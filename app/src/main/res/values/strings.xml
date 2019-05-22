@@ -5,4 +5,15 @@
     <string name="prompt_email">Correo</string>
     <string name="prompt_password">Clave</string>
     <string name="action_sign_in">Inicie sesion</string>
+    <string name="title_activity_prueba">Prueba</string>
+    <string name="action_sync">Sync</string>
+    <string name="title_activity_login">Login</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>

@@ -3,10 +3,9 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.text.Editable;
-import android.widget.Toast;
 
-import com.desarrollo.kuky.presionaguasriojanas.LoginActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,11 +18,12 @@ public class UsuarioControlador {
 
     private class UsuarioPorMailYClave extends AsyncTask<String, Float, String> {
         Activity a;
-        Editable mail;
-        Editable clave;
+        String mail;
+        String clave;
 
         @Override
         protected void onPreExecute() {
+            LoginActivity.usuario = new Usuario();
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setMessage("Estableciendo conexion...");
@@ -31,7 +31,7 @@ public class UsuarioControlador {
             pDialog.show();
         }
 
-        public UsuarioPorMailYClave(Activity a, Editable mail, Editable clave) {
+        public UsuarioPorMailYClave(Activity a, String mail, String clave) {
             this.a = a;
             this.mail = mail;
             this.clave = clave;
@@ -43,9 +43,9 @@ public class UsuarioControlador {
             PreparedStatement ps;
             ResultSet rs;
             try {
-                conn = (Connection) Conexion.GetConnection(a);
-                String consultaSql = "SELECT * FROM usuarios where mail like " + mail + " AND clave like " + clave ;
-                ps = (PreparedStatement) conn.prepareStatement(consultaSql);
+                conn = Conexion.GetConnection(a);
+                String consultaSql = "SELECT * FROM usuarios WHERE mail LIKE '" + mail + "' AND clave LIKE '" + clave + "'";
+                ps = conn.prepareStatement(consultaSql);
                 ps.execute();
                 rs = ps.getResultSet();
                 if (rs.next()) {
@@ -73,15 +73,19 @@ public class UsuarioControlador {
         @Override
         protected void onPostExecute(String s) {
             pDialog.dismiss();
-            if (s.equals("")) {
-                //Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
+            /*////////////////////////////////////////////////////////////////////////////////////*/
+            // ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA...
+            // ... LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
+            /*if (s.equals("")) {
+                Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(a, s.toString(), Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
+            }*/
+            /*////////////////////////////////////////////////////////////////////////////////////*/
         }
     }
 
-    public void extraerPorMailYClave(Activity a, Editable mail, Editable clave) {
+    public void extraerPorMailYClave(Activity a, String mail, String clave) {
         usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
         usuarioPorMailYClave.execute();
     }
