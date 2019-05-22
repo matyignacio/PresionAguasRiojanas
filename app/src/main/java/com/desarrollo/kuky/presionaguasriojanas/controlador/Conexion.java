@@ -1,9 +1,6 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
@@ -12,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Created by Kuky on 15/11/2016.
+ * Created by Kuky on 21/05/2019.
  */
 
 public class Conexion {

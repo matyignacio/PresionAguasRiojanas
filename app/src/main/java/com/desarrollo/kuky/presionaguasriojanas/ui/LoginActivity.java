@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.Sync;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         // CAPTURAMOS LOS ELEMENTOS
         etMail = findViewById(R.id.etMail);
         etClave = findViewById(R.id.etClave);
-        Button bLogin = findViewById(R.id.bLogin);
+        bLogin = findViewById(R.id.bLogin);
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,10 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_sync) {
-            // lo ideal aquí sería hacer un intent para abrir una nueva clase como lo siguiente
-            Toast.makeText(this, "Sync", Toast.LENGTH_SHORT).show();
-//            Intent about = new Intent(getApplicationContext(), About.class);
-//            startActivity(about);
+            Sync sync = new Sync();
+            sync.sincronizarUsuarios(this);
             return true;
         }
 
