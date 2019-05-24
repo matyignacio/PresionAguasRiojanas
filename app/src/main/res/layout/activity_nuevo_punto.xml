@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.NuevoPuntoActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rlCircuito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvCircuito"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_circuito" />
+
+            <EditText
+                android:id="@+id/etCircuito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvCircuito"
+                android:ems="10"
+                android:inputType="number" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlBarrio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlCircuito"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvBarrio"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_barrio" />
+
+            <EditText
+                android:id="@+id/etBarrio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvBarrio"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlCalle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlBarrio"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvCalle1"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_calle1" />
+
+            <EditText
+                android:id="@+id/etCalle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvCalle1"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlCalle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlCalle1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvCalle2"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_calle2" />
+
+            <EditText
+                android:id="@+id/etCalle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvCalle2"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlPresion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlCalle2"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvPresion"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/tv_presion" />
+
+            <EditText
+                android:id="@+id/etPresion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvPresion"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlPresion"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/bEnviarNuevoPunto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/b_enviar_nuevo_punto"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>

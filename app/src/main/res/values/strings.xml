@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">Presion Aguas Riojanas</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_punto">Datos del punto</string>
+    <string name="title_activity_nuevo_punto">Añadir nuevo punto</string>
+    <string name="title_activity_historial">Historial del punto</string>
     <string name="bAbrirMaps">Abrir Maps</string>
     <string name="prompt_email">Correo</string>
     <string name="prompt_password">Clave</string>
     <string name="action_sign_in">Inicie sesion</string>
     <string name="title_activity_prueba">Prueba</string>
-    <string name="action_sync">Sync</string>
+    <string name="action_sync">Sincronizar</string>
     <string name="title_activity_login">Login</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -16,4 +18,17 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_out">Cerrar Sesion</string>
+    <string name="b_add_punto_presion">Nuevo Punto</string>
+    <string name="b_sign_out">Cerrar Sesion</string>
+    <string name="b_enviar_nuevo_punto">Agregar Punto</string>
+    <string name="cerrar_sesion">¿Esta seguro que desea cerrar sesion?</string>
+    <string name="tv_circuito">Circuito: </string>
+    <string name="tv_barrio">Barrio: </string>
+    <string name="tv_calle1">Calle 1: </string>
+    <string name="tv_calle2">Calle 2: </string>
+    <string name="tv_presion">Presion: </string>
 </resources>

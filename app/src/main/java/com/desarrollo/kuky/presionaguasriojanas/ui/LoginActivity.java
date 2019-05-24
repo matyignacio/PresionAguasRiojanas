@@ -3,19 +3,17 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Sync;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,28 +40,12 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_sync) {
-            Sync sync = new Sync();
-            sync.sincronizarUsuarios(this);
-            return true;
+        if (uControlador.existeUsuario(this) == Util.EXITOSO) {
+            Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+            startActivity(intent);
+            this.finish();
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     private void attemptLogin() {
@@ -110,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             if (s.equals("correcto")) {
-                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                 startActivity(intent);
                 a.finish();
             } else {

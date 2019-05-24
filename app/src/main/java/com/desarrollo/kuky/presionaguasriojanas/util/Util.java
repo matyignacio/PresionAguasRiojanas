@@ -6,4 +6,6 @@ public class Util {
     public static String PUERTO = "3306";
     public static String USER = "root";
     public static String CLAVE = "root";
+    public static Integer EXITOSO = 1;
+    public static Integer ERROR = 0;
 }

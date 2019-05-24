@@ -7,9 +7,12 @@ public class PuntoPresion {
     private String calle1;
     private String calle2;
     private String perforacion;
-    private String latitud;
-    private String longitud;
+    private Double latitud;
+    private Double longitud;
+    private Integer pendiente;
+    private Float presion;
     private TipoPresion tipoPresion;
+    private TipoPunto tipoPunto;
 
     public Integer getId() {
         return id;
@@ -59,20 +62,36 @@ public class PuntoPresion {
         this.perforacion = perforacion;
     }
 
-    public String getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
+    }
+
+    public Integer getPendiente() {
+        return pendiente;
+    }
+
+    public void setPendiente(Integer pendiente) {
+        this.pendiente = pendiente;
+    }
+
+    public Float getPresion() {
+        return presion;
+    }
+
+    public void setPresion(Float presion) {
+        this.presion = presion;
     }
 
     public TipoPresion getTipoPresion() {
@@ -81,5 +100,13 @@ public class PuntoPresion {
 
     public void setTipoPresion(TipoPresion tipoPresion) {
         this.tipoPresion = tipoPresion;
+    }
+
+    public TipoPunto getTipoPunto() {
+        return tipoPunto;
+    }
+
+    public void setTipoPunto(TipoPunto tipoPunto) {
+        this.tipoPunto = tipoPunto;
     }
 }
