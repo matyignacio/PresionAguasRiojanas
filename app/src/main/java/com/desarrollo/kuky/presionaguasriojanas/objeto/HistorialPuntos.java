@@ -2,10 +2,10 @@ package com.desarrollo.kuky.presionaguasriojanas.objeto;
 
 import java.util.Date;
 
-public class HistorialPuntosPresion {
+public class HistorialPuntos {
     private Integer id;
-    private String latitud;
-    private String longitud;
+    private Double latitud;
+    private Double longitud;
     private Float presion;
     private Date fecha;
     private PuntoPresion puntoPresion;
@@ -18,19 +18,19 @@ public class HistorialPuntosPresion {
         this.id = id;
     }
 
-    public String getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
     }
 

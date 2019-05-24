@@ -8,4 +8,6 @@ public class Util {
     public static String CLAVE = "root";
     public static Integer EXITOSO = 1;
     public static Integer ERROR = 0;
+    public static final String PREFS_NAME = "MyPrefsFile";
+    public static String ID_PUNTO_PRESION_SHARED_PREFERENCE= "id_punto_presion";
 }

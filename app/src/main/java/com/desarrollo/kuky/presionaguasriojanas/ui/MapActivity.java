@@ -3,6 +3,7 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
@@ -28,12 +29,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+
 public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
         implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker puntoMarcador;
     private static final LatLng laRioja = new LatLng(-29.4126811, -66.8576855);
+    private LatLng marcador;
     private ArrayList<PuntoPresion> puntosPresion = new ArrayList<>();
 
     @Override
@@ -60,7 +64,13 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
 
         if (id == R.id.action_sync) {
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+            HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
             if (puntoPresionControlador.sincronizarDeMysqlToSqlite(this) == Util.EXITOSO) {
+                if (historialPuntosControlador.sincronizarDeMysqlToSqlite(this) == Util.EXITOSO) {
+                    Intent intent = new Intent(MapActivity.this, MapActivity.class);
+                    startActivity(intent);
+                    this.finish();
+                }
             }
             return true;
         }
@@ -102,7 +112,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         // Recorremos el arrayList para ir creando los marcadores
         for (Integer i = 0; i < puntosPresion.size(); i++) {
             if (puntosPresion.get(i).getTipoPresion().getId() == 1) {
-                LatLng marcador = new LatLng(puntosPresion.get(i).getLatitud(),
+                marcador = new LatLng(puntosPresion.get(i).getLatitud(),
                         puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
@@ -111,7 +121,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
             } else {
-                LatLng marcador = new LatLng(puntosPresion.get(i).getLatitud(),
+                marcador = new LatLng(puntosPresion.get(i).getLatitud(),
                         puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
@@ -120,6 +130,9 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
                 puntoMarcador.setTag(puntosPresion.get(i));
             }
         }
+
+        // Set a listener for marker click.
+        mMap.setOnMarkerClickListener(this);
     }
 
     /**
@@ -132,7 +145,15 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         PuntoPresion puntoPresion = new PuntoPresion();
         puntoPresion = (PuntoPresion) marker.getTag();
 
-        Toast.makeText(this, "Se toco el punto " + puntoPresion.getId(), Toast.LENGTH_SHORT).show();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(Util.ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
+        // Commit the edits!
+        editor.commit();
+
+        Intent intent = new Intent(this, PuntoPresionActivity.class);
+        startActivity(intent);
+        this.finish();
 
         // Return false to indicate that we have not consumed the event and that we wish
         // for the default behavior to occur (which is for the camera to move such that the

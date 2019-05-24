@@ -11,121 +11,93 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/rlCircuito"
+            android:id="@+id/rlForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:gravity="center">
 
+
             <TextView
                 android:id="@+id/tvCircuito"
-                android:layout_width="60dp"
+                style="@style/tv_primary"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
                 android:text="@string/tv_circuito" />
 
             <EditText
                 android:id="@+id/etCircuito"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tvCircuito"
+                android:layout_toEndOf="@id/tvCircuito"
                 android:ems="10"
                 android:inputType="number" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlBarrio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlCircuito"
-            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvBarrio"
-                android:layout_width="60dp"
+                style="@style/tv_primary"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_below="@id/etCircuito"
                 android:text="@string/tv_barrio" />
 
             <EditText
                 android:id="@+id/etBarrio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tvBarrio"
+                android:layout_below="@id/etCircuito"
+                android:layout_toEndOf="@id/tvBarrio"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlCalle1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlBarrio"
-            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvCalle1"
-                android:layout_width="60dp"
+                style="@style/tv_primary"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_below="@id/etBarrio"
                 android:text="@string/tv_calle1" />
 
             <EditText
                 android:id="@+id/etCalle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tvCalle1"
+                android:layout_below="@id/etBarrio"
+                android:layout_toEndOf="@id/tvCalle1"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlCalle2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlCalle1"
-            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvCalle2"
-                android:layout_width="60dp"
+                style="@style/tv_primary"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_below="@id/etCalle1"
                 android:text="@string/tv_calle2" />
 
             <EditText
                 android:id="@+id/etCalle2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tvCalle2"
+                android:layout_below="@id/etCalle1"
+                android:layout_toEndOf="@id/tvCalle2"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlPresion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlCalle2"
-            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvPresion"
-                android:layout_width="60dp"
+                style="@style/tv_primary"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_below="@id/etCalle2"
                 android:text="@string/tv_presion" />
 
             <EditText
                 android:id="@+id/etPresion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tvPresion"
+                android:layout_below="@id/etCalle2"
+                android:layout_toEndOf="@id/tvPresion"
                 android:ems="10"
                 android:inputType="numberDecimal" />
         </RelativeLayout>
@@ -133,7 +105,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rlPresion"
+            android:layout_below="@id/rlForm"
             android:gravity="center">
 
             <Button

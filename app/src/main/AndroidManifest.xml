@@ -46,6 +46,7 @@
         <activity
             android:name=".ui.Punto"
             android:label="@string/title_activity_punto" />
+        <activity android:name=".ui.PuntoPresionActivity"></activity>
     </application>
 
 </manifest>

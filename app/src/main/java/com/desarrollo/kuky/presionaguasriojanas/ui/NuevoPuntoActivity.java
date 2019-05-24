@@ -18,7 +18,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
-        Intent intent = new Intent(NuevoPuntoActivity.this, MapActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
         this.finish();
     }

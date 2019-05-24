@@ -45,20 +45,22 @@ public class PuntoPresionControlador {
         @Override
         protected String doInBackground(String... strings) {
             Connection conn;
-            PreparedStatement ps, ps2;
-            ResultSet rs, rs2;
+            PreparedStatement ps;
+            ResultSet rs;
             try {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
                 conn = Conexion.GetConnection(a);
-                String consultaSql = "SELECT * FROM puntos_presion " +
-                        "WHERE pendiente = 1 ";
+                String consultaSql = "SELECT * FROM puntos_presion ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
                 rs = ps.getResultSet();
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+                /* LIMPIAMOS LA TABLA */
+                db.execSQL("DELETE FROM puntos_presion");
                 while (rs.next()) {
+                    /* Y REGISTRAMOS TODOS DE NUEVO*/
                     String sql = "INSERT INTO puntos_presion" +
                             "(id," +
                             "circuito," +
@@ -67,6 +69,7 @@ public class PuntoPresionControlador {
                             "calle2," +
                             "latitud," +
                             "longitud," +
+                            "pendiente," +
                             "presion," +
                             "id_tipo_presion," +
                             "id_tipo_punto)" +
@@ -78,26 +81,15 @@ public class PuntoPresionControlador {
                             rs.getString(5) + "','" + // calle2
                             rs.getDouble(6) + "','" + // latitud
                             rs.getDouble(7) + "','" + // longitud
-                            rs.getInt(9) + "','" + // presion
-                            rs.getInt(10) + "','" + // id_tipo_presion
-                            rs.getInt(11) + "');"; // id_tipo_punto
+                            "0','" + // pendiente
+                            rs.getFloat(8) + "','" + // presion
+                            rs.getInt(9) + "','" + // id_tipo_presion
+                            rs.getInt(10) + "');"; // id_tipo_punto
                     db.execSQL(sql);
                 }
                 db.close();
-                /* Reseteamos los pendientes*/
-                ps2 = conn.prepareStatement(consultaSql);
-                ps2.execute();
-                rs2 = ps2.getResultSet();
-                while (rs2.next()) {
-                    consultaSql = "UPDATE puntos_presion " +
-                            " SET pendiente = 0 " +
-                            " WHERE id = " + rs2.getInt(1) + ";";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.executeUpdate();
-                }
                 check++;
                 rs.close();
-                rs2.close();
                 ps.close();
                 conn.close();
                 if (check == 1) {
@@ -117,7 +109,7 @@ public class PuntoPresionControlador {
             if (s.equals("EXITO")) {
                 Toast.makeText(a, "Se copiaron puntos de forma exitosa", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(a, "Error en el check", Toast.LENGTH_SHORT).show();
+                Toast.makeText(a, "Error en el checkPuntoPresion", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -141,7 +133,7 @@ public class PuntoPresionControlador {
             PuntoPresion puntoPresion = new PuntoPresion();
             TipoPresion tipoPresion = new TipoPresion();
             TipoPunto tipoPunto = new TipoPunto();
-            puntoPresion.setCircuito(c.getInt(0));
+            puntoPresion.setId(c.getInt(0));
             puntoPresion.setCircuito(c.getInt(1));
             puntoPresion.setBarrio(c.getString(2));
             puntoPresion.setCalle1(c.getString(3));
@@ -154,11 +146,34 @@ public class PuntoPresionControlador {
             tipoPunto.setId(c.getInt(10));
             puntoPresion.setTipoPunto(tipoPunto);
             puntosPresion.add(puntoPresion);
-
-
         }
         c.close();
         db.close();
         return puntosPresion;
+    }
+
+    public PuntoPresion extraerPorId(Activity a, int id) {
+        PuntoPresion puntoPresion = new PuntoPresion();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM puntos_presion where id =" + id, null);
+        while (c.moveToNext()) {
+            TipoPresion tipoPresion = new TipoPresion();
+            TipoPunto tipoPunto = new TipoPunto();
+            puntoPresion.setId(c.getInt(0));
+            puntoPresion.setCircuito(c.getInt(1));
+            puntoPresion.setBarrio(c.getString(2));
+            puntoPresion.setCalle1(c.getString(3));
+            puntoPresion.setCalle2(c.getString(4));
+            puntoPresion.setLatitud(c.getDouble(5));
+            puntoPresion.setLongitud(c.getDouble(6));
+            puntoPresion.setPresion(c.getFloat(8));
+            tipoPresion.setId(c.getInt(9));
+            puntoPresion.setTipoPresion(tipoPresion);
+            tipoPunto.setId(c.getInt(10));
+            puntoPresion.setTipoPunto(tipoPunto);
+        }
+        c.close();
+        db.close();
+        return puntoPresion;
     }
 }

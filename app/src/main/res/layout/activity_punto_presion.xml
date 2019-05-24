@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.PuntoPresionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rlForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvCircuito"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/tv_circuito" />
+
+            <TextView
+                android:id="@+id/etCircuito"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/tvCircuito"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/tvBarrio"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvCircuito"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tv_barrio" />
+
+            <TextView
+                android:id="@+id/etBarrio"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etCircuito"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/tvBarrio"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/tvCalle1"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvBarrio"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tv_calle1" />
+
+            <TextView
+                android:id="@+id/etCalle1"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etBarrio"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/tvCalle1"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/tvCalle2"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvCalle1"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tv_calle2" />
+
+            <TextView
+                android:id="@+id/etCalle2"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etCalle1"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/tvCalle2"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/tvLatitud"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvCalle2"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tv_latitud" />
+
+            <TextView
+                android:id="@+id/etLatitud"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etCalle2"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/tvLatitud"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/tvLongitud"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLatitud"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tv_longitud" />
+
+            <TextView
+                android:id="@+id/etLongitud"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etLatitud"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/tvLongitud"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/tvPresion"
+                style="@style/tv_primary"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLongitud"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tv_presion" />
+
+            <TextView
+                android:id="@+id/etPresion"
+                style="@style/tv_primary_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etLongitud"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/tvPresion"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlForm"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/bHistorialPunto"
+                android:drawableStart="@drawable/ic_history_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/b_historial_punto"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bNuevaMedicion"
+                android:drawableStart="@drawable/ic_add_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/bHistorialPunto"
+                android:text="@string/b_nueva_medicion"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>
