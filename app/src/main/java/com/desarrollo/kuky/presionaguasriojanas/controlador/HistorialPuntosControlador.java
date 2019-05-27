@@ -12,10 +12,10 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class HistorialPuntosControlador {
@@ -49,7 +49,7 @@ public class HistorialPuntosControlador {
             PreparedStatement ps;
             ResultSet rs;
             try {
-                                /*//////////////////////////////////////////////////////////////////////////////////
+                /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
                 conn = Conexion.GetConnection(a);
@@ -75,7 +75,7 @@ public class HistorialPuntosControlador {
                             rs.getDouble(3) + "','" + // longitud
                             "0','" + // pendiente
                             rs.getFloat(4) + "','" + // presion
-                            rs.getDate(5) + "','" + // fecha
+                            rs.getTimestamp(5) + "','" + // fecha
                             rs.getInt(6) + "');"; // id_tipo_presion
                     db.execSQL(sql);
                 }
@@ -112,29 +112,59 @@ public class HistorialPuntosControlador {
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(a, "Eror SyncMysqlToSqlite HPC" + e.toString(), Toast.LENGTH_SHORT).show();
             return Util.ERROR;
         }
     }
 
-    public ArrayList<HistorialPuntos> extraerTodos(Activity a) {
+    public ArrayList<HistorialPuntos> extraerTodosPorPunto(Activity a, int id) {
         historiales = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM historial_puntos_presion", null);
+        Cursor c = db.rawQuery("SELECT * FROM historial_puntos_presion " +
+                "WHERE id_punto_presion = " + id + " " +
+                "ORDER BY fecha DESC", null);
         while (c.moveToNext()) {
             HistorialPuntos historialPuntos = new HistorialPuntos();
             PuntoPresion puntoPresion = new PuntoPresion();
             historialPuntos.setId(c.getInt(0));
             historialPuntos.setLatitud(c.getDouble(1));
             historialPuntos.setLongitud(c.getDouble(2));
-            historialPuntos.setPresion(c.getFloat(3));
-            historialPuntos.setFecha(Date.valueOf(c.getString(4)));
-            puntoPresion.setId(c.getInt(5));
+            historialPuntos.setPresion(c.getFloat(4));
+            historialPuntos.setFecha(Timestamp.valueOf(c.getString(5)));
+            puntoPresion.setId(c.getInt(6));
             historialPuntos.setPuntoPresion(puntoPresion);
             historiales.add(historialPuntos);
         }
         c.close();
         db.close();
         return historiales;
+    }
+
+    public int insertar(HistorialPuntos historialPuntos, Activity a) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "INSERT INTO `historial_puntos_presion`" +
+                    "(`latitud`," +
+                    "`longitud`," +
+                    "`pendiente`," +
+                    "`presion`," +
+                    "`id_punto_presion`)" +
+                    "VALUES" +
+                    "('" + historialPuntos.getLatitud() + "','" + // latitud
+                    historialPuntos.getLongitud() + "','" + // longitud
+                    "1','" + // pendiente
+                    historialPuntos.getPresion() + "','" + // presion
+                    historialPuntos.getPuntoPresion().getId() + "');"; // id_punto_presion
+            db.execSQL(sql);
+            sql = "UPDATE puntos_presion " +
+                    "SET presion = '" + historialPuntos.getPresion() + "', pendiente = 1 " +
+                    "WHERE id=" + historialPuntos.getPuntoPresion().getId();
+            db.execSQL(sql);
+            db.close();
+            return Util.EXITOSO;
+        } catch (Exception e) {
+            Toast.makeText(a, "Error insertar HPC " + e.toString(), Toast.LENGTH_SHORT).show();
+            return Util.ERROR;
+        }
     }
 }

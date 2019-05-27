@@ -45,7 +45,7 @@ public class BaseHelper extends SQLiteOpenHelper {
     }
 
     String sqlTablaPuntosPresion = "CREATE TABLE IF NOT EXISTS `puntos_presion` (" +
-            "  `id` int(11) NOT NULL," +
+            "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
             "  `circuito` int(11) NOT NULL," +
             "  `barrio` varchar(30) NOT NULL," +
             "  `calle1` varchar(50) NOT NULL," +
@@ -55,23 +55,21 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
             "  `id_tipo_presion` int(11) DEFAULT NULL," +
-            "  `id_tipo_punto` int(11) DEFAULT '1'," +
-            "  PRIMARY KEY (`id`) " +
+            "  `id_tipo_punto` int(11) DEFAULT '1'" +
             ")";
 
     String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS `historial_puntos_presion` (" +
-            "  `id` int(11) NOT NULL," +
+            "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
             "  `latitud` double NOT NULL," +
             "  `longitud` double NOT NULL," +
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
-            "  `fecha` date NOT NULL," +
-            "  `id_punto_presion` int(11) DEFAULT NULL," +
-            "  PRIMARY KEY (`id`) " +
+            "  `fecha` date DEFAULT (datetime('now','localtime'))," +
+            "  `id_punto_presion` int(11) DEFAULT NULL" +
             ")";
 
     String sqlTablaUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (" +
-            "id INT(11) default NULL," +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "nombre varchar(30) default NULL, " +
             "mail varchar(45) default NULL," +
             "clave varchar(45) default NULL" +

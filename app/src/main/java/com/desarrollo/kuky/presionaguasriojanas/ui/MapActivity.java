@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 
 public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
@@ -111,7 +112,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         puntosPresion = puntoPresionControlador.extraerTodos(this);
         // Recorremos el arrayList para ir creando los marcadores
         for (Integer i = 0; i < puntosPresion.size(); i++) {
-            if (puntosPresion.get(i).getTipoPresion().getId() == 1) {
+            if (puntosPresion.get(i).getPresion() > ESTANDAR_MEDICION) {
                 marcador = new LatLng(puntosPresion.get(i).getLatitud(),
                         puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()

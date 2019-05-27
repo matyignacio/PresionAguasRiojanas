@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -19,6 +21,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
     PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     // UI References
     TextView etCircuito, etBarrio, etCalle1, etCalle2, etPresion, etLatitud, etLongitud;
+    Button bHistorialPunto, bNuevaMedicion;
 
 
     @Override
@@ -33,6 +36,8 @@ public class PuntoPresionActivity extends AppCompatActivity {
         etPresion = findViewById(R.id.etPresion);
         etLatitud = findViewById(R.id.etLatitud);
         etLongitud = findViewById(R.id.etLongitud);
+        bNuevaMedicion = findViewById(R.id.bNuevaMedicion);
+        bHistorialPunto = findViewById(R.id.bHistorialPunto);
         // OBTENEMOS EL PUNTO DE PRESION
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         int id = settings.getInt(Util.ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
@@ -44,6 +49,22 @@ public class PuntoPresionActivity extends AppCompatActivity {
         etPresion.setText(puntoPresion.getPresion().toString());
         etLatitud.setText(puntoPresion.getLatitud().toString());
         etLongitud.setText(puntoPresion.getLongitud().toString());
+        bNuevaMedicion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PuntoPresionActivity.this, NuevaPresionActivity.class);
+                startActivity(intent);
+                PuntoPresionActivity.this.finish();
+            }
+        });
+        bHistorialPunto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PuntoPresionActivity.this, HistorialActivity.class);
+                startActivity(intent);
+                PuntoPresionActivity.this.finish();
+            }
+        });
 
     }
 

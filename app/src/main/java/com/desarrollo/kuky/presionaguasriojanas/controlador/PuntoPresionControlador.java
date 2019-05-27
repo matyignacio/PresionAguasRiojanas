@@ -120,7 +120,7 @@ public class PuntoPresionControlador {
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(a, "Eror SyncMysqlToSqlite PPC" + e.toString(), Toast.LENGTH_SHORT).show();
             return Util.ERROR;
         }
     }

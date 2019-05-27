@@ -1,13 +1,13 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class HistorialPuntos {
     private Integer id;
     private Double latitud;
     private Double longitud;
     private Float presion;
-    private Date fecha;
+    private Timestamp fecha;
     private PuntoPresion puntoPresion;
 
     public Integer getId() {
@@ -42,11 +42,11 @@ public class HistorialPuntos {
         this.presion = presion;
     }
 
-    public Date getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(Timestamp fecha) {
         this.fecha = fecha;
     }
 

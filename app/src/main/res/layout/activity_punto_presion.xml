@@ -178,22 +178,22 @@
 
             <Button
                 android:id="@+id/bHistorialPunto"
-                android:drawableStart="@drawable/ic_history_24dp"
-                android:layout_width="wrap_content"
+                style="@style/b_primary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/b_historial_punto"
-                android:textStyle="bold" />
+                android:drawableStart="@drawable/ic_history_24dp"
+                android:text="@string/b_historial_punto" />
 
             <Button
                 android:id="@+id/bNuevaMedicion"
-                android:drawableStart="@drawable/ic_add_black_24dp"
-                android:layout_width="wrap_content"
+                style="@style/b_primary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_below="@id/bHistorialPunto"
-                android:text="@string/b_nueva_medicion"
-                android:textStyle="bold" />
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_add_black_24dp"
+                android:text="@string/b_nueva_medicion" />
         </RelativeLayout>
 
     </LinearLayout>

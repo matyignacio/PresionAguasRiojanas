@@ -39,14 +39,14 @@
         <activity android:name=".ui.MapActivity" />
         <activity
             android:name=".ui.HistorialActivity"
-            android:label="@string/title_activity_nuevo_punto" />
+            android:label="@string/title_activity_historial" />
         <activity
             android:name=".ui.NuevoPuntoActivity"
             android:label="@string/title_activity_nuevo_punto" />
+        <activity android:name=".ui.PuntoPresionActivity" />
         <activity
-            android:name=".ui.Punto"
-            android:label="@string/title_activity_punto" />
-        <activity android:name=".ui.PuntoPresionActivity"></activity>
+            android:name=".ui.NuevaPresionActivity"
+            android:label="@string/title_activity_nueva_medicion" />
     </application>
 
 </manifest>

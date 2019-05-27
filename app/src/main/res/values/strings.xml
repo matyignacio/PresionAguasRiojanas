@@ -2,6 +2,7 @@
     <string name="app_name">Presion Aguas Riojanas</string>
     <string name="title_activity_punto">Datos del punto</string>
     <string name="title_activity_nuevo_punto">Añadir nuevo punto</string>
+    <string name="title_activity_nueva_medicion">Nueva medicion</string>
     <string name="title_activity_historial">Historial del punto</string>
     <string name="bAbrirMaps">Abrir Maps</string>
     <string name="prompt_email">Correo</string>
@@ -35,4 +36,6 @@
     <string name="tv_presion">Presion: </string>
     <string name="tv_latitud">Latitud: </string>
     <string name="tv_longitud">Longitud: </string>
+    <string name="hitn_ingrese_presion">Ingrese presion</string>
+    <string name="b_enviar_medicion">Enviar medicion</string>
 </resources>
