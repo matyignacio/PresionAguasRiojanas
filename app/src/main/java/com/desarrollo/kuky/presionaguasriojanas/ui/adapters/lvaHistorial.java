@@ -12,6 +12,8 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.convertirFecha;
+
 public class lvaHistorial extends BaseAdapter {
     // Declare Variables
     Context context;
@@ -40,6 +42,7 @@ public class lvaHistorial extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
+
         // Declare Variables
         TextView tvFecha, tvLatitud, tvLongitud, tvPresion;
 
@@ -54,9 +57,10 @@ public class lvaHistorial extends BaseAdapter {
         tvLongitud = itemView.findViewById(R.id.tvLongitud);
         tvPresion = itemView.findViewById(R.id.tvPresion);
         // Capture position and set to the TextViews
-        tvFecha.setText(historialPuntos.get(position).getFecha().toString());
+
+        tvFecha.setText(convertirFecha(historialPuntos.get(position).getFecha()));
         tvLatitud.setText("Latitud: " + historialPuntos.get(position).getLatitud().toString());
-        tvLongitud.setText("- Longitud: " + historialPuntos.get(position).getLongitud().toString());
+        tvLongitud.setText("Longitud: " + historialPuntos.get(position).getLongitud().toString());
         tvPresion.setText("Presion: " + historialPuntos.get(position).getPresion().toString());
 
 

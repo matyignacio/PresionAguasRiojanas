@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
@@ -20,20 +19,118 @@ import java.util.ArrayList;
 
 public class HistorialPuntosControlador {
 
-    private ProgressDialog pDialog;
     private SyncMysqlToSqlite syncMysqlToSqlite;
+    private SyncSqliteToMysql syncSqliteToMysql;
     private Integer check;
     private ArrayList<HistorialPuntos> historiales;
 
-    private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
+    private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
 
         Activity a;
+        private ProgressDialog pDialog;
+        ArrayList<HistorialPuntos> historiales;
 
         @Override
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Estableciendo conexion...");
+            pDialog.setMessage("Enviando historial...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        public SyncSqliteToMysql(Activity a) {
+            this.a = a;
+            check = 0;
+            historiales = new ArrayList<>();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            historiales = extraerTodosPendientes(a);
+            Connection conn;
+            try {
+                conn = Conexion.GetConnection(a);
+                String consultaSql;
+                for (int i = 0; i < historiales.size(); i++) {
+                /*//////////////////////////////////////////////////////////////////////////////////
+                                            INSERTAMOS
+                //////////////////////////////////////////////////////////////////////////////////*/
+                    PreparedStatement ps;
+                    consultaSql = "INSERT INTO `historial_puntos_presion` " +
+                            "(`latitud`, `longitud`, `presion`, `fecha`, `id_punto_presion`) " +
+                            "VALUES " +
+                            "('" + historiales.get(i).getLatitud() + "', " +
+                            "'" + historiales.get(i).getLongitud() + "', " +
+                            "'" + historiales.get(i).getPresion() + "', " +
+                            "'" + historiales.get(i).getFecha() + "', " +
+                            "'" + historiales.get(i).getPuntoPresion().getId() + "');";
+                    ps = conn.prepareStatement(consultaSql);
+                    ps.execute();
+                    /*//////////////////////////////////////////////////////////////////////////////////
+                                            UPDETEAMOS LA PRESION
+                    //////////////////////////////////////////////////////////////////////////////////*/
+                    consultaSql = "UPDATE `puntos_presion` " +
+                            "SET `presion` = '" + historiales.get(i).getPresion() + "' " +
+                            "WHERE `id` = '" + historiales.get(i).getPuntoPresion().getId() + "' ;";
+                    ps = conn.prepareStatement(consultaSql);
+                    ps.execute();
+                    ps.close();
+                    /*//////////////////////////////////////////////////////////////////////////////////
+                                            BAJAMOS EL PENDIENTE DEL HISTORIAL
+                    //////////////////////////////////////////////////////////////////////////////////*/
+                    actualizarPendiente(historiales.get(i), a);
+                    check++;
+                }
+                conn.close();
+                if (check == historiales.size()) {
+                    return "EXITO";
+                } else {
+                    return "ERROR";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return e.toString();
+            }
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            pDialog.dismiss();
+            if (s.equals("EXITO")) {
+                Util.mostrarMensaje(a, "Se enviaron los historiales de forma exitosa");
+                /*//////////////////////////////////////////////////////////////////////////////////
+                 *                      CONCATENO CON LA SIGUIENTE ASYNCTASK
+                 */////////////////////////////////////////////////////////////////////////////////*/
+                sincronizarDeMysqlToSqlite(a);
+            } else {
+                Util.mostrarMensaje(a, "Error en el checkHistorialToMysql");
+            }
+        }
+    }
+
+    public int sincronizarDeSqliteToMysql(Activity a) {
+        try {
+            syncSqliteToMysql = new SyncSqliteToMysql(a);
+            syncSqliteToMysql.execute();
+            return Util.EXITOSO;
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, "Eror SyncSqliteToMysql HPC" + e.toString());
+            return Util.ERROR;
+        }
+    }
+
+    private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
+
+        Activity a;
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            pDialog = new ProgressDialog(a);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pDialog.setMessage("Trayendo historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -99,11 +196,17 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                Toast.makeText(a, "Se copio el historial de forma exitosa", Toast.LENGTH_SHORT).show();
+                Util.mostrarMensaje(a, "Se copio el historial de forma exitosa");
+                /*//////////////////////////////////////////////////////////////////////////////////
+                 *                      CONCATENO CON LA SIGUIENTE ASYNCTASK
+                 */////////////////////////////////////////////////////////////////////////////////*/
+                PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+                puntoPresionControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                Toast.makeText(a, "Error en el checkHistorial", Toast.LENGTH_SHORT).show();
+                Util.mostrarMensaje(a, "Error en el checkHistorial");
             }
         }
+
     }
 
     public int sincronizarDeMysqlToSqlite(Activity a) {
@@ -112,7 +215,7 @@ public class HistorialPuntosControlador {
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, "Eror SyncMysqlToSqlite HPC" + e.toString(), Toast.LENGTH_SHORT).show();
+            Util.mostrarMensaje(a, "Eror SyncMysqlToSqlite HPC" + e.toString());
             return Util.ERROR;
         }
     }
@@ -123,6 +226,29 @@ public class HistorialPuntosControlador {
         Cursor c = db.rawQuery("SELECT * FROM historial_puntos_presion " +
                 "WHERE id_punto_presion = " + id + " " +
                 "ORDER BY fecha DESC", null);
+        while (c.moveToNext()) {
+            HistorialPuntos historialPuntos = new HistorialPuntos();
+            PuntoPresion puntoPresion = new PuntoPresion();
+            historialPuntos.setId(c.getInt(0));
+            historialPuntos.setLatitud(c.getDouble(1));
+            historialPuntos.setLongitud(c.getDouble(2));
+            historialPuntos.setPresion(c.getFloat(4));
+            historialPuntos.setFecha(Timestamp.valueOf(c.getString(5)));
+            puntoPresion.setId(c.getInt(6));
+            historialPuntos.setPuntoPresion(puntoPresion);
+            historiales.add(historialPuntos);
+        }
+        c.close();
+        db.close();
+        return historiales;
+    }
+
+    public ArrayList<HistorialPuntos> extraerTodosPendientes(Activity a) {
+        historiales = new ArrayList<>();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM historial_puntos_presion " +
+                "WHERE pendiente = 1 " +
+                "ORDER BY id ASC", null);
         while (c.moveToNext()) {
             HistorialPuntos historialPuntos = new HistorialPuntos();
             PuntoPresion puntoPresion = new PuntoPresion();
@@ -163,7 +289,22 @@ public class HistorialPuntosControlador {
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, "Error insertar HPC " + e.toString(), Toast.LENGTH_SHORT).show();
+            Util.mostrarMensaje(a, "Error insertar HPC " + e.toString());
+            return Util.ERROR;
+        }
+    }
+
+    public int actualizarPendiente(HistorialPuntos historialPuntos, Activity a) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE historial_puntos_presion " +
+                    "SET presion = '" + historialPuntos.getPresion() + "', pendiente = 0 " +
+                    "WHERE id=" + historialPuntos.getId();
+            db.execSQL(sql);
+            db.close();
+            return Util.EXITOSO;
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, "Error actualizarPendiente HPC " + e.toString());
             return Util.ERROR;
         }
     }

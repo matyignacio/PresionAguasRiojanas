@@ -2,7 +2,6 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -13,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
@@ -31,6 +29,7 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
         implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
@@ -65,13 +64,8 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
 
         if (id == R.id.action_sync) {
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-            if (puntoPresionControlador.sincronizarDeMysqlToSqlite(this) == Util.EXITOSO) {
-                if (historialPuntosControlador.sincronizarDeMysqlToSqlite(this) == Util.EXITOSO) {
-                    Intent intent = new Intent(MapActivity.this, MapActivity.class);
-                    startActivity(intent);
-                    this.finish();
-                }
+            if (puntoPresionControlador.sincronizarDeSqliteToMysql(this) == Util.EXITOSO) {
+                abrirActivity(MapActivity.this, MapActivity.class);
             }
             return true;
         }
@@ -83,9 +77,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         }
 
         if (id == R.id.action_add) {
-            Intent intent = new Intent(MapActivity.this, NuevoPuntoActivity.class);
-            startActivity(intent);
-            this.finish();
+            abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
             return true;
         }
 
@@ -152,9 +144,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         // Commit the edits!
         editor.commit();
 
-        Intent intent = new Intent(this, PuntoPresionActivity.class);
-        startActivity(intent);
-        this.finish();
+        abrirActivity(this, PuntoPresionActivity.class);
 
         // Return false to indicate that we have not consumed the event and that we wish
         // for the default behavior to occur (which is for the camera to move such that the
@@ -175,9 +165,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
                     public void onClick(DialogInterface dialog, int id) {
                         UsuarioControlador usuarioControlador = new UsuarioControlador();
                         if (usuarioControlador.eliminarUsuario(a) == Util.EXITOSO) {
-                            Intent intent = new Intent(MapActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            a.finish();
+                            abrirActivity(MapActivity.this, LoginActivity.class);
                         }
                     }
                 })

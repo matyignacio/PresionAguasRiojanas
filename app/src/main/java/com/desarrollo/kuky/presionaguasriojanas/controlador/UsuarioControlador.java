@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
@@ -96,7 +95,7 @@ public class UsuarioControlador {
             usuarioPorMailYClave.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, e.toString(), Toast.LENGTH_SHORT).show();
+            Util.mostrarMensaje(a, e.toString());
             return Util.ERROR;
         }
     }
@@ -113,7 +112,7 @@ public class UsuarioControlador {
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, e.toString(), Toast.LENGTH_SHORT).show();
+            Util.mostrarMensaje(a, e.toString());
             return Util.ERROR;
         }
     }
@@ -127,7 +126,7 @@ public class UsuarioControlador {
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Toast.makeText(a, e.toString(), Toast.LENGTH_SHORT).show();
+            Util.mostrarMensaje(a, e.toString());
             return Util.ERROR;
         }
     }
@@ -143,7 +142,7 @@ public class UsuarioControlador {
             db.close();
             return Util.ERROR;
         } catch (Exception e) {
-            Toast.makeText(a, e.toString(), Toast.LENGTH_SHORT).show();
+            Util.mostrarMensaje(a, e.toString());
             return Util.ERROR;
         }
     }

@@ -38,4 +38,8 @@
     <string name="tv_longitud">Longitud: </string>
     <string name="hitn_ingrese_presion">Ingrese presion</string>
     <string name="b_enviar_medicion">Enviar medicion</string>
+    <string name="label_cancel">Cancelar</string>
+    <string name="action_settings">Settings</string>
+    <string name="GPSAlertDialogMessage">CuerpoMensaje</string>
+    <string name="GPSAlertDialogTitle">TituloMensaje</string>
 </resources>

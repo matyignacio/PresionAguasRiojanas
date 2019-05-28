@@ -1,6 +1,5 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class PuntoPresionActivity extends AppCompatActivity {
 
@@ -52,17 +52,13 @@ public class PuntoPresionActivity extends AppCompatActivity {
         bNuevaMedicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PuntoPresionActivity.this, NuevaPresionActivity.class);
-                startActivity(intent);
-                PuntoPresionActivity.this.finish();
+                abrirActivity(PuntoPresionActivity.this, NuevaPresionActivity.class);
             }
         });
         bHistorialPunto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PuntoPresionActivity.this, HistorialActivity.class);
-                startActivity(intent);
-                PuntoPresionActivity.this.finish();
+                abrirActivity(PuntoPresionActivity.this, HistorialActivity.class);
             }
         });
 
@@ -72,8 +68,6 @@ public class PuntoPresionActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
-        this.finish();
+        abrirActivity(PuntoPresionActivity.this, MapActivity.class);
     }
 }

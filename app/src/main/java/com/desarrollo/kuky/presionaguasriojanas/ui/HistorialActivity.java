@@ -1,11 +1,8 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -17,6 +14,7 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class HistorialActivity extends AppCompatActivity {
 
@@ -41,8 +39,6 @@ public class HistorialActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
-        Intent intent = new Intent(this, PuntoPresionActivity.class);
-        startActivity(intent);
-        this.finish();
+        abrirActivity(this, PuntoPresionActivity.class);
     }
 }

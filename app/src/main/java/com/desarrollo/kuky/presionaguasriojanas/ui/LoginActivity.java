@@ -1,19 +1,20 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
+
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etMail;
     private EditText etClave;
     private Button bLogin;
-    UsuarioControlador uControlador = new UsuarioControlador();
+    private UsuarioControlador uControlador = new UsuarioControlador();
     private AttemptLogin attemptLogin;
 
     @Override
@@ -41,9 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         if (uControlador.existeUsuario(this) == Util.EXITOSO) {
-            Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-            startActivity(intent);
-            this.finish();
+            abrirActivity(LoginActivity.this, MapActivity.class);
         }
 
     }
@@ -92,11 +91,9 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             if (s.equals("correcto")) {
-                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                startActivity(intent);
-                a.finish();
+                abrirActivity(LoginActivity.this, MapActivity.class);
             } else {
-                Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
+                mostrarMensaje(a, s);
             }
         }
     }

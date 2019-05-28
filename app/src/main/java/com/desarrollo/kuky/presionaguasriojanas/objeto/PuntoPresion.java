@@ -6,7 +6,6 @@ public class PuntoPresion {
     private String barrio;
     private String calle1;
     private String calle2;
-    private String perforacion;
     private Double latitud;
     private Double longitud;
     private Integer pendiente;
@@ -52,14 +51,6 @@ public class PuntoPresion {
 
     public void setCalle2(String calle2) {
         this.calle2 = calle2;
-    }
-
-    public String getPerforacion() {
-        return perforacion;
-    }
-
-    public void setPerforacion(String perforacion) {
-        this.perforacion = perforacion;
     }
 
     public Double getLatitud() {
