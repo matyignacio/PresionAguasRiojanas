@@ -14,9 +14,10 @@ public class Util {
     public static String PUERTO = "3306";
     public static String USER = "root";
     public static String CLAVE = "root";
-    public static Integer EXITOSO = 1;
-    public static Integer ERROR = 0;
-    public static Integer ESTANDAR_MEDICION = 3;
+    public static int EXITOSO = 1;
+    public static int ERROR = 0;
+    public static int ESTANDAR_MEDICION = 3;
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PREFS_NAME = "MyPrefsFile";
     public static String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
 
@@ -32,9 +33,19 @@ public class Util {
     }
 
     public static String convertirFecha(Date date) {
-        String fecha;
+        String fecha, minutos;
+        if (date.getMinutes() < 10) {
+            minutos = "0" + date.getMinutes();
+        } else {
+            minutos = String.valueOf(date.getMinutes());
+        }
         fecha = date.getDay() + "/" + date.getMonth() + "/" + (date.getYear() + 1900) +
-                " a las: " + date.getHours() + ":" + date.getMinutes();
+                " a las: " + date.getHours() + ":" + minutos;
         return fecha;
     }
+//
+//    public static void showDialog(Activity a, int layout) {
+//
+//
+//    }
 }

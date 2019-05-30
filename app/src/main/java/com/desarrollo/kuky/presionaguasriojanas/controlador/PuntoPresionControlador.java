@@ -20,14 +20,14 @@ import java.util.ArrayList;
 public class PuntoPresionControlador {
     private SyncMysqlToSqlite syncMysqlToSqlite;
     private SyncSqliteToMysql syncSqliteToMysql;
-    private Integer check;
     private ArrayList<PuntoPresion> puntosPresion;
 
     private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
 
         Activity a;
         private ProgressDialog pDialog;
-        ArrayList<PuntoPresion> puntosPresion;
+        private Integer check;
+        private ArrayList<PuntoPresion> puntosPresion;
 
         @Override
         protected void onPreExecute() {
@@ -101,11 +101,6 @@ public class PuntoPresionControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 Util.mostrarMensaje(a, "Se enviaron los puntos de forma exitosa");
-                /*//////////////////////////////////////////////////////////////////////////////////
-                 *                      CONCATENO CON LA SIGUIENTE ASYNCTASK
-                 */////////////////////////////////////////////////////////////////////////////////*/
-                HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-                historialPuntosControlador.sincronizarDeSqliteToMysql(a);
             } else {
                 Util.mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }
@@ -127,6 +122,7 @@ public class PuntoPresionControlador {
 
         private ProgressDialog pDialog;
         Activity a;
+        private Integer check;
 
         @Override
         protected void onPreExecute() {
@@ -187,14 +183,18 @@ public class PuntoPresionControlador {
                             rs.getInt(10) + "');"; // id_tipo_punto
                     db.execSQL(sql);
                 }
-                db.close();
                 check++;
-                rs.close();
-                ps.close();
-                conn.close();
                 if (check == 1) {
+                    db.close();
+                    rs.close();
+                    ps.close();
+                    conn.close();
                     return "EXITO";
                 } else {
+                    db.close();
+                    rs.close();
+                    ps.close();
+                    conn.close();
                     return "ERROR";
                 }
             } catch (SQLException e) {

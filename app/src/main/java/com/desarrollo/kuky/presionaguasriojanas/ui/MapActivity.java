@@ -12,10 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
@@ -64,8 +66,15 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
 
         if (id == R.id.action_sync) {
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            if (puntoPresionControlador.sincronizarDeSqliteToMysql(this) == Util.EXITOSO) {
-                abrirActivity(MapActivity.this, MapActivity.class);
+            HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
+            if (puntoPresionControlador.sincronizarDeSqliteToMysql(this) == EXITOSO) {
+                if (historialPuntosControlador.sincronizarDeSqliteToMysql(this) == EXITOSO) {
+                    if (historialPuntosControlador.sincronizarDeMysqlToSqlite(this) == EXITOSO) {
+                        if (puntoPresionControlador.sincronizarDeMysqlToSqlite(this) == EXITOSO) {
+                            abrirActivity(MapActivity.this, MapActivity.class);
+                        }
+                    }
+                }
             }
             return true;
         }
@@ -140,7 +149,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(Util.ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
+        editor.putInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
         // Commit the edits!
         editor.commit();
 
@@ -164,7 +173,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
                 .setPositiveButton("Si, cerrar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         UsuarioControlador usuarioControlador = new UsuarioControlador();
-                        if (usuarioControlador.eliminarUsuario(a) == Util.EXITOSO) {
+                        if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
                             abrirActivity(MapActivity.this, LoginActivity.class);
                         }
                     }

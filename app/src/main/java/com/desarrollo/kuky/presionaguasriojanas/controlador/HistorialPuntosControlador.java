@@ -21,14 +21,14 @@ public class HistorialPuntosControlador {
 
     private SyncMysqlToSqlite syncMysqlToSqlite;
     private SyncSqliteToMysql syncSqliteToMysql;
-    private Integer check;
     private ArrayList<HistorialPuntos> historiales;
 
     private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
 
         Activity a;
         private ProgressDialog pDialog;
-        ArrayList<HistorialPuntos> historiales;
+        private Integer check;
+        private ArrayList<HistorialPuntos> historiales;
 
         @Override
         protected void onPreExecute() {
@@ -100,10 +100,7 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 Util.mostrarMensaje(a, "Se enviaron los historiales de forma exitosa");
-                /*//////////////////////////////////////////////////////////////////////////////////
-                 *                      CONCATENO CON LA SIGUIENTE ASYNCTASK
-                 */////////////////////////////////////////////////////////////////////////////////*/
-                sincronizarDeMysqlToSqlite(a);
+
             } else {
                 Util.mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }
@@ -124,6 +121,7 @@ public class HistorialPuntosControlador {
     private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
 
         Activity a;
+        private Integer check;
         private ProgressDialog pDialog;
 
         @Override
@@ -176,14 +174,18 @@ public class HistorialPuntosControlador {
                             rs.getInt(6) + "');"; // id_tipo_presion
                     db.execSQL(sql);
                 }
-                db.close();
                 check++;
-                rs.close();
-                ps.close();
-                conn.close();
                 if (check == 1) {
+                    db.close();
+                    rs.close();
+                    ps.close();
+                    conn.close();
                     return "EXITO";
                 } else {
+                    db.close();
+                    rs.close();
+                    ps.close();
+                    conn.close();
                     return "ERROR";
                 }
             } catch (SQLException e) {
@@ -197,11 +199,6 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 Util.mostrarMensaje(a, "Se copio el historial de forma exitosa");
-                /*//////////////////////////////////////////////////////////////////////////////////
-                 *                      CONCATENO CON LA SIGUIENTE ASYNCTASK
-                 */////////////////////////////////////////////////////////////////////////////////*/
-                PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-                puntoPresionControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 Util.mostrarMensaje(a, "Error en el checkHistorial");
             }
