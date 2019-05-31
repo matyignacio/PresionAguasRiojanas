@@ -17,6 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+
 public class PuntoPresionControlador {
     private SyncMysqlToSqlite syncMysqlToSqlite;
     private SyncSqliteToMysql syncSqliteToMysql;
@@ -40,7 +43,7 @@ public class PuntoPresionControlador {
 
         public SyncSqliteToMysql(Activity a) {
             this.a = a;
-            check = 0;
+            check = ERROR;
             puntosPresion = new ArrayList<>();
         }
 
@@ -135,7 +138,7 @@ public class PuntoPresionControlador {
 
         public SyncMysqlToSqlite(Activity a) {
             this.a = a;
-            check = 0;
+            check = ERROR;
         }
 
         @Override
@@ -184,7 +187,7 @@ public class PuntoPresionControlador {
                     db.execSQL(sql);
                 }
                 check++;
-                if (check == 1) {
+                if (check == EXITOSO) {
                     db.close();
                     rs.close();
                     ps.close();

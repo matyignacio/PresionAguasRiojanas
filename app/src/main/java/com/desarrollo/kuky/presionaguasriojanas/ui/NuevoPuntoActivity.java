@@ -9,12 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
@@ -23,17 +25,25 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPunto;
 import com.desarrollo.kuky.presionaguasriojanas.util.GPSTracker;
 
+import java.util.ArrayList;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
 public class NuevoPuntoActivity extends AppCompatActivity {
 
     private EditText etCircuito, etBarrio, etCalle1, etCalle2, etPresion;
     private Button bEnviarNuevoPunto;
+    private ArrayList<EditText> inputs = new ArrayList<>();
+    private PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+    private PuntoPresion puntoPresion = new PuntoPresion();
+    private TipoPunto tipoPunto = new TipoPunto();
+    private TipoPresion tipoPresion = new TipoPresion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +54,42 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
         etPresion = findViewById(R.id.etPresion);
+        Spinner spinner = findViewById(R.id.sTipoPunto);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.tipos_punto_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                tipoPunto.setId(i+1);
+                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                tipoPunto.setId(0);
+                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+            }
+        });
+        inputs.add(etCircuito);
+        inputs.add(etBarrio);
+        inputs.add(etCalle1);
+        // inputs.add(etCalle2); A ESTE LO COMENTO PORQUE NO ES OBLIGATORIO EL CAMPO
+        inputs.add(etPresion);
         bEnviarNuevoPunto = findViewById(R.id.bEnviarNuevoPunto);
         bEnviarNuevoPunto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etCircuito.getText().toString().equals("") ||
-                        etCalle1.getText().toString().equals("") ||
-                        etPresion.getText().toString().equals("") ||
-                        etBarrio.getText().toString().equals("")) {
-                    mostrarMensaje(NuevoPuntoActivity.this, "Debe llenar los campos");
-                } else {
+                if (validarCampos(NuevoPuntoActivity.this, inputs) == EXITOSO) {
                     if (insertarPunto() == EXITOSO) {
                         mostrarMensaje(NuevoPuntoActivity.this, "Se agrego el nuevo punto");
                         abrirActivity(NuevoPuntoActivity.this, MapActivity.class);
                     } else {
-                        mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al agregar el punto");
+                        mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al intentar guardar");
                     }
                 }
             }
@@ -80,10 +111,6 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private int insertarPunto() {
         try {
             // INICIALIZAMOS LO Q VAMOS A NECESITAR
-            PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            PuntoPresion puntoPresion = new PuntoPresion();
-            TipoPunto tipoPunto = new TipoPunto();
-            TipoPresion tipoPresion = new TipoPresion();
             GPSTracker gpsTracker = new GPSTracker(this);
             // OBTENEMOS LA UBICACION
             gpsTracker.getLocation();
@@ -172,13 +199,13 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     }
 
     private void solicitarPermisosManual() {
-        final CharSequence[] opciones = {"si", "no"};
-        final AlertDialog.Builder alertOpciones = new AlertDialog.Builder(NuevoPuntoActivity.this);
+        final CharSequence[] opciones = {"Si", "No"};
+        AlertDialog.Builder alertOpciones = new AlertDialog.Builder(NuevoPuntoActivity.this);
         alertOpciones.setTitle("¿Desea configurar los permisos de forma manual?");
         alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (opciones[i].equals("si")) {
+                if (opciones[i].equals("Si")) {
                     Intent intent = new Intent();
                     intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     Uri uri = Uri.fromParts("package", getPackageName(), null);

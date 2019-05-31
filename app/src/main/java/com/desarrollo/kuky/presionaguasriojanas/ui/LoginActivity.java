@@ -13,13 +13,18 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
+import java.util.ArrayList;
+
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
 public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     public static Usuario usuario;
+    private ArrayList<EditText> inputs = new ArrayList<>();
     private EditText etMail;
     private EditText etClave;
     private Button bLogin;
@@ -34,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         // CAPTURAMOS LOS ELEMENTOS
         etMail = findViewById(R.id.etMail);
         etClave = findViewById(R.id.etClave);
+        inputs.add(etMail);
+        inputs.add(etClave);
         bLogin = findViewById(R.id.bLogin);
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +55,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        attemptLogin = new AttemptLogin(this);
-        attemptLogin.execute();
-
+        if (validarCampos(this, inputs) == EXITOSO) {
+            attemptLogin = new AttemptLogin(this);
+            attemptLogin.execute();
+        }
     }
 
     private class AttemptLogin extends AsyncTask<String, String, String> {

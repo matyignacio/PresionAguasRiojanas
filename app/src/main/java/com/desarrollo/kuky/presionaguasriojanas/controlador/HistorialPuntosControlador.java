@@ -17,6 +17,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+
 public class HistorialPuntosControlador {
 
     private SyncMysqlToSqlite syncMysqlToSqlite;
@@ -41,7 +44,7 @@ public class HistorialPuntosControlador {
 
         public SyncSqliteToMysql(Activity a) {
             this.a = a;
-            check = 0;
+            check = ERROR;
             historiales = new ArrayList<>();
         }
 
@@ -114,7 +117,7 @@ public class HistorialPuntosControlador {
             return Util.EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, "Eror SyncSqliteToMysql HPC" + e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
@@ -135,7 +138,7 @@ public class HistorialPuntosControlador {
 
         public SyncMysqlToSqlite(Activity a) {
             this.a = a;
-            check = 0;
+            check = ERROR;
         }
 
         @Override
@@ -175,7 +178,7 @@ public class HistorialPuntosControlador {
                     db.execSQL(sql);
                 }
                 check++;
-                if (check == 1) {
+                if (check == EXITOSO) {
                     db.close();
                     rs.close();
                     ps.close();
@@ -213,7 +216,7 @@ public class HistorialPuntosControlador {
             return Util.EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, "Eror SyncMysqlToSqlite HPC" + e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
@@ -287,7 +290,7 @@ public class HistorialPuntosControlador {
             return Util.EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, "Error insertar HPC " + e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
@@ -302,7 +305,7 @@ public class HistorialPuntosControlador {
             return Util.EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, "Error actualizarPendiente HPC " + e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 }

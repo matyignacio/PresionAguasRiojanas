@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
@@ -32,6 +32,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
         implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
@@ -65,16 +66,13 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         int id = item.getItemId();
 
         if (id == R.id.action_sync) {
-            PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-            if (puntoPresionControlador.sincronizarDeSqliteToMysql(this) == EXITOSO) {
-                if (historialPuntosControlador.sincronizarDeSqliteToMysql(this) == EXITOSO) {
-                    if (historialPuntosControlador.sincronizarDeMysqlToSqlite(this) == EXITOSO) {
-                        if (puntoPresionControlador.sincronizarDeMysqlToSqlite(this) == EXITOSO) {
-                            abrirActivity(MapActivity.this, MapActivity.class);
-                        }
-                    }
+            try {
+                MapActivityControlador mapActivityControlador = new MapActivityControlador();
+                if (mapActivityControlador.sync(this) == EXITOSO) {
+                    abrirActivity(this, MapActivity.class);
                 }
+            } catch (Exception e) {
+                mostrarMensaje(this, e.toString());
             }
             return true;
         }

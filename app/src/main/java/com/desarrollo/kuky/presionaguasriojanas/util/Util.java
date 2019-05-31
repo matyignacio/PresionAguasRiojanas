@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Util {
@@ -43,9 +45,19 @@ public class Util {
                 " a las: " + date.getHours() + ":" + minutos;
         return fecha;
     }
-//
-//    public static void showDialog(Activity a, int layout) {
-//
-//
-//    }
+
+    public static int validarCampos(Activity a, ArrayList<EditText> inputs) {
+        int i, check = 1;
+        for (i = 0; i < inputs.size(); i++) {
+            if (inputs.get(i).getText().toString().equals("")) {
+                check = 0;
+            }
+        }
+        if (check == EXITOSO) {
+            return EXITOSO;
+        } else {
+            mostrarMensaje(a, "Debe llenar los campos");
+            return ERROR;
+        }
+    }
 }

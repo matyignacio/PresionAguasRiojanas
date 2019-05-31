@@ -23,6 +23,8 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.util.GPSTracker;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
+import java.util.ArrayList;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -30,29 +32,30 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
 public class NuevaPresionActivity extends AppCompatActivity {
     private EditText etPresion;
     private Button bEnviarMedicion;
+    private ArrayList<EditText> inputs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_presion);
         etPresion = findViewById(R.id.etPresion);
+        inputs.add(etPresion);
         bEnviarMedicion = findViewById(R.id.bEnviarMediicion);
         bEnviarMedicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!etPresion.getText().toString().equals("")) {
+                if (validarCampos(NuevaPresionActivity.this, inputs) == EXITOSO) {
                     if (insertarMedicion(Float.parseFloat(etPresion.getText().toString())) == EXITOSO) {
                         mostrarMensaje(NuevaPresionActivity.this, "Se ingreso con exito");
                         abrirActivity(NuevaPresionActivity.this, PuntoPresionActivity.class);
                     } else {
-                        mostrarMensaje(NuevaPresionActivity.this, "Ocurrio un error durante el ingreso");
+                        mostrarMensaje(NuevaPresionActivity.this, "Ocurrio un error al intentar guardar");
                     }
-                } else {
-                    mostrarMensaje(NuevaPresionActivity.this, "Debe ingresar una presion");
                 }
             }
         });
@@ -162,13 +165,13 @@ public class NuevaPresionActivity extends AppCompatActivity {
     }
 
     private void solicitarPermisosManual() {
-        final CharSequence[] opciones = {"si", "no"};
-        final AlertDialog.Builder alertOpciones = new AlertDialog.Builder(NuevaPresionActivity.this);
+        final CharSequence[] opciones = {"Si", "No"};
+        AlertDialog.Builder alertOpciones = new AlertDialog.Builder(NuevaPresionActivity.this);
         alertOpciones.setTitle("¿Desea configurar los permisos de forma manual?");
         alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (opciones[i].equals("si")) {
+                if (opciones[i].equals("Si")) {
                     Intent intent = new Intent();
                     intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     Uri uri = Uri.fromParts("package", getPackageName(), null);
