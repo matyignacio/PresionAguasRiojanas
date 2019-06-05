@@ -18,8 +18,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
@@ -283,15 +285,30 @@ public class HistorialPuntosControlador {
                     "VALUES" +
                     "('" + historialPuntos.getLatitud() + "','" + // latitud
                     historialPuntos.getLongitud() + "','" + // longitud
-                    "1','" + // pendiente
+                    INSERTAR_PUNTO + "','" + // pendiente
                     historialPuntos.getPresion() + "','" + // presion
                     historialPuntos.getPuntoPresion().getId() + "');"; // id_punto_presion
             db.execSQL(sql);
-            sql = "UPDATE puntos_presion " +
-                    "SET presion = '" + historialPuntos.getPresion() + "', pendiente = 1 " +
-                    "WHERE id=" + historialPuntos.getPuntoPresion().getId();
-            db.execSQL(sql);
+            PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+            PuntoPresion puntoPresion = puntoPresionControlador.extraerPorId(a, historialPuntos.getPuntoPresion().getId());
+            /**
+             * EVALUAREMOS SI EL PUNTO ES UNO NUEVO SIN IMPACTAR EN LA BASE MYSQL
+             * O SI YA ES UN PUNTO CONOCIDO Y SIMPLEMENTE SE LE AGREGO UNA NUEVA MEDICION
+             */
+            SQLiteDatabase db2 = BaseHelper.getInstance(a).getWritableDatabase();
+            if (puntoPresion.getPendiente() == INSERTAR_PUNTO) {
+                sql = "UPDATE puntos_presion " +
+                        "SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + INSERTAR_PUNTO + " " +
+                        "WHERE id=" + historialPuntos.getPuntoPresion().getId();
+
+            } else {
+                sql = "UPDATE puntos_presion " +
+                        "SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + ACTUALIZAR_PUNTO + " " +
+                        "WHERE id=" + historialPuntos.getPuntoPresion().getId();
+            }
+            db2.execSQL(sql);
             db.close();
+            db2.close();
             return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar HPC " + e.toString());

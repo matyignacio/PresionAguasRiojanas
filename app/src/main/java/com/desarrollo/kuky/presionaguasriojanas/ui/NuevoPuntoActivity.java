@@ -1,6 +1,7 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -84,14 +86,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         bEnviarNuevoPunto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validarCampos(NuevoPuntoActivity.this, inputs) == EXITOSO) {
-                    if (insertarPunto() == EXITOSO) {
-                        mostrarMensaje(NuevoPuntoActivity.this, "Se agrego el nuevo punto");
-                        abrirActivity(NuevoPuntoActivity.this, MapActivity.class);
-                    } else {
-                        mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al intentar guardar");
-                    }
-                }
+                showDialogGuardar(NuevoPuntoActivity.this);
             }
         });
         if (validaPermisos()) {
@@ -218,5 +213,36 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             }
         });
         alertOpciones.show();
+    }
+
+    public void showDialogGuardar(final Activity a) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(R.layout.dialog_guardar, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Si, Guardar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (validarCampos(NuevoPuntoActivity.this, inputs) == EXITOSO) {
+                            if (insertarPunto() == EXITOSO) {
+                                mostrarMensaje(NuevoPuntoActivity.this, "Se agrego el nuevo punto");
+                                abrirActivity(NuevoPuntoActivity.this, MapActivity.class);
+                            } else {
+                                mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al intentar guardar");
+                            }
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }

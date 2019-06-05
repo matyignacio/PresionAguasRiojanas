@@ -26,7 +26,6 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sign_out">Cerrar Sesion</string>
     <string name="b_add_punto_presion">Nuevo Punto</string>
     <string name="b_sign_out">Cerrar Sesion</string>
@@ -48,4 +47,6 @@
     <string name="GPSAlertDialogMessage">CuerpoMensaje</string>
     <string name="GPSAlertDialogTitle">TituloMensaje</string>
     <string name="tipo_punto">Tipo punto:</string>
+    <string name="tv_confirmar_guardar">¿Confirma que desea guardar?</string>
+    <string name="tv_confirmar_sincronizar">¿Esta seguro de sincronizar?</string>
 </resources>

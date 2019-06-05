@@ -66,14 +66,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         int id = item.getItemId();
 
         if (id == R.id.action_sync) {
-            try {
-                MapActivityControlador mapActivityControlador = new MapActivityControlador();
-                if (mapActivityControlador.sync(this) == EXITOSO) {
-//                    abrirActivity(this, MapActivity.class);
-                }
-            } catch (Exception e) {
-                mostrarMensaje(this, e.toString());
-            }
+            showDialogSync(MapActivity.this);
             return true;
         }
 
@@ -173,6 +166,36 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
                         UsuarioControlador usuarioControlador = new UsuarioControlador();
                         if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
                             abrirActivity(MapActivity.this, LoginActivity.class);
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void showDialogSync(final Activity a) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(R.layout.dialog_sincronizar, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Si, sincrozar bases", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            MapActivityControlador mapActivityControlador = new MapActivityControlador();
+                            if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
+                            }
+                        } catch (Exception e) {
+                            mostrarMensaje(MapActivity.this, e.toString());
                         }
                     }
                 })

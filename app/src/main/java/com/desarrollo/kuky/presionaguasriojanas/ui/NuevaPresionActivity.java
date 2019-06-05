@@ -1,6 +1,7 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
@@ -49,14 +52,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
         bEnviarMedicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validarCampos(NuevaPresionActivity.this, inputs) == EXITOSO) {
-                    if (insertarMedicion(Float.parseFloat(etPresion.getText().toString())) == EXITOSO) {
-                        mostrarMensaje(NuevaPresionActivity.this, "Se ingreso con exito");
-                        abrirActivity(NuevaPresionActivity.this, PuntoPresionActivity.class);
-                    } else {
-                        mostrarMensaje(NuevaPresionActivity.this, "Ocurrio un error al intentar guardar");
-                    }
-                }
+                showDialogGuardar(NuevaPresionActivity.this);
             }
         });
         if (validaPermisos()) {
@@ -82,7 +78,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
             GPSTracker gpsTracker = new GPSTracker(this);
             // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            int id = settings.getInt(Util.ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
+            int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
             puntoPresion.setId(id);
             // OBTENEMOS LA UBICACION
             gpsTracker.getLocation();
@@ -184,5 +180,35 @@ public class NuevaPresionActivity extends AppCompatActivity {
             }
         });
         alertOpciones.show();
+    }
+
+    public void showDialogGuardar(final Activity a) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(R.layout.dialog_guardar, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Si, Guardar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (validarCampos(NuevaPresionActivity.this, inputs) == EXITOSO) {
+                            if (insertarMedicion(Float.parseFloat(etPresion.getText().toString())) == EXITOSO) {
+                                mostrarMensaje(NuevaPresionActivity.this, "Se ingreso con exito");
+                                abrirActivity(NuevaPresionActivity.this, PuntoPresionActivity.class);
+                            } else {
+                                mostrarMensaje(NuevaPresionActivity.this, "Ocurrio un error al intentar guardar");
+                            }
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }

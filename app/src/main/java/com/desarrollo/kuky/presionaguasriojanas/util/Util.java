@@ -22,6 +22,8 @@ public class Util {
     public static String PUERTO = "3306";
     public static int EXITOSO = 1;
     public static int ERROR = 0;
+    public static int INSERTAR_PUNTO = 1;
+    public static int ACTUALIZAR_PUNTO = 2;
     public static int ESTANDAR_MEDICION = 3;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PREFS_NAME = "MyPrefsFile";
