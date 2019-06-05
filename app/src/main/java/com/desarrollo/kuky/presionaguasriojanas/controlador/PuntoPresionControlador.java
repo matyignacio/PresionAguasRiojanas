@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPunto;
+import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
@@ -19,16 +20,18 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class PuntoPresionControlador {
     private SyncMysqlToSqlite syncMysqlToSqlite;
     private SyncSqliteToMysql syncSqliteToMysql;
     private ArrayList<PuntoPresion> puntosPresion;
+    private ProgressDialog pDialog;
 
     private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
 
         Activity a;
-        private ProgressDialog pDialog;
         private Integer check;
         private ArrayList<PuntoPresion> puntosPresion;
 
@@ -36,7 +39,7 @@ public class PuntoPresionControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Enviando historial...");
+            pDialog.setMessage("Enviando puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -59,7 +62,7 @@ public class PuntoPresionControlador {
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
                     PreparedStatement ps;
-                    consultaSql = "INSERT INTO `puntos_presion`\n" +
+                    consultaSql = "INSERT INTO `puntos_presion`" +
                             "(`circuito`," +
                             "`barrio`," +
                             "`calle1`," +
@@ -103,9 +106,11 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                Util.mostrarMensaje(a, "Se enviaron los puntos de forma exitosa");
+                mostrarMensaje(a, "Se enviaron los puntos de forma exitosa");
+                HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
+                historialPuntosControlador.sincronizarDeSqliteToMysql(a);
             } else {
-                Util.mostrarMensaje(a, "Error en el checkHistorialToMysql");
+                mostrarMensaje(a, "Error en el checkPuntosToMysql");
             }
         }
     }
@@ -116,14 +121,13 @@ public class PuntoPresionControlador {
             syncSqliteToMysql.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Util.mostrarMensaje(a, "Eror SyncSqliteToMysql HPC" + e.toString());
+            mostrarMensaje(a, "Error SyncSqliteToMysql PPC" + e.toString());
             return Util.ERROR;
         }
     }
 
     private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
 
-        private ProgressDialog pDialog;
         Activity a;
         private Integer check;
 
@@ -210,9 +214,11 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                Util.mostrarMensaje(a, "Se copiaron puntos de forma exitosa");
+                mostrarMensaje(a, "Se copiaron puntos de forma exitosa");
+                HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
+                historialPuntosControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                Util.mostrarMensaje(a, "Error en el checkPuntoPresion");
+                mostrarMensaje(a, "Error en el checkPuntoPresion");
             }
         }
     }
@@ -223,7 +229,7 @@ public class PuntoPresionControlador {
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Util.mostrarMensaje(a, "Eror SyncMysqlToSqlite PPC" + e.toString());
+            mostrarMensaje(a, "Eror SyncMysqlToSqlite PPC" + e.toString());
             return Util.ERROR;
         }
     }
@@ -309,7 +315,7 @@ public class PuntoPresionControlador {
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Util.mostrarMensaje(a, "Error insertar PPC " + e.toString());
+            mostrarMensaje(a, "Error insertar PPC " + e.toString());
             return Util.ERROR;
         }
     }
@@ -352,7 +358,7 @@ public class PuntoPresionControlador {
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
-            Util.mostrarMensaje(a, "Error actualizarPendiente PPC " + e.toString());
+            mostrarMensaje(a, "Error actualizarPendiente PPC " + e.toString());
             return Util.ERROR;
         }
     }

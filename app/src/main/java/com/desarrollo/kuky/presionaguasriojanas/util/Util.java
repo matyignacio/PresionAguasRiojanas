@@ -12,10 +12,14 @@ import java.util.Date;
 
 public class Util {
     public static String DATA_BASE = "presion_aguas";
-    public static String DIRECCION_IP = "192.168.1.46";
-    public static String PUERTO = "3306";
+    public static String HOST = "192.168.1.46";
     public static String USER = "root";
     public static String CLAVE = "root";
+    //    public static String DATA_BASE = "u101901458_presi";
+//    public static String HOST = "sql200.main-hosting.eu";
+//    public static String USER = "u101901458_matia";
+//    public static String CLAVE = "Miseignacio11";
+    public static String PUERTO = "3306";
     public static int EXITOSO = 1;
     public static int ERROR = 0;
     public static int ESTANDAR_MEDICION = 3;

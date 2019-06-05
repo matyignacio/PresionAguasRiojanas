@@ -69,7 +69,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
             try {
                 MapActivityControlador mapActivityControlador = new MapActivityControlador();
                 if (mapActivityControlador.sync(this) == EXITOSO) {
-                    abrirActivity(this, MapActivity.class);
+//                    abrirActivity(this, MapActivity.class);
                 }
             } catch (Exception e) {
                 mostrarMensaje(this, e.toString());

@@ -8,6 +8,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CLAVE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.DATA_BASE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.HOST;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PUERTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USER;
+
 /**
  * Created by Kuky on 21/05/2019.
  */
@@ -18,11 +24,11 @@ public class Conexion {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(
-                    "jdbc:mysql://" + Util.DIRECCION_IP + ":" +
-                            Util.PUERTO + "/" +
-                            Util.DATA_BASE,
-                    Util.USER,
-                    Util.CLAVE);
+                    "jdbc:mysql://" + HOST + ":" +
+                            PUERTO + "/" +
+                            DATA_BASE,
+                    USER,
+                    CLAVE);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             conexion = null;

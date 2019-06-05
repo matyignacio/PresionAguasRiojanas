@@ -65,14 +65,14 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tipoPunto.setId(i+1);
-                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+                tipoPunto.setId(i + 1);
+//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 tipoPunto.setId(0);
-                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
             }
         });
         inputs.add(etCircuito);
@@ -125,7 +125,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             puntoPresion.setPresion(Float.parseFloat(etPresion.getText().toString()));
             tipoPresion.setId(1);
             puntoPresion.setTipoPresion(tipoPresion);
-            tipoPunto.setId(1);
+            // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
             puntoPresion.setTipoPunto(tipoPunto);
             // INSERTAMOS EL NUEVO REGISTRO
             puntoPresionControlador.insertar(puntoPresion, this);
