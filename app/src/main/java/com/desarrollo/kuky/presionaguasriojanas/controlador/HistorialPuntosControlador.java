@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
@@ -105,6 +106,7 @@ public class HistorialPuntosControlador {
                 }
             } catch (SQLException e) {
                 try {
+                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
                     conn.rollback();
                 } catch (SQLException e1) {
                     e1.printStackTrace();
