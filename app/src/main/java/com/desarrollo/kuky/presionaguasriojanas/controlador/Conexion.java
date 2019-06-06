@@ -2,8 +2,6 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
 import android.app.Activity;
 
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

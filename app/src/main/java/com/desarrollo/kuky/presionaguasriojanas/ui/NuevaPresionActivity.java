@@ -23,7 +23,6 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosContr
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.util.GPSTracker;
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.util.ArrayList;
 
@@ -105,6 +104,8 @@ public class NuevaPresionActivity extends AppCompatActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+//                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     bEnviarMedicion.setEnabled(true);
@@ -131,15 +132,15 @@ public class NuevaPresionActivity extends AppCompatActivity {
         }
 
         if ((checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) /*&&
-                (checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)*/) {
+                (checkSelfPermission(ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)*/) {
             return true;
         }
 
-        if ((shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))/* ||
-                (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))*/) {
+        if ((shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) /*||
+                (shouldShowRequestPermissionRationale(ACCESS_COARSE_LOCATION))*/) {
             cargarDialogoRecomendacion();
         } else {
-            requestPermissions(new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            requestPermissions(new String[]{ACCESS_FINE_LOCATION/*, ACCESS_COARSE_LOCATION*/}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
 
         return false;
@@ -154,7 +155,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                requestPermissions(new String[]{ACCESS_FINE_LOCATION/*, ACCESS_COARSE_LOCATION*/}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         });
         dialogo.show();
