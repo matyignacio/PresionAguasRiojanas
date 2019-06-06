@@ -109,6 +109,7 @@ public class PuntoPresionControlador {
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
+                    ps.close();
                     /*//////////////////////////////////////////////////////////////////////////////////
                                             BAJAMOS EL PENDIENTE DEL PUNTO
                     //////////////////////////////////////////////////////////////////////////////////*/
@@ -137,7 +138,6 @@ public class PuntoPresionControlador {
                     e.printStackTrace();
                 }
             }
-
         }
 
         @Override
