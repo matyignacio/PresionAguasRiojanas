@@ -52,11 +52,16 @@ public class PuntoPresionControlador {
 
         @Override
         protected String doInBackground(String... strings) {
+            /**
+             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
+             DESDE EL TELEFONO HACIA EL SERVER
+             */
             ArrayList<PuntoPresion> puntosPresionInsertar = extraerTodosPendientesInsertar(a);
             ArrayList<PuntoPresion> puntosPresionActualizar = extraerTodosPendientesActualizar(a);
             Connection conn;
+            conn = Conexion.GetConnection(a);
             try {
-                conn = Conexion.GetConnection(a);
+                conn.setAutoCommit(false);
                 String consultaSql;
                 for (int i = 0; i < puntosPresionInsertar.size(); i++) {
                 /*//////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +90,7 @@ public class PuntoPresionControlador {
                             puntosPresionInsertar.get(i).getTipoPunto().getId() + "');"; //tipo punto
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
+                    conn.commit();
                     /*//////////////////////////////////////////////////////////////////////////////////
                                             BAJAMOS EL PENDIENTE DEL PUNTO
                     //////////////////////////////////////////////////////////////////////////////////*/
@@ -101,22 +107,35 @@ public class PuntoPresionControlador {
                             " WHERE id = " + puntosPresionActualizar.get(i).getId();
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
+                    conn.commit();
                     /*//////////////////////////////////////////////////////////////////////////////////
                                             BAJAMOS EL PENDIENTE DEL PUNTO
                     //////////////////////////////////////////////////////////////////////////////////*/
                     actualizarPendiente(puntosPresionActualizar.get(i), a);
                     check++;
                 }
-                conn.close();
                 if (check == (puntosPresionActualizar.size() + puntosPresionInsertar.size())) {
                     return "EXITO";
                 } else {
                     return "ERROR";
                 }
             } catch (SQLException e) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
                 e.printStackTrace();
                 return e.toString();
+            } finally {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
 
         @Override

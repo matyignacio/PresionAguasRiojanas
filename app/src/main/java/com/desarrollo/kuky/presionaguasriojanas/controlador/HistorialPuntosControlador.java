@@ -56,10 +56,15 @@ public class HistorialPuntosControlador {
 
         @Override
         protected String doInBackground(String... strings) {
+            /**
+             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
+             DESDE EL TELEFONO HACIA EL SERVER
+             */
             historiales = extraerTodosPendientes(a);
             Connection conn;
+            conn = Conexion.GetConnection(a);
             try {
-                conn = Conexion.GetConnection(a);
+                conn.setAutoCommit(false);
                 String consultaSql;
                 for (int i = 0; i < historiales.size(); i++) {
                 /*//////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +81,7 @@ public class HistorialPuntosControlador {
                             "'" + historiales.get(i).getPuntoPresion().getId() + "');";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
+                    conn.commit();
                     /*//////////////////////////////////////////////////////////////////////////////////
                                             UPDETEAMOS LA PRESION
                     //////////////////////////////////////////////////////////////////////////////////*/
@@ -84,6 +90,7 @@ public class HistorialPuntosControlador {
                             "WHERE `id` = '" + historiales.get(i).getPuntoPresion().getId() + "' ;";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
+                    conn.commit();
                     ps.close();
                     /*//////////////////////////////////////////////////////////////////////////////////
                                             BAJAMOS EL PENDIENTE DEL HISTORIAL
@@ -91,15 +98,26 @@ public class HistorialPuntosControlador {
                     actualizarPendiente(historiales.get(i), a);
                     check++;
                 }
-                conn.close();
                 if (check == historiales.size()) {
                     return "EXITO";
                 } else {
                     return "ERROR";
                 }
             } catch (SQLException e) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
                 e.printStackTrace();
                 return e.toString();
+            } finally {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
