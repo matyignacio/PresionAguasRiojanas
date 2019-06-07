@@ -131,16 +131,50 @@ public class UsuarioControlador {
         }
     }
 
-    public int existeUsuario(Activity a) {
+    public int existeUsuario(Activity a, Usuario u) {
+        u = new Usuario();
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
             Cursor c = db.rawQuery("SELECT * FROM usuarios", null);
             if (c.moveToFirst()) {
+                u.setNombre(c.getString(1));
                 return Util.EXITOSO;
             }
             c.close();
             db.close();
             return Util.ERROR;
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, e.toString());
+            return Util.ERROR;
+        }
+    }
+
+    public int esPrimerInicioModuloPresion(Activity a, Usuario u) {
+        u = new Usuario();
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+            Cursor c = db.rawQuery("SELECT * FROM usuarios", null);
+            if (c.moveToFirst()) {
+                u.setBandera(c.getInt(4));
+                return Util.EXITOSO;
+            }
+            c.close();
+            db.close();
+            return Util.ERROR;
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, e.toString());
+            return Util.ERROR;
+        }
+    }
+
+    public int editarBanderaPresion(Activity a, Boolean bandera) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE usuarios SET ( 'bandera_modulo_presion=" +
+                    bandera + ")";
+            db.execSQL(sql);
+            db.close();
+            return Util.EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
             return Util.ERROR;

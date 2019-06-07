@@ -46,11 +46,13 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private PuntoPresion puntoPresion = new PuntoPresion();
     private TipoPunto tipoPunto = new TipoPunto();
     private TipoPresion tipoPresion = new TipoPresion();
+    private GPSTracker gpsTracker ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_punto);
+        gpsTracker = new GPSTracker(this, this);
         etCircuito = findViewById(R.id.etCircuito);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
@@ -90,7 +92,12 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             }
         });
         if (validaPermisos()) {
-            bEnviarNuevoPunto.setEnabled(true);
+            //gpsTracker.getLocation();
+            if (gpsTracker.getIsGPSTrackingEnabled()) {
+                bEnviarNuevoPunto.setEnabled(true);
+            } else {
+                gpsTracker.showSettingsAlert();
+            }
         } else {
             bEnviarNuevoPunto.setEnabled(false);
         }
@@ -98,7 +105,6 @@ public class NuevoPuntoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
         abrirActivity(this, MapActivity.class);
     }
@@ -106,7 +112,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private int insertarPunto() {
         try {
             // INICIALIZAMOS LO Q VAMOS A NECESITAR
-            GPSTracker gpsTracker = new GPSTracker(this);
+
             // OBTENEMOS LA UBICACION
             gpsTracker.getLocation();
             gpsTracker.updateGPSCoordinates();

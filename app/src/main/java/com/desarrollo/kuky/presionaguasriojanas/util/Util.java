@@ -15,7 +15,7 @@ public class Util {
     public static String HOST = "192.168.1.46";
     public static String USER = "root";
     public static String CLAVE = "root";
-    //    public static String DATA_BASE = "u101901458_presi";
+//            public static String DATA_BASE = "u101901458_presi";
 //    public static String HOST = "sql200.main-hosting.eu";
 //    public static String USER = "u101901458_matia";
 //    public static String CLAVE = "Miseignacio11";
@@ -24,10 +24,11 @@ public class Util {
     public static int ERROR = 0;
     public static int INSERTAR_PUNTO = 1;
     public static int ACTUALIZAR_PUNTO = 2;
-    public static int ESTANDAR_MEDICION = 3;
+    public static int ESTANDAR_MEDICION = 6;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PREFS_NAME = "MyPrefsFile";
     public static String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
+    public static String NOMBRE_USUARIO_SHARED_PREFERENCE = "nombre_usuario";
 
     public static void abrirActivity(Activity a, Class destino) {
         Intent intent = new Intent(a, destino);

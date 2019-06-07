@@ -43,10 +43,12 @@
     <string name="hitn_ingrese_presion">Ingrese presion</string>
     <string name="b_enviar_medicion">Enviar medicion</string>
     <string name="label_cancel">Cancelar</string>
-    <string name="action_settings">Settings</string>
-    <string name="GPSAlertDialogMessage">CuerpoMensaje</string>
-    <string name="GPSAlertDialogTitle">TituloMensaje</string>
+    <string name="action_settings">Configurar y reiniciar app</string>
+    <string name="GPSAlertDialogMessage">Ud posee el GPS desactivado, debe activarlo para poder continuar</string>
+    <string name="GPSAlertDialogTitle">Error GPS</string>
     <string name="tipo_punto">Tipo punto:</string>
     <string name="tv_confirmar_guardar">¿Confirma que desea guardar?</string>
     <string name="tv_confirmar_sincronizar">¿Esta seguro de sincronizar?</string>
+    <string name="tvUsuario">Bienvenido:</string>
+    <string name="bModuloPresion">Modulo Presion</string>
 </resources>

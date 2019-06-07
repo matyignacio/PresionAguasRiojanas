@@ -40,11 +40,13 @@ public class NuevaPresionActivity extends AppCompatActivity {
     private EditText etPresion;
     private Button bEnviarMedicion;
     private ArrayList<EditText> inputs = new ArrayList<>();
+    private GPSTracker gpsTracker ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_presion);
+        gpsTracker = new GPSTracker(this, this);
         etPresion = findViewById(R.id.etPresion);
         inputs.add(etPresion);
         bEnviarMedicion = findViewById(R.id.bEnviarMediicion);
@@ -55,7 +57,12 @@ public class NuevaPresionActivity extends AppCompatActivity {
             }
         });
         if (validaPermisos()) {
-            bEnviarMedicion.setEnabled(true);
+            //gpsTracker.getLocation();
+            if (gpsTracker.getIsGPSTrackingEnabled()) {
+                bEnviarMedicion.setEnabled(true);
+            } else {
+                gpsTracker.showSettingsAlert();
+            }
         } else {
             bEnviarMedicion.setEnabled(false);
         }
@@ -63,7 +70,6 @@ public class NuevaPresionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
         abrirActivity(this, PuntoPresionActivity.class);
     }
@@ -74,7 +80,6 @@ public class NuevaPresionActivity extends AppCompatActivity {
             HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
             HistorialPuntos historialPuntos = new HistorialPuntos();
             PuntoPresion puntoPresion = new PuntoPresion();
-            GPSTracker gpsTracker = new GPSTracker(this);
             // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);

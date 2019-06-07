@@ -14,7 +14,6 @@ import android.view.View;
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,10 +46,16 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        primerInicio();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        abrirActivity(this, InicioActivity.class);
     }
 
     @Override
@@ -67,12 +72,6 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
 
         if (id == R.id.action_sync) {
             showDialogSync(MapActivity.this);
-            return true;
-        }
-
-        if (id == R.id.action_sign_out) {
-            /* LO QUE TENGAMOS QUE HACER PARA CERRAR SESION*/
-            showDialogCerrarSesion(this);
             return true;
         }
 
@@ -153,33 +152,6 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
     }
 
 
-    public void showDialogCerrarSesion(final Activity a) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(R.layout.dialog_cerrar_sesion, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Si, cerrar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        UsuarioControlador usuarioControlador = new UsuarioControlador();
-                        if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
-                            abrirActivity(MapActivity.this, LoginActivity.class);
-                        }
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
     public void showDialogSync(final Activity a) {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(a);
@@ -208,5 +180,9 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    private void primerInicio() {
+
     }
 }

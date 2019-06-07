@@ -72,7 +72,8 @@ public class BaseHelper extends SQLiteOpenHelper {
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "nombre varchar(30) default NULL, " +
             "mail varchar(45) default NULL," +
-            "clave varchar(45) default NULL" +
+            "clave varchar(45) default NULL," +
+            "bandera_modulo_presion INTEGER default 0" +
             ")";
 
     public String getSqlTablaUsuarios() {

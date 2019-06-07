@@ -48,6 +48,7 @@
         <activity
             android:name=".ui.NuevaPresionActivity"
             android:label="@string/title_activity_nueva_medicion" />
+        <activity android:name=".ui.InicioActivity"></activity>
     </application>
 
 </manifest>

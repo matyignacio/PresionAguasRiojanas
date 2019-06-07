@@ -37,7 +37,6 @@ public class HistorialActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
         abrirActivity(this, PuntoPresionActivity.class);
     }

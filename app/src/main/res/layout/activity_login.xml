@@ -9,6 +9,7 @@
         android:id="@+id/email_login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
 
@@ -24,17 +25,18 @@
             android:id="@+id/etClave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="@string/prompt_password"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/bLogin"
+            style="@style/b_primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/action_sign_in"
-            style="@style/b_primary"/>
+            android:text="@string/action_sign_in" />
 
     </LinearLayout>
 

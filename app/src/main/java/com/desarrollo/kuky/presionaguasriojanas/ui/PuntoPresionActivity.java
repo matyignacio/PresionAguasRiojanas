@@ -66,7 +66,6 @@ public class PuntoPresionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         /* LO QUE HACE CUANDO VUELVA*/
         abrirActivity(PuntoPresionActivity.this, MapActivity.class);
     }

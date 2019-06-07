@@ -6,6 +6,7 @@ public class Usuario {
     private String nombre;
     private String mail;
     private String clave;
+    private int bandera;
 
     public Integer getId() {
         return id;
@@ -37,6 +38,14 @@ public class Usuario {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    public int getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(int bandera) {
+        this.bandera = bandera;
     }
 
     @Override

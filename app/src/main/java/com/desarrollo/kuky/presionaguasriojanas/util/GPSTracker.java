@@ -1,5 +1,6 @@
 package com.desarrollo.kuky.presionaguasriojanas.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -16,10 +17,13 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 /*Created by
 @moizest89 in SV on 8/19/15.
@@ -32,6 +36,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String TAG = GPSTracker.class.getName();
 
     private final Context mContext;
+    private final Activity mActivity;
 
     // flag for GPS Status
     boolean isGPSEnabled = false;
@@ -61,8 +66,9 @@ public class GPSTracker extends Service implements LocationListener {
     // Store LocationManager.GPS_PROVIDER or LocationManager.NETWORK_PROVIDER information
     private String provider_info;
 
-    public GPSTracker(Context context) {
+    public GPSTracker(Context context, Activity activity) {
         this.mContext = context;
+        this.mActivity = activity;
         getLocation();
     }
 
@@ -95,18 +101,21 @@ public class GPSTracker extends Service implements LocationListener {
                 provider_info = LocationManager.GPS_PROVIDER;
 
             } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
-                this.isGPSTrackingEnabled = true;
+             this.isGPSTrackingEnabled = true;
 
-                Log.d(TAG, "Application use Network State to get GPS coordinates");
+             Log.d(TAG, "Application use Network State to get GPS coordinates");
 
-                /*
-                 * This provider determines location based on
-                 * availability of cell tower and WiFi access points. Results are retrieved
-                 * by means of a network lookup.
-                 */
-                provider_info = LocationManager.NETWORK_PROVIDER;
+             /*
+             * This provider determines location based on
+             * availability of cell tower and WiFi access points. Results are retrieved
+             * by means of a network lookup.
+             */
+             provider_info = LocationManager.NETWORK_PROVIDER;
 
-            }
+             }
+/**            else {
+                showSettingsAlert();
+            }*/
 
             // Application can use GPS or Network Provider
             if (!provider_info.isEmpty()) {
@@ -202,6 +211,8 @@ public class GPSTracker extends Service implements LocationListener {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
+                mActivity.finish();
+
             }
         });
 
@@ -210,7 +221,7 @@ public class GPSTracker extends Service implements LocationListener {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                abrirActivity(mActivity, MapActivity.class);
             }
         });
 
