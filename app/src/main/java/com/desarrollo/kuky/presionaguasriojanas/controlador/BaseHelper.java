@@ -37,6 +37,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaPuntosPresion);
         sqLiteDatabase.execSQL(sqlTablaUsuarios);
         sqLiteDatabase.execSQL(sqlTablaHistorialPuntosPresion);
+        sqLiteDatabase.execSQL(sqlTablaTipoPunto);
     }
 
     @Override
@@ -55,8 +56,7 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
             "  `id_tipo_presion` int(11) DEFAULT NULL," +
-            "  `id_tipo_punto` int(11) DEFAULT '1'" +
-            ")";
+            "  `id_tipo_punto` int(11) DEFAULT '1'" + ")";
 
     String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS `historial_puntos_presion` (" +
             "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -65,16 +65,19 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
             "  `fecha` date DEFAULT (datetime('now','localtime'))," +
-            "  `id_punto_presion` int(11) DEFAULT NULL" +
-            ")";
+            "  `id_punto_presion` int(11) DEFAULT NULL" + ")";
 
     String sqlTablaUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "nombre varchar(30) default NULL, " +
             "mail varchar(45) default NULL," +
             "clave varchar(45) default NULL," +
-            "bandera_modulo_presion INTEGER default 0" +
-            ")";
+            "bandera_modulo_presion INTEGER default 0" + ")";
+
+    String sqlTablaTipoPunto = "CREATE TABLE `tipo_punto` (" +
+            "  `id` int(11) NOT NULL," +
+            "  `nombre` varchar(20) NOT NULL," +
+            "  PRIMARY KEY (`id`)" + ") ";
 
     public String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
@@ -86,5 +89,13 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaHistorialPuntosPresion() {
         return sqlTablaHistorialPuntosPresion;
+    }
+
+    public String getSqlTablaTipoPunto() {
+        return sqlTablaTipoPunto;
+    }
+
+    public static BaseHelper getsInstance() {
+        return sInstance;
     }
 }

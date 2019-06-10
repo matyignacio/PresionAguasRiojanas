@@ -29,7 +29,7 @@ public class UsuarioControlador {
             LoginActivity.usuario = new Usuario();
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Estableciendo conexion...");
+            pDialog.setMessage("Iniciando sesion...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -56,6 +56,7 @@ public class UsuarioControlador {
                     LoginActivity.usuario.setNombre(rs.getString(2));
                     LoginActivity.usuario.setMail(rs.getString(3));
                     LoginActivity.usuario.setClave(rs.getString(4));
+                    LoginActivity.usuario.setBandera_modulo_presion(0);
                     guardarUsuario(a, LoginActivity.usuario);
                 } else {
                     LoginActivity.usuario.setNombre(null);
@@ -107,7 +108,8 @@ public class UsuarioControlador {
                     u.getId() + "', '"
                     + u.getNombre() + "', '"
                     + u.getMail() + "', '"
-                    + u.getClave() + "')";
+                    + u.getClave() + "', '"
+                    + u.getBandera_modulo_presion() + "')";
             db.execSQL(sql);
             db.close();
             return Util.EXITOSO;
@@ -131,13 +133,13 @@ public class UsuarioControlador {
         }
     }
 
-    public int existeUsuario(Activity a, Usuario u) {
-        u = new Usuario();
+    public int existeUsuario(Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
             Cursor c = db.rawQuery("SELECT * FROM usuarios", null);
             if (c.moveToFirst()) {
-                u.setNombre(c.getString(1));
+                LoginActivity.usuario.setNombre(c.getString(1));
+                LoginActivity.usuario.setBandera_modulo_presion(c.getInt(4));
                 return Util.EXITOSO;
             }
             c.close();
@@ -149,31 +151,14 @@ public class UsuarioControlador {
         }
     }
 
-    public int esPrimerInicioModuloPresion(Activity a, Usuario u) {
-        u = new Usuario();
+    public int editarBanderaPresion(Activity a, int bandera) {
         try {
-            SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-            Cursor c = db.rawQuery("SELECT * FROM usuarios", null);
-            if (c.moveToFirst()) {
-                u.setBandera(c.getInt(4));
-                return Util.EXITOSO;
-            }
-            c.close();
-            db.close();
-            return Util.ERROR;
-        } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
-            return Util.ERROR;
-        }
-    }
-
-    public int editarBanderaPresion(Activity a, Boolean bandera) {
-        try {
-            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE usuarios SET ( 'bandera_modulo_presion=" +
-                    bandera + ")";
-            db.execSQL(sql);
-            db.close();
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE usuarios SET  'bandera_modulo_presion' =" +
+                    bandera;
+            bh.execSQL(sql);
+            bh.close();
+            LoginActivity.usuario.setBandera_modulo_presion(bandera);
             return Util.EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());

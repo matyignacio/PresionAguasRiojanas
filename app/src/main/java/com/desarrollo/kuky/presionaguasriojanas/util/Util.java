@@ -7,28 +7,36 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * EN ESTA CLASE UTIL VAMOS A IR CREANDO LAS CONSTANTES O FUNCIONES QUE NOS SIRVAN PARA
+ * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
+ */
 public class Util {
-    public static String DATA_BASE = "presion_aguas";
-    public static String HOST = "192.168.1.46";
-    public static String USER = "root";
-    public static String CLAVE = "root";
-//            public static String DATA_BASE = "u101901458_presi";
-//    public static String HOST = "sql200.main-hosting.eu";
-//    public static String USER = "u101901458_matia";
-//    public static String CLAVE = "Miseignacio11";
-    public static String PUERTO = "3306";
-    public static int EXITOSO = 1;
-    public static int ERROR = 0;
-    public static int INSERTAR_PUNTO = 1;
-    public static int ACTUALIZAR_PUNTO = 2;
-    public static int ESTANDAR_MEDICION = 6;
+    public static final String DATA_BASE = "presion_aguas";
+    public static final String HOST = "192.168.1.46";
+    public static final String USER = "root";
+    public static final String CLAVE = "root";
+    //    public static final String DATA_BASE = "u101901458_presi";
+//    public static final String HOST = "sql200.main-hosting.eu";
+//    public static final String USER = "u101901458_matia";
+//    public static final String CLAVE = "Miseignacio11";
+    public static final String PUERTO = "3306";
+    public static final int EXITOSO = 1;
+    public static final int ERROR = 0;
+    public static final int PRIMER_INICIO_MODULO_PRESION = 0;
+    public static final int SEGUNDO_INICIO_MODULO_PRESION = 1;
+    public static final int INSERTAR_PUNTO = 1;
+    public static final int ACTUALIZAR_PUNTO = 2;
+    public static final int ESTANDAR_MEDICION = 6;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PREFS_NAME = "MyPrefsFile";
-    public static String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
-    public static String NOMBRE_USUARIO_SHARED_PREFERENCE = "nombre_usuario";
+    public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
+    public static final LatLng LA_RIOJA = new LatLng(-29.4126811, -66.8576855);
 
     public static void abrirActivity(Activity a, Class destino) {
         Intent intent = new Intent(a, destino);
@@ -49,7 +57,7 @@ public class Util {
             minutos = String.valueOf(date.getMinutes());
         }
         fecha = date.getDay() + "/" + date.getMonth() + "/" + (date.getYear() + 1900) +
-                " a las: " + date.getHours() + ":" + minutos;
+                "\na las: " + date.getHours() + ":" + minutos;
         return fecha;
     }
 

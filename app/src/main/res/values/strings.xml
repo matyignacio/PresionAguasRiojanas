@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Presion Aguas Riojanas</string>
-    <string name="title_activity_punto">Datos del punto</string>
-    <string name="title_activity_nuevo_punto">Añadir nuevo punto</string>
+    <string name="title_activity_punto">Datos del nombre</string>
+    <string name="title_activity_nuevo_punto">Añadir nuevo nombre</string>
     <string name="title_activity_nueva_medicion">Nueva medicion</string>
-    <string name="title_activity_historial">Historial del punto</string>
+    <string name="title_activity_historial">Historial del nombre</string>
     <string name="bAbrirMaps">Abrir Maps</string>
     <string name="prompt_email">Correo</string>
     <string name="prompt_password">Clave</string>
@@ -19,11 +19,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string-array name="tipos_punto_array">
-        <item>Perforacion</item>
-        <item>Cliente</item>
-        <item>Red</item>
-    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="sign_out">Cerrar Sesion</string>
@@ -46,9 +41,11 @@
     <string name="action_settings">Configurar y reiniciar app</string>
     <string name="GPSAlertDialogMessage">Ud posee el GPS desactivado, debe activarlo para poder continuar</string>
     <string name="GPSAlertDialogTitle">Error GPS</string>
-    <string name="tipo_punto">Tipo punto:</string>
+    <string name="tipo_punto">Tipo nombre:</string>
     <string name="tv_confirmar_guardar">¿Confirma que desea guardar?</string>
     <string name="tv_confirmar_sincronizar">¿Esta seguro de sincronizar?</string>
     <string name="tvUsuario">Bienvenido:</string>
     <string name="bModuloPresion">Modulo Presion</string>
+    <string name="tv_presion_historial">Presion:</string>
+    <string name="tv_fecha_historial">Fecha:</string>
 </resources>

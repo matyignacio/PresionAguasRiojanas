@@ -2,7 +2,6 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +16,6 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.NOMBRE_USUARIO_SHARED_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class InicioActivity extends AppCompatActivity {
@@ -32,9 +29,7 @@ public class InicioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inicio);
         tvUsuario = findViewById(R.id.tvUsuario);
         bMapas = findViewById(R.id.bMapas);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        tvUsuario.setText(" Bienvenido " +
-                settings.getString(NOMBRE_USUARIO_SHARED_PREFERENCE, ""));
+        tvUsuario.setText(" Bienvenido " + LoginActivity.usuario.getNombre());
         bMapas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,16 +55,13 @@ public class InicioActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-
         if (id == R.id.action_sign_out) {
             /* LO QUE TENGAMOS QUE HACER PARA CERRAR SESION*/
             showDialogCerrarSesion(this);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     public void showDialogCerrarSesion(final Activity a) {
         // get prompts.xml view

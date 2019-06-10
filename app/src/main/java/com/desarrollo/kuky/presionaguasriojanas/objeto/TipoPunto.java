@@ -2,7 +2,7 @@ package com.desarrollo.kuky.presionaguasriojanas.objeto;
 
 public class TipoPunto {
     private Integer id;
-    private String punto;
+    private String nombre;
 
     public Integer getId() {
         return id;
@@ -12,11 +12,11 @@ public class TipoPunto {
         this.id = id;
     }
 
-    public String getPunto() {
-        return punto;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setPunto(String punto) {
-        this.punto = punto;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

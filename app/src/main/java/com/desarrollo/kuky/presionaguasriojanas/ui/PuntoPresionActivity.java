@@ -20,7 +20,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
     PuntoPresion puntoPresion = new PuntoPresion();
     PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     // UI References
-    TextView etCircuito, etBarrio, etCalle1, etCalle2, etPresion, etLatitud, etLongitud;
+    TextView etCircuito, etBarrio, etCalle1, etCalle2, etPresion;
     Button bHistorialPunto, bNuevaMedicion;
 
 
@@ -34,8 +34,6 @@ public class PuntoPresionActivity extends AppCompatActivity {
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
         etPresion = findViewById(R.id.etPresion);
-        etLatitud = findViewById(R.id.etLatitud);
-        etLongitud = findViewById(R.id.etLongitud);
         bNuevaMedicion = findViewById(R.id.bNuevaMedicion);
         bHistorialPunto = findViewById(R.id.bHistorialPunto);
         // OBTENEMOS EL PUNTO DE PRESION
@@ -47,8 +45,6 @@ public class PuntoPresionActivity extends AppCompatActivity {
         etCalle1.setText(puntoPresion.getCalle1());
         etCalle2.setText(puntoPresion.getCalle2());
         etPresion.setText(puntoPresion.getPresion().toString());
-        etLatitud.setText(puntoPresion.getLatitud().toString());
-        etLongitud.setText(puntoPresion.getLongitud().toString());
         bNuevaMedicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

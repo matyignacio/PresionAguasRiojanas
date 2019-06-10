@@ -40,7 +40,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
     private EditText etPresion;
     private Button bEnviarMedicion;
     private ArrayList<EditText> inputs = new ArrayList<>();
-    private GPSTracker gpsTracker ;
+    private GPSTracker gpsTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

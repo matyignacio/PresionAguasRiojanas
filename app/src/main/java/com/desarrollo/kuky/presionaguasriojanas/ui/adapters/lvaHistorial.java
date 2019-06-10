@@ -44,7 +44,7 @@ public class lvaHistorial extends BaseAdapter {
 
 
         // Declare Variables
-        TextView tvFecha, tvLatitud, tvLongitud, tvPresion;
+        TextView tvFecha, tvPresion;
 
         //http://developer.android.com/intl/es/reference/android/view/LayoutInflater.html
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -52,16 +52,12 @@ public class lvaHistorial extends BaseAdapter {
         View itemView = inflater.inflate(R.layout.sli_historial, parent, false);
 
         // Locate the TextViews in listview_item.xml
-        tvFecha = itemView.findViewById(R.id.tvFecha);
-        tvLatitud = itemView.findViewById(R.id.tvLatitud);
-        tvLongitud = itemView.findViewById(R.id.tvLongitud);
-        tvPresion = itemView.findViewById(R.id.tvPresion);
+        tvFecha = itemView.findViewById(R.id.etFecha);
+        tvPresion = itemView.findViewById(R.id.etPresion);
         // Capture position and set to the TextViews
 
         tvFecha.setText(convertirFecha(historialPuntos.get(position).getFecha()));
-        tvLatitud.setText("Latitud: " + historialPuntos.get(position).getLatitud().toString());
-        tvLongitud.setText("Longitud: " + historialPuntos.get(position).getLongitud().toString());
-        tvPresion.setText("Presion: " + historialPuntos.get(position).getPresion().toString());
+        tvPresion.setText(historialPuntos.get(position).getPresion().toString() + " mca");
 
 
         return itemView;

@@ -1,7 +1,6 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +16,6 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.NOMBRE_USUARIO_SHARED_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
@@ -26,7 +23,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 public class LoginActivity extends AppCompatActivity {
 
     // UI references.
-    public static Usuario usuario;
+    public static Usuario usuario = new Usuario();
     private ArrayList<EditText> inputs = new ArrayList<>();
     private EditText etMail;
     private EditText etClave;
@@ -51,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
-        if (uControlador.existeUsuario(this, usuario) == Util.EXITOSO) {
-            asignarNombreSharedPreferences();
+        if (uControlador.existeUsuario(this) == Util.EXITOSO) {
             abrirActivity(LoginActivity.this, InicioActivity.class);
         }
     }
@@ -82,7 +78,9 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPreExecute() {
             nombre = String.valueOf(etMail.getText());
             pass = String.valueOf(etClave.getText());
-            uControlador.extraerPorMailYClave(LoginActivity.this, String.valueOf(etMail.getText()), String.valueOf(etClave.getText()));
+            uControlador.extraerPorMailYClave(LoginActivity.this,
+                    String.valueOf(etMail.getText()),
+                    String.valueOf(etClave.getText()));
         }
 
         @Override
@@ -107,20 +105,11 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             if (s.equals("correcto")) {
-                asignarNombreSharedPreferences();
                 abrirActivity(LoginActivity.this, InicioActivity.class);
             } else {
                 mostrarMensaje(a, s);
             }
         }
-    }
-
-    private void asignarNombreSharedPreferences() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(NOMBRE_USUARIO_SHARED_PREFERENCE, usuario.getNombre());
-        // Commit the edits!
-        editor.commit();
     }
 
 }

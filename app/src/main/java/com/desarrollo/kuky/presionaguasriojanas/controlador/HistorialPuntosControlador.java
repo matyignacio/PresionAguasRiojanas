@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
@@ -23,6 +24,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNT
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
@@ -129,8 +132,8 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 mostrarMensaje(a, "Se enviaron los historiales de forma exitosa");
-                PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-                puntoPresionControlador.sincronizarDeMysqlToSqlite(a);
+                TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
+                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }
@@ -228,6 +231,10 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 mostrarMensaje(a, "Se copio el historial de forma exitosa");
+                if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
+                    UsuarioControlador usuarioControlador = new UsuarioControlador();
+                    usuarioControlador.editarBanderaPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
+                }
                 abrirActivity(a, MapActivity.class);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorial");

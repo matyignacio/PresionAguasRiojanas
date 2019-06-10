@@ -22,12 +22,14 @@ import android.widget.Spinner;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.TipoPuntoControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPunto;
 import com.desarrollo.kuky.presionaguasriojanas.util.GPSTracker;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
@@ -40,45 +42,30 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 public class NuevoPuntoActivity extends AppCompatActivity {
 
     private EditText etCircuito, etBarrio, etCalle1, etCalle2, etPresion;
+    private Spinner sTipoPunto;
     private Button bEnviarNuevoPunto;
     private ArrayList<EditText> inputs = new ArrayList<>();
+    private ArrayList<TipoPunto> tipoPuntos = new ArrayList<>();
+    private TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
     private PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     private PuntoPresion puntoPresion = new PuntoPresion();
     private TipoPunto tipoPunto = new TipoPunto();
     private TipoPresion tipoPresion = new TipoPresion();
-    private GPSTracker gpsTracker ;
+    private GPSTracker gpsTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_punto);
+        tipoPuntos = tipoPuntoControlador.extraerTodos(this);
         gpsTracker = new GPSTracker(this, this);
         etCircuito = findViewById(R.id.etCircuito);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
         etPresion = findViewById(R.id.etPresion);
-        Spinner spinner = findViewById(R.id.sTipoPunto);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.tipos_punto_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tipoPunto.setId(i + 1);
-//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                tipoPunto.setId(0);
-//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
-            }
-        });
+        sTipoPunto = findViewById(R.id.sTipoPunto);
+        cargarSpinnerTipoPunto();
         inputs.add(etCircuito);
         inputs.add(etBarrio);
         inputs.add(etCalle1);
@@ -250,5 +237,31 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    private void cargarSpinnerTipoPunto() {
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < tipoPuntos.size(); i++) {
+            labels.add(tipoPuntos.get(i).getNombre());
+        }
+        /******************************************************************************************/
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, labels);
+        spinnerAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sTipoPunto.setAdapter(spinnerAdapter);
+        sTipoPunto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                tipoPunto.setId(i + 1);
+//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                tipoPunto.setId(0);
+//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+            }
+        });
     }
 }

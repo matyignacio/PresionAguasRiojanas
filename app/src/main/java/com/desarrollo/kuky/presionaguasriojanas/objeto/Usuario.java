@@ -6,7 +6,7 @@ public class Usuario {
     private String nombre;
     private String mail;
     private String clave;
-    private int bandera;
+    private int bandera_modulo_presion; // CERO ES QUE NUNCA INGRESO, DEBE SINCRONIZAR. UNO YA INGRESO AL MENOS UNA VEZ
 
     public Integer getId() {
         return id;
@@ -40,12 +40,12 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public int getBandera() {
-        return bandera;
+    public int getBandera_modulo_presion() {
+        return bandera_modulo_presion;
     }
 
-    public void setBandera(int bandera) {
-        this.bandera = bandera;
+    public void setBandera_modulo_presion(int bandera_modulo_presion) {
+        this.bandera_modulo_presion = bandera_modulo_presion;
     }
 
     @Override

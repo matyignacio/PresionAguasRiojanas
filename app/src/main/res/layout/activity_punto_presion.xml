@@ -103,55 +103,11 @@
                 android:inputType="textPostalAddress" />
 
             <TextView
-                android:id="@+id/tvLatitud"
-                style="@style/tv_primary"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvCalle2"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/tv_latitud" />
-
-            <TextView
-                android:id="@+id/etLatitud"
-                style="@style/tv_primary_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etCalle2"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@+id/tvLatitud"
-                android:ems="10"
-                android:inputType="numberDecimal" />
-
-            <TextView
-                android:id="@+id/tvLongitud"
-                style="@style/tv_primary"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvLatitud"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/tv_longitud" />
-
-            <TextView
-                android:id="@+id/etLongitud"
-                style="@style/tv_primary_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etLatitud"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@+id/tvLongitud"
-                android:ems="10"
-                android:inputType="numberDecimal" />
-
-            <TextView
                 android:id="@+id/tvPresion"
                 style="@style/tv_primary"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvLongitud"
+                android:layout_below="@id/tvCalle2"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/tv_presion" />
@@ -161,7 +117,7 @@
                 style="@style/tv_primary_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etLongitud"
+                android:layout_below="@id/etCalle2"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_toEndOf="@+id/tvPresion"

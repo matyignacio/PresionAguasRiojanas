@@ -29,16 +29,16 @@ import java.util.ArrayList;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
         implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker puntoMarcador;
-    private static final LatLng laRioja = new LatLng(-29.4126811, -66.8576855);
     private LatLng marcador;
     private ArrayList<PuntoPresion> puntosPresion = new ArrayList<>();
 
@@ -95,7 +95,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // Move camera to La Rioja
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LA_RIOJA));
         // Add a marker in La Rioja
 //        mMap.addMarker(new MarkerOptions().position(laRioja).title("La Rioja"));
 //        // Traemos los puntos de presion
@@ -162,13 +162,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Si, sincrozar bases", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try {
-                            MapActivityControlador mapActivityControlador = new MapActivityControlador();
-                            if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
-                            }
-                        } catch (Exception e) {
-                            mostrarMensaje(MapActivity.this, e.toString());
-                        }
+                        sincronizar();
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -183,6 +177,18 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
     }
 
     private void primerInicio() {
+        /**
+         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.sincronizarDeMysqlToSqlite
+         * */
+        if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
+            sincronizar();
+        }
 
+    }
+
+    private void sincronizar() {
+        MapActivityControlador mapActivityControlador = new MapActivityControlador();
+        if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
+        }
     }
 }

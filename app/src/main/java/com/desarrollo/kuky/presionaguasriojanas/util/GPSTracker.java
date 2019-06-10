@@ -101,21 +101,21 @@ public class GPSTracker extends Service implements LocationListener {
                 provider_info = LocationManager.GPS_PROVIDER;
 
             } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
-             this.isGPSTrackingEnabled = true;
+                this.isGPSTrackingEnabled = true;
 
-             Log.d(TAG, "Application use Network State to get GPS coordinates");
+                Log.d(TAG, "Application use Network State to get GPS coordinates");
 
-             /*
-             * This provider determines location based on
-             * availability of cell tower and WiFi access points. Results are retrieved
-             * by means of a network lookup.
-             */
-             provider_info = LocationManager.NETWORK_PROVIDER;
+                /*
+                 * This provider determines location based on
+                 * availability of cell tower and WiFi access points. Results are retrieved
+                 * by means of a network lookup.
+                 */
+                provider_info = LocationManager.NETWORK_PROVIDER;
 
-             }
+            }
 /**            else {
-                showSettingsAlert();
-            }*/
+ showSettingsAlert();
+ }*/
 
             // Application can use GPS or Network Provider
             if (!provider_info.isEmpty()) {
