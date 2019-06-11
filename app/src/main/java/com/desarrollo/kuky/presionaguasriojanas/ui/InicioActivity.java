@@ -20,7 +20,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class InicioActivity extends AppCompatActivity {
 
-    private Button bMapas;
+    private Button bMapas, bPrueba;
     private TextView tvUsuario;
 
     @Override
@@ -29,11 +29,18 @@ public class InicioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inicio);
         tvUsuario = findViewById(R.id.tvUsuario);
         bMapas = findViewById(R.id.bMapas);
+        bPrueba = findViewById(R.id.bPrueba);
         tvUsuario.setText(" Bienvenido " + LoginActivity.usuario.getNombre());
         bMapas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 abrirActivity(InicioActivity.this, MapActivity.class);
+            }
+        });
+        bPrueba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirActivity(InicioActivity.this, PruebaFused.class);
             }
         });
     }

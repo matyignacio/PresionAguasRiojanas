@@ -2,14 +2,17 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -26,12 +29,11 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.TipoPuntoControlador
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPunto;
-import com.desarrollo.kuky.presionaguasriojanas.util.GPSTracker;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -51,14 +53,19 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private PuntoPresion puntoPresion = new PuntoPresion();
     private TipoPunto tipoPunto = new TipoPunto();
     private TipoPresion tipoPresion = new TipoPresion();
-    private GPSTracker gpsTracker;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private String provider_info;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private LatLng posicion;
+
+    private LocationManager locationManager;
+    private LocationListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_punto);
         tipoPuntos = tipoPuntoControlador.extraerTodos(this);
-        gpsTracker = new GPSTracker(this, this);
         etCircuito = findViewById(R.id.etCircuito);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
@@ -72,22 +79,51 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         // inputs.add(etCalle2); A ESTE LO COMENTO PORQUE NO ES OBLIGATORIO EL CAMPO
         inputs.add(etPresion);
         bEnviarNuevoPunto = findViewById(R.id.bEnviarNuevoPunto);
-        bEnviarNuevoPunto.setOnClickListener(new View.OnClickListener() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        listener = new LocationListener() {
             @Override
-            public void onClick(View view) {
-                showDialogGuardar(NuevoPuntoActivity.this);
+            public void onLocationChanged(Location location) {
+                posicion = new LatLng(location.getLatitude(), location.getLongitude());
+                etCalle1.setText(String.valueOf(posicion.latitude));
+                etCalle2.setText(String.valueOf(posicion.longitude));
+                locationManager.removeUpdates(listener);
             }
-        });
-        if (validaPermisos()) {
-            //gpsTracker.getLocation();
-            if (gpsTracker.getIsGPSTrackingEnabled()) {
-                bEnviarNuevoPunto.setEnabled(true);
-            } else {
-                gpsTracker.showSettingsAlert();
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
             }
-        } else {
-            bEnviarNuevoPunto.setEnabled(false);
-        }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(i);
+            }
+        };
+//        bEnviarNuevoPunto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showDialogGuardar(NuevoPuntoActivity.this);
+//            }
+//        });
+//        if (validaPermisos()) {
+//            locationManager.requestLocationUpdates("network", 5000, 0, listener);
+//            bEnviarNuevoPunto.setEnabled(true);
+//            //gpsTracker.getLocation();
+////            if (gpsTracker.getIsGPSTrackingEnabled()) {
+////                bEnviarNuevoPunto.setEnabled(true);
+////            } else {
+////                gpsTracker.showSettingsAlert();
+////            }
+//        } else {
+//            bEnviarNuevoPunto.setEnabled(false);
+//        }
+        configure_button();
     }
 
     @Override
@@ -101,15 +137,14 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             // INICIALIZAMOS LO Q VAMOS A NECESITAR
 
             // OBTENEMOS LA UBICACION
-            gpsTracker.getLocation();
-            gpsTracker.updateGPSCoordinates();
+
             // CARGAMOS EL OBJETO historialPuntos
             puntoPresion.setCircuito(Integer.parseInt(etCircuito.getText().toString()));
             puntoPresion.setBarrio(etBarrio.getText().toString());
             puntoPresion.setCalle1(etCalle1.getText().toString());
             puntoPresion.setCalle2(etCalle2.getText().toString());
-            puntoPresion.setLatitud(gpsTracker.getLatitude());
-            puntoPresion.setLongitud(gpsTracker.getLongitude());
+//            puntoPresion.setLatitud(location.getLatitude());
+//            puntoPresion.setLongitud(location.getLongitude());
             puntoPresion.setPresion(Float.parseFloat(etPresion.getText().toString()));
             tipoPresion.setId(1);
             puntoPresion.setTipoPresion(tipoPresion);
@@ -118,7 +153,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             // INSERTAMOS EL NUEVO REGISTRO
             puntoPresionControlador.insertar(puntoPresion, this);
             // Y DETENEMOS EL USO DEL GPS
-            gpsTracker.stopUsingGPS();
+
             return EXITOSO;
         } catch (Exception e) {
             return ERROR;
@@ -130,82 +165,38 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    bEnviarNuevoPunto.setEnabled(true);
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-                    solicitarPermisosManual();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
+                configure_button();
+                break;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
-    private boolean validaPermisos() {
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
+    void configure_button() {
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                        , MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+            return;
         }
-
-        if ((checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) /*&&
-                (checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)*/) {
-            return true;
-        }
-
-        if ((shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))/* ||
-                (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))*/) {
-            cargarDialogoRecomendacion();
-        } else {
-            requestPermissions(new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-
-        return false;
-    }
-
-    private void cargarDialogoRecomendacion() {
-        AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
-        dialogo.setTitle("Permisos Desactivados");
-        dialogo.setMessage("Debe aceptar los permisos para el correcto funcionamiento de la App");
-
-        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
+        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
+        bEnviarNuevoPunto.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            public void onClick(View view) {
+                provider_info = LocationManager.GPS_PROVIDER;
+
+                if (!provider_info.isEmpty()) {
+                    locationManager.requestLocationUpdates(
+                            provider_info,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                            listener
+                    );
+                }
+
             }
         });
-        dialogo.show();
-    }
-
-    private void solicitarPermisosManual() {
-        final CharSequence[] opciones = {"Si", "No"};
-        AlertDialog.Builder alertOpciones = new AlertDialog.Builder(NuevoPuntoActivity.this);
-        alertOpciones.setTitle("¿Desea configurar los permisos de forma manual?");
-        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (opciones[i].equals("Si")) {
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    intent.setData(uri);
-                    startActivity(intent);
-                } else {
-                    mostrarMensaje(NuevoPuntoActivity.this, "Los permisos no fueron aceptados");
-                    dialogInterface.dismiss();
-                }
-            }
-        });
-        alertOpciones.show();
     }
 
     public void showDialogGuardar(final Activity a) {
