@@ -26,7 +26,7 @@
     <string name="b_sign_out">Cerrar Sesion</string>
     <string name="b_enviar_nuevo_punto">Agregar Punto</string>
     <string name="b_historial_punto">Ver Historial</string>
-    <string name="b_nueva_medicion">Medir Presion</string>
+    <string name="b_nueva_medicion">Agregar medicion</string>
     <string name="cerrar_sesion">¿Esta seguro que desea cerrar sesion?</string>
     <string name="tv_circuito">Circuito: </string>
     <string name="tv_barrio">Barrio: </string>
