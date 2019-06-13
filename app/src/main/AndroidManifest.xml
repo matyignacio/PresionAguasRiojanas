@@ -49,7 +49,6 @@
             android:name=".ui.NuevaPresionActivity"
             android:label="@string/title_activity_nueva_medicion" />
         <activity android:name=".ui.InicioActivity" />
-        <activity android:name=".ui.PruebaFused"></activity>
     </application>
 
 </manifest>

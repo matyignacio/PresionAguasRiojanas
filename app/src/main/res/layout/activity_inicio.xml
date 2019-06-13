@@ -28,13 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="@string/bModuloPresion" />
-        <Button
-            android:id="@+id/bPrueba"
-            style="@style/b_primary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Prueba" />
     </LinearLayout>
 
 </RelativeLayout>

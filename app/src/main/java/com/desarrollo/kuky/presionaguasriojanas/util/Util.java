@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -56,7 +57,7 @@ public class Util {
         } else {
             minutos = String.valueOf(date.getMinutes());
         }
-        fecha = date.getDay() + "/" + date.getMonth() + "/" + (date.getYear() + 1900) +
+        fecha = date.getDate() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() + 1900) +
                 "\na las: " + date.getHours() + ":" + minutos;
         return fecha;
     }
@@ -73,6 +74,18 @@ public class Util {
         } else {
             mostrarMensaje(a, "Debe llenar los campos");
             return ERROR;
+        }
+    }
+
+    public static void toggleButtons(ArrayList<Button> botones, Boolean bandera) {
+        if (bandera) {
+            for (int i = 0; i < botones.size(); i++) {
+                botones.get(i).setEnabled(false);
+            }
+        } else {
+            for (int i = 0; i < botones.size(); i++) {
+                botones.get(i).setEnabled(true);
+            }
         }
     }
 }

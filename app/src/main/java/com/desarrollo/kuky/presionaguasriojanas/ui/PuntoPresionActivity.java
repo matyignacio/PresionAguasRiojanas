@@ -44,7 +44,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
         etBarrio.setText(puntoPresion.getBarrio());
         etCalle1.setText(puntoPresion.getCalle1());
         etCalle2.setText(puntoPresion.getCalle2());
-        etPresion.setText(puntoPresion.getPresion().toString());
+        etPresion.setText(puntoPresion.getPresion().toString() + " mca");
         bNuevaMedicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
