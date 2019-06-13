@@ -296,8 +296,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
                 /**ESTE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL*/
             }
         } else {
-            mostrarMensaje(NuevaPresionActivity.this, "Debe activar el GPS");
-            mostrarMensaje(NuevaPresionActivity.this, "Una vez activo, abra nuevamente esta pantalla");
+            mostrarMensaje(NuevaPresionActivity.this, "Debe activar el GPS. Una vez activo, abra nuevamente esta pantalla");
         }
 
     }

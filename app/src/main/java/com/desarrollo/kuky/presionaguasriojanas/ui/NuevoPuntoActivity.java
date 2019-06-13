@@ -313,8 +313,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                 /**ESTE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL*/
             }
         } else {
-            mostrarMensaje(NuevoPuntoActivity.this, "Debe activar el GPS");
-            mostrarMensaje(NuevoPuntoActivity.this, "Una vez activo, abra nuevamente esta pantalla");
+            mostrarMensaje(NuevoPuntoActivity.this, "Debe activar el GPS. Una vez activo, abra nuevamente esta pantalla");
         }
 
     }
