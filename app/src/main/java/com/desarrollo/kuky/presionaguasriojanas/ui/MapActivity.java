@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -30,18 +34,22 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICI
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LA_RIOJA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
-public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
-        implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker puntoMarcador;
     private LatLng marcador;
     private ArrayList<PuntoPresion> puntosPresion = new ArrayList<>();
+    private int tipoPunto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,36 +60,72 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        tipoPunto = settings.getInt(TIPO_MAPA, MAPA_RECORRIDO);
+        if (tipoPunto == MAPA_RECORRIDO) {
+            this.setTitle("Mapa recorrido");
+        } else if (tipoPunto == MAPA_CLIENTES) {
+            this.setTitle("Mapa clientes");
+        }
     }
 
     @Override
     public void onBackPressed() {
-        abrirActivity(this, InicioActivity.class);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            abrirActivity(this, InicioActivity.class);
+        }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_map, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.action_sync) {
+        if (id == R.id.map_recorrido) {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(TIPO_MAPA, MAPA_RECORRIDO);
+            editor.commit();
+            abrirActivity(MapActivity.this, MapActivity.class);
+        } else if (id == R.id.map_clientes) {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(TIPO_MAPA, MAPA_CLIENTES);
+            editor.commit();
+            abrirActivity(MapActivity.this, MapActivity.class);
+        } else if (id == R.id.action_sync) {
             showDialogSync(MapActivity.this);
-            return true;
-        }
-
-        if (id == R.id.action_add) {
+        } else if (id == R.id.action_add) {
             abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
-            return true;
         }
+//         else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
-        return super.onOptionsItemSelected(item);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     /**
@@ -101,7 +145,7 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
 //        mMap.addMarker(new MarkerOptions().position(laRioja).title("La Rioja"));
 //        // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-        puntosPresion = puntoPresionControlador.extraerTodos(this);
+        puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
         // Recorremos el arrayList para ir creando los marcadores
         for (Integer i = 0; i < puntosPresion.size(); i++) {
             if (puntosPresion.get(i).getPresion() > ESTANDAR_MEDICION) {

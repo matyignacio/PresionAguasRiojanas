@@ -10,8 +10,8 @@ import android.util.Log;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
-import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
@@ -369,56 +369,6 @@ public class HistorialPuntosControlador {
                         " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + ACTUALIZAR_PUNTO +
                         " WHERE id=" + historialPuntos.getPuntoPresion().getId() +
                         " AND id_usuario LIKE '" + historialPuntos.getPuntoPresion().getUsuario().getId() + "'";
-            }
-            db2.execSQL(sql);
-            db.close();
-            db2.close();
-            return Util.EXITOSO;
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error insertar HPC " + e.toString());
-            return ERROR;
-        }
-    }
-
-    public int insertar(HistorialPuntos historialPuntos, Activity a, String u) {
-        try {
-            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "INSERT INTO `historial_puntos_presion`" +
-                    "(`latitud`," +
-                    "`longitud`," +
-                    "`pendiente`," +
-                    "`presion`," +
-                    "`id_punto_presion`," +
-                    "`id_usuario`)" +
-                    "VALUES" +
-                    "('" + historialPuntos.getLatitud() + "','" + // latitud
-                    historialPuntos.getLongitud() + "','" + // longitud
-                    INSERTAR_PUNTO + "','" + // pendiente
-                    historialPuntos.getPresion() + "','" + // presion
-                    historialPuntos.getPuntoPresion().getId() + "','" + // id_punto_presion
-                    LoginActivity.usuario.getId() + "');"; // SIEMPRE TOMO EL USUARIO DEL LOGUEO
-            db.execSQL(sql);
-            PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            PuntoPresion puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(a,
-                    historialPuntos.getPuntoPresion().getId(),
-                    u);
-
-            /**
-             * EVALUAREMOS SI EL PUNTO ES UNO NUEVO SIN IMPACTAR EN LA BASE MYSQL
-             * O SI YA ES UN PUNTO CONOCIDO Y SIMPLEMENTE SE LE AGREGO UNA NUEVA MEDICION
-             */
-            SQLiteDatabase db2 = BaseHelper.getInstance(a).getWritableDatabase();
-            if (puntoPresion.getPendiente() == INSERTAR_PUNTO) {
-                sql = "UPDATE puntos_presion" +
-                        " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + INSERTAR_PUNTO +
-                        " WHERE id=" + puntoPresion.getId() +
-                        " AND id_usuario LIKE '" + puntoPresion.getUsuario().getId() + "'";
-
-            } else {
-                sql = "UPDATE puntos_presion" +
-                        " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + ACTUALIZAR_PUNTO +
-                        " WHERE id=" + puntoPresion.getId() +
-                        " AND id_usuario LIKE '" + puntoPresion.getUsuario().getId() + "'";
             }
             db2.execSQL(sql);
             db.close();

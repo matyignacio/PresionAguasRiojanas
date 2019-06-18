@@ -311,6 +311,38 @@ public class PuntoPresionControlador {
         return puntosPresion;
     }
 
+    public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
+        puntosPresion = new ArrayList<>();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM puntos_presion" +
+                " WHERE id_tipo_punto=" + idTipoPunto, null);
+
+        while (c.moveToNext()) {
+            Usuario u = new Usuario();
+            PuntoPresion puntoPresion = new PuntoPresion();
+            TipoPresion tipoPresion = new TipoPresion();
+            TipoPunto tipoPunto = new TipoPunto();
+            puntoPresion.setId(c.getInt(0));
+            puntoPresion.setCircuito(c.getInt(1));
+            puntoPresion.setBarrio(c.getString(2));
+            puntoPresion.setCalle1(c.getString(3));
+            puntoPresion.setCalle2(c.getString(4));
+            puntoPresion.setLatitud(c.getDouble(5));
+            puntoPresion.setLongitud(c.getDouble(6));
+            puntoPresion.setPresion(c.getFloat(8));
+            tipoPresion.setId(c.getInt(9));
+            puntoPresion.setTipoPresion(tipoPresion);
+            tipoPunto.setId(c.getInt(10));
+            puntoPresion.setTipoPunto(tipoPunto);
+            u.setId(c.getString(11));
+            puntoPresion.setUsuario(u);
+            puntosPresion.add(puntoPresion);
+        }
+        c.close();
+        db.close();
+        return puntosPresion;
+    }
+
     public PuntoPresion extraerPorId(Activity a, int id) {
         PuntoPresion puntoPresion = new PuntoPresion();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();

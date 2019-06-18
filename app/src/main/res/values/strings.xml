@@ -49,4 +49,11 @@
     <string name="tv_presion_historial">Presion:</string>
     <string name="tv_fecha_historial">Fecha:</string>
     <string name="tv_mca">mca</string>
+    <string name="title_activity_inicio2">Inicio2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Aguas Riojanas</string>
+    <string name="nav_header_subtitle">desarrollo@aguasriojanas.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="subtitulo_nav_maps">Mapas</string>
 </resources>
