@@ -10,10 +10,12 @@ import android.widget.TextView;
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class PuntoPresionActivity extends AppCompatActivity {
 
@@ -38,8 +40,10 @@ public class PuntoPresionActivity extends AppCompatActivity {
         bHistorialPunto = findViewById(R.id.bHistorialPunto);
         // OBTENEMOS EL PUNTO DE PRESION
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        int id = settings.getInt(Util.ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
-        puntoPresion = puntoPresionControlador.extraerPorId(this, id);
+        int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
+        String usuario = settings.getString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+        //mostrarMensaje(this, "id: " + id + ", usuario: " + usuario);
+        puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(this, id, usuario);
         etCircuito.setText(puntoPresion.getCircuito().toString());
         etBarrio.setText(puntoPresion.getBarrio());
         etCalle1.setText(puntoPresion.getCalle1());

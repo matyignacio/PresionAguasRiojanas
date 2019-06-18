@@ -21,7 +21,7 @@ public class UsuarioControlador {
 
     private class UsuarioPorMailYClave extends AsyncTask<String, Float, String> {
         Activity a;
-        String mail;
+        String eMail;
         String clave;
 
         @Override
@@ -34,9 +34,9 @@ public class UsuarioControlador {
             pDialog.show();
         }
 
-        public UsuarioPorMailYClave(Activity a, String mail, String clave) {
+        public UsuarioPorMailYClave(Activity a, String eMail, String clave) {
             this.a = a;
-            this.mail = mail;
+            this.eMail = eMail;
             this.clave = clave;
         }
 
@@ -47,15 +47,17 @@ public class UsuarioControlador {
             ResultSet rs;
             try {
                 conn = Conexion.GetConnection(a);
-                String consultaSql = "SELECT * FROM usuarios WHERE mail LIKE '" + mail + "' AND clave LIKE '" + clave + "'";
+                String consultaSql = "SELECT * FROM susuario WHERE email LIKE '" + eMail + "' AND clave LIKE '" + clave + "' AND activo LIKE 's'";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
                 rs = ps.getResultSet();
                 if (rs.next()) {
-                    LoginActivity.usuario.setId(rs.getInt(1));
+                    LoginActivity.usuario.setId(rs.getString(1));
                     LoginActivity.usuario.setNombre(rs.getString(2));
-                    LoginActivity.usuario.setMail(rs.getString(3));
+                    LoginActivity.usuario.setEmail(rs.getString(3));
                     LoginActivity.usuario.setClave(rs.getString(4));
+                    LoginActivity.usuario.setTipo(rs.getString(5));
+                    LoginActivity.usuario.setActivo(rs.getString(6));
                     LoginActivity.usuario.setBandera_modulo_presion(0);
                     guardarUsuario(a, LoginActivity.usuario);
                 } else {
@@ -65,7 +67,7 @@ public class UsuarioControlador {
                 ps.close();
                 conn.close();
                 if (LoginActivity.usuario.getNombre() == null) {
-                    return "El nombre de usuario es inexistente";
+                    return "El nombre de usuario es inexistente o esta dado de baja.";
                 } else {
                     return "";
                 }
@@ -104,11 +106,13 @@ public class UsuarioControlador {
     public int guardarUsuario(Activity a, Usuario u) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "INSERT INTO usuarios VALUES( '" +
+            String sql = "INSERT INTO susuario VALUES( '" +
                     u.getId() + "', '"
                     + u.getNombre() + "', '"
-                    + u.getMail() + "', '"
+                    + u.getEmail() + "', '"
                     + u.getClave() + "', '"
+                    + u.getTipo() + "', '"
+                    + u.getActivo() + "', '"
                     + u.getBandera_modulo_presion() + "')";
             db.execSQL(sql);
             db.close();
@@ -122,7 +126,7 @@ public class UsuarioControlador {
     public int eliminarUsuario(Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "DROP TABLE usuarios";
+            String sql = "DROP TABLE susuario";
             db.execSQL(sql);
             db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
             db.close();
@@ -136,10 +140,13 @@ public class UsuarioControlador {
     public int existeUsuario(Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-            Cursor c = db.rawQuery("SELECT * FROM usuarios", null);
+            Cursor c = db.rawQuery("SELECT * FROM susuario", null);
             if (c.moveToFirst()) {
+                LoginActivity.usuario.setId(c.getString(0));
                 LoginActivity.usuario.setNombre(c.getString(1));
-                LoginActivity.usuario.setBandera_modulo_presion(c.getInt(4));
+                LoginActivity.usuario.setTipo(c.getString(4));
+                LoginActivity.usuario.setActivo(c.getString(5));
+                LoginActivity.usuario.setBandera_modulo_presion(c.getInt(6));
                 return Util.EXITOSO;
             }
             c.close();
@@ -154,7 +161,7 @@ public class UsuarioControlador {
     public int editarBanderaPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE usuarios SET  'bandera_modulo_presion' =" +
+            String sql = "UPDATE susuario SET  'bandera_modulo_presion' =" +
                     bandera;
             bh.execSQL(sql);
             bh.close();

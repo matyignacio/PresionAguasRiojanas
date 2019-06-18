@@ -2,18 +2,20 @@ package com.desarrollo.kuky.presionaguasriojanas.objeto;
 
 public class Usuario {
 
-    private Integer id;
+    private String usuario;
     private String nombre;
-    private String mail;
+    private String email;
     private String clave;
+    private String tipo;
+    private String activo;
     private int bandera_modulo_presion; // CERO ES QUE NUNCA INGRESO, DEBE SINCRONIZAR. UNO YA INGRESO AL MENOS UNA VEZ
 
-    public Integer getId() {
-        return id;
+    public String getId() {
+        return usuario;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getNombre() {
@@ -24,12 +26,12 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getClave() {
@@ -38,6 +40,22 @@ public class Usuario {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getActivo() {
+        return activo;
+    }
+
+    public void setActivo(String activo) {
+        this.activo = activo;
     }
 
     public int getBandera_modulo_presion() {

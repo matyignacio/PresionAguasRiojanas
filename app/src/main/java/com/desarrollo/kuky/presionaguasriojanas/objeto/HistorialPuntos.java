@@ -9,6 +9,7 @@ public class HistorialPuntos {
     private Float presion;
     private Timestamp fecha;
     private PuntoPresion puntoPresion;
+    private Usuario usuario;
 
     public Integer getId() {
         return id;
@@ -56,5 +57,13 @@ public class HistorialPuntos {
 
     public void setPuntoPresion(PuntoPresion puntoPresion) {
         this.puntoPresion = puntoPresion;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

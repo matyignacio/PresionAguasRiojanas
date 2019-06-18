@@ -115,9 +115,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/etCalle2"
-                android:layout_toEndOf="@id/tvPresion"
+                android:layout_toEndOf="@+id/tvPresion"
+                android:layout_alignEnd="@+id/tvMca"
                 android:ems="10"
                 android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/tvMca"
+                style="@style/tv_primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etCalle2"
+                android:layout_alignEnd="@+id/etCircuito"
+                android:text="@string/tv_mca" />
         </RelativeLayout>
 
         <RelativeLayout

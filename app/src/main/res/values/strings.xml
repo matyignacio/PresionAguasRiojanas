@@ -48,4 +48,5 @@
     <string name="bModuloPresion">Modulo Presion</string>
     <string name="tv_presion_historial">Presion:</string>
     <string name="tv_fecha_historial">Fecha:</string>
+    <string name="tv_mca">mca</string>
 </resources>

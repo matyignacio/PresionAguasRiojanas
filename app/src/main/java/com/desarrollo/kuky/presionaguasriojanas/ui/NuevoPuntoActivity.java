@@ -110,7 +110,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         inputs.add(etCalle1);
         // inputs.add(etCalle2); A ESTE LO COMENTO PORQUE NO ES OBLIGATORIO EL CAMPO
         inputs.add(etPresion);
-        configure_button();
+        request_permissions();
     }
 
     @Override
@@ -153,13 +153,13 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                configure_button();
+                request_permissions();
                 break;
             }
         }
     }
 
-    void configure_button() {
+    void request_permissions() {
         // first check for permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -193,6 +193,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             puntoPresion.setPresion(Float.parseFloat(etPresion.getText().toString()));
             tipoPresion.setId(1);
             puntoPresion.setTipoPresion(tipoPresion);
+            puntoPresion.setUsuario(LoginActivity.usuario);
             // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
             puntoPresion.setTipoPunto(tipoPunto);
             // INSERTAMOS EL NUEVO REGISTRO

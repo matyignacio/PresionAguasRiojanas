@@ -10,6 +10,8 @@ import android.util.Log;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.TipoPunto;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
@@ -70,7 +72,8 @@ public class PuntoPresionControlador {
                 //////////////////////////////////////////////////////////////////////////////////*/
                     PreparedStatement ps;
                     consultaSql = "INSERT INTO `puntos_presion`" +
-                            "(`circuito`," +
+                            "(`id`," +
+                            "`circuito`," +
                             "`barrio`," +
                             "`calle1`," +
                             "`calle2`," +
@@ -78,9 +81,11 @@ public class PuntoPresionControlador {
                             "`longitud`," +
                             "`presion`," +
                             "`id_tipo_presion`," +
-                            "`id_tipo_punto`)" +
+                            "`id_tipo_punto`," +
+                            "`id_usuario`)" +
                             " VALUES " +
-                            "('" + puntosPresionInsertar.get(i).getCircuito() + "','" + //circuito
+                            "('" + puntosPresionInsertar.get(i).getId() + "','" + //id
+                            puntosPresionInsertar.get(i).getCircuito() + "','" + //circuito
                             puntosPresionInsertar.get(i).getBarrio() + "','" + //barrio
                             puntosPresionInsertar.get(i).getCalle1() + "','" + //calle1
                             puntosPresionInsertar.get(i).getCalle2() + "','" + //calle2
@@ -88,7 +93,8 @@ public class PuntoPresionControlador {
                             puntosPresionInsertar.get(i).getLongitud() + "','" + //longitud
                             puntosPresionInsertar.get(i).getPresion() + "','" + //presion
                             puntosPresionInsertar.get(i).getTipoPresion().getId() + "','" + //tipo presion
-                            puntosPresionInsertar.get(i).getTipoPunto().getId() + "');"; //tipo punto
+                            puntosPresionInsertar.get(i).getTipoPunto().getId() + "','" + //tipo punto
+                            LoginActivity.usuario.getId() + "');"; //id_usuario
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -105,7 +111,8 @@ public class PuntoPresionControlador {
                     PreparedStatement ps;
                     consultaSql = "UPDATE `puntos_presion` SET " +
                             "`presion` = " + puntosPresionActualizar.get(i).getPresion() +
-                            " WHERE id = " + puntosPresionActualizar.get(i).getId();
+                            " WHERE id = " + puntosPresionActualizar.get(i).getId() +
+                            " AND id_usuario like '" + puntosPresionActualizar.get(i).getId() + "'";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -213,7 +220,8 @@ public class PuntoPresionControlador {
                             "pendiente," +
                             "presion," +
                             "id_tipo_presion," +
-                            "id_tipo_punto)" +
+                            "id_tipo_punto," +
+                            "id_usuario)" +
                             "VALUES" +
                             "(" + rs.getInt(1) + ",'" + // id
                             rs.getInt(2) + "','" + // circuito
@@ -225,7 +233,8 @@ public class PuntoPresionControlador {
                             "0','" + // pendiente
                             rs.getFloat(8) + "','" + // presion
                             rs.getInt(9) + "','" + // id_tipo_presion
-                            rs.getInt(10) + "');"; // id_tipo_punto
+                            rs.getInt(10) + "','" + // id_tipo_punto
+                            rs.getString(11) + "');"; // id_usuario
                     db.execSQL(sql);
                 }
                 check++;
@@ -267,7 +276,7 @@ public class PuntoPresionControlador {
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite PPC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite PPC" + e.toString());
             return Util.ERROR;
         }
     }
@@ -277,6 +286,7 @@ public class PuntoPresionControlador {
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM puntos_presion", null);
         while (c.moveToNext()) {
+            Usuario u = new Usuario();
             PuntoPresion puntoPresion = new PuntoPresion();
             TipoPresion tipoPresion = new TipoPresion();
             TipoPunto tipoPunto = new TipoPunto();
@@ -292,6 +302,8 @@ public class PuntoPresionControlador {
             puntoPresion.setTipoPresion(tipoPresion);
             tipoPunto.setId(c.getInt(10));
             puntoPresion.setTipoPunto(tipoPunto);
+            u.setId(c.getString(11));
+            puntoPresion.setUsuario(u);
             puntosPresion.add(puntoPresion);
         }
         c.close();
@@ -325,11 +337,43 @@ public class PuntoPresionControlador {
         return puntoPresion;
     }
 
+    public PuntoPresion extraerPorIdYUsuario(Activity a, int id, String usuario) {
+        PuntoPresion puntoPresion = new PuntoPresion();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM puntos_presion where id =" + id + " " +
+                "AND id_usuario like '" + usuario + "'", null);
+        while (c.moveToNext()) {
+            TipoPresion tipoPresion = new TipoPresion();
+            TipoPunto tipoPunto = new TipoPunto();
+            Usuario u = new Usuario();
+            puntoPresion.setId(c.getInt(0));
+            puntoPresion.setCircuito(c.getInt(1));
+            puntoPresion.setBarrio(c.getString(2));
+            puntoPresion.setCalle1(c.getString(3));
+            puntoPresion.setCalle2(c.getString(4));
+            puntoPresion.setLatitud(c.getDouble(5));
+            puntoPresion.setLongitud(c.getDouble(6));
+            puntoPresion.setPendiente(c.getInt(7));
+            puntoPresion.setPresion(c.getFloat(8));
+            tipoPresion.setId(c.getInt(9));
+            puntoPresion.setTipoPresion(tipoPresion);
+            tipoPunto.setId(c.getInt(10));
+            puntoPresion.setTipoPunto(tipoPunto);
+            u.setId(usuario);
+            puntoPresion.setUsuario(u);
+        }
+        c.close();
+        db.close();
+        return puntoPresion;
+    }
+
     public int insertar(PuntoPresion puntoPresion, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            int id = obtenerSiguienteId(a);
             String sql = "INSERT INTO `puntos_presion`" +
-                    "(`circuito`," +
+                    "(`id`," +
+                    "`circuito`," +
                     "`barrio`," +
                     "`calle1`," +
                     "`calle2`," +
@@ -338,9 +382,11 @@ public class PuntoPresionControlador {
                     "`pendiente`," +
                     "`presion`," +
                     "`id_tipo_presion`," +
-                    "`id_tipo_punto`)" +
+                    "`id_tipo_punto`," +
+                    "`id_usuario`)" +
                     "VALUES" +
-                    "('" + puntoPresion.getCircuito() + "','" + // circuito
+                    "('" + id + "','" + // id
+                    +puntoPresion.getCircuito() + "','" + // circuito
                     puntoPresion.getBarrio() + "','" + // barrio
                     puntoPresion.getCalle1() + "','" + // calle1
                     puntoPresion.getCalle2() + "','" + // calle2
@@ -349,7 +395,8 @@ public class PuntoPresionControlador {
                     INSERTAR_PUNTO + "','" + // pendiente
                     puntoPresion.getPresion() + "','" + // presion
                     puntoPresion.getTipoPresion().getId() + "','" + // tipo_presion
-                    puntoPresion.getTipoPunto().getId() + "');"; // tipo_punto
+                    puntoPresion.getTipoPresion().getId() + "','" + // tipo_punto
+                    LoginActivity.usuario.getId() + "');"; // id_usuario
             db.execSQL(sql);
             db.close();
             return Util.EXITOSO;
@@ -380,6 +427,9 @@ public class PuntoPresionControlador {
             TipoPunto tipoPunto = new TipoPunto();
             tipoPunto.setId(c.getInt(10));
             pp.setTipoPunto(tipoPunto);
+            Usuario u = new Usuario();
+            u.setId(c.getString(11));
+            pp.setUsuario(u);
             puntosPresion.add(pp);
         }
         c.close();
@@ -408,6 +458,9 @@ public class PuntoPresionControlador {
             TipoPunto tipoPunto = new TipoPunto();
             tipoPunto.setId(c.getInt(10));
             pp.setTipoPunto(tipoPunto);
+            Usuario u = new Usuario();
+            u.setId(c.getString(11));
+            pp.setUsuario(u);
             puntosPresion.add(pp);
         }
         c.close();
@@ -418,14 +471,31 @@ public class PuntoPresionControlador {
     public int actualizarPendiente(PuntoPresion puntoPresion, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE puntos_presion " +
-                    "SET pendiente = 0 " +
-                    "WHERE id=" + puntoPresion.getId();
+            String sql = "UPDATE puntos_presion" +
+                    " SET pendiente = 0" +
+                    " WHERE id=" + puntoPresion.getId() +
+                    " AND id_usuario like '" + puntoPresion.getUsuario().getId() + "'";
             db.execSQL(sql);
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error actualizarPendiente PPC " + e.toString());
+            return Util.ERROR;
+        }
+    }
+
+    public int obtenerSiguienteId(Activity a) {
+        int id = 1;
+        try {
+            SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();
+            String sql = "SELECT id FROM puntos_presion ORDER BY id DESC LIMIT 1";
+            Cursor c3 = db3.rawQuery(sql, null);
+            while (c3.moveToNext()) {
+                id = c3.getInt(0) + 1;
+            }
+            return id;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error obtenerSiguienteId PPC " + e.toString());
             return Util.ERROR;
         }
     }

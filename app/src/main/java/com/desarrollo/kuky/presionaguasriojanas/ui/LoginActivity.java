@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                if (nombre.equalsIgnoreCase(usuario.getMail())) {
+                if (nombre.equalsIgnoreCase(usuario.getEmail())) {
                     if (pass.equals(usuario.getClave())) {
                         regreso = "correcto";
                     } else {

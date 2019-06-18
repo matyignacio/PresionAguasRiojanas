@@ -14,6 +14,7 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class HistorialActivity extends AppCompatActivity {
@@ -29,7 +30,8 @@ public class HistorialActivity extends AppCompatActivity {
         // OBTENEMOS EL PUNTO DE PRESION
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         int id = settings.getInt(Util.ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
-        historiales = historialPuntosControlador.extraerTodosPorPunto(this, id);
+        String usuario = settings.getString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+        historiales = historialPuntosControlador.extraerTodosPorPunto(this, id, usuario);
         lvHistorial = findViewById(R.id.lvHistorial);
         lvaHistorial adaptador = new lvaHistorial(this, historiales);
         lvHistorial.setAdapter(adaptador);

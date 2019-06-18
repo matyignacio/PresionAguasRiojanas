@@ -46,7 +46,7 @@ public class BaseHelper extends SQLiteOpenHelper {
     }
 
     String sqlTablaPuntosPresion = "CREATE TABLE IF NOT EXISTS `puntos_presion` (" +
-            "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "  `id` INTEGER NOT NULL," +
             "  `circuito` int(11) NOT NULL," +
             "  `barrio` varchar(30) NOT NULL," +
             "  `calle1` varchar(50) NOT NULL," +
@@ -56,7 +56,9 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
             "  `id_tipo_presion` int(11) DEFAULT NULL," +
-            "  `id_tipo_punto` int(11) DEFAULT '1'" + ")";
+            "  `id_tipo_punto` int(11) DEFAULT '1'," +
+            "  `id_usuario` char(10) DEFAULT NULL"
+            + ")";
 
     String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS `historial_puntos_presion` (" +
             "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -65,14 +67,20 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
             "  `fecha` date DEFAULT (datetime('now','localtime'))," +
-            "  `id_punto_presion` int(11) DEFAULT NULL" + ")";
+            "  `id_punto_presion` int(11) DEFAULT NULL," +
+            "  `id_usuario` char(10) DEFAULT NULL," +
+            "  `id_usuario_historial` char(10) DEFAULT NULL"
+            + ")";
 
-    String sqlTablaUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "nombre varchar(30) default NULL, " +
-            "mail varchar(45) default NULL," +
-            "clave varchar(45) default NULL," +
-            "bandera_modulo_presion INTEGER default 0" + ")";
+    String sqlTablaUsuarios = "CREATE TABLE susuario (" +
+            "  usuario char(10) NOT NULL DEFAULT ''," +
+            "  nombre char(50) NOT NULL DEFAULT ''," +
+            "  email varchar(100) DEFAULT ''," +
+            "  clave char(10) NOT NULL DEFAULT ''," +
+            "  tipo char(1) NOT NULL DEFAULT ''," +
+            "  activo char(1) NOT NULL DEFAULT ''," +
+            "  bandera_modulo_presion INTEGER default 0," +
+            "  PRIMARY KEY (`usuario`)" + ")";
 
     String sqlTablaTipoPunto = "CREATE TABLE `tipo_punto` (" +
             "  `id` int(11) NOT NULL," +

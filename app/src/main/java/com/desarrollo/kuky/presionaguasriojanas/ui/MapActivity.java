@@ -32,6 +32,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESIO
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class MapActivity extends AppCompatActivity /* FragmentActivity para que no tenga AppBar */
@@ -134,12 +135,13 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
     public boolean onMarkerClick(final Marker marker) {
 
         // Retrieve the data from the marker.
-        PuntoPresion puntoPresion = new PuntoPresion();
+        PuntoPresion puntoPresion;
         puntoPresion = (PuntoPresion) marker.getTag();
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
+        editor.putString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getUsuario().getId());
         // Commit the edits!
         editor.commit();
 
@@ -150,7 +152,6 @@ public class MapActivity extends AppCompatActivity /* FragmentActivity para que 
         // marker is centered and for the marker's info window to open, if it has one).
         return true;
     }
-
 
     public void showDialogSync(final Activity a) {
         // get prompts.xml view

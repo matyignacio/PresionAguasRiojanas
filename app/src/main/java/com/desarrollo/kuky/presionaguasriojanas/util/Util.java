@@ -18,14 +18,14 @@ import java.util.Date;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-//    public static final String DATA_BASE = "presion_aguas";
-//    public static final String HOST = "192.168.1.46";
-//    public static final String USER = "root";
-//    public static final String CLAVE = "root";
-        public static final String DATA_BASE = "u101901458_presi";
-    public static final String HOST = "sql200.main-hosting.eu";
-    public static final String USER = "u101901458_matia";
-    public static final String CLAVE = "Miseignacio11";
+    public static final String DATA_BASE = "presion_aguas";
+    public static final String HOST = "192.168.1.46";
+    public static final String USER = "root";
+    public static final String CLAVE = "root";
+//        public static final String DATA_BASE = "u101901458_presi";
+//    public static final String HOST = "sql200.main-hosting.eu";
+//    public static final String USER = "u101901458_matia";
+//    public static final String CLAVE = "Miseignacio11";
     public static final String PUERTO = "3306";
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
@@ -37,6 +37,7 @@ public class Util {
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
+    public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
     public static final LatLng LA_RIOJA = new LatLng(-29.4126811, -66.8576855);
 
     public static void abrirActivity(Activity a, Class destino) {
@@ -77,15 +78,4 @@ public class Util {
         }
     }
 
-    public static void toggleButtons(ArrayList<Button> botones, Boolean bandera) {
-        if (bandera) {
-            for (int i = 0; i < botones.size(); i++) {
-                botones.get(i).setEnabled(false);
-            }
-        } else {
-            for (int i = 0; i < botones.size(); i++) {
-                botones.get(i).setEnabled(true);
-            }
-        }
-    }
 }

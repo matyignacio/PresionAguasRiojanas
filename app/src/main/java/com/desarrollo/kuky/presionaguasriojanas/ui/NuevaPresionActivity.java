@@ -26,6 +26,7 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -51,6 +52,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
@@ -90,7 +92,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         etPresion = findViewById(R.id.etPresion);
         inputs.add(etPresion);
-        configure_button();
+        request_permissions();
     }
 
     @Override
@@ -133,13 +135,13 @@ public class NuevaPresionActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                configure_button();
+                request_permissions();
                 break;
             }
         }
     }
 
-    private void configure_button() {
+    private void request_permissions() {
         // first check for permissions
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -169,15 +171,20 @@ public class NuevaPresionActivity extends AppCompatActivity {
             HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
             HistorialPuntos historialPuntos = new HistorialPuntos();
             PuntoPresion puntoPresion = new PuntoPresion();
+            Usuario uPunto = new Usuario();
             // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
             puntoPresion.setId(id);
+            String usuario = settings.getString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+            uPunto.setId(usuario);
+            puntoPresion.setUsuario(uPunto);
             // CARGAMOS EL OBJETO historialPuntos
             historialPuntos.setLatitud(mCurrentLocation.getLatitude());
             historialPuntos.setLongitud(mCurrentLocation.getLongitude());
             historialPuntos.setPresion(Float.parseFloat(etPresion.getText().toString()));
             historialPuntos.setPuntoPresion(puntoPresion);
+            historialPuntos.setUsuario(LoginActivity.usuario);
             // INSERTAMOS EL NUEVO REGISTRO
             historialPuntosControlador.insertar(historialPuntos, this);
             mostrarMensaje(NuevaPresionActivity.this, "Se ingreso con exito");
@@ -298,6 +305,5 @@ public class NuevaPresionActivity extends AppCompatActivity {
         } else {
             mostrarMensaje(NuevaPresionActivity.this, "Debe activar el GPS. Una vez activo, abra nuevamente esta pantalla");
         }
-
     }
 }

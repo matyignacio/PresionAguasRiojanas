@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
@@ -76,13 +77,15 @@ public class HistorialPuntosControlador {
                 //////////////////////////////////////////////////////////////////////////////////*/
                     PreparedStatement ps;
                     consultaSql = "INSERT INTO `historial_puntos_presion` " +
-                            "(`latitud`, `longitud`, `presion`, `fecha`, `id_punto_presion`) " +
+                            "(`latitud`, `longitud`, `presion`, `fecha`, `id_punto_presion`, `id_usuario`, `id_usuario_historial`) " +
                             "VALUES " +
                             "('" + historiales.get(i).getLatitud() + "', " +
                             "'" + historiales.get(i).getLongitud() + "', " +
                             "'" + historiales.get(i).getPresion() + "', " +
                             "'" + historiales.get(i).getFecha() + "', " +
-                            "'" + historiales.get(i).getPuntoPresion().getId() + "');";
+                            "'" + historiales.get(i).getPuntoPresion().getId() + "', " +
+                            "'" + historiales.get(i).getPuntoPresion().getUsuario().getId() + "', " +
+                            "'" + historiales.get(i).getUsuario().getId() + "');";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -90,8 +93,9 @@ public class HistorialPuntosControlador {
                                             UPDETEAMOS LA PRESION
                     //////////////////////////////////////////////////////////////////////////////////*/
                     consultaSql = "UPDATE `puntos_presion` " +
-                            "SET `presion` = '" + historiales.get(i).getPresion() + "' " +
-                            "WHERE `id` = '" + historiales.get(i).getPuntoPresion().getId() + "' ;";
+                            " SET `presion` = '" + historiales.get(i).getPresion() + "' " +
+                            " WHERE `id` = " + historiales.get(i).getPuntoPresion().getId() +
+                            " AND `id_usuario` like '" + historiales.get(i).getPuntoPresion().getUsuario().getId() + "' ;";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -195,7 +199,9 @@ public class HistorialPuntosControlador {
                             "`pendiente`," +
                             "`presion`," +
                             "`fecha`," +
-                            "`id_punto_presion`)" +
+                            "`id_punto_presion`," +
+                            "`id_usuario`," +
+                            "`id_usuario_historial`)" +
                             "VALUES" +
                             "('" + rs.getInt(1) + "','" + // id
                             rs.getDouble(2) + "','" + // latitud
@@ -203,7 +209,9 @@ public class HistorialPuntosControlador {
                             "0','" + // pendiente
                             rs.getFloat(4) + "','" + // presion
                             rs.getTimestamp(5) + "','" + // fecha
-                            rs.getInt(6) + "');"; // id_tipo_presion
+                            rs.getInt(6) + "','" + // id_tipo_presion
+                            rs.getString(7) + "','" + // id_usuario
+                            rs.getString(8) + "');"; // id_usuario_historial
                     db.execSQL(sql);
                 }
                 check++;
@@ -249,27 +257,44 @@ public class HistorialPuntosControlador {
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite HPC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite HPC" + e.toString());
             return ERROR;
         }
     }
 
-    public ArrayList<HistorialPuntos> extraerTodosPorPunto(Activity a, int id) {
+    public ArrayList<HistorialPuntos> extraerTodosPorPunto(Activity a, int id, String usuario) {
         historiales = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM historial_puntos_presion " +
-                "WHERE id_punto_presion = " + id + " " +
-                "ORDER BY fecha DESC", null);
+        Cursor c = db.rawQuery("SELECT hp.`id`," +
+                "    hp.`latitud`," +
+                "    hp.`longitud`," +
+                "    hp.`presion`," +
+                "    hp.`fecha`," +
+                "    hp.`id_punto_presion`," +
+                "    hp.`id_usuario`," +
+                "    hp.`id_usuario_historial`" +
+                " FROM historial_puntos_presion AS hp, puntos_presion AS pp " +
+                " WHERE pp.id=hp.id_punto_presion " +
+                " AND pp.id_usuario = hp.id_usuario" +
+                " AND pp.id = " + id +
+                " AND pp.id_usuario like '" + usuario + "'" +
+                " ORDER BY fecha DESC", null);
         while (c.moveToNext()) {
             HistorialPuntos historialPuntos = new HistorialPuntos();
             PuntoPresion puntoPresion = new PuntoPresion();
+            Usuario uPunto = new Usuario();
+            Usuario uHistorial = new Usuario();
             historialPuntos.setId(c.getInt(0));
             historialPuntos.setLatitud(c.getDouble(1));
             historialPuntos.setLongitud(c.getDouble(2));
-            historialPuntos.setPresion(c.getFloat(4));
-            historialPuntos.setFecha(Timestamp.valueOf(c.getString(5)));
-            puntoPresion.setId(c.getInt(6));
+            historialPuntos.setPresion(c.getFloat(3));
+            historialPuntos.setFecha(Timestamp.valueOf(c.getString(4)));
+            puntoPresion.setId(c.getInt(5));
+            uPunto.setId(c.getString(6));
+            puntoPresion.setUsuario(uPunto);
+            uHistorial.setId(c.getString(7));
             historialPuntos.setPuntoPresion(puntoPresion);
+            historialPuntos.setUsuario(uHistorial);
             historiales.add(historialPuntos);
         }
         c.close();
@@ -286,13 +311,19 @@ public class HistorialPuntosControlador {
         while (c.moveToNext()) {
             HistorialPuntos historialPuntos = new HistorialPuntos();
             PuntoPresion puntoPresion = new PuntoPresion();
+            Usuario uPunto = new Usuario();
+            Usuario uHistorial = new Usuario();
             historialPuntos.setId(c.getInt(0));
             historialPuntos.setLatitud(c.getDouble(1));
             historialPuntos.setLongitud(c.getDouble(2));
             historialPuntos.setPresion(c.getFloat(4));
             historialPuntos.setFecha(Timestamp.valueOf(c.getString(5)));
             puntoPresion.setId(c.getInt(6));
+            uPunto.setId(c.getString(7));
+            puntoPresion.setUsuario(uPunto);
             historialPuntos.setPuntoPresion(puntoPresion);
+            uHistorial.setId(c.getString(8));
+            historialPuntos.setUsuario(uHistorial);
             historiales.add(historialPuntos);
         }
         c.close();
@@ -308,13 +339,17 @@ public class HistorialPuntosControlador {
                     "`longitud`," +
                     "`pendiente`," +
                     "`presion`," +
-                    "`id_punto_presion`)" +
+                    "`id_punto_presion`," +
+                    "`id_usuario`," +
+                    "`id_usuario_historial`)" +
                     "VALUES" +
                     "('" + historialPuntos.getLatitud() + "','" + // latitud
                     historialPuntos.getLongitud() + "','" + // longitud
                     INSERTAR_PUNTO + "','" + // pendiente
                     historialPuntos.getPresion() + "','" + // presion
-                    historialPuntos.getPuntoPresion().getId() + "');"; // id_punto_presion
+                    historialPuntos.getPuntoPresion().getId() + "','" + // id_punto_presion
+                    historialPuntos.getPuntoPresion().getUsuario().getId() + "','" + // id_usuario_historial
+                    historialPuntos.getUsuario().getId() + "');";
             db.execSQL(sql);
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
             PuntoPresion puntoPresion = puntoPresionControlador.extraerPorId(a, historialPuntos.getPuntoPresion().getId());
@@ -324,14 +359,66 @@ public class HistorialPuntosControlador {
              */
             SQLiteDatabase db2 = BaseHelper.getInstance(a).getWritableDatabase();
             if (puntoPresion.getPendiente() == INSERTAR_PUNTO) {
-                sql = "UPDATE puntos_presion " +
-                        "SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + INSERTAR_PUNTO + " " +
-                        "WHERE id=" + historialPuntos.getPuntoPresion().getId();
+                sql = "UPDATE puntos_presion" +
+                        " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + INSERTAR_PUNTO +
+                        " WHERE id=" + historialPuntos.getPuntoPresion().getId() +
+                        " AND id_usuario LIKE '" + historialPuntos.getPuntoPresion().getUsuario().getId() + "'";
 
             } else {
-                sql = "UPDATE puntos_presion " +
-                        "SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + ACTUALIZAR_PUNTO + " " +
-                        "WHERE id=" + historialPuntos.getPuntoPresion().getId();
+                sql = "UPDATE puntos_presion" +
+                        " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + ACTUALIZAR_PUNTO +
+                        " WHERE id=" + historialPuntos.getPuntoPresion().getId() +
+                        " AND id_usuario LIKE '" + historialPuntos.getPuntoPresion().getUsuario().getId() + "'";
+            }
+            db2.execSQL(sql);
+            db.close();
+            db2.close();
+            return Util.EXITOSO;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error insertar HPC " + e.toString());
+            return ERROR;
+        }
+    }
+
+    public int insertar(HistorialPuntos historialPuntos, Activity a, String u) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "INSERT INTO `historial_puntos_presion`" +
+                    "(`latitud`," +
+                    "`longitud`," +
+                    "`pendiente`," +
+                    "`presion`," +
+                    "`id_punto_presion`," +
+                    "`id_usuario`)" +
+                    "VALUES" +
+                    "('" + historialPuntos.getLatitud() + "','" + // latitud
+                    historialPuntos.getLongitud() + "','" + // longitud
+                    INSERTAR_PUNTO + "','" + // pendiente
+                    historialPuntos.getPresion() + "','" + // presion
+                    historialPuntos.getPuntoPresion().getId() + "','" + // id_punto_presion
+                    LoginActivity.usuario.getId() + "');"; // SIEMPRE TOMO EL USUARIO DEL LOGUEO
+            db.execSQL(sql);
+            PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+            PuntoPresion puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(a,
+                    historialPuntos.getPuntoPresion().getId(),
+                    u);
+
+            /**
+             * EVALUAREMOS SI EL PUNTO ES UNO NUEVO SIN IMPACTAR EN LA BASE MYSQL
+             * O SI YA ES UN PUNTO CONOCIDO Y SIMPLEMENTE SE LE AGREGO UNA NUEVA MEDICION
+             */
+            SQLiteDatabase db2 = BaseHelper.getInstance(a).getWritableDatabase();
+            if (puntoPresion.getPendiente() == INSERTAR_PUNTO) {
+                sql = "UPDATE puntos_presion" +
+                        " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + INSERTAR_PUNTO +
+                        " WHERE id=" + puntoPresion.getId() +
+                        " AND id_usuario LIKE '" + puntoPresion.getUsuario().getId() + "'";
+
+            } else {
+                sql = "UPDATE puntos_presion" +
+                        " SET presion = '" + historialPuntos.getPresion() + "', pendiente = " + ACTUALIZAR_PUNTO +
+                        " WHERE id=" + puntoPresion.getId() +
+                        " AND id_usuario LIKE '" + puntoPresion.getUsuario().getId() + "'";
             }
             db2.execSQL(sql);
             db.close();
@@ -348,7 +435,8 @@ public class HistorialPuntosControlador {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE historial_puntos_presion " +
                     "SET presion = '" + historialPuntos.getPresion() + "', pendiente = 0 " +
-                    "WHERE id=" + historialPuntos.getId();
+                    " WHERE id=" + historialPuntos.getPuntoPresion().getId() +
+                    " AND id_usuario LIKE '" + historialPuntos.getPuntoPresion().getUsuario().getId() + "'";
             db.execSQL(sql);
             db.close();
             return Util.EXITOSO;
