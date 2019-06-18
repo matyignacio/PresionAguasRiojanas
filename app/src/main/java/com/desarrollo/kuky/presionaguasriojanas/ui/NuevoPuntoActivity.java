@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -53,7 +54,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
@@ -320,6 +324,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     }
 
     private void cargarSpinnerTipoPunto() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        int idTipoPunto = settings.getInt(TIPO_MAPA, MAPA_RECORRIDO);
         List<String> labels = new ArrayList<>();
         for (int i = 0; i < tipoPuntos.size(); i++) {
             labels.add(tipoPuntos.get(i).getNombre());
@@ -330,6 +336,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         spinnerAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sTipoPunto.setAdapter(spinnerAdapter);
+        sTipoPunto.setSelection(idTipoPunto - 1);
         sTipoPunto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -339,7 +346,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                tipoPunto.setId(0);
+                tipoPunto.setId(MAPA_RECORRIDO);
 //                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
             }
         });

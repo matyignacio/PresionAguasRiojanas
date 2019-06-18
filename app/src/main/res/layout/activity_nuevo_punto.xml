@@ -29,6 +29,7 @@
                 android:id="@+id/etCircuito"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tvCircuito"
                 android:layout_toEndOf="@id/tvCircuito"
                 android:ems="10"
                 android:inputType="number" />
@@ -63,7 +64,7 @@
                 android:id="@+id/etBarrio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/sTipoPunto"
+                android:layout_alignBaseline="@+id/tvBarrio"
                 android:layout_toEndOf="@id/tvBarrio"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
@@ -80,7 +81,7 @@
                 android:id="@+id/etCalle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etBarrio"
+                android:layout_alignBaseline="@+id/tvCalle1"
                 android:layout_toEndOf="@id/tvCalle1"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
@@ -97,7 +98,7 @@
                 android:id="@+id/etCalle2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etCalle1"
+                android:layout_alignBaseline="@+id/tvCalle2"
                 android:layout_toEndOf="@id/tvCalle2"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
@@ -114,7 +115,7 @@
                 android:id="@+id/etPresion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etCalle2"
+                android:layout_alignBaseline="@+id/tvPresion"
                 android:layout_toEndOf="@+id/tvPresion"
                 android:layout_alignEnd="@+id/tvMca"
                 android:ems="10"
