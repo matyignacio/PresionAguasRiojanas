@@ -427,7 +427,7 @@ public class PuntoPresionControlador {
                     INSERTAR_PUNTO + "','" + // pendiente
                     puntoPresion.getPresion() + "','" + // presion
                     puntoPresion.getTipoPresion().getId() + "','" + // tipo_presion
-                    puntoPresion.getTipoPresion().getId() + "','" + // tipo_punto
+                    puntoPresion.getTipoPunto().getId() + "','" + // tipo_punto
                     LoginActivity.usuario.getId() + "');"; // id_usuario
             db.execSQL(sql);
             db.close();

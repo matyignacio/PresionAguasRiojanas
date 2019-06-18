@@ -334,7 +334,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 tipoPunto.setId(i + 1);
-//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+                //mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
             }
 
             @Override

@@ -36,6 +36,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESIO
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RED;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
@@ -77,6 +78,8 @@ public class MapActivity extends AppCompatActivity
             this.setTitle("Mapa recorrido");
         } else if (tipoPunto == MAPA_CLIENTES) {
             this.setTitle("Mapa clientes");
+        } else if (tipoPunto == MAPA_RED) {
+            this.setTitle("Mapa red");
         }
     }
 
@@ -106,6 +109,12 @@ public class MapActivity extends AppCompatActivity
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt(TIPO_MAPA, MAPA_CLIENTES);
+            editor.commit();
+            abrirActivity(MapActivity.this, MapActivity.class);
+        } else if (id == R.id.map_red) {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(TIPO_MAPA, MAPA_RED);
             editor.commit();
             abrirActivity(MapActivity.this, MapActivity.class);
         } else if (id == R.id.action_sync) {

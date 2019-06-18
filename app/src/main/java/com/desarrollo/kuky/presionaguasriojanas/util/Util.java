@@ -21,7 +21,7 @@ public class Util {
     public static final String HOST = "192.168.1.46";
     public static final String USER = "root";
     public static final String CLAVE = "root";
-    //        public static final String DATA_BASE = "u101901458_presi";
+//            public static final String DATA_BASE = "u101901458_presi";
 //    public static final String HOST = "sql200.main-hosting.eu";
 //    public static final String USER = "u101901458_matia";
 //    public static final String CLAVE = "Miseignacio11";
@@ -40,6 +40,7 @@ public class Util {
     public static final String TIPO_MAPA = "id_tipo_punto";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
+    public static final int MAPA_RED = 3;
     public static final LatLng LA_RIOJA = new LatLng(-29.4126811, -66.8576855);
 
     public static void abrirActivity(Activity a, Class destino) {
