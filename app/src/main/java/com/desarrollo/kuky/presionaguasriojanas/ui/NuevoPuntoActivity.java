@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
@@ -54,12 +56,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
 public class NuevoPuntoActivity extends AppCompatActivity {
@@ -88,8 +92,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private Location mCurrentLocation;
     // boolean flag to toggle the ui
     public Boolean mRequestingLocationUpdates;
-
-    private EditText etCircuito, etBarrio, etCalle1, etCalle2, etPresion;
+    private TextView tvUnidad;
+    private EditText etCircuito, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
     private Spinner sTipoPunto;
     private ArrayList<EditText> inputs = new ArrayList<>();
     private ArrayList<TipoPunto> tipoPuntos = new ArrayList<>();
@@ -102,13 +106,25 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nuevo_punto);
         ButterKnife.bind(this);
         tipoPuntos = tipoPuntoControlador.extraerTodos(this);
+        tvUnidad = findViewById(R.id.tvUnidad);
         etCircuito = findViewById(R.id.etCircuito);
+        etUnidad = findViewById(R.id.etUnidad);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
         etPresion = findViewById(R.id.etPresion);
         sTipoPunto = findViewById(R.id.sTipoPunto);
         cargarSpinnerTipoPunto();
+        /** SETEAMOS LOS TYPEFACES*/
+        //setPrimaryFont(this, tvUnidad);
+        setPrimaryFontBold(this, etCircuito);
+        setPrimaryFontBold(this, etUnidad);
+        setPrimaryFontBold(this, etBarrio);
+        setPrimaryFontBold(this, etCalle1);
+        setPrimaryFontBold(this, etCalle2);
+        setPrimaryFontBold(this, etPresion);
+        setPrimaryFontBold(this, bEnviarNuevoPunto);
+        /**************************/
         inputs.add(etCircuito);
         inputs.add(etBarrio);
         inputs.add(etCalle1);
@@ -198,6 +214,11 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             tipoPresion.setId(1);
             puntoPresion.setTipoPresion(tipoPresion);
             puntoPresion.setUsuario(LoginActivity.usuario);
+            if (inputs.size() == 5) {
+                puntoPresion.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
+            } else {
+                puntoPresion.setUnidad(0);
+            }
             // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
             puntoPresion.setTipoPunto(tipoPunto);
             // INSERTAMOS EL NUEVO REGISTRO
@@ -341,6 +362,19 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 tipoPunto.setId(i + 1);
+                if ((i + 1) == MAPA_CLIENTES) {
+                    etUnidad.setEnabled(true);
+                    if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAD*/
+                        inputs.add(etUnidad);
+                    }
+                    tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
+                } else {
+                    if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAD*/
+                        inputs.remove(4);
+                    }
+                    tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW
+                    etUnidad.setEnabled(false);
+                }
                 //mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
             }
 

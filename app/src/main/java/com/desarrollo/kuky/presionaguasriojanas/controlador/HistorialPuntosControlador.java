@@ -348,11 +348,13 @@ public class HistorialPuntosControlador {
                     INSERTAR_PUNTO + "','" + // pendiente
                     historialPuntos.getPresion() + "','" + // presion
                     historialPuntos.getPuntoPresion().getId() + "','" + // id_punto_presion
-                    historialPuntos.getPuntoPresion().getUsuario().getId() + "','" + // id_usuario_historial
-                    historialPuntos.getUsuario().getId() + "');";
+                    historialPuntos.getPuntoPresion().getUsuario().getId() + "','" + // id_usuario
+                    historialPuntos.getUsuario().getId() + "');";// id_usuario_historial
             db.execSQL(sql);
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            PuntoPresion puntoPresion = puntoPresionControlador.extraerPorId(a, historialPuntos.getPuntoPresion().getId());
+            PuntoPresion puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(a,
+                    historialPuntos.getPuntoPresion().getId(),
+                    historialPuntos.getPuntoPresion().getUsuario().getId());
             /**
              * EVALUAREMOS SI EL PUNTO ES UNO NUEVO SIN IMPACTAR EN LA BASE MYSQL
              * O SI YA ES UN PUNTO CONOCIDO Y SIMPLEMENTE SE LE AGREGO UNA NUEVA MEDICION

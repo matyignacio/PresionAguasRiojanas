@@ -3,10 +3,14 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,50 +21,77 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
-public class InicioActivity extends AppCompatActivity {
+public class InicioActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Button bMapas;
-    private TextView tvUsuario;
+    private Button bModuloPresion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-        tvUsuario = findViewById(R.id.tvUsuario);
-        bMapas = findViewById(R.id.bMapas);
-        tvUsuario.setText(" Bienvenido " + LoginActivity.usuario.getNombre());
-        bMapas.setOnClickListener(new View.OnClickListener() {
+        bModuloPresion = findViewById(R.id.bModuloPresion);
+        /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(this, bModuloPresion);
+        /**************************/
+        bModuloPresion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 abrirActivity(InicioActivity.this, MapActivity.class);
             }
         });
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
+        subTitle.setText(LoginActivity.usuario.getNombre());
     }
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            this.finish();
+        }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_inicio, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.action_sign_out) {
-            /* LO QUE TENGAMOS QUE HACER PARA CERRAR SESION*/
             showDialogCerrarSesion(this);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        } /*else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*/
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void showDialogCerrarSesion(final Activity a) {

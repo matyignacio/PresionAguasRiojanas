@@ -82,7 +82,8 @@ public class PuntoPresionControlador {
                             "`presion`," +
                             "`id_tipo_presion`," +
                             "`id_tipo_punto`," +
-                            "`id_usuario`)" +
+                            "`id_usuario`," +
+                            "`unidad`)" +
                             " VALUES " +
                             "('" + puntosPresionInsertar.get(i).getId() + "','" + //id
                             puntosPresionInsertar.get(i).getCircuito() + "','" + //circuito
@@ -94,7 +95,8 @@ public class PuntoPresionControlador {
                             puntosPresionInsertar.get(i).getPresion() + "','" + //presion
                             puntosPresionInsertar.get(i).getTipoPresion().getId() + "','" + //tipo presion
                             puntosPresionInsertar.get(i).getTipoPunto().getId() + "','" + //tipo punto
-                            LoginActivity.usuario.getId() + "');"; //id_usuario
+                            LoginActivity.usuario.getId() + "','" + //id_usuario
+                            puntosPresionInsertar.get(i).getUnidad() + "');"; //unidad
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -221,7 +223,8 @@ public class PuntoPresionControlador {
                             "presion," +
                             "id_tipo_presion," +
                             "id_tipo_punto," +
-                            "id_usuario)" +
+                            "id_usuario," +
+                            "unidad)" +
                             "VALUES" +
                             "(" + rs.getInt(1) + ",'" + // id
                             rs.getInt(2) + "','" + // circuito
@@ -234,7 +237,8 @@ public class PuntoPresionControlador {
                             rs.getFloat(8) + "','" + // presion
                             rs.getInt(9) + "','" + // id_tipo_presion
                             rs.getInt(10) + "','" + // id_tipo_punto
-                            rs.getString(11) + "');"; // id_usuario
+                            rs.getString(11) + "'," + // id_usuario
+                            rs.getInt(12) + ");"; // unidad
                     db.execSQL(sql);
                 }
                 check++;
@@ -304,6 +308,7 @@ public class PuntoPresionControlador {
             puntoPresion.setTipoPunto(tipoPunto);
             u.setId(c.getString(11));
             puntoPresion.setUsuario(u);
+            puntoPresion.setUnidad(c.getInt(12));
             puntosPresion.add(puntoPresion);
         }
         c.close();
@@ -336,37 +341,12 @@ public class PuntoPresionControlador {
             puntoPresion.setTipoPunto(tipoPunto);
             u.setId(c.getString(11));
             puntoPresion.setUsuario(u);
+            puntoPresion.setUnidad(c.getInt(12));
             puntosPresion.add(puntoPresion);
         }
         c.close();
         db.close();
         return puntosPresion;
-    }
-
-    public PuntoPresion extraerPorId(Activity a, int id) {
-        PuntoPresion puntoPresion = new PuntoPresion();
-        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM puntos_presion where id =" + id, null);
-        while (c.moveToNext()) {
-            TipoPresion tipoPresion = new TipoPresion();
-            TipoPunto tipoPunto = new TipoPunto();
-            puntoPresion.setId(c.getInt(0));
-            puntoPresion.setCircuito(c.getInt(1));
-            puntoPresion.setBarrio(c.getString(2));
-            puntoPresion.setCalle1(c.getString(3));
-            puntoPresion.setCalle2(c.getString(4));
-            puntoPresion.setLatitud(c.getDouble(5));
-            puntoPresion.setLongitud(c.getDouble(6));
-            puntoPresion.setPendiente(c.getInt(7));
-            puntoPresion.setPresion(c.getFloat(8));
-            tipoPresion.setId(c.getInt(9));
-            puntoPresion.setTipoPresion(tipoPresion);
-            tipoPunto.setId(c.getInt(10));
-            puntoPresion.setTipoPunto(tipoPunto);
-        }
-        c.close();
-        db.close();
-        return puntoPresion;
     }
 
     public PuntoPresion extraerPorIdYUsuario(Activity a, int id, String usuario) {
@@ -393,6 +373,7 @@ public class PuntoPresionControlador {
             puntoPresion.setTipoPunto(tipoPunto);
             u.setId(usuario);
             puntoPresion.setUsuario(u);
+            puntoPresion.setUnidad(c.getInt(12));
         }
         c.close();
         db.close();
@@ -415,7 +396,8 @@ public class PuntoPresionControlador {
                     "`presion`," +
                     "`id_tipo_presion`," +
                     "`id_tipo_punto`," +
-                    "`id_usuario`)" +
+                    "`id_usuario`," +
+                    "`unidad`)" +
                     "VALUES" +
                     "('" + id + "','" + // id
                     +puntoPresion.getCircuito() + "','" + // circuito
@@ -428,7 +410,8 @@ public class PuntoPresionControlador {
                     puntoPresion.getPresion() + "','" + // presion
                     puntoPresion.getTipoPresion().getId() + "','" + // tipo_presion
                     puntoPresion.getTipoPunto().getId() + "','" + // tipo_punto
-                    LoginActivity.usuario.getId() + "');"; // id_usuario
+                    LoginActivity.usuario.getId() + "'," + // id_usuario
+                    puntoPresion.getUnidad() + ");"; // id_usuario
             db.execSQL(sql);
             db.close();
             return Util.EXITOSO;
@@ -462,6 +445,7 @@ public class PuntoPresionControlador {
             Usuario u = new Usuario();
             u.setId(c.getString(11));
             pp.setUsuario(u);
+            pp.setUnidad(c.getInt(12));
             puntosPresion.add(pp);
         }
         c.close();
@@ -493,6 +477,7 @@ public class PuntoPresionControlador {
             Usuario u = new Usuario();
             u.setId(c.getString(11));
             pp.setUsuario(u);
+            pp.setUnidad(c.getInt(12));
             puntosPresion.add(pp);
         }
         c.close();

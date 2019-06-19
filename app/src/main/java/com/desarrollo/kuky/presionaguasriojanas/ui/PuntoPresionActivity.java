@@ -15,13 +15,14 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESIO
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class PuntoPresionActivity extends AppCompatActivity {
 
     PuntoPresion puntoPresion = new PuntoPresion();
     PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     // UI References
-    TextView etCircuito, etBarrio, etCalle1, etCalle2, etPresion;
+    TextView etCircuito, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
     Button bHistorialPunto, bNuevaMedicion;
 
 
@@ -31,6 +32,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_punto_presion);
         // CAPTURAMOS LOS ELEMENTOS
         etCircuito = findViewById(R.id.etCircuito);
+        etUnidad = findViewById(R.id.etUnidad);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
@@ -44,7 +46,22 @@ public class PuntoPresionActivity extends AppCompatActivity {
         //mostrarMensaje(this, "id: " + id + ", usuario: " + usuario);
         puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(this, id, usuario);
         etCircuito.setText(puntoPresion.getCircuito().toString());
+        if (puntoPresion.getUnidad() > 0) {
+            etUnidad.setText(String.valueOf(puntoPresion.getUnidad()));
+        } else {
+            etUnidad.setText("Sin nº de unidad");
+        }
         etBarrio.setText(puntoPresion.getBarrio());
+        /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(this, etCircuito);
+        setPrimaryFontBold(this, etUnidad);
+        setPrimaryFontBold(this, etBarrio);
+        setPrimaryFontBold(this, etCalle1);
+        setPrimaryFontBold(this, etCalle2);
+        setPrimaryFontBold(this, etPresion);
+        setPrimaryFontBold(this, bHistorialPunto);
+        setPrimaryFontBold(this, bNuevaMedicion);
+        /**************************/
         etCalle1.setText(puntoPresion.getCalle1());
         etCalle2.setText(puntoPresion.getCalle2());
         etPresion.setText(puntoPresion.getPresion().toString() + " mca");

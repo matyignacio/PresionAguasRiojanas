@@ -13,6 +13,7 @@ public class PuntoPresion {
     private TipoPresion tipoPresion;
     private TipoPunto tipoPunto;
     private Usuario usuario;
+    private int unidad;
 
     public Integer getId() {
         return id;
@@ -108,5 +109,13 @@ public class PuntoPresion {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public int getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(int unidad) {
+        this.unidad = unidad;
     }
 }

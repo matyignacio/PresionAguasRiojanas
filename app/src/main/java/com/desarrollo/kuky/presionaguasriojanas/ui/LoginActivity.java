@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
 public class LoginActivity extends AppCompatActivity {
@@ -42,6 +43,11 @@ public class LoginActivity extends AppCompatActivity {
         inputs.add(etMail);
         inputs.add(etClave);
         bLogin = findViewById(R.id.bLogin);
+        /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(this, etMail);
+        setPrimaryFontBold(this, etClave);
+        setPrimaryFontBold(this, bLogin);
+        /**************************/
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

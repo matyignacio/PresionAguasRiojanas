@@ -3,8 +3,11 @@ package com.desarrollo.kuky.presionaguasriojanas.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -17,14 +20,14 @@ import java.util.Date;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-    public static final String DATA_BASE = "presion_aguas";
-    public static final String HOST = "192.168.1.46";
-    public static final String USER = "root";
-    public static final String CLAVE = "root";
-//    public static final String DATA_BASE = "u101901458_presi";
-//    public static final String HOST = "sql200.main-hosting.eu";
-//    public static final String USER = "u101901458_matia";
-//    public static final String CLAVE = "Miseignacio11";
+    //    public static final String DATA_BASE = "presion_aguas";
+//    public static final String HOST = "192.168.1.46";
+//    public static final String USER = "root";
+//    public static final String CLAVE = "root";
+    public static final String DATA_BASE = "u101901458_presi";
+    public static final String HOST = "sql200.main-hosting.eu";
+    public static final String USER = "u101901458_matia";
+    public static final String CLAVE = "Miseignacio11";
     public static final String PUERTO = "3306";
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
@@ -41,6 +44,8 @@ public class Util {
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RED = 3;
+    public static final String font_primary_path = "font/font_primary.ttf";
+    public static final String font_primary_bold_path = "font/font_primary_bold.ttf";
     public static final LatLng LA_RIOJA = new LatLng(-29.4126811, -66.8576855);
 
     public static void abrirActivity(Activity a, Class destino) {
@@ -79,6 +84,36 @@ public class Util {
             mostrarMensaje(a, "Debe llenar los campos");
             return ERROR;
         }
+    }
+
+    public static void setPrimaryFont(Context a, TextView tv) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_path);
+        tv.setTypeface(TF);
+    }
+
+    public static void setPrimaryFont(Context a, EditText et) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_path);
+        et.setTypeface(TF);
+    }
+
+    public static void setPrimaryFont(Context a, Button bt) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_path);
+        bt.setTypeface(TF);
+    }
+
+    public static void setPrimaryFontBold(Context a, TextView tv) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_bold_path);
+        tv.setTypeface(TF);
+    }
+
+    public static void setPrimaryFontBold(Context a, EditText et) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_bold_path);
+        et.setTypeface(TF);
+    }
+
+    public static void setPrimaryFontBold(Context a, Button bt) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_bold_path);
+        bt.setTypeface(TF);
     }
 
 }

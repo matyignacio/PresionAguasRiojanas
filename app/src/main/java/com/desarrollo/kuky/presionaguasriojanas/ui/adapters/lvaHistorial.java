@@ -13,6 +13,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.convertirFecha;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class lvaHistorial extends BaseAdapter {
     // Declare Variables
@@ -55,7 +56,10 @@ public class lvaHistorial extends BaseAdapter {
         tvFecha = itemView.findViewById(R.id.etFecha);
         tvPresion = itemView.findViewById(R.id.etPresion);
         // Capture position and set to the TextViews
-
+        /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(context, tvFecha);
+        setPrimaryFontBold(context, tvPresion);
+        /**************************/
         tvFecha.setText(convertirFecha(historialPuntos.get(position).getFecha()));
         tvPresion.setText(historialPuntos.get(position).getPresion().toString() + " mca");
 

@@ -13,7 +13,7 @@
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/tv_confirmar_guardar"
         android:textAlignment="center"
-        android:textSize="18dp" />
+        style="@style/tv_primary_bold" />
 
 
 </RelativeLayout>

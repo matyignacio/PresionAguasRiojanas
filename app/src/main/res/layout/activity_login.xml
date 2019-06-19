@@ -3,42 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".ui.LoginActivity">
 
-    <LinearLayout
-        android:id="@+id/email_login_form"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:gravity="center">
 
-
-        <EditText
-            android:id="@+id/etMail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/etClave"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="@string/prompt_password"
-            android:inputType="textPassword" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/bLogin"
-            style="@style/b_primary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/action_sign_in" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/etMail"
+                style="@style/et_primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/etClave"
+                style="@style/et_primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="@string/prompt_password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="15dp"/>
+
+            <Button
+                android:id="@+id/bLogin"
+                style="@style/b_primary"
+                android:layout_width="match_parent"
+                android:text="@string/action_sign_in" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

@@ -55,6 +55,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
 public class NuevaPresionActivity extends AppCompatActivity {
@@ -92,6 +93,10 @@ public class NuevaPresionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         etPresion = findViewById(R.id.etPresion);
         inputs.add(etPresion);
+        /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(this, etPresion);
+        setPrimaryFontBold(this, bEnviarMedicion);
+        /**************************/
         request_permissions();
     }
 

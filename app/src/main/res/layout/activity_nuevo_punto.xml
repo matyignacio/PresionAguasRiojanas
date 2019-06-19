@@ -3,18 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     android:orientation="vertical"
     tools:context=".ui.NuevoPuntoActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp">
 
         <RelativeLayout
             android:id="@+id/rlForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center">
 
 
@@ -22,14 +24,13 @@
                 android:id="@+id/tvCircuito"
                 style="@style/tv_primary"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
                 android:text="@string/tv_circuito" />
 
             <EditText
                 android:id="@+id/etCircuito"
+                style="@style/et_primary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tvCircuito"
+                android:layout_alignBaseline="@id/tvCircuito"
                 android:layout_toEndOf="@id/tvCircuito"
                 android:ems="10"
                 android:inputType="number" />
@@ -38,33 +39,49 @@
                 android:id="@+id/tvTipoPunto"
                 style="@style/tv_primary"
                 android:layout_width="120dp"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/etCircuito"
+                android:layout_marginTop="15dp"
                 android:text="@string/tipo_punto" />
 
             <Spinner
                 android:id="@+id/sTipoPunto"
-                style="@style/tv_primary"
+                style="@style/et_primary"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@+id/etCircuito"
                 android:layout_alignRight="@id/etCircuito"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_toEndOf="@id/tvTipoPunto" />
+
+            <TextView
+                android:id="@+id/tvUnidad"
+                style="@style/tv_primary"
+                android:layout_width="80dp"
+                android:layout_below="@id/tvTipoPunto"
+                android:text="@string/tv_unidad" />
+
+            <EditText
+                android:id="@+id/etUnidad"
+                style="@style/et_primary"
+                android:layout_width="wrap_content"
+                android:layout_alignBaseline="@id/tvUnidad"
+                android:layout_alignBottom="@+id/tvUnidad"
+                android:layout_toEndOf="@id/tvUnidad"
+                android:ems="10"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/tvBarrio"
                 style="@style/tv_primary"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/sTipoPunto"
+                android:layout_below="@id/tvUnidad"
                 android:text="@string/tv_barrio" />
 
             <EditText
                 android:id="@+id/etBarrio"
+                style="@style/et_primary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tvBarrio"
+                android:layout_alignBaseline="@id/tvBarrio"
+                android:layout_alignBottom="@+id/tvBarrio"
                 android:layout_toEndOf="@id/tvBarrio"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
@@ -73,15 +90,15 @@
                 android:id="@+id/tvCalle1"
                 style="@style/tv_primary"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/etBarrio"
                 android:text="@string/tv_calle1" />
 
             <EditText
                 android:id="@+id/etCalle1"
+                style="@style/et_primary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tvCalle1"
+                android:layout_alignBaseline="@id/tvCalle1"
+                android:layout_alignBottom="@+id/tvCalle1"
                 android:layout_toEndOf="@id/tvCalle1"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
@@ -90,15 +107,15 @@
                 android:id="@+id/tvCalle2"
                 style="@style/tv_primary"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/etCalle1"
                 android:text="@string/tv_calle2" />
 
             <EditText
                 android:id="@+id/etCalle2"
+                style="@style/et_primary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tvCalle2"
+                android:layout_alignBaseline="@id/tvCalle2"
+                android:layout_alignBottom="@+id/tvCalle2"
                 android:layout_toEndOf="@id/tvCalle2"
                 android:ems="10"
                 android:inputType="textPostalAddress" />
@@ -107,17 +124,17 @@
                 android:id="@+id/tvPresion"
                 style="@style/tv_primary"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/etCalle2"
                 android:text="@string/tv_presion" />
 
             <EditText
                 android:id="@+id/etPresion"
+                style="@style/et_primary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tvPresion"
-                android:layout_toEndOf="@+id/tvPresion"
+                android:layout_alignBaseline="@id/tvPresion"
                 android:layout_alignEnd="@+id/tvMca"
+                android:layout_alignBottom="@+id/tvPresion"
+                android:layout_toEndOf="@+id/tvPresion"
                 android:ems="10"
                 android:inputType="numberDecimal" />
 
@@ -125,26 +142,26 @@
                 android:id="@+id/tvMca"
                 style="@style/tv_primary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/etCalle2"
                 android:layout_alignEnd="@+id/etCircuito"
                 android:text="@string/tv_mca" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/rlForm"
-            android:gravity="center">
+            android:gravity="center"
+            android:weightSum="100">
 
             <Button
                 android:id="@+id/bEnviarNuevoPunto"
                 style="@style/b_primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="50"
+                android:drawableStart="@drawable/ic_add_white_24dp"
                 android:text="@string/b_enviar_nuevo_punto" />
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 </ScrollView>
