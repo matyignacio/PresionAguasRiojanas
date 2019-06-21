@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
+    style="@style/layout_primary"
     tools:context=".ui.LoginActivity">
 
     <RelativeLayout
@@ -18,26 +16,18 @@
             android:layout_marginTop="10dp"
             android:orientation="vertical">
 
-
             <EditText
                 android:id="@+id/etMail"
                 style="@style/et_primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/etClave"
                 style="@style/et_primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp" />
 
             <Button
                 android:id="@+id/bLogin"

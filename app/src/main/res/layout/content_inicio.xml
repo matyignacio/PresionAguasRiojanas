@@ -2,9 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
+    style="@style/layout_primary"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.InicioActivity"
     tools:showIn="@layout/app_bar_inicio">
@@ -12,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="15dp"
+        android:gravity="center"
         android:weightSum="100">
 
         <Button
@@ -24,7 +22,6 @@
             android:layout_weight="50"
             android:text="@string/bModuloPresion" />
     </LinearLayout>
-
 
 
 </RelativeLayout>

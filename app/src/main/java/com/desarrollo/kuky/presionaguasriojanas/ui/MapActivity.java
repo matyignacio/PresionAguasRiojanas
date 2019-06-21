@@ -48,10 +48,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private Marker puntoMarcador;
-    private LatLng marcador;
-    private ArrayList<PuntoPresion> puntosPresion = new ArrayList<>();
     private int tipoPunto;
 
     @Override
@@ -88,11 +84,11 @@ public class MapActivity extends AppCompatActivity
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         tipoPunto = settings.getInt(TIPO_MAPA, MAPA_RECORRIDO);
         if (tipoPunto == MAPA_RECORRIDO) {
-            this.setTitle("Mapa recorrido");
+            this.setTitle("Mapa Recorrido");
         } else if (tipoPunto == MAPA_CLIENTES) {
-            this.setTitle("Mapa clientes");
+            this.setTitle("Mapa Clientes");
         } else if (tipoPunto == MAPA_RED) {
-            this.setTitle("Mapa red");
+            this.setTitle("Mapa Red");
         }
     }
 
@@ -160,22 +156,25 @@ public class MapActivity extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        GoogleMap mMap = googleMap;
         // Move camera to La Rioja
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LA_RIOJA));
         // Add a marker in La Rioja
 //        mMap.addMarker(new MarkerOptions().position(laRioja).title("La Rioja"));
 //        // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-        puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
+        ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
         // Recorremos el arrayList para ir creando los marcadores
         for (Integer i = 0; i < puntosPresion.size(); i++) {
+            Marker puntoMarcador;
+            LatLng marcador;
             if (puntosPresion.get(i).getPresion() > ESTANDAR_MEDICION) {
                 marcador = new LatLng(puntosPresion.get(i).getLatitud(),
                         puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_blue))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
@@ -184,6 +183,7 @@ public class MapActivity extends AppCompatActivity
                         puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_yellow))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Paint;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
@@ -92,7 +90,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private Location mCurrentLocation;
     // boolean flag to toggle the ui
     public Boolean mRequestingLocationUpdates;
-    private TextView tvUnidad;
+    //private TextView tvUnidad;
     private EditText etCircuito, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
     private Spinner sTipoPunto;
     private ArrayList<EditText> inputs = new ArrayList<>();
@@ -106,7 +104,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nuevo_punto);
         ButterKnife.bind(this);
         tipoPuntos = tipoPuntoControlador.extraerTodos(this);
-        tvUnidad = findViewById(R.id.tvUnidad);
+        //tvUnidad = findViewById(R.id.tvUnidad);
         etCircuito = findViewById(R.id.etCircuito);
         etUnidad = findViewById(R.id.etUnidad);
         etBarrio = findViewById(R.id.etBarrio);
@@ -364,16 +362,21 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                 tipoPunto.setId(i + 1);
                 if ((i + 1) == MAPA_CLIENTES) {
                     etUnidad.setEnabled(true);
+                    etUnidad.setHint("Unidad");
+                    etUnidad.setBackgroundResource(R.drawable.et_redondo);
                     if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAD*/
                         inputs.add(etUnidad);
                     }
-                    tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
+                    //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
                 } else {
                     if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAD*/
                         inputs.remove(4);
                     }
-                    tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW
+                    //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW
+                    etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
+                    etUnidad.setHint("Sin n° de unidad");
                     etUnidad.setEnabled(false);
+                    etUnidad.setText("");
                 }
                 //mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
             }
