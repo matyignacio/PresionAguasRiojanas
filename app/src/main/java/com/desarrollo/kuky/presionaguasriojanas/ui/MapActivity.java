@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -224,30 +225,6 @@ public class MapActivity extends AppCompatActivity
         return true;
     }
 
-    public void showDialogSync(final Activity a) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(R.layout.dialog_sincronizar, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Si, sincrozar bases", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        sincronizar();
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
     private void primerInicio() {
         /**
          * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.sincronizarDeMysqlToSqlite
@@ -258,16 +235,16 @@ public class MapActivity extends AppCompatActivity
 
     }
 
-    private void sincronizar() {
-        MapActivityControlador mapActivityControlador = new MapActivityControlador();
-        if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
-        }
-    }
-
     private void setNombreUsuario() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         subTitle.setText(LoginActivity.usuario.getNombre() + "\n" +
                 "Circuito " + settings.getInt(CIRCUITO_USUARIO, 1));
+    }
+
+    private void sincronizar() {
+        MapActivityControlador mapActivityControlador = new MapActivityControlador();
+        if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
+        }
     }
 
     public void showDialogSetCircuito(final Activity a) {
@@ -315,5 +292,29 @@ public class MapActivity extends AppCompatActivity
                 .setNegativeButton("Cancelar", null)
                 .create();
         dialog.show();
+    }
+
+    public void showDialogSync(final Activity a) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(R.layout.dialog_sincronizar, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Si, sincrozar bases", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        sincronizar();
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }
