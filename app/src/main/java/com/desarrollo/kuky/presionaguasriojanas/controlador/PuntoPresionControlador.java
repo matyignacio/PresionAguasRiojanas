@@ -286,6 +286,7 @@ public class PuntoPresionControlador {
     }
 
     public ArrayList<PuntoPresion> extraerTodos(Activity a) {
+        /** Extrae todos los puntos */
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM puntos_presion", null);
@@ -317,10 +318,46 @@ public class PuntoPresionControlador {
     }
 
     public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
+        /** Extrae todos los puntos que sean del tipo "idTipoPunto" */
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM puntos_presion" +
                 " WHERE id_tipo_punto=" + idTipoPunto, null);
+
+        while (c.moveToNext()) {
+            Usuario u = new Usuario();
+            PuntoPresion puntoPresion = new PuntoPresion();
+            TipoPresion tipoPresion = new TipoPresion();
+            TipoPunto tipoPunto = new TipoPunto();
+            puntoPresion.setId(c.getInt(0));
+            puntoPresion.setCircuito(c.getInt(1));
+            puntoPresion.setBarrio(c.getString(2));
+            puntoPresion.setCalle1(c.getString(3));
+            puntoPresion.setCalle2(c.getString(4));
+            puntoPresion.setLatitud(c.getDouble(5));
+            puntoPresion.setLongitud(c.getDouble(6));
+            puntoPresion.setPresion(c.getFloat(8));
+            tipoPresion.setId(c.getInt(9));
+            puntoPresion.setTipoPresion(tipoPresion);
+            tipoPunto.setId(c.getInt(10));
+            puntoPresion.setTipoPunto(tipoPunto);
+            u.setId(c.getString(11));
+            puntoPresion.setUsuario(u);
+            puntoPresion.setUnidad(c.getInt(12));
+            puntosPresion.add(puntoPresion);
+        }
+        c.close();
+        db.close();
+        return puntosPresion;
+    }
+
+    public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto, int circuito) {
+        /** Extrae todos los puntos que sean del tipo "idTipoPunto" y pertenezcan al circuito seleccinado*/
+        puntosPresion = new ArrayList<>();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM puntos_presion" +
+                " WHERE id_tipo_punto =" + idTipoPunto +
+                " AND circuito =" + circuito, null);
 
         while (c.moveToNext()) {
             Usuario u = new Usuario();

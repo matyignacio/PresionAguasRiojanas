@@ -44,6 +44,7 @@
 
             <EditText
                 android:id="@+id/etBarrio"
+                android:focusedByDefault="true"
                 style="@style/et_primary"
                 android:layout_width="wrap_content"
                 android:layout_below="@id/etUnidad"

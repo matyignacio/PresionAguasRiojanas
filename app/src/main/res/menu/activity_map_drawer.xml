@@ -12,6 +12,10 @@
             android:id="@+id/action_sync"
             android:icon="@drawable/ic_sync_24dp"
             android:title="@string/action_sync" />
+        <item
+            android:id="@+id/set_circuito"
+            android:icon="@drawable/ic_settings_applications_black_24dp"
+            android:title="Configurar circuito" />
         <!--<item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
@@ -48,6 +52,14 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Send" />-->
+        </menu>
+    </item>
+    <item android:title="@string/subtitulo_nav_ayuda">
+        <menu>
+            <item
+                android:id="@+id/ayuda_colores"
+                android:icon="@drawable/ic_help_outline_black_24dp"
+                android:title="Paleta de colores" />
         </menu>
     </item>
 

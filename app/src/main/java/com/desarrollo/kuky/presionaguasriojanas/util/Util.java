@@ -44,10 +44,12 @@ public class Util {
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
     public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
+    public static final String CIRCUITO_USUARIO = "circuito_usuario";
     public static final String TIPO_MAPA = "id_tipo_punto";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RED = 3;
+    public static final int MAXIMO_CIRCUITO = 2;
     public static final String font_primary_path = "font/font_primary.ttf";
     public static final String font_primary_bold_path = "font/font_primary_bold.ttf";
     public static final LatLng LA_RIOJA = new LatLng(-29.4126811, -66.8576855);

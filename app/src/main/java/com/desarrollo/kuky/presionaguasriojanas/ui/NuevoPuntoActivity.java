@@ -53,6 +53,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
@@ -113,6 +114,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         etPresion = findViewById(R.id.etPresion);
         sTipoPunto = findViewById(R.id.sTipoPunto);
         cargarSpinnerTipoPunto();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        etCircuito.setText(String.valueOf(settings.getInt(CIRCUITO_USUARIO, 1)));
         /** SETEAMOS LOS TYPEFACES*/
         //setPrimaryFont(this, tvUnidad);
         setPrimaryFontBold(this, etCircuito);
@@ -356,6 +359,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sTipoPunto.setAdapter(spinnerAdapter);
         sTipoPunto.setSelection(idTipoPunto - 1);
+        sTipoPunto.setDropDownWidth(250);
         sTipoPunto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -364,12 +368,12 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                     etUnidad.setEnabled(true);
                     etUnidad.setHint("Unidad");
                     etUnidad.setBackgroundResource(R.drawable.et_redondo);
-                    if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAD*/
+                    if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
                         inputs.add(etUnidad);
                     }
                     //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
                 } else {
-                    if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAD*/
+                    if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
                         inputs.remove(4);
                     }
                     //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW

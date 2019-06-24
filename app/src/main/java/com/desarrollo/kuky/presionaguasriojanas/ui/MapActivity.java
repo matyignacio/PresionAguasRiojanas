@@ -15,6 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -31,7 +34,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
@@ -39,16 +44,19 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RED;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
     private int tipoPunto;
+    TextView subTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,28 +67,23 @@ public class MapActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fNuevoPunto);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
-            }
-        });
+        FloatingActionButton fab = findViewById(R.id.fNuevoPunto);
+        fab.setOnClickListener(view -> abrirActivity(MapActivity.this, NuevoPuntoActivity.class));
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
-        TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
-        subTitle.setText(LoginActivity.usuario.getNombre());
+        subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
+        setNombreUsuario();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         tipoPunto = settings.getInt(TIPO_MAPA, MAPA_RECORRIDO);
         if (tipoPunto == MAPA_RECORRIDO) {
@@ -94,7 +97,7 @@ public class MapActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -126,10 +129,14 @@ public class MapActivity extends AppCompatActivity
             editor.putInt(TIPO_MAPA, MAPA_RED);
             editor.commit();
             abrirActivity(MapActivity.this, MapActivity.class);
+        } else if (id == R.id.ayuda_colores) {
+            abrirActivity(MapActivity.this, PaletaColoresActivity.class);
         } else if (id == R.id.action_sync) {
             showDialogSync(MapActivity.this);
         } else if (id == R.id.action_add) {
             abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
+        } else if (id == R.id.set_circuito) {
+            showDialogSetCircuito(this);
         }
 //         else if (id == R.id.nav_slideshow) {
 //
@@ -159,8 +166,6 @@ public class MapActivity extends AppCompatActivity
         GoogleMap mMap = googleMap;
         // Move camera to La Rioja
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LA_RIOJA));
-        // Add a marker in La Rioja
-//        mMap.addMarker(new MarkerOptions().position(laRioja).title("La Rioja"));
 //        // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
         ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
@@ -174,7 +179,7 @@ public class MapActivity extends AppCompatActivity
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
                         //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_blue))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
@@ -183,7 +188,7 @@ public class MapActivity extends AppCompatActivity
                         puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_yellow))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_red))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
@@ -257,5 +262,58 @@ public class MapActivity extends AppCompatActivity
         MapActivityControlador mapActivityControlador = new MapActivityControlador();
         if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
         }
+    }
+
+    private void setNombreUsuario() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        subTitle.setText(LoginActivity.usuario.getNombre() + "\n" +
+                "Circuito " + settings.getInt(CIRCUITO_USUARIO, 1));
+    }
+
+    public void showDialogSetCircuito(final Activity a) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        final Spinner taskSpinner = new Spinner(a);
+        taskSpinner.setBackgroundResource(R.drawable.sp_redondo);
+        List<String> labels = new ArrayList<>();
+        for (int i = 1; i <= MAXIMO_CIRCUITO; i++) {
+            labels.add("Circuito " + String.valueOf(i));
+        }
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, labels);
+        spinnerAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        taskSpinner.setAdapter(spinnerAdapter);
+        taskSpinner.setDropDownWidth(250);
+        taskSpinner.setSelection(settings.getInt(CIRCUITO_USUARIO, 1) - 1);
+        taskSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(CIRCUITO_USUARIO, i + 1);
+                editor.commit();
+                //mostrarMensaje(MapActivity.this, "Se actualizo el circuito a: " +
+                //        String.valueOf(i + 1));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                /** NO MODIFICA NADA*/
+            }
+        });
+        //taskEditText.setBackgroundResource(R.drawable.et_redondo);
+        AlertDialog dialog = new AlertDialog.Builder(a)
+                .setTitle(" ")
+                //.setMessage("Seleccione el circuito")
+                .setView(taskSpinner)
+                .setPositiveButton("Listo", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setNombreUsuario();
+                        mostrarMensaje(MapActivity.this, "Se actualizo el circuito");
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .create();
+        dialog.show();
     }
 }

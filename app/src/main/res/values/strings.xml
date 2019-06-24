@@ -29,6 +29,7 @@
     <string name="b_nueva_medicion">Agregar medicion</string>
     <string name="cerrar_sesion">¿Esta seguro que desea cerrar sesion?</string>
     <string name="cerrar_sesion_cuerpo">Recuerde que para volver a iniciar sesion debe estar en la misma red del servidor.</string>
+    <string name="tv_titulo_dialgo_circuito">Deslice para seleccionar el circuito</string>
     <string name="tv_circuito">Circuito </string>
     <string name="tv_barrio">Barrio </string>
     <string name="tv_unidad">Unidad </string>
@@ -56,4 +57,5 @@
     <string name="nav_header_subtitle">desarrollo@aguasriojanas.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="subtitulo_nav_maps">Mapas</string>
+    <string name="subtitulo_nav_ayuda">Ayuda</string>
 </resources>
