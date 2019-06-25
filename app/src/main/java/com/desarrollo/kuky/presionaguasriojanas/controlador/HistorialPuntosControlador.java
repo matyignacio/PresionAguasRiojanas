@@ -10,8 +10,8 @@ import android.util.Log;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
-import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
@@ -378,6 +378,46 @@ public class HistorialPuntosControlador {
             return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar HPC " + e.toString());
+            return ERROR;
+        }
+    }
+
+    public int insertar(PuntoPresion pp, Activity a, int id) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "INSERT INTO `historial_puntos_presion`" +
+                    "(`latitud`," +
+                    "`longitud`," +
+                    "`pendiente`," +
+                    "`presion`," +
+                    "`id_punto_presion`," +
+                    "`id_usuario`," +
+                    "`id_usuario_historial`)" +
+                    "VALUES" +
+                    "('" + pp.getLatitud() + "','" + // latitud
+                    pp.getLongitud() + "','" + // longitud
+                    INSERTAR_PUNTO + "','" + // pendiente
+                    pp.getPresion() + "','" + // presion
+                    id + "','" + // id_punto_presion
+                    pp.getUsuario().getId() + "','" + // id_usuario
+                    pp.getUsuario().getId() + "');";// id_usuario_historial
+            db.execSQL(sql);
+            /**
+             * EVALUAREMOS SI EL PUNTO ES UNO NUEVO SIN IMPACTAR EN LA BASE MYSQL
+             * O SI YA ES UN PUNTO CONOCIDO Y SIMPLEMENTE SE LE AGREGO UNA NUEVA MEDICION
+             */
+            SQLiteDatabase db2 = BaseHelper.getInstance(a).getWritableDatabase();
+            sql = "UPDATE puntos_presion" +
+                    " SET presion = '" + pp.getPresion() + "', pendiente = " + INSERTAR_PUNTO +
+                    " WHERE id=" + pp.getId() +
+                    " AND id_usuario LIKE '" + pp.getUsuario().getId() + "'";
+
+            db2.execSQL(sql);
+            db.close();
+            db2.close();
+            return Util.EXITOSO;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error insertar HPC + PPC " + e.toString());
             return ERROR;
         }
     }

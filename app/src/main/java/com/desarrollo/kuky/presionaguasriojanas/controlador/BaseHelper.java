@@ -67,7 +67,7 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `longitud` double NOT NULL," +
             "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
             "  `presion` float NOT NULL," +
-            "  `fecha` date DEFAULT (datetime('now','localtime'))," +
+            "  `fecha` timestamp DEFAULT (datetime('now','localtime'))," +
             "  `id_punto_presion` int(11) DEFAULT NULL," +
             "  `id_usuario` char(10) DEFAULT NULL," +
             "  `id_usuario_historial` char(10) DEFAULT NULL"

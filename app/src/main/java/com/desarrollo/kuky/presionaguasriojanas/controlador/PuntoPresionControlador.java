@@ -24,6 +24,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNT
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class PuntoPresionControlador {
@@ -321,9 +322,24 @@ public class PuntoPresionControlador {
         /** Extrae todos los puntos que sean del tipo "idTipoPunto" */
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM puntos_presion" +
-                " WHERE id_tipo_punto=" + idTipoPunto, null);
-
+        Cursor c;
+        if (idTipoPunto == MAPA_CLIENTES) {
+            /** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA */
+            c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
+                    " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
+                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad " +
+                    " FROM puntos_presion AS pp, historial_puntos_presion AS hp " +
+                    " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
+                    " AND pp.id = hp.id_punto_presion" +
+                    " AND pp.id_usuario = hp.id_usuario" +
+                    " AND id_tipo_punto = 2" +
+                    " GROUP BY pp.id, pp.id_usuario" +
+                    " ORDER BY hp.fecha DESC", null);
+        } else {
+            /** SI NO BUSCAMOS CLIENTES, QUE TRAIGA TODOS LOS PUNTOS HISTORICOS */
+            c = db.rawQuery("SELECT * FROM puntos_presion" +
+                    " WHERE id_tipo_punto=" + idTipoPunto, null);
+        }
         while (c.moveToNext()) {
             Usuario u = new Usuario();
             PuntoPresion puntoPresion = new PuntoPresion();
@@ -450,6 +466,8 @@ public class PuntoPresionControlador {
                     LoginActivity.usuario.getId() + "'," + // id_usuario
                     puntoPresion.getUnidad() + ");"; // id_usuario
             db.execSQL(sql);
+            HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
+            historialPuntosControlador.insertar(puntoPresion, a, id);
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {
