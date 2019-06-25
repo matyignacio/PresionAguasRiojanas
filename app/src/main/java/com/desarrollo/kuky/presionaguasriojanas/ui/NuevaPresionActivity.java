@@ -50,6 +50,7 @@ import butterknife.ButterKnife;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMA_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
@@ -171,33 +172,38 @@ public class NuevaPresionActivity extends AppCompatActivity {
     }
 
     private void insertarMedicion() {
-        try {
-            // INICIALIZAMOS LO Q VAMOS A NECESITAR
-            HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-            HistorialPuntos historialPuntos = new HistorialPuntos();
-            PuntoPresion puntoPresion = new PuntoPresion();
-            Usuario uPunto = new Usuario();
-            // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
-            puntoPresion.setId(id);
-            String usuario = settings.getString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
-            uPunto.setId(usuario);
-            puntoPresion.setUsuario(uPunto);
-            // CARGAMOS EL OBJETO historialPuntos
-            historialPuntos.setLatitud(mCurrentLocation.getLatitude());
-            historialPuntos.setLongitud(mCurrentLocation.getLongitude());
-            historialPuntos.setPresion(Float.parseFloat(etPresion.getText().toString()));
-            historialPuntos.setPuntoPresion(puntoPresion);
-            historialPuntos.setUsuario(LoginActivity.usuario);
-            // INSERTAMOS EL NUEVO REGISTRO
-            historialPuntosControlador.insertar(historialPuntos, this);
-            mostrarMensaje(NuevaPresionActivity.this, "Se ingreso con exito");
-            // Y DETENEMOS EL USO DEL GPS
-            stopLocationUpdates();
-            abrirActivity(NuevaPresionActivity.this, PuntoPresionActivity.class);
-        } catch (Exception e) {
-            mostrarMensaje(NuevaPresionActivity.this, "Ocurrio un error al intentar guardar");
+        if (Float.parseFloat(etPresion.getText().toString()) <= MAXIMA_MEDICION &&
+                Float.parseFloat(etPresion.getText().toString()) > 0) {
+            try {
+                // INICIALIZAMOS LO Q VAMOS A NECESITAR
+                HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
+                HistorialPuntos historialPuntos = new HistorialPuntos();
+                PuntoPresion puntoPresion = new PuntoPresion();
+                Usuario uPunto = new Usuario();
+                // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
+                puntoPresion.setId(id);
+                String usuario = settings.getString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+                uPunto.setId(usuario);
+                puntoPresion.setUsuario(uPunto);
+                // CARGAMOS EL OBJETO historialPuntos
+                historialPuntos.setLatitud(mCurrentLocation.getLatitude());
+                historialPuntos.setLongitud(mCurrentLocation.getLongitude());
+                historialPuntos.setPresion(Float.parseFloat(etPresion.getText().toString()));
+                historialPuntos.setPuntoPresion(puntoPresion);
+                historialPuntos.setUsuario(LoginActivity.usuario);
+                // INSERTAMOS EL NUEVO REGISTRO
+                historialPuntosControlador.insertar(historialPuntos, this);
+                mostrarMensaje(NuevaPresionActivity.this, "Se ingreso con exito");
+                // Y DETENEMOS EL USO DEL GPS
+                stopLocationUpdates();
+                abrirActivity(NuevaPresionActivity.this, PuntoPresionActivity.class);
+            } catch (Exception e) {
+                mostrarMensaje(NuevaPresionActivity.this, "Ocurrio un error al intentar guardar");
+            }
+        } else {
+            mostrarMensaje(this, "La presion debe ser entre 0 mca y 20 mca");
         }
     }
 

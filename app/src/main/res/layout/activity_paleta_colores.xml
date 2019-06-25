@@ -19,6 +19,7 @@
             <Button android:background="@color/marcador_amarillo" />
 
             <TextView
+                android:background="@drawable/et_redondo"
                 android:fontFamily="casual"
                 android:text="Escribir definición"
                 android:textColor="@color/textColorPrimary" />
@@ -33,6 +34,7 @@
             <Button android:background="@color/marcador_verde" />
 
             <TextView
+                android:background="@drawable/et_redondo"
                 android:fontFamily="casual"
                 android:text="Escribir definición"
                 android:textColor="@color/textColorPrimary" />
@@ -46,6 +48,7 @@
             <Button android:background="@color/marcador_rojo" />
 
             <TextView
+                android:background="@drawable/et_redondo"
                 android:fontFamily="casual"
                 android:text="Escribir definición"
                 android:textColor="@color/textColorPrimary" />
@@ -59,6 +62,7 @@
             <Button android:background="@color/marcador_azul" />
 
             <TextView
+                android:background="@drawable/et_redondo"
                 android:fontFamily="casual"
                 android:text="Escribir definición"
                 android:textColor="@color/textColorPrimary" />

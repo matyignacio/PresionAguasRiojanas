@@ -57,6 +57,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARI
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMA_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
@@ -200,36 +201,41 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     }
 
     private void insertarPunto() {
-        try {
-            PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            PuntoPresion puntoPresion = new PuntoPresion();
-            TipoPresion tipoPresion = new TipoPresion();
-            // INICIALIZAMOS LO Q VAMOS A NECESITAR
-            puntoPresion.setCircuito(Integer.parseInt(etCircuito.getText().toString()));
-            puntoPresion.setBarrio(etBarrio.getText().toString());
-            puntoPresion.setCalle1(etCalle1.getText().toString());
-            puntoPresion.setCalle2(etCalle2.getText().toString());
-            puntoPresion.setLatitud(mCurrentLocation.getLatitude());
-            puntoPresion.setLongitud(mCurrentLocation.getLongitude());
-            puntoPresion.setPresion(Float.parseFloat(etPresion.getText().toString()));
-            tipoPresion.setId(1);
-            puntoPresion.setTipoPresion(tipoPresion);
-            puntoPresion.setUsuario(LoginActivity.usuario);
-            if (inputs.size() == 5) {
-                puntoPresion.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
-            } else {
-                puntoPresion.setUnidad(0);
+        if (Float.parseFloat(etPresion.getText().toString()) <= MAXIMA_MEDICION &&
+                Float.parseFloat(etPresion.getText().toString()) > 0) {
+            try {
+                PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+                PuntoPresion puntoPresion = new PuntoPresion();
+                TipoPresion tipoPresion = new TipoPresion();
+                // INICIALIZAMOS LO Q VAMOS A NECESITAR
+                puntoPresion.setCircuito(Integer.parseInt(etCircuito.getText().toString()));
+                puntoPresion.setBarrio(etBarrio.getText().toString());
+                puntoPresion.setCalle1(etCalle1.getText().toString());
+                puntoPresion.setCalle2(etCalle2.getText().toString());
+                puntoPresion.setLatitud(mCurrentLocation.getLatitude());
+                puntoPresion.setLongitud(mCurrentLocation.getLongitude());
+                puntoPresion.setPresion(Float.parseFloat(etPresion.getText().toString()));
+                tipoPresion.setId(1);
+                puntoPresion.setTipoPresion(tipoPresion);
+                puntoPresion.setUsuario(LoginActivity.usuario);
+                if (inputs.size() == 5) {
+                    puntoPresion.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
+                } else {
+                    puntoPresion.setUnidad(0);
+                }
+                // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
+                puntoPresion.setTipoPunto(tipoPunto);
+                // INSERTAMOS EL NUEVO REGISTRO
+                puntoPresionControlador.insertar(puntoPresion, this);
+                mostrarMensaje(NuevoPuntoActivity.this, "Se ingreso con exito");
+                // Y DETENEMOS EL USO DEL GPS
+                stopLocationUpdates();
+                abrirActivity(NuevoPuntoActivity.this, MapActivity.class);
+            } catch (Exception e) {
+                mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al intentar guardar");
             }
-            // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
-            puntoPresion.setTipoPunto(tipoPunto);
-            // INSERTAMOS EL NUEVO REGISTRO
-            puntoPresionControlador.insertar(puntoPresion, this);
-            mostrarMensaje(NuevoPuntoActivity.this, "Se ingreso con exito");
-            // Y DETENEMOS EL USO DEL GPS
-            stopLocationUpdates();
-            abrirActivity(NuevoPuntoActivity.this, MapActivity.class);
-        } catch (Exception e) {
-            mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al intentar guardar");
+        } else {
+            mostrarMensaje(this, "La presion debe ser entre 0 mca y 20 mca");
         }
     }
 

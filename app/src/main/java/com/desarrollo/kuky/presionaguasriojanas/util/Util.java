@@ -2,13 +2,9 @@ package com.desarrollo.kuky.presionaguasriojanas.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,6 +36,7 @@ public class Util {
     public static final int INSERTAR_PUNTO = 1;
     public static final int ACTUALIZAR_PUNTO = 2;
     public static final int ESTANDAR_MEDICION = 6;
+    public static final int MAXIMA_MEDICION = 20;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
