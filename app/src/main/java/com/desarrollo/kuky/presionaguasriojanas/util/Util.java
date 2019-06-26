@@ -2,7 +2,6 @@ package com.desarrollo.kuky.presionaguasriojanas.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
@@ -140,20 +139,14 @@ public class Util {
         alertDialogBuilder.setView(promptView);
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(mensajeSI, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        try {
-                            methodParam.call();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                .setPositiveButton(mensajeSI, (dialog1, id) -> {
+                    try {
+                        methodParam.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton("Cancelar", (dialog12, id) -> dialog12.cancel());
 
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();

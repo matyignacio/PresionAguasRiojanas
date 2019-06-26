@@ -3,7 +3,6 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -14,11 +13,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -27,6 +23,7 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosContr
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -163,10 +160,22 @@ public class NuevaPresionActivity extends AppCompatActivity {
         // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
         init();
 
-        bEnviarMedicion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialogGuardar(NuevaPresionActivity.this);
+        bEnviarMedicion.setOnClickListener(view -> {
+            if (mCurrentLocation != null) {
+                if (validarCampos(NuevaPresionActivity.this, inputs) == EXITOSO) {
+                    Util.showDialog(NuevaPresionActivity.this,
+                            R.layout.dialog_guardar,
+                            "Si, Guardar",
+                            () -> {
+                                insertarMedicion();
+                                return null;
+                            }
+                    );
+                } else {
+                    /**ESTE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL*/
+                }
+            } else {
+                mostrarMensaje(NuevaPresionActivity.this, "Debe activar el GPS. Una vez activo, abra nuevamente esta pantalla");
             }
         });
     }
@@ -281,37 +290,6 @@ public class NuevaPresionActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-        }
-    }
-
-    public void showDialogGuardar(final Activity a) {
-        if (mCurrentLocation != null) {
-            if (validarCampos(NuevaPresionActivity.this, inputs) == EXITOSO) {
-                // get prompts.xml view
-                LayoutInflater layoutInflater = LayoutInflater.from(a);
-                View promptView = layoutInflater.inflate(R.layout.dialog_guardar, null);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-                alertDialogBuilder.setView(promptView);
-                // setup a dialog window
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("Si, Guardar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                insertarMedicion();
-                            }
-                        })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                // create an alert dialog
-                AlertDialog alert = alertDialogBuilder.create();
-                alert.show();
-            } else {
-                /**ESTE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL*/
-            }
-        } else {
-            mostrarMensaje(NuevaPresionActivity.this, "Debe activar el GPS. Una vez activo, abra nuevamente esta pantalla");
         }
     }
 }

@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +23,7 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -132,14 +132,14 @@ public class MapActivity extends AppCompatActivity
         } else if (id == R.id.ayuda_colores) {
             abrirActivity(MapActivity.this, PaletaColoresActivity.class);
         } else if (id == R.id.action_sync) {
-//            Util.showDialog(MapActivity.this, R.layout.dialog_sincronizar, "Si, sincronizar bases", new Callable<Void>() {
-//                        public Void call() {
-//                            sincronizar();
-//                            return null;
-//                        }
-//                    }
-//            );
-            showDialogSync(MapActivity.this);
+            Util.showDialog(MapActivity.this,
+                    R.layout.dialog_sincronizar,
+                    "Si, sincronizar bases",
+                    () -> {
+                        sincronizar();
+                        return null;
+                    }
+            );
         } else if (id == R.id.action_add) {
             abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
         } else if (id == R.id.set_circuito) {
@@ -155,7 +155,7 @@ public class MapActivity extends AppCompatActivity
 //
 //        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -298,30 +298,5 @@ public class MapActivity extends AppCompatActivity
                 .setNegativeButton("Cancelar", null)
                 .create();
         dialog.show();
-    }
-
-
-    public void showDialogSync(final Activity a) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(R.layout.dialog_sincronizar, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Si, sincrozar bases", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        sincronizar();
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
     }
 }

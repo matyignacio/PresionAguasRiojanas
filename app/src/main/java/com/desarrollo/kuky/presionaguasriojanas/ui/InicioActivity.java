@@ -1,16 +1,12 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +14,7 @@ import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
@@ -77,7 +74,21 @@ public class InicioActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_sign_out) {
-            showDialogCerrarSesion(this);
+            Util.showDialog(this,
+                    R.layout.dialog_cerrar_sesion,
+                    "Si, cerrar",
+                    () -> {
+                        if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
+                            mostrarMensaje(InicioActivity.this, "Debe sincronizar primero");
+                        } else {
+                            UsuarioControlador usuarioControlador = new UsuarioControlador();
+                            if (usuarioControlador.eliminarUsuario(InicioActivity.this) == EXITOSO) {
+                                abrirActivity(InicioActivity.this, LoginActivity.class);
+                            }
+                        }
+                        return null;
+                    }
+            );
         } /*else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -90,39 +101,8 @@ public class InicioActivity extends AppCompatActivity
 
         }*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void showDialogCerrarSesion(final Activity a) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(R.layout.dialog_cerrar_sesion, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Si, cerrar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
-                            mostrarMensaje(a, "Debe sincronizar primero");
-                        } else {
-                            UsuarioControlador usuarioControlador = new UsuarioControlador();
-                            if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
-                                abrirActivity(a, LoginActivity.class);
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
     }
 }
