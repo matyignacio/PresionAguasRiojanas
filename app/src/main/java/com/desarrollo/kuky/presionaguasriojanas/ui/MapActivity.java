@@ -132,6 +132,13 @@ public class MapActivity extends AppCompatActivity
         } else if (id == R.id.ayuda_colores) {
             abrirActivity(MapActivity.this, PaletaColoresActivity.class);
         } else if (id == R.id.action_sync) {
+//            Util.showDialog(MapActivity.this, R.layout.dialog_sincronizar, "Si, sincronizar bases", new Callable<Void>() {
+//                        public Void call() {
+//                            sincronizar();
+//                            return null;
+//                        }
+//                    }
+//            );
             showDialogSync(MapActivity.this);
         } else if (id == R.id.action_add) {
             abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
@@ -292,6 +299,7 @@ public class MapActivity extends AppCompatActivity
                 .create();
         dialog.show();
     }
+
 
     public void showDialogSync(final Activity a) {
         // get prompts.xml view

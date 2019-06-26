@@ -8,7 +8,17 @@ public class Usuario {
     private String clave;
     private String tipo;
     private String activo;
-    private int bandera_modulo_presion; // CERO ES QUE NUNCA INGRESO, DEBE SINCRONIZAR. UNO YA INGRESO AL MENOS UNA VEZ
+    private int bandera_modulo_presion;
+    /**
+     * 0 ES QUE NUNCA INGRESO, DEBE SINCRONIZAR.
+     * 1 YA INGRESO AL MENOS UNA VEZ
+     */
+    private int bandera_sync_modulo_presion;
+
+    /**
+     * 0 ES QUE NO TIENE INFO NUEVA.
+     * 1 YA INGRESO AL MENOS REGISTRO, DEBE SINCRONIZAR.
+     */
 
     public String getId() {
         return usuario;
@@ -64,6 +74,14 @@ public class Usuario {
 
     public void setBandera_modulo_presion(int bandera_modulo_presion) {
         this.bandera_modulo_presion = bandera_modulo_presion;
+    }
+
+    public int getBandera_sync_modulo_presion() {
+        return bandera_sync_modulo_presion;
+    }
+
+    public void setBandera_sync_modulo_presion(int bandera_sync_modulo_presion) {
+        this.bandera_sync_modulo_presion = bandera_sync_modulo_presion;
     }
 
     @Override

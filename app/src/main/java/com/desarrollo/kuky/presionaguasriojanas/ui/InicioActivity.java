@@ -21,6 +21,7 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class InicioActivity extends AppCompatActivity
@@ -42,17 +43,17 @@ public class InicioActivity extends AppCompatActivity
                 abrirActivity(InicioActivity.this, MapActivity.class);
             }
         });
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
@@ -61,7 +62,7 @@ public class InicioActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -104,9 +105,13 @@ public class InicioActivity extends AppCompatActivity
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Si, cerrar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        UsuarioControlador usuarioControlador = new UsuarioControlador();
-                        if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
-                            abrirActivity(InicioActivity.this, LoginActivity.class);
+                        if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
+                            mostrarMensaje(a, "Debe sincronizar primero");
+                        } else {
+                            UsuarioControlador usuarioControlador = new UsuarioControlador();
+                            if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
+                                abrirActivity(a, LoginActivity.class);
+                            }
                         }
                     }
                 })

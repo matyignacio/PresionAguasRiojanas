@@ -15,6 +15,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+
 public class UsuarioControlador {
     private ProgressDialog pDialog;
     private UsuarioPorMailYClave usuarioPorMailYClave;
@@ -59,6 +62,7 @@ public class UsuarioControlador {
                     LoginActivity.usuario.setTipo(rs.getString(5));
                     LoginActivity.usuario.setActivo(rs.getString(6));
                     LoginActivity.usuario.setBandera_modulo_presion(0);
+                    LoginActivity.usuario.setBandera_sync_modulo_presion(0);
                     guardarUsuario(a, LoginActivity.usuario);
                 } else {
                     LoginActivity.usuario.setNombre(null);
@@ -96,10 +100,10 @@ public class UsuarioControlador {
         try {
             usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
             usuarioPorMailYClave.execute();
-            return Util.EXITOSO;
+            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
@@ -113,13 +117,14 @@ public class UsuarioControlador {
                     + u.getClave() + "', '"
                     + u.getTipo() + "', '"
                     + u.getActivo() + "', '"
-                    + u.getBandera_modulo_presion() + "')";
+                    + u.getBandera_modulo_presion() + "', '"
+                    + u.getBandera_sync_modulo_presion() + "')";
             db.execSQL(sql);
             db.close();
-            return Util.EXITOSO;
+            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
@@ -130,10 +135,10 @@ public class UsuarioControlador {
             db.execSQL(sql);
             db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
             db.close();
-            return Util.EXITOSO;
+            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
@@ -147,18 +152,19 @@ public class UsuarioControlador {
                 LoginActivity.usuario.setTipo(c.getString(4));
                 LoginActivity.usuario.setActivo(c.getString(5));
                 LoginActivity.usuario.setBandera_modulo_presion(c.getInt(6));
-                return Util.EXITOSO;
+                LoginActivity.usuario.setBandera_sync_modulo_presion(c.getInt(7));
+                return EXITOSO;
             }
             c.close();
             db.close();
-            return Util.ERROR;
+            return ERROR;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
 
-    public int editarBanderaPresion(Activity a, int bandera) {
+    public int editarBanderaModuloPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE susuario SET  'bandera_modulo_presion' =" +
@@ -166,11 +172,27 @@ public class UsuarioControlador {
             bh.execSQL(sql);
             bh.close();
             LoginActivity.usuario.setBandera_modulo_presion(bandera);
-            return Util.EXITOSO;
+            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return Util.ERROR;
+            return ERROR;
         }
     }
+
+    public int editarBanderaSyncModuloPresion(Activity a, int bandera) {
+        try {
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE susuario SET 'bandera_sync_modulo_presion' = " +
+                    bandera;
+            bh.execSQL(sql);
+            bh.close();
+            LoginActivity.usuario.setBandera_sync_modulo_presion(bandera);
+            return EXITOSO;
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, e.toString());
+            return ERROR;
+        }
+    }
+
 
 }

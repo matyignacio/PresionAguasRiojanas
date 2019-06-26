@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
@@ -154,7 +155,7 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "Se enviaron los puntos de forma exitosa");
+                mostrarMensaje(a, "1/5 - Se enviaron los puntos con exito");
                 HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
                 historialPuntosControlador.sincronizarDeSqliteToMysql(a);
             } else {
@@ -266,7 +267,7 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "Se copiaron puntos de forma exitosa");
+                mostrarMensaje(a, "4/5 - Se copiaron puntos con exito");
                 HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
                 historialPuntosControlador.sincronizarDeMysqlToSqlite(a);
             } else {
@@ -332,7 +333,7 @@ public class PuntoPresionControlador {
                     " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
                     " AND pp.id = hp.id_punto_presion" +
                     " AND pp.id_usuario = hp.id_usuario" +
-                    " AND id_tipo_punto = 2" +
+                    " AND id_tipo_punto = " + MAPA_CLIENTES + " " +
                     " GROUP BY pp.id, pp.id_usuario" +
                     " ORDER BY hp.fecha DESC", null);
         } else {
@@ -371,10 +372,26 @@ public class PuntoPresionControlador {
         /** Extrae todos los puntos que sean del tipo "idTipoPunto" y pertenezcan al circuito seleccinado*/
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM puntos_presion" +
-                " WHERE id_tipo_punto =" + idTipoPunto +
-                " AND circuito =" + circuito, null);
-
+        Cursor c;
+        if (idTipoPunto == MAPA_CLIENTES) {
+            /** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA */
+            c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
+                    " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
+                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad " +
+                    " FROM puntos_presion AS pp, historial_puntos_presion AS hp " +
+                    " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
+                    " AND pp.id = hp.id_punto_presion" +
+                    " AND pp.id_usuario = hp.id_usuario" +
+                    " AND id_tipo_punto = " + MAPA_CLIENTES + " " +
+                    " AND id_tipo_punto = " + circuito + " " +
+                    " GROUP BY pp.id, pp.id_usuario" +
+                    " ORDER BY hp.fecha DESC", null);
+        } else {
+            /** SI NO BUSCAMOS CLIENTES, QUE TRAIGA TODOS LOS PUNTOS HISTORICOS */
+            c = db.rawQuery("SELECT * FROM puntos_presion" +
+                    " WHERE id_tipo_punto =" + idTipoPunto +
+                    " AND circuito =" + circuito, null);
+        }
         while (c.moveToNext()) {
             Usuario u = new Usuario();
             PuntoPresion puntoPresion = new PuntoPresion();
@@ -466,8 +483,13 @@ public class PuntoPresionControlador {
                     LoginActivity.usuario.getId() + "'," + // id_usuario
                     puntoPresion.getUnidad() + ");"; // id_usuario
             db.execSQL(sql);
+            /** SUBIMOS LA BANDERA DE SYNC MODULO PRESION **/
+            UsuarioControlador usuarioControlador = new UsuarioControlador();
+            usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_ALTA);
+            /** LE INSERTAMOS UN HISTORIAL AL PUNTO **/
             HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
             historialPuntosControlador.insertar(puntoPresion, a, id);
+            /** CERRAMOS LAS CONEXIONES **/
             db.close();
             return Util.EXITOSO;
         } catch (Exception e) {

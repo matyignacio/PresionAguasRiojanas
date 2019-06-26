@@ -22,6 +22,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
@@ -135,7 +137,7 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "Se enviaron los historiales de forma exitosa");
+                mostrarMensaje(a, "2/5 - Se enviaron los historiales con exito");
                 TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
                 tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
             } else {
@@ -238,11 +240,12 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "Se copio el historial de forma exitosa");
+                mostrarMensaje(a, "5/5 - Se copio el historial con exito");
+                UsuarioControlador usuarioControlador = new UsuarioControlador();
                 if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
-                    UsuarioControlador usuarioControlador = new UsuarioControlador();
-                    usuarioControlador.editarBanderaPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
+                    usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
                 }
+                usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
                 abrirActivity(a, MapActivity.class);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorial");
@@ -373,6 +376,10 @@ public class HistorialPuntosControlador {
                         " AND id_usuario LIKE '" + historialPuntos.getPuntoPresion().getUsuario().getId() + "'";
             }
             db2.execSQL(sql);
+            /** SUBIMOS LA BANDERA DE SYNC MODULO PRESION **/
+            UsuarioControlador usuarioControlador = new UsuarioControlador();
+            usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_ALTA);
+            /** CERRAMOS LAS CONEXIONES **/
             db.close();
             db2.close();
             return Util.EXITOSO;

@@ -57,7 +57,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARI
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMA_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
@@ -65,6 +64,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarPresion;
 
 public class NuevoPuntoActivity extends AppCompatActivity {
 
@@ -201,8 +201,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     }
 
     private void insertarPunto() {
-        if (Float.parseFloat(etPresion.getText().toString()) <= MAXIMA_MEDICION &&
-                Float.parseFloat(etPresion.getText().toString()) > 0) {
+        if (validarPresion(this, etPresion) == EXITOSO) {
             try {
                 PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
                 PuntoPresion puntoPresion = new PuntoPresion();
@@ -234,8 +233,6 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             } catch (Exception e) {
                 mostrarMensaje(NuevoPuntoActivity.this, "Ocurrio un error al intentar guardar");
             }
-        } else {
-            mostrarMensaje(this, "La presion debe ser entre 0 mca y 20 mca");
         }
     }
 

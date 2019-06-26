@@ -36,7 +36,6 @@
     <string name="tv_calle1">Calle 1 </string>
     <string name="tv_calle2">Calle 2 </string>
     <string name="tv_presion">Presion </string>
-    <string name="hitn_ingrese_presion">Ingrese presion</string>
     <string name="b_enviar_medicion">Enviar medicion</string>
     <string name="label_cancel">Cancelar</string>
     <string name="action_settings">Configurar y reiniciar app</string>

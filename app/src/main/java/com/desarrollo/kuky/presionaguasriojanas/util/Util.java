@@ -2,9 +2,13 @@ package com.desarrollo.kuky.presionaguasriojanas.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,23 +18,26 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 /**
  * EN ESTA CLASE UTIL VAMOS A IR CREANDO LAS CONSTANTES O FUNCIONES QUE NOS SIRVAN PARA
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-    //    public static final String DATA_BASE = "presion_aguas";
-//    public static final String HOST = "192.168.1.46";
-//    public static final String USER = "root";
-//    public static final String CLAVE = "root";
-    public static final String DATA_BASE = "u101901458_presi";
-    public static final String HOST = "sql200.main-hosting.eu";
-    public static final String USER = "u101901458_matia";
-    public static final String CLAVE = "Miseignacio11";
+    public static final String DATA_BASE = "presion_aguas";
+    public static final String HOST = "192.168.1.46";
+    public static final String USER = "root";
+    public static final String CLAVE = "root";
+    //        public static final String DATA_BASE = "u101901458_presi";
+//    public static final String HOST = "sql200.main-hosting.eu";
+//    public static final String USER = "u101901458_matia";
+//    public static final String CLAVE = "Miseignacio11";
     public static final String PUERTO = "3306";
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
+    public static final int BANDERA_ALTA = 1;
+    public static final int BANDERA_BAJA = 0;
     public static final int PRIMER_INICIO_MODULO_PRESION = 0;
     public static final int SEGUNDO_INICIO_MODULO_PRESION = 1;
     public static final int INSERTAR_PUNTO = 1;
@@ -75,16 +82,22 @@ public class Util {
     }
 
     public static int validarCampos(Activity a, ArrayList<EditText> inputs) {
-        int i, check = 1;
+        int i;
         for (i = 0; i < inputs.size(); i++) {
             if (inputs.get(i).getText().toString().equals("")) {
-                check = 0;
+                mostrarMensaje(a, "Debe llenar el campo " + inputs.get(i).getHint().toString());
+                return ERROR;
             }
         }
-        if (check == EXITOSO) {
+        return EXITOSO;
+    }
+
+    public static int validarPresion(Activity a, EditText etPresion) {
+        if (Float.parseFloat(etPresion.getText().toString()) <= MAXIMA_MEDICION &&
+                Float.parseFloat(etPresion.getText().toString()) > 0) {
             return EXITOSO;
         } else {
-            mostrarMensaje(a, "Debe llenar los campos");
+            mostrarMensaje(a, "La presion debe ser entre 0 mca y 20 mca");
             return ERROR;
         }
     }
@@ -117,6 +130,34 @@ public class Util {
     public static void setPrimaryFontBold(Context a, Button bt) {
         Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_bold_path);
         bt.setTypeface(TF);
+    }
+
+    public static void showDialog(final Activity a, int dialog, String mensajeSI, Callable<Void> methodParam) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(mensajeSI, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            methodParam.call();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
 }

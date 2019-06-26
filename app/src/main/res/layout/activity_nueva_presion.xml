@@ -9,7 +9,7 @@
         style="@style/et_primary"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
-        android:hint="@string/hitn_ingrese_presion"
+        android:hint="@string/tv_presion"
         android:inputType="numberDecimal" />
 
     <TextView

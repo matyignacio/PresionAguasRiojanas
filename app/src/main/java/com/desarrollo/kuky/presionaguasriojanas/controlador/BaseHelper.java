@@ -81,6 +81,7 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  tipo char(1) NOT NULL DEFAULT ''," +
             "  activo char(1) NOT NULL DEFAULT ''," +
             "  bandera_modulo_presion INTEGER default 0," +
+            "  bandera_sync_modulo_presion INTEGER default 0," +
             "  PRIMARY KEY (`usuario`)" + ")";
 
     String sqlTablaTipoPunto = "CREATE TABLE `tipo_punto` (" +
