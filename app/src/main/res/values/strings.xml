@@ -57,4 +57,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="subtitulo_nav_maps">Mapas</string>
     <string name="subtitulo_nav_ayuda">Ayuda</string>
+    <string name="tv_sifnificado_rojo">"El punto en rojo significa\nque tiene presion baja.\n(Menor a 8 mca)"</string>
+    <string name="tv_significado_verde">"El punto en verde significa\nque tiene presion alta.\n(Mayor a 8 mca)"</string>
+    <string name="tv_significado_amarillo">"En amarillo es el punto\nque se debe medir."</string>
 </resources>
