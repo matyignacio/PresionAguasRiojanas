@@ -12,25 +12,35 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp">
 
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_marker_yellow" />
+            <RelativeLayout
+                android:id="@+id/rl1"
+                android:background="@drawable/et_redondo">
 
-            <TextView
-                android:background="@drawable/et_redondo"
-                android:fontFamily="casual"
-                android:text="@string/tv_significado_amarillo"
-                android:textColor="@color/textColorPrimary"
-                android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_marker_yellow" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/imageView1"
+                    android:fontFamily="casual"
+                    android:text="@string/tv_significado_amarillo"
+                    android:textColor="@color/textColorPrimary"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
 
         </TableRow>
 
@@ -40,19 +50,26 @@
             android:layout_margin="5dp"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_marker_green" />
+            <RelativeLayout android:background="@drawable/et_redondo">
 
-            <TextView
-                android:background="@drawable/et_redondo"
-                android:fontFamily="casual"
-                android:text="@string/tv_significado_verde"
-                android:textColor="@color/textColorPrimary"
-                android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_marker_green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/imageView2"
+                    android:fontFamily="casual"
+                    android:text="@string/tv_significado_verde"
+                    android:textColor="@color/textColorPrimary"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
         </TableRow>
 
         <TableRow
@@ -61,19 +78,27 @@
             android:layout_margin="5dp"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_marker_red" />
+            <RelativeLayout android:background="@drawable/et_redondo">
 
-            <TextView
-                android:background="@drawable/et_redondo"
-                android:fontFamily="casual"
-                android:text="@string/tv_sifnificado_rojo"
-                android:textColor="@color/textColorPrimary"
-                android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_marker_red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/imageView3"
+                    android:fontFamily="casual"
+                    android:text="@string/tv_sifnificado_rojo"
+                    android:textColor="@color/textColorPrimary"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+
         </TableRow>
 
         <!--<TableRow
