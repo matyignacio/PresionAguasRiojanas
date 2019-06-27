@@ -90,11 +90,11 @@ public class TipoPuntoControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "3/5 - Se copio los tipos de puntos con exito");
-                PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-                puntoPresionControlador.sincronizarDeMysqlToSqlite(a);
+                mostrarMensaje(a, "3/6 - Se copio los tipos de puntos con exito");
+                OrdenControlador ordenControlador = new OrdenControlador();
+                ordenControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                mostrarMensaje(a, "Error en el checkHistorial");
+                mostrarMensaje(a, "Error en el checkTipoPunto");
             }
         }
 

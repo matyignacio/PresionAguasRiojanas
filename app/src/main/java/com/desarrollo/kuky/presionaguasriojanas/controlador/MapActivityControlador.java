@@ -13,6 +13,7 @@ public class MapActivityControlador {
          *  puntoPresionControlador.sincronizarDeSqliteToMysql(a)
          *  historialPuntosControlador.sincronizarDeSqliteToMysql(a)
          *  tipoPuntoControlador.sincronizarDeMysqlToSqlite(a)
+         *  ordenControlador.sincronizarDeMysqlToSqlite(a)
          *  puntoPresionControlador.sincronizarDeMysqlToSqlite(a)
          *  historialPuntosControlador.sincronizarDeMysqlToSqlite(a)
          * */

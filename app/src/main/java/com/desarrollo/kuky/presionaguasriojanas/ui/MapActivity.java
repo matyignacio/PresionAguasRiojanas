@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.OrdenControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Orden;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,7 +42,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARI
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LA_RIOJA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RED;
@@ -48,6 +51,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -172,7 +177,17 @@ public class MapActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         GoogleMap mMap = googleMap;
         // Move camera to La Rioja
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LA_RIOJA));
+        /** BUSCAMOS EN SHARED PREFERENCES LA ULTIMA LATITUD Y LONGITUD SELECCIONADAS.
+         *  EN CASO DE NO HABER, SETEAMOS EL MAPA EN LA RIOJA                       **/
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        Double latitud = Double.valueOf(
+                settings.getString(ULTIMA_LATITUD,
+                        LATITUD_LA_RIOJA));
+        Double longitud = Double.valueOf(
+                settings.getString(ULTIMA_LONGITUD,
+                        LONGITUD_LA_RIOJA));
+        LatLng laRioja = new LatLng(latitud, longitud);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
 //        // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
         ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
@@ -180,9 +195,12 @@ public class MapActivity extends AppCompatActivity
         for (Integer i = 0; i < puntosPresion.size(); i++) {
             Marker puntoMarcador;
             LatLng marcador;
+            /**
+             *  EN EL SIGUIENTE IF ELSE EVALUAMOS LA PRESION DEL PUNTO
+             */
+            marcador = new LatLng(puntosPresion.get(i).getLatitud(),
+                    puntosPresion.get(i).getLongitud());
             if (puntosPresion.get(i).getPresion() > ESTANDAR_MEDICION) {
-                marcador = new LatLng(puntosPresion.get(i).getLatitud(),
-                        puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
                         //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
@@ -191,11 +209,24 @@ public class MapActivity extends AppCompatActivity
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
             } else {
-                marcador = new LatLng(puntosPresion.get(i).getLatitud(),
-                        puntosPresion.get(i).getLongitud());
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_red))
+                        .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
+                                puntosPresion.get(i).getBarrio()));
+                puntoMarcador.setTag(puntosPresion.get(i));
+            }
+            /**
+             * Y EN ESTE IF ELSE EVALUAMOS SI ES EL SIGUIENTE PUNTO
+             */
+            OrdenControlador ordenControlador = new OrdenControlador();
+            Orden orden;
+            orden = ordenControlador.extraerActivo(this);
+            if (puntosPresion.get(i).getId() == orden.getPpActual().getId() &&
+                    puntosPresion.get(i).getUsuario().getId().equals(orden.getPpActual().getUsuario().getId())) {
+                puntoMarcador = mMap.addMarker(new MarkerOptions()
+                        .position(marcador)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_yellow))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
@@ -216,10 +247,14 @@ public class MapActivity extends AppCompatActivity
         PuntoPresion puntoPresion;
         puntoPresion = (PuntoPresion) marker.getTag();
 
+        /** GUARDAMOS EN SHARED PREFERENCES EL ID Y USUARIO DEL PUNTO
+         *  TAMBIEN GUARDAMOS SU UBICACION PARA REABRIR EL MAPA EN EL PUNTO SELECCIONADO **/
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
         editor.putString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getUsuario().getId());
+        editor.putString(ULTIMA_LATITUD, puntoPresion.getLatitud().toString());
+        editor.putString(ULTIMA_LONGITUD, puntoPresion.getLongitud().toString());
         // Commit the edits!
         editor.commit();
 
@@ -243,8 +278,9 @@ public class MapActivity extends AppCompatActivity
 
     private void setNombreUsuario() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        subTitle.setText(LoginActivity.usuario.getNombre() + "\n" +
-                "Circuito " + settings.getInt(CIRCUITO_USUARIO, 1));
+        String usuario = LoginActivity.usuario.getNombre() + "\n" +
+                "Circuito " + settings.getInt(CIRCUITO_USUARIO, 1);
+        subTitle.setText(usuario);
     }
 
     private void sincronizar() {
@@ -283,7 +319,7 @@ public class MapActivity extends AppCompatActivity
                 /** NO MODIFICA NADA*/
             }
         });
-        //taskEditText.setBackgroundResource(R.drawable.et_redondo);
+
         AlertDialog dialog = new AlertDialog.Builder(a)
                 .setTitle(" ")
                 //.setMessage("Seleccione el circuito")

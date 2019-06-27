@@ -38,6 +38,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaUsuarios);
         sqLiteDatabase.execSQL(sqlTablaHistorialPuntosPresion);
         sqLiteDatabase.execSQL(sqlTablaTipoPunto);
+        sqLiteDatabase.execSQL(sqlTablaOrden);
     }
 
     @Override
@@ -89,6 +90,15 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `nombre` varchar(20) NOT NULL," +
             "  PRIMARY KEY (`id`)" + ") ";
 
+    String sqlTablaOrden = "CREATE TABLE `orden` (" +
+            "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "  `id_pp_actual` int(11) DEFAULT NULL," +
+            "  `id_usuario_pp_actual` char(10) DEFAULT NULL," +
+            "  `id_pp_siguiente` int(11) DEFAULT NULL," +
+            "  `id_usuario_pp_siguiente` char(10) DEFAULT NULL," +
+            "  `activo` int(1) NOT NULL DEFAULT '0'" +
+            " )";
+
     public String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
     }
@@ -103,6 +113,10 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaTipoPunto() {
         return sqlTablaTipoPunto;
+    }
+
+    public String getSqlTablaOrden() {
+        return sqlTablaOrden;
     }
 
     public static BaseHelper getsInstance() {

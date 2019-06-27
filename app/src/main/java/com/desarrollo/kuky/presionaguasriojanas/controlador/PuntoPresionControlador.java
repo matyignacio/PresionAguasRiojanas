@@ -155,7 +155,7 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "1/5 - Se enviaron los puntos con exito");
+                mostrarMensaje(a, "1/6 - Se enviaron los puntos con exito");
                 HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
                 historialPuntosControlador.sincronizarDeSqliteToMysql(a);
             } else {
@@ -267,7 +267,7 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "4/5 - Se copiaron puntos con exito");
+                mostrarMensaje(a, "5/6 - Se copiaron puntos con exito");
                 HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
                 historialPuntosControlador.sincronizarDeMysqlToSqlite(a);
             } else {

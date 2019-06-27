@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Orden;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
@@ -137,7 +138,7 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "2/5 - Se enviaron los historiales con exito");
+                mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
                 TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
                 tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
             } else {
@@ -240,7 +241,7 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "5/5 - Se copio el historial con exito");
+                mostrarMensaje(a, "6/6 - Se copio el historial con exito");
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
                 if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
@@ -379,6 +380,22 @@ public class HistorialPuntosControlador {
             /** SUBIMOS LA BANDERA DE SYNC MODULO PRESION **/
             UsuarioControlador usuarioControlador = new UsuarioControlador();
             usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_ALTA);
+            /** EVUALUAMOS SI HAY QUE CAMBIAR EL ORDEN **/
+            Orden orden = new Orden();
+            OrdenControlador ordenControlador = new OrdenControlador();
+            orden = ordenControlador.existePunto(a, historialPuntos.getPuntoPresion());
+            if (orden.getId() > 0) {
+                /** SI EL PUNTO EXISTE EN LA TABLA DE ORDEN, LE BAJAMOS LA BANDERA **/
+                ordenControlador.editarActivo(a,
+                        orden.getPpActual().getId(),
+                        orden.getPpActual().getUsuario().getId(),
+                        BANDERA_BAJA);
+                /** Y LE SUBIMOS LA BANDERA AL SIGUIENTE PUNTO **/
+                ordenControlador.editarActivo(a,
+                        orden.getPpSiguiente().getId(),
+                        orden.getPpSiguiente().getUsuario().getId(),
+                        BANDERA_ALTA);
+            }
             /** CERRAMOS LAS CONEXIONES **/
             db.close();
             db2.close();
