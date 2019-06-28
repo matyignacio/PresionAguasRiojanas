@@ -140,15 +140,6 @@ public class MapActivity extends AppCompatActivity
         } else if (id == R.id.set_circuito) {
             showDialogSetCircuito(this);
         }
-//         else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -166,7 +157,6 @@ public class MapActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         GoogleMap mMap = googleMap;
-        // Move camera to La Rioja
         /** BUSCAMOS EN SHARED PREFERENCES LA ULTIMA LATITUD Y LONGITUD SELECCIONADAS.
          *  EN CASO DE NO HABER, SETEAMOS EL MAPA EN LA RIOJA                       **/
         Double latitud = Double.valueOf(getPreference(MapActivity.this, ULTIMA_LATITUD,
@@ -175,7 +165,7 @@ public class MapActivity extends AppCompatActivity
                 LONGITUD_LA_RIOJA));
         LatLng laRioja = new LatLng(latitud, longitud);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
-//        // Traemos los puntos de presion
+        // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
         ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
         // Recorremos el arrayList para ir creando los marcadores
@@ -190,7 +180,6 @@ public class MapActivity extends AppCompatActivity
             if (puntosPresion.get(i).getPresion() > ESTANDAR_MEDICION) {
                 puntoMarcador = mMap.addMarker(new MarkerOptions()
                         .position(marcador)
-                        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
@@ -230,7 +219,6 @@ public class MapActivity extends AppCompatActivity
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        // Retrieve the data from the marker.
         PuntoPresion puntoPresion;
         puntoPresion = (PuntoPresion) marker.getTag();
 
@@ -242,10 +230,6 @@ public class MapActivity extends AppCompatActivity
         setPreference(MapActivity.this, ULTIMA_LONGITUD, puntoPresion.getLongitud().toString());
 
         abrirActivity(this, PuntoPresionActivity.class);
-
-        // Return false to indicate that we have not consumed the event and that we wish
-        // for the default behavior to occur (which is for the camera to move such that the
-        // marker is centered and for the marker's info window to open, if it has one).
         return true;
     }
 
@@ -292,8 +276,6 @@ public class MapActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 setPreference(MapActivity.this, CIRCUITO_USUARIO, i + 1);
-                //mostrarMensaje(MapActivity.this, "Se actualizo el circuito a: " +
-                //        String.valueOf(i + 1));
             }
 
             @Override
