@@ -2,7 +2,6 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -48,14 +47,15 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RED;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
@@ -89,8 +89,7 @@ public class MapActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         setNombreUsuario();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        tipoPunto = settings.getInt(TIPO_MAPA, MAPA_RECORRIDO);
+        tipoPunto = getPreference(this, TIPO_MAPA, MAPA_RECORRIDO);
         if (tipoPunto == MAPA_RECORRIDO) {
             this.setTitle("Mapa Recorrido");
         } else if (tipoPunto == MAPA_CLIENTES) {
@@ -117,22 +116,13 @@ public class MapActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.map_recorrido) {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(TIPO_MAPA, MAPA_RECORRIDO);
-            editor.commit();
+            setPreference(MapActivity.this, TIPO_MAPA, MAPA_RECORRIDO);
             abrirActivity(MapActivity.this, MapActivity.class);
         } else if (id == R.id.map_clientes) {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(TIPO_MAPA, MAPA_CLIENTES);
-            editor.commit();
+            setPreference(MapActivity.this, TIPO_MAPA, MAPA_CLIENTES);
             abrirActivity(MapActivity.this, MapActivity.class);
         } else if (id == R.id.map_red) {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(TIPO_MAPA, MAPA_RED);
-            editor.commit();
+            setPreference(MapActivity.this, TIPO_MAPA, MAPA_RED);
             abrirActivity(MapActivity.this, MapActivity.class);
         } else if (id == R.id.ayuda_colores) {
             abrirActivity(MapActivity.this, PaletaColoresActivity.class);
@@ -179,13 +169,10 @@ public class MapActivity extends AppCompatActivity
         // Move camera to La Rioja
         /** BUSCAMOS EN SHARED PREFERENCES LA ULTIMA LATITUD Y LONGITUD SELECCIONADAS.
          *  EN CASO DE NO HABER, SETEAMOS EL MAPA EN LA RIOJA                       **/
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        Double latitud = Double.valueOf(
-                settings.getString(ULTIMA_LATITUD,
-                        LATITUD_LA_RIOJA));
-        Double longitud = Double.valueOf(
-                settings.getString(ULTIMA_LONGITUD,
-                        LONGITUD_LA_RIOJA));
+        Double latitud = Double.valueOf(getPreference(MapActivity.this, ULTIMA_LATITUD,
+                LATITUD_LA_RIOJA));
+        Double longitud = Double.valueOf(getPreference(MapActivity.this, ULTIMA_LONGITUD,
+                LONGITUD_LA_RIOJA));
         LatLng laRioja = new LatLng(latitud, longitud);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
 //        // Traemos los puntos de presion
@@ -249,14 +236,10 @@ public class MapActivity extends AppCompatActivity
 
         /** GUARDAMOS EN SHARED PREFERENCES EL ID Y USUARIO DEL PUNTO
          *  TAMBIEN GUARDAMOS SU UBICACION PARA REABRIR EL MAPA EN EL PUNTO SELECCIONADO **/
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
-        editor.putString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getUsuario().getId());
-        editor.putString(ULTIMA_LATITUD, puntoPresion.getLatitud().toString());
-        editor.putString(ULTIMA_LONGITUD, puntoPresion.getLongitud().toString());
-        // Commit the edits!
-        editor.commit();
+        setPreference(MapActivity.this, ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
+        setPreference(MapActivity.this, USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getUsuario().getId());
+        setPreference(MapActivity.this, ULTIMA_LATITUD, puntoPresion.getLatitud().toString());
+        setPreference(MapActivity.this, ULTIMA_LONGITUD, puntoPresion.getLongitud().toString());
 
         abrirActivity(this, PuntoPresionActivity.class);
 
@@ -277,9 +260,8 @@ public class MapActivity extends AppCompatActivity
     }
 
     private void setNombreUsuario() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String usuario = LoginActivity.usuario.getNombre() + "\n" +
-                "Circuito " + settings.getInt(CIRCUITO_USUARIO, 1);
+                "Circuito " + getPreference(MapActivity.this, CIRCUITO_USUARIO, 1);
         subTitle.setText(usuario);
     }
 
@@ -290,7 +272,6 @@ public class MapActivity extends AppCompatActivity
     }
 
     public void showDialogSetCircuito(final Activity a) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         final Spinner taskSpinner = new Spinner(a);
         taskSpinner.setBackgroundResource(R.drawable.sp_redondo);
         List<String> labels = new ArrayList<>();
@@ -303,13 +284,14 @@ public class MapActivity extends AppCompatActivity
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         taskSpinner.setAdapter(spinnerAdapter);
         taskSpinner.setDropDownWidth(250);
-        taskSpinner.setSelection(settings.getInt(CIRCUITO_USUARIO, 1) - 1);
+        taskSpinner.setSelection(getPreference(
+                MapActivity.this,
+                CIRCUITO_USUARIO,
+                1) - 1);
         taskSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putInt(CIRCUITO_USUARIO, i + 1);
-                editor.commit();
+                setPreference(MapActivity.this, CIRCUITO_USUARIO, i + 1);
                 //mostrarMensaje(MapActivity.this, "Se actualizo el circuito a: " +
                 //        String.valueOf(i + 1));
             }

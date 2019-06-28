@@ -3,6 +3,7 @@ package com.desarrollo.kuky.presionaguasriojanas.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -12,8 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,10 +56,21 @@ public class Util {
     public static final int MAXIMO_CIRCUITO = 2;
     public static final String font_primary_path = "font/font_primary.ttf";
     public static final String font_primary_bold_path = "font/font_primary_bold.ttf";
-    /** A LATITUD Y LONGITUD LAS DEFINO COMO STRINGS PARA PODER USARLAS COMO SHARED PREFERENCES
-     *  DESPUES LAS PARSEO A DOUBLE EN MAPACTIVITY                                          **/
+    /**
+     * A LATITUD Y LONGITUD LAS DEFINO COMO STRINGS PARA PODER USARLAS COMO SHARED PREFERENCES
+     * DESPUES LAS PARSEO A DOUBLE EN MAPACTIVITY
+     **/
     public static final String LATITUD_LA_RIOJA = "-29.4126811";
     public static final String LONGITUD_LA_RIOJA = "-66.8576855";
+    // location updates interval - 10sec
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+
+    // fastest updates interval - 5 sec
+    // location updates will be received if another app is requesting the locations
+    // than your app can handle
+    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+
+    public static final int REQUEST_CHECK_SETTINGS = 100;
 
     public static void abrirActivity(Activity a, Class destino) {
         Intent intent = new Intent(a, destino);
@@ -156,6 +166,32 @@ public class Util {
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    public static void setPreference(Context c, String nombreDato, int dato) {
+        SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(nombreDato, dato);
+        // Commit the edits!
+        editor.commit();
+    }
+
+    public static void setPreference(Context c, String nombreDato, String dato) {
+        SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(nombreDato, dato);
+        // Commit the edits!
+        editor.commit();
+    }
+
+    public static int getPreference(Context c, String nombreDato, int defaultValue) {
+        SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
+        return settings.getInt(nombreDato, defaultValue);
+    }
+
+    public static String getPreference(Context c, String nombreDato, String defaultValue) {
+        SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
+        return settings.getString(nombreDato, defaultValue);
     }
 
 }

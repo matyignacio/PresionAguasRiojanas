@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -46,11 +45,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
@@ -60,17 +62,6 @@ public class NuevaPresionActivity extends AppCompatActivity {
     private static final String TAG = NuevaPresionActivity.class.getSimpleName();
     @BindView(R.id.bEnviarMediicion)
     Button bEnviarMedicion;
-
-    // location updates interval - 10sec
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-
-    // fastest updates interval - 5 sec
-    // location updates will be received if another app is requesting the locations
-    // than your app can handle
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-
-    private static final int REQUEST_CHECK_SETTINGS = 100;
-
 
     // bunch of location related apis
     private FusedLocationProviderClient mFusedLocationClient;
@@ -189,10 +180,13 @@ public class NuevaPresionActivity extends AppCompatActivity {
                 PuntoPresion puntoPresion = new PuntoPresion();
                 Usuario uPunto = new Usuario();
                 // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                int id = settings.getInt(ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
+                int id = getPreference(NuevaPresionActivity.this,
+                        ID_PUNTO_PRESION_SHARED_PREFERENCE,
+                        0);
                 puntoPresion.setId(id);
-                String usuario = settings.getString(USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+                String usuario = getPreference(NuevaPresionActivity.this,
+                        USUARIO_PUNTO_PRESION_SHARED_PREFERENCE,
+                        "");
                 uPunto.setId(usuario);
                 puntoPresion.setUsuario(uPunto);
                 // CARGAMOS EL OBJETO historialPuntos

@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -53,12 +52,15 @@ import butterknife.ButterKnife;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PREFS_NAME;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
@@ -69,17 +71,6 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private static final String TAG = NuevoPuntoActivity.class.getSimpleName();
     @BindView(R.id.bEnviarNuevoPunto)
     Button bEnviarNuevoPunto;
-
-    // location updates interval - 10sec
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-
-    // fastest updates interval - 5 sec
-    // location updates will be received if another app is requesting the locations
-    // than your app can handle
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-
-    private static final int REQUEST_CHECK_SETTINGS = 100;
-
 
     // bunch of location related apis
     private FusedLocationProviderClient mFusedLocationClient;
@@ -113,8 +104,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         etPresion = findViewById(R.id.etPresion);
         sTipoPunto = findViewById(R.id.sTipoPunto);
         cargarSpinnerTipoPunto();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        etCircuito.setText(String.valueOf(settings.getInt(CIRCUITO_USUARIO, 1)));
+        etCircuito.setText(String.valueOf(getPreference(this, CIRCUITO_USUARIO, 1)));
         /** SETEAMOS LOS TYPEFACES*/
         //setPrimaryFont(this, tvUnidad);
         setPrimaryFontBold(this, etCircuito);
@@ -326,8 +316,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     }
 
     private void cargarSpinnerTipoPunto() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        int idTipoPunto = settings.getInt(TIPO_MAPA, MAPA_RECORRIDO);
+        int idTipoPunto = getPreference(NuevoPuntoActivity.this, TIPO_MAPA, MAPA_RECORRIDO);
         List<String> labels = new ArrayList<>();
         for (int i = 0; i < tipoPuntos.size(); i++) {
             labels.add(tipoPuntos.get(i).getNombre());
