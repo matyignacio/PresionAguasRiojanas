@@ -35,8 +35,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class HistorialPuntosControlador {
 
-    private SyncMysqlToSqlite syncMysqlToSqlite;
-    private SyncSqliteToMysql syncSqliteToMysql;
     private ArrayList<HistorialPuntos> historiales;
     private ProgressDialog pDialog;
 
@@ -149,7 +147,7 @@ public class HistorialPuntosControlador {
 
     public int sincronizarDeSqliteToMysql(Activity a) {
         try {
-            syncSqliteToMysql = new SyncSqliteToMysql(a);
+            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
@@ -258,7 +256,7 @@ public class HistorialPuntosControlador {
 
     public int sincronizarDeMysqlToSqlite(Activity a) {
         try {
-            syncMysqlToSqlite = new SyncMysqlToSqlite(a);
+            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {

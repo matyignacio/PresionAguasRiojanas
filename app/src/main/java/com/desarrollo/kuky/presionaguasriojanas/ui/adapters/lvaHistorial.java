@@ -12,6 +12,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.convertirFecha;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
@@ -62,7 +63,13 @@ public class lvaHistorial extends BaseAdapter {
         /**************************/
         tvFecha.setText(convertirFecha(historialPuntos.get(position).getFecha()));
         tvPresion.setText(historialPuntos.get(position).getPresion().toString() + " mca");
-
+        if (historialPuntos.get(position).getPresion() > ESTANDAR_MEDICION) {
+            tvFecha.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+            tvPresion.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+        } else {
+            tvFecha.setTextColor(context.getResources().getColor(R.color.marcador_rojo));
+            tvPresion.setTextColor(context.getResources().getColor(R.color.marcador_rojo));
+        }
 
         return itemView;
     }

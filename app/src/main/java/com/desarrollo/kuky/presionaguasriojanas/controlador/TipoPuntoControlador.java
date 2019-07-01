@@ -20,7 +20,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class TipoPuntoControlador {
 
-    private SyncMysqlToSqlite syncMysqlToSqlite;
     private ProgressDialog pDialog;
 
     private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
@@ -102,7 +101,7 @@ public class TipoPuntoControlador {
 
     public int sincronizarDeMysqlToSqlite(Activity a) {
         try {
-            syncMysqlToSqlite = new SyncMysqlToSqlite(a);
+            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
             return EXITOSO;
         } catch (Exception e) {

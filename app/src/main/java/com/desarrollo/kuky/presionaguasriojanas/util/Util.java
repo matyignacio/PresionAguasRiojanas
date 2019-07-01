@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,15 +92,10 @@ public class Util {
     }
 
     public static String convertirFecha(Date date) {
-        String fecha, minutos;
-        if (date.getMinutes() < 10) {
-            minutos = "0" + date.getMinutes();
-        } else {
-            minutos = String.valueOf(date.getMinutes());
-        }
-        fecha = date.getDate() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() + 1900) +
-                "\na las: " + date.getHours() + ":" + minutos;
-        return fecha;
+        String fecha, hora;
+        fecha = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+        hora = DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
+        return fecha + "\na las " + hora;
     }
 
     public static int validarCampos(Activity a, ArrayList<EditText> inputs) {

@@ -29,8 +29,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class PuntoPresionControlador {
-    private SyncMysqlToSqlite syncMysqlToSqlite;
-    private SyncSqliteToMysql syncSqliteToMysql;
     private ArrayList<PuntoPresion> puntosPresion;
     private ProgressDialog pDialog;
 
@@ -166,7 +164,7 @@ public class PuntoPresionControlador {
 
     public int sincronizarDeSqliteToMysql(Activity a) {
         try {
-            syncSqliteToMysql = new SyncSqliteToMysql(a);
+            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
             return Util.EXITOSO;
         } catch (Exception e) {
@@ -278,7 +276,7 @@ public class PuntoPresionControlador {
 
     public int sincronizarDeMysqlToSqlite(Activity a) {
         try {
-            syncMysqlToSqlite = new SyncMysqlToSqlite(a);
+            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
             return Util.EXITOSO;
         } catch (Exception e) {

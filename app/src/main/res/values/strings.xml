@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Presion Aguas Riojanas</string>
+    <string name="app_name">Aguas Riojanas</string>
     <string name="title_activity_punto">Datos del punto</string>
     <string name="title_activity_nuevo_punto">Añadir nuevo punto</string>
     <string name="title_activity_nueva_medicion">Nueva medicion</string>
