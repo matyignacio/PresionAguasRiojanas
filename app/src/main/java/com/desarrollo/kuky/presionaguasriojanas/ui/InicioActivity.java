@@ -18,7 +18,6 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class InicioActivity extends AppCompatActivity
@@ -79,7 +78,13 @@ public class InicioActivity extends AppCompatActivity
                     "Si, cerrar",
                     () -> {
                         if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
-                            mostrarMensaje(InicioActivity.this, "Debe sincronizar primero");
+                            Util.showDialog(this,
+                                    R.layout.dialog_debe_sincronizar,
+                                    "Ok",
+                                    () -> {
+                                        return null;
+                                    });
+                            //mostrarMensaje(InicioActivity.this, "Debe sincronizar primero");
                         } else {
                             UsuarioControlador usuarioControlador = new UsuarioControlador();
                             if (usuarioControlador.eliminarUsuario(InicioActivity.this) == EXITOSO) {

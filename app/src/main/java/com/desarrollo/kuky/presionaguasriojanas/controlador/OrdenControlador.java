@@ -34,7 +34,7 @@ public class OrdenControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Trayendo orden...");
+            pDialog.setMessage("4/6 - Recibiendo orden...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -96,7 +96,7 @@ public class OrdenControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "4/6 - Se copio el orden con exito");
+                //mostrarMensaje(a, "4/6 - Se copio el orden con exito");
                 PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
                 puntoPresionControlador.sincronizarDeMysqlToSqlite(a);
             } else {

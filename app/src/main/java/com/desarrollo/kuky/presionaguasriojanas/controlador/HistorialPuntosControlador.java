@@ -51,7 +51,7 @@ public class HistorialPuntosControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Enviando historial...");
+            pDialog.setMessage("2/6 - Enviando historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -138,7 +138,7 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
+                //mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
                 TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
                 tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
             } else {
@@ -167,7 +167,7 @@ public class HistorialPuntosControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Trayendo historial...");
+            pDialog.setMessage("6/6 - Recibiendo historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -241,7 +241,8 @@ public class HistorialPuntosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "6/6 - Se copio el historial con exito");
+                //mostrarMensaje(a, "6/6 - Se copio el historial con exito");
+                mostrarMensaje(a, "Se sincronizo con exito!");
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
                 if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);

@@ -6,8 +6,7 @@
     tools:context=".ui.NuevoPuntoActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/layout_primary"
         android:layout_marginBottom="15dp">
 
         <RelativeLayout
@@ -44,11 +43,11 @@
 
             <EditText
                 android:id="@+id/etBarrio"
-                android:focusedByDefault="true"
                 style="@style/et_primary"
                 android:layout_width="wrap_content"
                 android:layout_below="@id/etUnidad"
                 android:autofillHints=""
+                android:focusedByDefault="true"
                 android:hint="@string/tv_barrio"
                 android:inputType="textPostalAddress" />
 

@@ -14,9 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -56,6 +53,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
@@ -321,44 +319,36 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         for (int i = 0; i < tipoPuntos.size(); i++) {
             labels.add(tipoPuntos.get(i).getNombre());
         }
-        /******************************************************************************************/
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, labels);
-        spinnerAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sTipoPunto.setAdapter(spinnerAdapter);
-        sTipoPunto.setSelection(idTipoPunto - 1);
-        sTipoPunto.setDropDownWidth(250);
-        sTipoPunto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tipoPunto.setId(i + 1);
-                if ((i + 1) == MAPA_CLIENTES) {
-                    etUnidad.setEnabled(true);
-                    etUnidad.setHint("Unidad");
-                    etUnidad.setBackgroundResource(R.drawable.et_redondo);
-                    if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
-                        inputs.add(etUnidad);
+        Util.cargarSpinner(sTipoPunto,
+                this,
+                idTipoPunto,
+                labels,
+                () -> {
+                    tipoPunto.setId(getPreference(this, POSICION_SELECCIONADA, 1));
+                    if (getPreference(this, POSICION_SELECCIONADA, 1) == MAPA_CLIENTES) {
+                        etUnidad.setEnabled(true);
+                        etUnidad.setHint("Unidad");
+                        etUnidad.setBackgroundResource(R.drawable.et_redondo);
+                        if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
+                            inputs.add(etUnidad);
+                        }
+                        //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
+                    } else {
+                        if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
+                            inputs.remove(4);
+                        }
+                        //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW
+                        etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
+                        etUnidad.setHint("Sin n° de unidad");
+                        etUnidad.setEnabled(false);
+                        etUnidad.setText("");
                     }
-                    //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
-                } else {
-                    if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
-                        inputs.remove(4);
-                    }
-                    //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW
-                    etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
-                    etUnidad.setHint("Sin n° de unidad");
-                    etUnidad.setEnabled(false);
-                    etUnidad.setText("");
-                }
-                //mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                tipoPunto.setId(MAPA_RECORRIDO);
-//                mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
-            }
-        });
+                    //mostrarMensaje(NuevoPuntoActivity.this, String.valueOf(tipoPunto.getId()));
+                    return null;
+                },
+                () -> {
+                    tipoPunto.setId(MAPA_RECORRIDO);
+                    return null;
+                });
     }
 }

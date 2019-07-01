@@ -9,13 +9,19 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.desarrollo.kuky.presionaguasriojanas.R;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -50,6 +56,7 @@ public class Util {
     public static final String ULTIMA_LONGITUD = "longitud";
     public static final String CIRCUITO_USUARIO = "circuito_usuario";
     public static final String TIPO_MAPA = "id_tipo_punto";
+    public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RED = 3;
@@ -146,27 +153,6 @@ public class Util {
         bt.setTypeface(TF);
     }
 
-    public static void showDialog(final Activity a, int dialog, String mensajeSI, Callable<Void> methodParam) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(mensajeSI, (dialog1, id) -> {
-                    try {
-                        methodParam.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                })
-                .setNegativeButton("Cancelar", (dialog12, id) -> dialog12.cancel());
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
 
     public static void setPreference(Context c, String nombreDato, int dato) {
         SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
@@ -194,4 +180,82 @@ public class Util {
         return settings.getString(nombreDato, defaultValue);
     }
 
+    public static void showDialog(final Activity a, int dialog, String mensajeSI, Callable<Void> methodParam) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(mensajeSI, (dialog1, id) -> {
+                    try {
+                        methodParam.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton("Cancelar", (dialog12, id) -> dialog12.cancel());
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public static void showStandarDialog(final Activity a,
+                                         String titulo,
+                                         View view,
+                                         String mensajeSI,
+                                         Callable<Void> methodParam) {
+        AlertDialog dialog = new AlertDialog.Builder(a)
+                .setTitle(titulo)
+                //.setMessage("Seleccione el circuito")
+                .setView(view)
+                .setPositiveButton(mensajeSI, (dialog13, which) -> {
+                    try {
+                        methodParam.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .create();
+        dialog.show();
+    }
+
+    public static void cargarSpinner(Spinner spinner,
+                                     Activity a,
+                                     int dato,
+                                     List<String> labels,
+                                     Callable<Void> methodAcept,
+                                     Callable<Void> methodCancel) {
+        spinner.setBackgroundResource(R.drawable.sp_redondo);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(a,
+                android.R.layout.simple_spinner_item, labels);
+        spinnerAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setSelection(dato - 1);
+        spinner.setDropDownWidth(350);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setPreference(a, POSICION_SELECCIONADA, i + 1);
+                try {
+                    methodAcept.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                try {
+                    methodCancel.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

@@ -44,6 +44,7 @@
     <string name="tipo_punto">Punto:</string>
     <string name="tv_confirmar_guardar">¿Confirma que desea guardar?</string>
     <string name="tv_confirmar_sincronizar">¿Esta seguro de sincronizar?</string>
+    <string name="tv_debe_sincronizar">Debe sincronizar para poder cerrar sesion</string>
     <string name="tvUsuario">Bienvenido:</string>
     <string name="bModuloPresion">Modulo Presion</string>
     <string name="tv_presion_historial">Presion:</string>

@@ -44,7 +44,7 @@ public class PuntoPresionControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Enviando puntos...");
+            pDialog.setMessage("1/6 - Enviando puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -155,7 +155,7 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "1/6 - Se enviaron los puntos con exito");
+                //mostrarMensaje(a, "1/6 - Se enviaron los puntos con exito");
                 HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
                 historialPuntosControlador.sincronizarDeSqliteToMysql(a);
             } else {
@@ -184,7 +184,7 @@ public class PuntoPresionControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Trayendo puntos...");
+            pDialog.setMessage("5/6 - Recibiendo puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -267,7 +267,7 @@ public class PuntoPresionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "5/6 - Se copiaron puntos con exito");
+                //mostrarMensaje(a, "5/6 - Se copiaron puntos con exito");
                 HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
                 historialPuntosControlador.sincronizarDeMysqlToSqlite(a);
             } else {

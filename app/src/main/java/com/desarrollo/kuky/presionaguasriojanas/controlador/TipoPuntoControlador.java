@@ -32,7 +32,7 @@ public class TipoPuntoControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Trayendo tipos de puntos...");
+            pDialog.setMessage("3/6 - Recibiendo tipos de puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -90,7 +90,7 @@ public class TipoPuntoControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "3/6 - Se copio los tipos de puntos con exito");
+                //mostrarMensaje(a, "3/6 - Se copio los tipos de puntos con exito");
                 OrdenControlador ordenControlador = new OrdenControlador();
                 ordenControlador.sincronizarDeMysqlToSqlite(a);
             } else {

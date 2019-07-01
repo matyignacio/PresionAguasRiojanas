@@ -1,20 +1,16 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -47,6 +43,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RED;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD;
@@ -257,46 +254,35 @@ public class MapActivity extends AppCompatActivity
 
     public void showDialogSetCircuito(final Activity a) {
         final Spinner taskSpinner = new Spinner(a);
-        taskSpinner.setBackgroundResource(R.drawable.sp_redondo);
         List<String> labels = new ArrayList<>();
         for (int i = 1; i <= MAXIMO_CIRCUITO; i++) {
-            labels.add("Circuito " + String.valueOf(i));
+            labels.add("Circuito " + i);
         }
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, labels);
-        spinnerAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        taskSpinner.setAdapter(spinnerAdapter);
-        taskSpinner.setDropDownWidth(250);
-        taskSpinner.setSelection(getPreference(
-                MapActivity.this,
-                CIRCUITO_USUARIO,
-                1) - 1);
-        taskSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setPreference(MapActivity.this, CIRCUITO_USUARIO, i + 1);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                /** NO MODIFICA NADA*/
-            }
-        });
-
-        AlertDialog dialog = new AlertDialog.Builder(a)
-                .setTitle(" ")
-                //.setMessage("Seleccione el circuito")
-                .setView(taskSpinner)
-                .setPositiveButton("Listo", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setNombreUsuario();
-                        mostrarMensaje(MapActivity.this, "Se actualizo el circuito");
-                    }
-                })
-                .setNegativeButton("Cancelar", null)
-                .create();
-        dialog.show();
+        Util.cargarSpinner(taskSpinner,
+                a,
+                getPreference(
+                        MapActivity.this,
+                        CIRCUITO_USUARIO,
+                        1),
+                labels,
+                () -> {
+                    setPreference(MapActivity.this, CIRCUITO_USUARIO, getPreference(a,
+                            POSICION_SELECCIONADA,
+                            1));
+                    return null;
+                },
+                () -> {
+                    /** NO MODIFICA NADA*/
+                    return null;
+                });
+        Util.showStandarDialog(a,
+                " ",
+                taskSpinner,
+                "Listo",
+                () -> {
+                    setNombreUsuario();
+                    mostrarMensaje(MapActivity.this, "Se actualizo el circuito");
+                    return null;
+                });
     }
 }
