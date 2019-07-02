@@ -24,7 +24,7 @@
     <string name="sign_out">Cerrar Sesion</string>
     <string name="b_add_punto_presion">Nuevo Punto</string>
     <string name="b_sign_out">Cerrar Sesion</string>
-    <string name="b_enviar_nuevo_punto">Agregar Punto</string>
+    <string name="b_enviar_nuevo_punto">Guardar Punto</string>
     <string name="b_historial_punto">Ver Historial</string>
     <string name="b_nueva_medicion">Agregar medicion</string>
     <string name="cerrar_sesion">¿Esta seguro que desea cerrar sesion?</string>
@@ -36,7 +36,7 @@
     <string name="tv_calle1">Calle 1 </string>
     <string name="tv_calle2">Calle 2 </string>
     <string name="tv_presion">Presion </string>
-    <string name="b_enviar_medicion">Enviar medicion</string>
+    <string name="b_enviar_medicion">Guardar medicion</string>
     <string name="label_cancel">Cancelar</string>
     <string name="action_settings">Configurar y reiniciar app</string>
     <string name="GPSAlertDialogMessage">Ud posee el GPS desactivado, debe activarlo para poder continuar</string>

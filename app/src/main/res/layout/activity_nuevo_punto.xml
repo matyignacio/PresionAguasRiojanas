@@ -83,22 +83,18 @@
                 android:paddingTop="2dp"
                 android:paddingRight="10dp"
                 android:text="@string/tv_mca" />
-        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlForm"
-            android:gravity="center"
-            android:weightSum="100">
 
             <Button
                 android:id="@+id/bEnviarNuevoPunto"
                 style="@style/b_primary"
-                android:layout_weight="50"
-                android:drawableStart="@drawable/ic_add_white_24dp"
+                android:layout_below="@id/etPresion"
+                android:layout_alignStart="@id/etPresion"
+                android:layout_alignEnd="@id/etPresion"
+                android:layout_marginTop="15dp"
+                android:drawableEnd="@drawable/ic_save_white_24dp"
                 android:text="@string/b_enviar_nuevo_punto" />
-        </LinearLayout>
 
+        </RelativeLayout>
     </RelativeLayout>
 </ScrollView>
