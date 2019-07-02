@@ -31,6 +31,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class HistorialPuntosControlador {
@@ -240,13 +241,18 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "6/6 - Se copio el historial con exito");
-                mostrarMensaje(a, "Se sincronizo con exito!");
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
                 if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
                 }
                 usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
-                abrirActivity(a, MapActivity.class);
+                if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity")) {
+                    mostrarMensaje(a, "Se sincronizo con exito!");
+                    abrirActivity(a, MapActivity.class);
+                } else {
+                    logOut(a);
+                }
+
             } else {
                 mostrarMensaje(a, "Error en el checkHistorial");
             }

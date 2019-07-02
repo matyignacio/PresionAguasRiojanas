@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -116,6 +118,13 @@ public class Util {
         } else {
             mostrarMensaje(a, "La presion debe ser entre 0 mca y 20 mca");
             return ERROR;
+        }
+    }
+
+    public static void logOut(Activity a) {
+        UsuarioControlador usuarioControlador = new UsuarioControlador();
+        if (usuarioControlador.eliminarUsuario(a) == EXITOSO) {
+            abrirActivity(a, LoginActivity.class);
         }
     }
 

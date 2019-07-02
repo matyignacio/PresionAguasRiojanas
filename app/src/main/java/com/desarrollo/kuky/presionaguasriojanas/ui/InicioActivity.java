@@ -13,11 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class InicioActivity extends AppCompatActivity
@@ -80,16 +81,16 @@ public class InicioActivity extends AppCompatActivity
                         if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
                             Util.showDialog(this,
                                     R.layout.dialog_debe_sincronizar,
-                                    "Ok",
+                                    "Si, sincronizar ahora",
                                     () -> {
+                                        MapActivityControlador mapActivityControlador = new MapActivityControlador();
+                                        if (mapActivityControlador.sync(InicioActivity.this) == EXITOSO) {
+                                        }
                                         return null;
                                     });
                             //mostrarMensaje(InicioActivity.this, "Debe sincronizar primero");
                         } else {
-                            UsuarioControlador usuarioControlador = new UsuarioControlador();
-                            if (usuarioControlador.eliminarUsuario(InicioActivity.this) == EXITOSO) {
-                                abrirActivity(InicioActivity.this, LoginActivity.class);
-                            }
+                            logOut(InicioActivity.this);
                         }
                         return null;
                     }

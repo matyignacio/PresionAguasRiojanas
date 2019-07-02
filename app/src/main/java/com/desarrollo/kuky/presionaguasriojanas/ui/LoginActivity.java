@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -48,12 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setPrimaryFontBold(this, etClave);
         setPrimaryFontBold(this, bLogin);
         /**************************/
-        bLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        bLogin.setOnClickListener(view -> attemptLogin());
         if (uControlador.existeUsuario(this) == Util.EXITOSO) {
             abrirActivity(LoginActivity.this, InicioActivity.class);
         }
