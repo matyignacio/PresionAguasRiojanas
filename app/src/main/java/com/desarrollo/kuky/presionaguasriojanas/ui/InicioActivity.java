@@ -81,7 +81,7 @@ public class InicioActivity extends AppCompatActivity
                         if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
                             Util.showDialog(this,
                                     R.layout.dialog_debe_sincronizar,
-                                    "Si, sincronizar ahora",
+                                    "sincronizar ahora",
                                     () -> {
                                         MapActivityControlador mapActivityControlador = new MapActivityControlador();
                                         if (mapActivityControlador.sync(InicioActivity.this) == EXITOSO) {

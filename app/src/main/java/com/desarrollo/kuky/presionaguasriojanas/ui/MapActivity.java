@@ -126,7 +126,7 @@ public class MapActivity extends AppCompatActivity
         } else if (id == R.id.action_sync) {
             Util.showDialog(MapActivity.this,
                     R.layout.dialog_sincronizar,
-                    "Si, sincronizar bases",
+                    "sincronizar",
                     () -> {
                         sincronizar();
                         return null;

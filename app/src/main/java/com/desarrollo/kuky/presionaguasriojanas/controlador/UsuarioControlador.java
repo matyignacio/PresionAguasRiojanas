@@ -20,7 +20,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 
 public class UsuarioControlador {
     private ProgressDialog pDialog;
-    private UsuarioPorMailYClave usuarioPorMailYClave;
 
     private class UsuarioPorMailYClave extends AsyncTask<String, Float, String> {
         Activity a;
@@ -84,21 +83,21 @@ public class UsuarioControlador {
         @Override
         protected void onPostExecute(String s) {
             pDialog.dismiss();
-            /*////////////////////////////////////////////////////////////////////////////////////*/
-            // ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA...
-            // ... LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
-            /*if (s.equals("")) {
+            /***
+             * ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA
+             * LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
+             if (s.equals("")) {
                 Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
-            }*/
-            /*////////////////////////////////////////////////////////////////////////////////////*/
+             }
+             */
         }
     }
 
     public int extraerPorMailYClave(Activity a, String mail, String clave) {
         try {
-            usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
+            UsuarioPorMailYClave usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
             usuarioPorMailYClave.execute();
             return EXITOSO;
         } catch (Exception e) {

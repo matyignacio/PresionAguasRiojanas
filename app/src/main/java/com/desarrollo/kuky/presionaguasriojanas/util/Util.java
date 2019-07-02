@@ -74,12 +74,10 @@ public class Util {
     public static final String LONGITUD_LA_RIOJA = "-66.8576855";
     // location updates interval - 10sec
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-
     // fastest updates interval - 5 sec
     // location updates will be received if another app is requesting the locations
     // than your app can handle
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-
     public static final int REQUEST_CHECK_SETTINGS = 100;
 
     public static void abrirActivity(Activity a, Class destino) {
