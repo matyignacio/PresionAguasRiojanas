@@ -131,9 +131,8 @@ public class UsuarioControlador {
     public int eliminarUsuario(Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "DROP TABLE susuario";
+            String sql = "DELETE FROM susuario";
             db.execSQL(sql);
-            db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
             db.close();
             return EXITOSO;
         } catch (Exception e) {
