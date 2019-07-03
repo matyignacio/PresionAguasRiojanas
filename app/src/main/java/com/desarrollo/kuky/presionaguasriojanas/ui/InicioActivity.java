@@ -24,22 +24,15 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 public class InicioActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Button bModuloPresion;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-        bModuloPresion = findViewById(R.id.bModuloPresion);
+        Button bModuloPresion = findViewById(R.id.bModuloPresion);
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, bModuloPresion);
         /**************************/
-        bModuloPresion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirActivity(InicioActivity.this, MapActivity.class);
-            }
-        });
+        bModuloPresion.setOnClickListener(view -> abrirActivity(InicioActivity.this, MapActivity.class));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

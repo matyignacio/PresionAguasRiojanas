@@ -18,9 +18,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 
 public class HistorialActivity extends AppCompatActivity {
 
-    private ListView lvHistorial;
     private HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-    private ArrayList<HistorialPuntos> historiales = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +27,8 @@ public class HistorialActivity extends AppCompatActivity {
         // OBTENEMOS EL PUNTO DE PRESION
         int id = getPreference(this, ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
         String usuario = getPreference(this, USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
-        historiales = historialPuntosControlador.extraerTodosPorPunto(this, id, usuario);
-        lvHistorial = findViewById(R.id.lvHistorial);
+        ArrayList<HistorialPuntos> historiales = historialPuntosControlador.extraerTodosPorPunto(this, id, usuario);
+        ListView lvHistorial = findViewById(R.id.lvHistorial);
         lvaHistorial adaptador = new lvaHistorial(this, historiales);
         lvHistorial.setAdapter(adaptador);
     }

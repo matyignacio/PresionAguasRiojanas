@@ -153,7 +153,6 @@ public class MapActivity extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        GoogleMap mMap = googleMap;
         /** BUSCAMOS EN SHARED PREFERENCES LA ULTIMA LATITUD Y LONGITUD SELECCIONADAS.
          *  EN CASO DE NO HABER, SETEAMOS EL MAPA EN LA RIOJA                       **/
         Double latitud = Double.valueOf(getPreference(MapActivity.this, ULTIMA_LATITUD,
@@ -161,7 +160,7 @@ public class MapActivity extends AppCompatActivity
         Double longitud = Double.valueOf(getPreference(MapActivity.this, ULTIMA_LONGITUD,
                 LONGITUD_LA_RIOJA));
         LatLng laRioja = new LatLng(latitud, longitud);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
         // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
         ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
@@ -175,14 +174,14 @@ public class MapActivity extends AppCompatActivity
             marcador = new LatLng(puntosPresion.get(i).getLatitud(),
                     puntosPresion.get(i).getLongitud());
             if (puntosPresion.get(i).getPresion() > ESTANDAR_MEDICION) {
-                puntoMarcador = mMap.addMarker(new MarkerOptions()
+                puntoMarcador = googleMap.addMarker(new MarkerOptions()
                         .position(marcador)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
                                 puntosPresion.get(i).getBarrio()));
                 puntoMarcador.setTag(puntosPresion.get(i));
             } else {
-                puntoMarcador = mMap.addMarker(new MarkerOptions()
+                puntoMarcador = googleMap.addMarker(new MarkerOptions()
                         .position(marcador)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_red))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
@@ -195,9 +194,9 @@ public class MapActivity extends AppCompatActivity
             OrdenControlador ordenControlador = new OrdenControlador();
             Orden orden;
             orden = ordenControlador.extraerActivo(this);
-            if (puntosPresion.get(i).getId() == orden.getPpActual().getId() &&
+            if (puntosPresion.get(i).getId().equals(orden.getPpActual().getId()) &&
                     puntosPresion.get(i).getUsuario().getId().equals(orden.getPpActual().getUsuario().getId())) {
-                puntoMarcador = mMap.addMarker(new MarkerOptions()
+                puntoMarcador = googleMap.addMarker(new MarkerOptions()
                         .position(marcador)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_yellow))
                         .title(puntosPresion.get(i).getCalle1() + ", Bº: " +
@@ -207,7 +206,7 @@ public class MapActivity extends AppCompatActivity
         }
 
         // Set a listener for marker click.
-        mMap.setOnMarkerClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
     }
 
     /**

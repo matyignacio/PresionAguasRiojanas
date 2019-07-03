@@ -27,9 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private ArrayList<EditText> inputs = new ArrayList<>();
     private EditText etMail;
     private EditText etClave;
-    private Button bLogin;
     private UsuarioControlador uControlador = new UsuarioControlador();
-    private AttemptLogin attemptLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         etClave = findViewById(R.id.etClave);
         inputs.add(etMail);
         inputs.add(etClave);
-        bLogin = findViewById(R.id.bLogin);
+        Button bLogin = findViewById(R.id.bLogin);
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, etMail);
         setPrimaryFontBold(this, etClave);
@@ -60,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin() {
         if (validarCampos(this, inputs) == EXITOSO) {
-            attemptLogin = new AttemptLogin(this);
+            AttemptLogin attemptLogin = new AttemptLogin(this);
             attemptLogin.execute();
         }
     }
@@ -70,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         Activity a;
         String nombre, pass, regreso;
 
-        public AttemptLogin(Activity a) {
+        AttemptLogin(Activity a) {
             this.a = a;
         }
 

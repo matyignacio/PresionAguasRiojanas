@@ -2,7 +2,6 @@ package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -63,18 +62,8 @@ public class PuntoPresionActivity extends AppCompatActivity {
         etCalle1.setText(puntoPresion.getCalle1());
         etCalle2.setText(puntoPresion.getCalle2());
         etPresion.setText(puntoPresion.getPresion().toString() + " mca");
-        bNuevaMedicion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirActivity(PuntoPresionActivity.this, NuevaPresionActivity.class);
-            }
-        });
-        bHistorialPunto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                abrirActivity(PuntoPresionActivity.this, HistorialActivity.class);
-            }
-        });
+        bNuevaMedicion.setOnClickListener(view -> abrirActivity(PuntoPresionActivity.this, NuevaPresionActivity.class));
+        bHistorialPunto.setOnClickListener(view -> abrirActivity(PuntoPresionActivity.this, HistorialActivity.class));
 
     }
 

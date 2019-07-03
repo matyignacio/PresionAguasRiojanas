@@ -18,9 +18,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 
 public class lvaHistorial extends BaseAdapter {
     // Declare Variables
-    Context context;
-    ArrayList<HistorialPuntos> historialPuntos;
-    LayoutInflater inflater;
+    private Context context;
+    private ArrayList<HistorialPuntos> historialPuntos;
 
     public lvaHistorial(Context context, ArrayList<HistorialPuntos> historialPuntos) {
         this.context = context;
@@ -49,7 +48,7 @@ public class lvaHistorial extends BaseAdapter {
         TextView tvFecha, tvPresion;
 
         //http://developer.android.com/intl/es/reference/android/view/LayoutInflater.html
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View itemView = inflater.inflate(R.layout.sli_historial, parent, false);
 
