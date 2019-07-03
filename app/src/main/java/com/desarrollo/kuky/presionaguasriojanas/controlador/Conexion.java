@@ -1,7 +1,5 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
-import android.app.Activity;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,8 +14,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USER;
  * Created by Kuky on 21/05/2019.
  */
 
-public class Conexion {
-    public static Connection GetConnection(Activity a) {
+class Conexion {
+    static Connection GetConnection() {
         Connection conexion = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -27,12 +25,8 @@ public class Conexion {
                             DATA_BASE,
                     USER,
                     CLAVE);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            conexion = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            conexion = null;
         } finally {
             return conexion;
         }

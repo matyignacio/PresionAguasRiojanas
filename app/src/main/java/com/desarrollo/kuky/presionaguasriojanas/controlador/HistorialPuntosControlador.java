@@ -13,7 +13,6 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,7 +54,7 @@ public class HistorialPuntosControlador {
             pDialog.show();
         }
 
-        public SyncSqliteToMysql(Activity a) {
+        SyncSqliteToMysql(Activity a) {
             this.a = a;
             check = ERROR;
             historiales = new ArrayList<>();
@@ -69,7 +68,7 @@ public class HistorialPuntosControlador {
              */
             historiales = extraerTodosPendientes(a);
             Connection conn;
-            conn = Conexion.GetConnection(a);
+            conn = Conexion.GetConnection();
             try {
                 conn.setAutoCommit(false);
                 String consultaSql;
@@ -146,14 +145,12 @@ public class HistorialPuntosControlador {
         }
     }
 
-    public int sincronizarDeSqliteToMysql(Activity a) {
+    void sincronizarDeSqliteToMysql(Activity a) {
         try {
             SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Eror SyncSqliteToMysql HPC" + e.toString());
-            return ERROR;
         }
     }
 
@@ -171,7 +168,7 @@ public class HistorialPuntosControlador {
             pDialog.show();
         }
 
-        public SyncMysqlToSqlite(Activity a) {
+        SyncMysqlToSqlite(Activity a) {
             this.a = a;
             check = ERROR;
         }
@@ -185,7 +182,7 @@ public class HistorialPuntosControlador {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection(a);
+                conn = Conexion.GetConnection();
                 String consultaSql = "SELECT * FROM historial_puntos_presion ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
@@ -260,14 +257,12 @@ public class HistorialPuntosControlador {
 
     }
 
-    public int sincronizarDeMysqlToSqlite(Activity a) {
+    void sincronizarDeMysqlToSqlite(Activity a) {
         try {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error SyncMysqlToSqlite HPC" + e.toString());
-            return ERROR;
         }
     }
 
@@ -311,7 +306,7 @@ public class HistorialPuntosControlador {
         return historiales;
     }
 
-    public ArrayList<HistorialPuntos> extraerTodosPendientes(Activity a) {
+    private ArrayList<HistorialPuntos> extraerTodosPendientes(Activity a) {
         historiales = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM historial_puntos_presion " +
@@ -340,7 +335,7 @@ public class HistorialPuntosControlador {
         return historiales;
     }
 
-    public int insertar(HistorialPuntos historialPuntos, Activity a) {
+    public void insertar(HistorialPuntos historialPuntos, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "INSERT INTO `historial_puntos_presion`" +
@@ -404,14 +399,12 @@ public class HistorialPuntosControlador {
             /** CERRAMOS LAS CONEXIONES **/
             db.close();
             db2.close();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar HPC " + e.toString());
-            return ERROR;
         }
     }
 
-    public int insertar(PuntoPresion pp, Activity a, int id) {
+    void insertar(PuntoPresion pp, Activity a, int id) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "INSERT INTO `historial_puntos_presion`" +
@@ -444,14 +437,12 @@ public class HistorialPuntosControlador {
             db2.execSQL(sql);
             db.close();
             db2.close();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar HPC + PPC " + e.toString());
-            return ERROR;
         }
     }
 
-    public int actualizarPendiente(HistorialPuntos historialPuntos, Activity a) {
+    private void actualizarPendiente(HistorialPuntos historialPuntos, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE historial_puntos_presion " +
@@ -460,10 +451,8 @@ public class HistorialPuntosControlador {
                     " AND id_usuario LIKE '" + historialPuntos.getPuntoPresion().getUsuario().getId() + "'";
             db.execSQL(sql);
             db.close();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error actualizarPendiente HPC " + e.toString());
-            return ERROR;
         }
     }
 }

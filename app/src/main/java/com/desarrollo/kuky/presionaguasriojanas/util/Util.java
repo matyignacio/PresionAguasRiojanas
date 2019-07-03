@@ -50,9 +50,7 @@ public class Util {
     public static final int INSERTAR_PUNTO = 1;
     public static final int ACTUALIZAR_PUNTO = 2;
     public static final int ESTANDAR_MEDICION = 6;
-    public static final int MAXIMA_MEDICION = 20;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    public static final String PREFS_NAME = "MyPrefsFile";
     public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
     public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
     public static final String ULTIMA_LATITUD = "latitud";
@@ -64,8 +62,10 @@ public class Util {
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RED = 3;
     public static final int MAXIMO_CIRCUITO = 2;
-    public static final String font_primary_path = "font/font_primary.ttf";
-    public static final String font_primary_bold_path = "font/font_primary_bold.ttf";
+    private static final int MAXIMA_MEDICION = 20;
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String font_primary_path = "font/font_primary.ttf";
+    private static final String font_primary_bold_path = "font/font_primary_bold.ttf";
     /**
      * A LATITUD Y LONGITUD LAS DEFINO COMO STRINGS PARA PODER USARLAS COMO SHARED PREFERENCES
      * DESPUES LAS PARSEO A DOUBLE EN MAPACTIVITY
@@ -161,16 +161,14 @@ public class Util {
         SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(nombreDato, dato);
-        // Commit the edits!
-        editor.commit();
+        editor.apply();
     }
 
     public static void setPreference(Context c, String nombreDato, String dato) {
         SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(nombreDato, dato);
-        // Commit the edits!
-        editor.commit();
+        editor.apply();
     }
 
     public static int getPreference(Context c, String nombreDato, int defaultValue) {

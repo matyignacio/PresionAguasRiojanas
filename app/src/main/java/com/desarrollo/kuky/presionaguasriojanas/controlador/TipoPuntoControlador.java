@@ -36,7 +36,7 @@ public class TipoPuntoControlador {
             pDialog.show();
         }
 
-        public SyncMysqlToSqlite(Activity a) {
+        SyncMysqlToSqlite(Activity a) {
             this.a = a;
             check = ERROR;
         }
@@ -50,7 +50,7 @@ public class TipoPuntoControlador {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection(a);
+                conn = Conexion.GetConnection();
                 String consultaSql = "SELECT * FROM tipo_punto ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
@@ -99,14 +99,12 @@ public class TipoPuntoControlador {
 
     }
 
-    public int sincronizarDeMysqlToSqlite(Activity a) {
+    void sincronizarDeMysqlToSqlite(Activity a) {
         try {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
-            return EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Eror SyncMysqlToSqlite TPC" + e.toString());
-            return ERROR;
         }
     }
 

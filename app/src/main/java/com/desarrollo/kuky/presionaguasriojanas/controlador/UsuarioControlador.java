@@ -36,7 +36,7 @@ public class UsuarioControlador {
             pDialog.show();
         }
 
-        public UsuarioPorMailYClave(Activity a, String eMail, String clave) {
+        UsuarioPorMailYClave(Activity a, String eMail, String clave) {
             this.a = a;
             this.eMail = eMail;
             this.clave = clave;
@@ -48,7 +48,7 @@ public class UsuarioControlador {
             PreparedStatement ps;
             ResultSet rs;
             try {
-                conn = Conexion.GetConnection(a);
+                conn = Conexion.GetConnection();
                 String consultaSql = "SELECT * FROM susuario WHERE email LIKE '" + eMail + "' AND clave LIKE '" + clave + "' AND activo LIKE 's'";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
@@ -95,18 +95,16 @@ public class UsuarioControlador {
         }
     }
 
-    public int extraerPorMailYClave(Activity a, String mail, String clave) {
+    public void extraerPorMailYClave(Activity a, String mail, String clave) {
         try {
             UsuarioPorMailYClave usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
             usuarioPorMailYClave.execute();
-            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return ERROR;
         }
     }
 
-    public int guardarUsuario(Activity a, Usuario u) {
+    private void guardarUsuario(Activity a, Usuario u) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "INSERT INTO susuario VALUES( '" +
@@ -120,10 +118,8 @@ public class UsuarioControlador {
                     + u.getBandera_sync_modulo_presion() + "')";
             db.execSQL(sql);
             db.close();
-            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return ERROR;
         }
     }
 
@@ -162,7 +158,7 @@ public class UsuarioControlador {
         }
     }
 
-    public int editarBanderaModuloPresion(Activity a, int bandera) {
+    void editarBanderaModuloPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE susuario SET  'bandera_modulo_presion' =" +
@@ -170,14 +166,12 @@ public class UsuarioControlador {
             bh.execSQL(sql);
             bh.close();
             LoginActivity.usuario.setBandera_modulo_presion(bandera);
-            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return ERROR;
         }
     }
 
-    public int editarBanderaSyncModuloPresion(Activity a, int bandera) {
+    void editarBanderaSyncModuloPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE susuario SET 'bandera_sync_modulo_presion' = " +
@@ -185,10 +179,8 @@ public class UsuarioControlador {
             bh.execSQL(sql);
             bh.close();
             LoginActivity.usuario.setBandera_sync_modulo_presion(bandera);
-            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return ERROR;
         }
     }
 

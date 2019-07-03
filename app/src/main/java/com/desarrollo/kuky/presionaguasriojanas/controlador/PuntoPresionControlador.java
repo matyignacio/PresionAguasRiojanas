@@ -47,7 +47,7 @@ public class PuntoPresionControlador {
             pDialog.show();
         }
 
-        public SyncSqliteToMysql(Activity a) {
+        SyncSqliteToMysql(Activity a) {
             this.a = a;
             check = ERROR;
             puntosPresion = new ArrayList<>();
@@ -62,7 +62,7 @@ public class PuntoPresionControlador {
             ArrayList<PuntoPresion> puntosPresionInsertar = extraerTodosPendientesInsertar(a);
             ArrayList<PuntoPresion> puntosPresionActualizar = extraerTodosPendientesActualizar(a);
             Connection conn;
-            conn = Conexion.GetConnection(a);
+            conn = Conexion.GetConnection();
             try {
                 conn.setAutoCommit(false);
                 String consultaSql;
@@ -162,7 +162,7 @@ public class PuntoPresionControlador {
         }
     }
 
-    public int sincronizarDeSqliteToMysql(Activity a) {
+    int sincronizarDeSqliteToMysql(Activity a) {
         try {
             SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
@@ -187,7 +187,7 @@ public class PuntoPresionControlador {
             pDialog.show();
         }
 
-        public SyncMysqlToSqlite(Activity a) {
+        SyncMysqlToSqlite(Activity a) {
             this.a = a;
             check = ERROR;
         }
@@ -201,7 +201,7 @@ public class PuntoPresionControlador {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection(a);
+                conn = Conexion.GetConnection();
                 String consultaSql = "SELECT * FROM puntos_presion ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
@@ -274,14 +274,12 @@ public class PuntoPresionControlador {
         }
     }
 
-    public int sincronizarDeMysqlToSqlite(Activity a) {
+    void sincronizarDeMysqlToSqlite(Activity a) {
         try {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error SyncMysqlToSqlite PPC" + e.toString());
-            return Util.ERROR;
         }
     }
 
@@ -448,7 +446,7 @@ public class PuntoPresionControlador {
         return puntoPresion;
     }
 
-    public int insertar(PuntoPresion puntoPresion, Activity a) {
+    public void insertar(PuntoPresion puntoPresion, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             int id = obtenerSiguienteId(a);
@@ -489,14 +487,12 @@ public class PuntoPresionControlador {
             historialPuntosControlador.insertar(puntoPresion, a, id);
             /** CERRAMOS LAS CONEXIONES **/
             db.close();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar PPC " + e.toString());
-            return Util.ERROR;
         }
     }
 
-    public ArrayList<PuntoPresion> extraerTodosPendientesInsertar(Activity a) {
+    private ArrayList<PuntoPresion> extraerTodosPendientesInsertar(Activity a) {
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM puntos_presion " +
@@ -528,7 +524,7 @@ public class PuntoPresionControlador {
         return puntosPresion;
     }
 
-    public ArrayList<PuntoPresion> extraerTodosPendientesActualizar(Activity a) {
+    private ArrayList<PuntoPresion> extraerTodosPendientesActualizar(Activity a) {
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM puntos_presion " +
@@ -560,7 +556,7 @@ public class PuntoPresionControlador {
         return puntosPresion;
     }
 
-    public int actualizarPendiente(PuntoPresion puntoPresion, Activity a) {
+    private void actualizarPendiente(PuntoPresion puntoPresion, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE puntos_presion" +
@@ -569,14 +565,12 @@ public class PuntoPresionControlador {
                     " AND id_usuario like '" + puntoPresion.getUsuario().getId() + "'";
             db.execSQL(sql);
             db.close();
-            return Util.EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Error actualizarPendiente PPC " + e.toString());
-            return Util.ERROR;
         }
     }
 
-    public int obtenerSiguienteId(Activity a) {
+    private int obtenerSiguienteId(Activity a) {
         int id = 1;
         try {
             SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();

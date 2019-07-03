@@ -38,7 +38,7 @@ public class OrdenControlador {
             pDialog.show();
         }
 
-        public SyncMysqlToSqlite(Activity a) {
+        SyncMysqlToSqlite(Activity a) {
             this.a = a;
             check = ERROR;
         }
@@ -52,7 +52,7 @@ public class OrdenControlador {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection(a);
+                conn = Conexion.GetConnection();
                 String consultaSql = "SELECT * FROM orden ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
@@ -105,14 +105,12 @@ public class OrdenControlador {
 
     }
 
-    public int sincronizarDeMysqlToSqlite(Activity a) {
+    void sincronizarDeMysqlToSqlite(Activity a) {
         try {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
-            return EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Eror SyncMysqlToSqlite OC" + e.toString());
-            return ERROR;
         }
     }
 
@@ -153,7 +151,7 @@ public class OrdenControlador {
         return orden;
     }
 
-    public int editarActivo(Activity a, int id_punto, String id_usuario, int bandera) {
+    void editarActivo(Activity a, int id_punto, String id_usuario, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE orden SET activo = " + bandera +
@@ -161,14 +159,12 @@ public class OrdenControlador {
                     " AND id_usuario_pp_actual like '" + id_usuario + "'";
             bh.execSQL(sql);
             bh.close();
-            return EXITOSO;
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
-            return ERROR;
         }
     }
 
-    public Orden existePunto(Activity a, PuntoPresion puntoPresion) {
+    Orden existePunto(Activity a, PuntoPresion puntoPresion) {
         Orden orden = new Orden();
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
