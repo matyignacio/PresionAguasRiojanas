@@ -60,7 +60,6 @@ public class Util {
     public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
-    public static final int MAPA_RED = 3;
     public static final int MAXIMO_CIRCUITO = 2;
     private static final int MAXIMA_MEDICION = 20;
     private static final String PREFS_NAME = "MyPrefsFile";

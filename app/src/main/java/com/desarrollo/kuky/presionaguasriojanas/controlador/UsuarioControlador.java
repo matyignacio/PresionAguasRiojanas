@@ -87,9 +87,9 @@ public class UsuarioControlador {
              * ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA
              * LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
              if (s.equals("")) {
-                Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
+             Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
+             } else {
+             Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
              }
              */
         }
@@ -107,6 +107,7 @@ public class UsuarioControlador {
     private void guardarUsuario(Activity a, Usuario u) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
             String sql = "INSERT INTO susuario VALUES( '" +
                     u.getId() + "', '"
                     + u.getNombre() + "', '"
@@ -138,7 +139,8 @@ public class UsuarioControlador {
 
     public int existeUsuario(Activity a) {
         try {
-            SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
             Cursor c = db.rawQuery("SELECT * FROM susuario", null);
             if (c.moveToFirst()) {
                 LoginActivity.usuario.setId(c.getString(0));

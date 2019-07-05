@@ -41,7 +41,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJ
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RED;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
@@ -91,8 +90,6 @@ public class MapActivity extends AppCompatActivity
             this.setTitle("Mapa Recorrido");
         } else if (tipoPunto == MAPA_CLIENTES) {
             this.setTitle("Mapa Clientes");
-        } else if (tipoPunto == MAPA_RED) {
-            this.setTitle("Mapa Red");
         }
     }
 
@@ -117,9 +114,6 @@ public class MapActivity extends AppCompatActivity
             abrirActivity(MapActivity.this, MapActivity.class);
         } else if (id == R.id.map_clientes) {
             setPreference(MapActivity.this, TIPO_MAPA, MAPA_CLIENTES);
-            abrirActivity(MapActivity.this, MapActivity.class);
-        } else if (id == R.id.map_red) {
-            setPreference(MapActivity.this, TIPO_MAPA, MAPA_RED);
             abrirActivity(MapActivity.this, MapActivity.class);
         } else if (id == R.id.ayuda_colores) {
             abrirActivity(MapActivity.this, PaletaColoresActivity.class);
@@ -163,7 +157,12 @@ public class MapActivity extends AppCompatActivity
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(laRioja));
         // Traemos los puntos de presion
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-        ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this, tipoPunto);
+        ArrayList<PuntoPresion> puntosPresion = puntoPresionControlador.extraerTodos(this,
+                tipoPunto,
+                getPreference(
+                        this,
+                        CIRCUITO_USUARIO,
+                        1));
         // Recorremos el arrayList para ir creando los marcadores
         for (Integer i = 0; i < puntosPresion.size(); i++) {
             Marker puntoMarcador;
@@ -264,13 +263,13 @@ public class MapActivity extends AppCompatActivity
                         CIRCUITO_USUARIO,
                         1),
                 labels,
-                () -> {
+                () -> {// BUTTON ACEPTAR
                     setPreference(MapActivity.this, CIRCUITO_USUARIO, getPreference(a,
                             POSICION_SELECCIONADA,
                             1));
                     return null;
                 },
-                () -> {
+                () -> {// BUTTON CANCELAR
                     /** NO MODIFICA NADA*/
                     return null;
                 });
@@ -281,6 +280,7 @@ public class MapActivity extends AppCompatActivity
                 () -> {
                     setNombreUsuario();
                     mostrarMensaje(MapActivity.this, "Se actualizo el circuito");
+                    abrirActivity(MapActivity.this, MapActivity.class);
                     return null;
                 });
     }

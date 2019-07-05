@@ -30,6 +30,7 @@
                 style="@style/et_primary"
                 android:layout_below="@+id/sTipoPunto"
                 android:autofillHints=""
+                android:enabled="false"
                 android:hint="@string/tv_circuito"
                 android:inputType="number" />
 

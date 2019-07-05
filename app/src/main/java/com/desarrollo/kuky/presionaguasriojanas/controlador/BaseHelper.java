@@ -50,16 +50,7 @@ public class BaseHelper extends SQLiteOpenHelper {
                 "  `id_usuario` char(10) DEFAULT NULL," +
                 "  `unidad` int(20) DEFAULT NULL"
                 + ")";
-        String sqlTablaUsuarios = "CREATE TABLE susuario (" +
-                "  usuario char(10) NOT NULL DEFAULT ''," +
-                "  nombre char(50) NOT NULL DEFAULT ''," +
-                "  email varchar(100) DEFAULT ''," +
-                "  clave char(10) NOT NULL DEFAULT ''," +
-                "  tipo char(1) NOT NULL DEFAULT ''," +
-                "  activo char(1) NOT NULL DEFAULT ''," +
-                "  bandera_modulo_presion INTEGER default 0," +
-                "  bandera_sync_modulo_presion INTEGER default 0," +
-                "  PRIMARY KEY (`usuario`)" + ")";
+
         String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS `historial_puntos_presion` (" +
                 "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "  `latitud` double NOT NULL," +
@@ -71,11 +62,11 @@ public class BaseHelper extends SQLiteOpenHelper {
                 "  `id_usuario` char(10) DEFAULT NULL," +
                 "  `id_usuario_historial` char(10) DEFAULT NULL"
                 + ")";
-        String sqlTablaTipoPunto = "CREATE TABLE `tipo_punto` (" +
+        String sqlTablaTipoPunto = "CREATE TABLE IF NOT EXISTS `tipo_punto` (" +
                 "  `id` int(11) NOT NULL," +
                 "  `nombre` varchar(20) NOT NULL," +
                 "  PRIMARY KEY (`id`)" + ") ";
-        String sqlTablaOrden = "CREATE TABLE `orden` (" +
+        String sqlTablaOrden = "CREATE TABLE IF NOT EXISTS `orden` (" +
                 "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "  `id_pp_actual` int(11) DEFAULT NULL," +
                 "  `id_usuario_pp_actual` char(10) DEFAULT NULL," +
@@ -96,4 +87,18 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     }
 
+    private String sqlTablaUsuarios = "CREATE TABLE IF NOT EXISTS susuario (" +
+            "  usuario char(10) NOT NULL DEFAULT ''," +
+            "  nombre char(50) NOT NULL DEFAULT ''," +
+            "  email varchar(100) DEFAULT ''," +
+            "  clave char(10) NOT NULL DEFAULT ''," +
+            "  tipo char(1) NOT NULL DEFAULT ''," +
+            "  activo char(1) NOT NULL DEFAULT ''," +
+            "  bandera_modulo_presion INTEGER default 0," +
+            "  bandera_sync_modulo_presion INTEGER default 0," +
+            "  PRIMARY KEY (`usuario`)" + ")";
+
+    public String getSqlTablaUsuarios() {
+        return sqlTablaUsuarios;
+    }
 }

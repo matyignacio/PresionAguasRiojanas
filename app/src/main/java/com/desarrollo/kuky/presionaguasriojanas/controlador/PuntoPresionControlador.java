@@ -283,8 +283,8 @@ public class PuntoPresionControlador {
         }
     }
 
-    public ArrayList<PuntoPresion> extraerTodos(Activity a) {
-        /** Extrae todos los puntos */
+    /**public ArrayList<PuntoPresion> extraerTodos(Activity a) {
+     //** Extrae todos los puntos *
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM puntos_presion", null);
@@ -313,15 +313,15 @@ public class PuntoPresionControlador {
         c.close();
         db.close();
         return puntosPresion;
-    }
+     }**/
 
-    public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
-        /** Extrae todos los puntos que sean del tipo "idTipoPunto" */
+    /**public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
+     //* Extrae todos los puntos que sean del tipo "idTipoPunto" *
         puntosPresion = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c;
         if (idTipoPunto == MAPA_CLIENTES) {
-            /** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA */
+     //** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA *
             c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
                     " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
                     " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad " +
@@ -333,7 +333,7 @@ public class PuntoPresionControlador {
                     " GROUP BY pp.id, pp.id_usuario" +
                     " ORDER BY hp.fecha DESC", null);
         } else {
-            /** SI NO BUSCAMOS CLIENTES, QUE TRAIGA TODOS LOS PUNTOS HISTORICOS */
+     //** SI NO BUSCAMOS CLIENTES, QUE TRAIGA TODOS LOS PUNTOS HISTORICOS *
             c = db.rawQuery("SELECT * FROM puntos_presion" +
                     " WHERE id_tipo_punto=" + idTipoPunto, null);
         }
@@ -362,7 +362,7 @@ public class PuntoPresionControlador {
         c.close();
         db.close();
         return puntosPresion;
-    }
+     }**/
 
     public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto, int circuito) {
         /** Extrae todos los puntos que sean del tipo "idTipoPunto" y pertenezcan al circuito seleccinado*/
@@ -379,7 +379,7 @@ public class PuntoPresionControlador {
                     " AND pp.id = hp.id_punto_presion" +
                     " AND pp.id_usuario = hp.id_usuario" +
                     " AND id_tipo_punto = " + MAPA_CLIENTES + " " +
-                    " AND id_tipo_punto = " + circuito + " " +
+                    " AND circuito = " + circuito + " " +
                     " GROUP BY pp.id, pp.id_usuario" +
                     " ORDER BY hp.fecha DESC", null);
         } else {
