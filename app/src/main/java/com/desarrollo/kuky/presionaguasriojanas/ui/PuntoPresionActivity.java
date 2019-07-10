@@ -20,7 +20,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
     PuntoPresion puntoPresion = new PuntoPresion();
     PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     // UI References
-    TextView etCircuito, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
+    TextView etCircuito, etTipoUnidad, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
     Button bHistorialPunto, bNuevaMedicion;
 
 
@@ -30,6 +30,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_punto_presion);
         // CAPTURAMOS LOS ELEMENTOS
         etCircuito = findViewById(R.id.etCircuito);
+        etTipoUnidad = findViewById(R.id.etTipoUnidad);
         etUnidad = findViewById(R.id.etUnidad);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
@@ -44,13 +45,16 @@ public class PuntoPresionActivity extends AppCompatActivity {
         puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(this, id, usuario);
         etCircuito.setText(puntoPresion.getCircuito().toString());
         if (puntoPresion.getUnidad() > 0) {
+            etTipoUnidad.setText(puntoPresion.getTipoUnidad());
             etUnidad.setText(String.valueOf(puntoPresion.getUnidad()));
         } else {
+            etTipoUnidad.setText("");
             etUnidad.setText("Sin nº de unidad");
         }
         etBarrio.setText(puntoPresion.getBarrio());
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, etCircuito);
+        setPrimaryFontBold(this, etTipoUnidad);
         setPrimaryFontBold(this, etUnidad);
         setPrimaryFontBold(this, etBarrio);
         setPrimaryFontBold(this, etCalle1);
