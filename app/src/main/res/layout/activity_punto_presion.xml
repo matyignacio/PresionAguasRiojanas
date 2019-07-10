@@ -21,7 +21,7 @@
             android:layout_weight="60"
             android:gravity="center">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/tvCircuito"
                 style="@style/tv_primary_mini"
                 android:layout_marginStart="10dp"
@@ -31,12 +31,11 @@
                 android:id="@+id/etCircuito"
                 style="@style/tv_primary_bold_background"
                 android:layout_below="@id/tvCircuito"
-                android:layout_alignStart="@id/tvCircuito" />
+                android:layout_alignStart="@id/tvCircuito" />-->
 
             <TextView
                 android:id="@+id/tvTipoUnidad"
                 style="@style/tv_primary_mini"
-                android:layout_below="@id/etCircuito"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/tv_tipo_unidad" />

@@ -20,16 +20,15 @@ public class PuntoPresionActivity extends AppCompatActivity {
     PuntoPresion puntoPresion = new PuntoPresion();
     PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     // UI References
-    TextView etCircuito, etTipoUnidad, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
+    TextView /*etCircuito,*/ etTipoUnidad, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
     Button bHistorialPunto, bNuevaMedicion;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_punto_presion);
         // CAPTURAMOS LOS ELEMENTOS
-        etCircuito = findViewById(R.id.etCircuito);
+        //etCircuito = findViewById(R.id.etCircuito);
         etTipoUnidad = findViewById(R.id.etTipoUnidad);
         etUnidad = findViewById(R.id.etUnidad);
         etBarrio = findViewById(R.id.etBarrio);
@@ -43,7 +42,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
         String usuario = getPreference(this, USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
         //mostrarMensaje(this, "id: " + id + ", usuario: " + usuario);
         puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(this, id, usuario);
-        etCircuito.setText(puntoPresion.getCircuito().toString());
+        //etCircuito.setText(puntoPresion.getCircuito().toString());
         if (puntoPresion.getUnidad() > 0) {
             etTipoUnidad.setText(puntoPresion.getTipoUnidad());
             etUnidad.setText(String.valueOf(puntoPresion.getUnidad()));
@@ -53,7 +52,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
         }
         etBarrio.setText(puntoPresion.getBarrio());
         /** SETEAMOS LOS TYPEFACES*/
-        setPrimaryFontBold(this, etCircuito);
+        //setPrimaryFontBold(this, etCircuito);
         setPrimaryFontBold(this, etTipoUnidad);
         setPrimaryFontBold(this, etUnidad);
         setPrimaryFontBold(this, etBarrio);

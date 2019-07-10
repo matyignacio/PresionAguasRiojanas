@@ -33,7 +33,7 @@
     <string name="tv_circuito">Circuito </string>
     <string name="tv_barrio">Barrio </string>
     <string name="tv_tipo_unidad">Tipo de unidad </string>
-    <string name="tv_unidad">Unidad </string>
+    <string name="tv_unidad">Numero </string>
     <string name="tv_calle1">Calle 1 </string>
     <string name="tv_calle2">Calle 2 </string>
     <string name="tv_presion">Presion </string>
