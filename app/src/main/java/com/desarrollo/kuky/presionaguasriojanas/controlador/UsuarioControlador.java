@@ -83,6 +83,17 @@ public class UsuarioControlador {
         @Override
         protected void onPostExecute(String s) {
             pDialog.dismiss();
+            /** ACTUALIZAMOS LOS FORMATOS DE TABLAS*/
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            db.execSQL(BaseHelper.getInstance(a).dropTable("orden"));
+            db.execSQL(BaseHelper.getInstance(a).dropTable("historial_puntos_presion"));
+            db.execSQL(BaseHelper.getInstance(a).dropTable("puntos_presion"));
+            db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_punto"));
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaOrden());
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaHistorialPuntosPresion());
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaPuntosPresion());
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoPunto());
+            db.close();
             /***
              * ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA
              * LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY

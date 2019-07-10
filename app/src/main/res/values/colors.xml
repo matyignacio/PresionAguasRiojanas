@@ -6,7 +6,8 @@
     <color name="textColorPrimaryAppBar">#FFFFFF</color>
     <color name="textColorPrimary">#000000</color>
     <color name="backgroundColor">#cfd8dc</color>
-    <color name="backgroundDisabled">#d32f2f</color>
+    <!--<color name="backgroundDisabled">#d32f2f</color>-->
+    <color name="backgroundDisabled">#6c6c6c</color>
     <color name="marcador_amarillo">#FFEB3B</color>
     <color name="marcador_verde">#4CAF50</color>
     <color name="marcador_rojo">#F44336</color>

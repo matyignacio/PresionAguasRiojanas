@@ -20,24 +20,25 @@
                 android:id="@+id/sTipoPunto"
                 style="@style/et_primary"
                 android:layout_height="40dp"
-                android:layout_alignStart="@+id/etCircuito"
-                android:layout_alignEnd="@id/etCircuito"
+                android:layout_alignStart="@+id/etUnidad"
+                android:layout_alignEnd="@id/etUnidad"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/sp_redondo" />
+
+            <Spinner
+                android:id="@+id/sTipoUnidad"
+                style="@style/et_primary"
+                android:layout_height="40dp"
+                android:layout_below="@id/sTipoPunto"
+                android:layout_alignStart="@+id/etUnidad"
+                android:layout_alignEnd="@id/etUnidad"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/sp_redondo" />
 
             <EditText
-                android:id="@+id/etCircuito"
-                style="@style/et_primary"
-                android:layout_below="@+id/sTipoPunto"
-                android:autofillHints=""
-                android:enabled="false"
-                android:hint="@string/tv_circuito"
-                android:inputType="number" />
-
-            <EditText
                 android:id="@+id/etUnidad"
                 style="@style/et_primary"
-                android:layout_below="@id/etCircuito"
+                android:layout_below="@id/sTipoUnidad"
                 android:autofillHints=""
                 android:hint="@string/tv_unidad"
                 android:inputType="number" />

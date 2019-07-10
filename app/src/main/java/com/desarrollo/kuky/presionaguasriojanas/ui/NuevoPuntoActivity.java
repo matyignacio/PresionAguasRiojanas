@@ -51,11 +51,13 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SPINNER_TIPO_UNIDAD;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarPresion;
@@ -75,13 +77,13 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private Location mCurrentLocation;
     // boolean flag to toggle the ui
     public Boolean mRequestingLocationUpdates;
-    //private TextView tvUnidad;
-    private EditText etCircuito, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
-    private Spinner sTipoPunto;
+    private EditText etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
+    private Spinner sTipoPunto, sTipoUnidad;
     private ArrayList<EditText> inputs = new ArrayList<>();
     private ArrayList<TipoPunto> tipoPuntos = new ArrayList<>();
     private TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
     private TipoPunto tipoPunto = new TipoPunto();
+    private List<String> labelsTipoUnidad = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,18 +92,21 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tipoPuntos = tipoPuntoControlador.extraerTodos(this);
         //tvUnidad = findViewById(R.id.tvUnidad);
-        etCircuito = findViewById(R.id.etCircuito);
         etUnidad = findViewById(R.id.etUnidad);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
         etPresion = findViewById(R.id.etPresion);
         sTipoPunto = findViewById(R.id.sTipoPunto);
+        sTipoUnidad = findViewById(R.id.sTipoUnidad);
+        labelsTipoUnidad.add("Unidad");
+        labelsTipoUnidad.add("Nis");
+        labelsTipoUnidad.add("Medidor Aguas");
+        labelsTipoUnidad.add("Medidor Edelar");
         cargarSpinnerTipoPunto();
-        etCircuito.setText(String.valueOf(getPreference(this, CIRCUITO_USUARIO, 1)));
+        cargarSpinnerTipoUnidad();
         /** SETEAMOS LOS TYPEFACES*/
         //setPrimaryFont(this, tvUnidad);
-        setPrimaryFontBold(this, etCircuito);
         setPrimaryFontBold(this, etUnidad);
         setPrimaryFontBold(this, etBarrio);
         setPrimaryFontBold(this, etCalle1);
@@ -109,7 +114,6 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         setPrimaryFontBold(this, etPresion);
         setPrimaryFontBold(this, bEnviarNuevoPunto);
         /**************************/
-        inputs.add(etCircuito);
         inputs.add(etBarrio);
         inputs.add(etCalle1);
         // inputs.add(etCalle2); A ESTE LO COMENTO PORQUE NO ES OBLIGATORIO EL CAMPO
@@ -201,7 +205,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                 PuntoPresion puntoPresion = new PuntoPresion();
                 TipoPresion tipoPresion = new TipoPresion();
                 // INICIALIZAMOS LO Q VAMOS A NECESITAR
-                puntoPresion.setCircuito(Integer.parseInt(etCircuito.getText().toString()));
+                puntoPresion.setCircuito(getPreference(this, CIRCUITO_USUARIO, 1));
                 puntoPresion.setBarrio(etBarrio.getText().toString());
                 puntoPresion.setCalle1(etCalle1.getText().toString());
                 puntoPresion.setCalle2(etCalle2.getText().toString());
@@ -211,7 +215,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                 tipoPresion.setId(1);
                 puntoPresion.setTipoPresion(tipoPresion);
                 puntoPresion.setUsuario(LoginActivity.usuario);
-                if (inputs.size() == 5) {
+                if (inputs.size() == 4) {
+                    puntoPresion.setTipoUnidad(labelsTipoUnidad.get(sTipoUnidad.getSelectedItemPosition()));
                     puntoPresion.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
                 } else {
                     puntoPresion.setUnidad(0);
@@ -315,19 +320,17 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                     tipoPunto.setId(getPreference(this, POSICION_SELECCIONADA, 1));
                     if (getPreference(this, POSICION_SELECCIONADA, 1) == MAPA_CLIENTES) {
                         etUnidad.setEnabled(true);
-                        etUnidad.setHint("Unidad");
-                        etUnidad.setBackgroundResource(R.drawable.et_redondo);
-                        if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
+                        sTipoUnidad.setEnabled(true);
+                        cargarSpinnerTipoUnidad();
+                        if (inputs.size() == 3) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
                             inputs.add(etUnidad);
                         }
-                        //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //DESTACHAMOS EL TEXTVIEW
                     } else {
-                        if (inputs.size() == 5) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
-                            inputs.remove(4);
+                        if (inputs.size() == 4) { /**EVALUAMOS SI UNIDAD YA PERTENECE A LOS CAMPOS A VALIDAR*/
+                            inputs.remove(3);
                         }
-                        //tvUnidad.setPaintFlags(tvUnidad.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //TACHAMOS EL TEXTVIEW
-                        etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
-                        etUnidad.setHint("Sin n° de unidad");
+                        cargarSpinnerTipoUnidad();
+                        sTipoUnidad.setEnabled(false);
                         etUnidad.setEnabled(false);
                         etUnidad.setText("");
                     }
@@ -338,5 +341,27 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                     tipoPunto.setId(MAPA_RECORRIDO);
                     return null;
                 });
+    }
+
+    private void cargarSpinnerTipoUnidad() {
+        Util.cargarSpinner(sTipoUnidad,
+                this,
+                1,
+                labelsTipoUnidad,
+                () -> {//ON ITEM SELECTED
+                    etUnidad.setHint("Numero de " + labelsTipoUnidad.get(sTipoUnidad.getSelectedItemPosition()));
+                    setPreference(NuevoPuntoActivity.this, SPINNER_TIPO_UNIDAD, sTipoUnidad.getSelectedItemPosition() + 1);
+                    return null;
+                },
+                () -> null);
+        if (getPreference(this, POSICION_SELECCIONADA, 1) == MAPA_CLIENTES) {
+            //etUnidad.setHint("Numero de " + labelsTipoUnidad.get(sTipoUnidad.getSelectedItemPosition()));
+            etUnidad.setBackgroundResource(R.drawable.et_redondo);
+            sTipoUnidad.setBackgroundResource(R.drawable.sp_redondo);
+        } else {
+            etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
+            sTipoUnidad.setBackgroundResource(R.drawable.sp_redondo_disabled);
+            etUnidad.setHint("Sin n° de unidad");
+        }
     }
 }

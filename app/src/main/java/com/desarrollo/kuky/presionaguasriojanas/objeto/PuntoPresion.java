@@ -14,6 +14,7 @@ public class PuntoPresion {
     private TipoPunto tipoPunto;
     private Usuario usuario;
     private int unidad;
+    private String tipoUnidad;
 
     public Integer getId() {
         return id;
@@ -117,5 +118,13 @@ public class PuntoPresion {
 
     public void setUnidad(int unidad) {
         this.unidad = unidad;
+    }
+
+    public String getTipoUnidad() {
+        return tipoUnidad;
+    }
+
+    public void setTipoUnidad(String tipoUnidad) {
+        this.tipoUnidad = tipoUnidad;
     }
 }

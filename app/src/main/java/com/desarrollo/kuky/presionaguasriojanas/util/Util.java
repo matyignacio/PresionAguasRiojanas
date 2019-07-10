@@ -58,6 +58,7 @@ public class Util {
     public static final String CIRCUITO_USUARIO = "circuito_usuario";
     public static final String TIPO_MAPA = "id_tipo_punto";
     public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
+    public static final String SPINNER_TIPO_UNIDAD = "tipo_unidad";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAXIMO_CIRCUITO = 2;

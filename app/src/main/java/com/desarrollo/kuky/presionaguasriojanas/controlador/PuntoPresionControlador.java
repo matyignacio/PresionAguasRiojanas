@@ -36,7 +36,6 @@ public class PuntoPresionControlador {
 
         Activity a;
         private Integer check;
-        private ArrayList<PuntoPresion> puntosPresion;
 
         @Override
         protected void onPreExecute() {
@@ -50,7 +49,6 @@ public class PuntoPresionControlador {
         SyncSqliteToMysql(Activity a) {
             this.a = a;
             check = ERROR;
-            puntosPresion = new ArrayList<>();
         }
 
         @Override
@@ -83,7 +81,8 @@ public class PuntoPresionControlador {
                             "`id_tipo_presion`," +
                             "`id_tipo_punto`," +
                             "`id_usuario`," +
-                            "`unidad`)" +
+                            "`unidad`," +
+                            "`tipo_unidad`)" +
                             " VALUES " +
                             "('" + puntosPresionInsertar.get(i).getId() + "','" + //id
                             puntosPresionInsertar.get(i).getCircuito() + "','" + //circuito
@@ -96,7 +95,8 @@ public class PuntoPresionControlador {
                             puntosPresionInsertar.get(i).getTipoPresion().getId() + "','" + //tipo presion
                             puntosPresionInsertar.get(i).getTipoPunto().getId() + "','" + //tipo punto
                             LoginActivity.usuario.getId() + "','" + //id_usuario
-                            puntosPresionInsertar.get(i).getUnidad() + "');"; //unidad
+                            puntosPresionInsertar.get(i).getUnidad() + "','" + //unidad
+                            puntosPresionInsertar.get(i).getTipoUnidad() + "');"; //tipo_unidad
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -224,7 +224,8 @@ public class PuntoPresionControlador {
                             "id_tipo_presion," +
                             "id_tipo_punto," +
                             "id_usuario," +
-                            "unidad)" +
+                            "unidad," +
+                            "tipo_unidad)" +
                             "VALUES" +
                             "(" + rs.getInt(1) + ",'" + // id
                             rs.getInt(2) + "','" + // circuito
@@ -237,8 +238,9 @@ public class PuntoPresionControlador {
                             rs.getFloat(8) + "','" + // presion
                             rs.getInt(9) + "','" + // id_tipo_presion
                             rs.getInt(10) + "','" + // id_tipo_punto
-                            rs.getString(11) + "'," + // id_usuario
-                            rs.getInt(12) + ");"; // unidad
+                            rs.getString(11) + "','" + // id_usuario
+                            rs.getInt(12) + "','" + // unidad
+                            rs.getString(13) + "');"; // tipo_unidad
                     db.execSQL(sql);
                 }
                 check++;
@@ -285,84 +287,86 @@ public class PuntoPresionControlador {
 
     /**public ArrayList<PuntoPresion> extraerTodos(Activity a) {
      //** Extrae todos los puntos *
-        puntosPresion = new ArrayList<>();
-        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM puntos_presion", null);
-        while (c.moveToNext()) {
-            Usuario u = new Usuario();
-            PuntoPresion puntoPresion = new PuntoPresion();
-            TipoPresion tipoPresion = new TipoPresion();
-            TipoPunto tipoPunto = new TipoPunto();
-            puntoPresion.setId(c.getInt(0));
-            puntoPresion.setCircuito(c.getInt(1));
-            puntoPresion.setBarrio(c.getString(2));
-            puntoPresion.setCalle1(c.getString(3));
-            puntoPresion.setCalle2(c.getString(4));
-            puntoPresion.setLatitud(c.getDouble(5));
-            puntoPresion.setLongitud(c.getDouble(6));
-            puntoPresion.setPresion(c.getFloat(8));
-            tipoPresion.setId(c.getInt(9));
-            puntoPresion.setTipoPresion(tipoPresion);
-            tipoPunto.setId(c.getInt(10));
-            puntoPresion.setTipoPunto(tipoPunto);
-            u.setId(c.getString(11));
-            puntoPresion.setUsuario(u);
-            puntoPresion.setUnidad(c.getInt(12));
-            puntosPresion.add(puntoPresion);
-        }
-        c.close();
-        db.close();
-        return puntosPresion;
+     puntosPresion = new ArrayList<>();
+     SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+     Cursor c = db.rawQuery("SELECT * FROM puntos_presion", null);
+     while (c.moveToNext()) {
+     Usuario u = new Usuario();
+     PuntoPresion puntoPresion = new PuntoPresion();
+     TipoPresion tipoPresion = new TipoPresion();
+     TipoPunto tipoPunto = new TipoPunto();
+     puntoPresion.setId(c.getInt(0));
+     puntoPresion.setCircuito(c.getInt(1));
+     puntoPresion.setBarrio(c.getString(2));
+     puntoPresion.setCalle1(c.getString(3));
+     puntoPresion.setCalle2(c.getString(4));
+     puntoPresion.setLatitud(c.getDouble(5));
+     puntoPresion.setLongitud(c.getDouble(6));
+     puntoPresion.setPresion(c.getFloat(8));
+     tipoPresion.setId(c.getInt(9));
+     puntoPresion.setTipoPresion(tipoPresion);
+     tipoPunto.setId(c.getInt(10));
+     puntoPresion.setTipoPunto(tipoPunto);
+     u.setId(c.getString(11));
+     puntoPresion.setUsuario(u);
+     puntoPresion.setUnidad(c.getInt(12));
+     puntosPresion.add(puntoPresion);
+     }
+     c.close();
+     db.close();
+     return puntosPresion;
      }**/
 
-    /**public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
-     //* Extrae todos los puntos que sean del tipo "idTipoPunto" *
-        puntosPresion = new ArrayList<>();
-        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c;
-        if (idTipoPunto == MAPA_CLIENTES) {
-     //** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA *
-            c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
-                    " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
-                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad " +
-                    " FROM puntos_presion AS pp, historial_puntos_presion AS hp " +
-                    " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
-                    " AND pp.id = hp.id_punto_presion" +
-                    " AND pp.id_usuario = hp.id_usuario" +
-                    " AND id_tipo_punto = " + MAPA_CLIENTES + " " +
-                    " GROUP BY pp.id, pp.id_usuario" +
-                    " ORDER BY hp.fecha DESC", null);
-        } else {
-     //** SI NO BUSCAMOS CLIENTES, QUE TRAIGA TODOS LOS PUNTOS HISTORICOS *
-            c = db.rawQuery("SELECT * FROM puntos_presion" +
-                    " WHERE id_tipo_punto=" + idTipoPunto, null);
-        }
-        while (c.moveToNext()) {
-            Usuario u = new Usuario();
-            PuntoPresion puntoPresion = new PuntoPresion();
-            TipoPresion tipoPresion = new TipoPresion();
-            TipoPunto tipoPunto = new TipoPunto();
-            puntoPresion.setId(c.getInt(0));
-            puntoPresion.setCircuito(c.getInt(1));
-            puntoPresion.setBarrio(c.getString(2));
-            puntoPresion.setCalle1(c.getString(3));
-            puntoPresion.setCalle2(c.getString(4));
-            puntoPresion.setLatitud(c.getDouble(5));
-            puntoPresion.setLongitud(c.getDouble(6));
-            puntoPresion.setPresion(c.getFloat(8));
-            tipoPresion.setId(c.getInt(9));
-            puntoPresion.setTipoPresion(tipoPresion);
-            tipoPunto.setId(c.getInt(10));
-            puntoPresion.setTipoPunto(tipoPunto);
-            u.setId(c.getString(11));
-            puntoPresion.setUsuario(u);
-            puntoPresion.setUnidad(c.getInt(12));
-            puntosPresion.add(puntoPresion);
-        }
-        c.close();
-        db.close();
-        return puntosPresion;
-     }**/
+    /**
+     * public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
+     * //* Extrae todos los puntos que sean del tipo "idTipoPunto" *
+     * puntosPresion = new ArrayList<>();
+     * SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+     * Cursor c;
+     * if (idTipoPunto == MAPA_CLIENTES) {
+     * //** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA *
+     * c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
+     * " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
+     * " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad " +
+     * " FROM puntos_presion AS pp, historial_puntos_presion AS hp " +
+     * " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
+     * " AND pp.id = hp.id_punto_presion" +
+     * " AND pp.id_usuario = hp.id_usuario" +
+     * " AND id_tipo_punto = " + MAPA_CLIENTES + " " +
+     * " GROUP BY pp.id, pp.id_usuario" +
+     * " ORDER BY hp.fecha DESC", null);
+     * } else {
+     * //** SI NO BUSCAMOS CLIENTES, QUE TRAIGA TODOS LOS PUNTOS HISTORICOS *
+     * c = db.rawQuery("SELECT * FROM puntos_presion" +
+     * " WHERE id_tipo_punto=" + idTipoPunto, null);
+     * }
+     * while (c.moveToNext()) {
+     * Usuario u = new Usuario();
+     * PuntoPresion puntoPresion = new PuntoPresion();
+     * TipoPresion tipoPresion = new TipoPresion();
+     * TipoPunto tipoPunto = new TipoPunto();
+     * puntoPresion.setId(c.getInt(0));
+     * puntoPresion.setCircuito(c.getInt(1));
+     * puntoPresion.setBarrio(c.getString(2));
+     * puntoPresion.setCalle1(c.getString(3));
+     * puntoPresion.setCalle2(c.getString(4));
+     * puntoPresion.setLatitud(c.getDouble(5));
+     * puntoPresion.setLongitud(c.getDouble(6));
+     * puntoPresion.setPresion(c.getFloat(8));
+     * tipoPresion.setId(c.getInt(9));
+     * puntoPresion.setTipoPresion(tipoPresion);
+     * tipoPunto.setId(c.getInt(10));
+     * puntoPresion.setTipoPunto(tipoPunto);
+     * u.setId(c.getString(11));
+     * puntoPresion.setUsuario(u);
+     * puntoPresion.setUnidad(c.getInt(12));
+     * puntosPresion.add(puntoPresion);
+     * }
+     * c.close();
+     * db.close();
+     * return puntosPresion;
+     * }
+     **/
 
     public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto, int circuito) {
         /** Extrae todos los puntos que sean del tipo "idTipoPunto" y pertenezcan al circuito seleccinado*/
@@ -373,7 +377,7 @@ public class PuntoPresionControlador {
             /** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA */
             c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
                     " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
-                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad " +
+                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad, pp.tipo_unidad " +
                     " FROM puntos_presion AS pp, historial_puntos_presion AS hp " +
                     " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
                     " AND pp.id = hp.id_punto_presion" +
@@ -408,6 +412,7 @@ public class PuntoPresionControlador {
             u.setId(c.getString(11));
             puntoPresion.setUsuario(u);
             puntoPresion.setUnidad(c.getInt(12));
+            puntoPresion.setTipoUnidad(c.getString(13));
             puntosPresion.add(puntoPresion);
         }
         c.close();
@@ -440,6 +445,7 @@ public class PuntoPresionControlador {
             u.setId(usuario);
             puntoPresion.setUsuario(u);
             puntoPresion.setUnidad(c.getInt(12));
+            puntoPresion.setTipoUnidad(c.getString(13));
         }
         c.close();
         db.close();
@@ -463,10 +469,11 @@ public class PuntoPresionControlador {
                     "`id_tipo_presion`," +
                     "`id_tipo_punto`," +
                     "`id_usuario`," +
-                    "`unidad`)" +
+                    "`unidad`," +
+                    "`tipo_unidad`)" +
                     "VALUES" +
                     "('" + id + "','" + // id
-                    +puntoPresion.getCircuito() + "','" + // circuito
+                    puntoPresion.getCircuito() + "','" + // circuito
                     puntoPresion.getBarrio() + "','" + // barrio
                     puntoPresion.getCalle1() + "','" + // calle1
                     puntoPresion.getCalle2() + "','" + // calle2
@@ -476,8 +483,9 @@ public class PuntoPresionControlador {
                     puntoPresion.getPresion() + "','" + // presion
                     puntoPresion.getTipoPresion().getId() + "','" + // tipo_presion
                     puntoPresion.getTipoPunto().getId() + "','" + // tipo_punto
-                    LoginActivity.usuario.getId() + "'," + // id_usuario
-                    puntoPresion.getUnidad() + ");"; // id_usuario
+                    LoginActivity.usuario.getId() + "','" + // id_usuario
+                    puntoPresion.getUnidad() + "','" + // unidad
+                    puntoPresion.getTipoUnidad() + "');"; // tipo_unidad
             db.execSQL(sql);
             /** SUBIMOS LA BANDERA DE SYNC MODULO PRESION **/
             UsuarioControlador usuarioControlador = new UsuarioControlador();
@@ -517,6 +525,7 @@ public class PuntoPresionControlador {
             u.setId(c.getString(11));
             pp.setUsuario(u);
             pp.setUnidad(c.getInt(12));
+            pp.setTipoUnidad(c.getString(13));
             puntosPresion.add(pp);
         }
         c.close();
@@ -549,6 +558,7 @@ public class PuntoPresionControlador {
             u.setId(c.getString(11));
             pp.setUsuario(u);
             pp.setUnidad(c.getInt(12));
+            pp.setTipoUnidad(c.getString(13));
             puntosPresion.add(pp);
         }
         c.close();
