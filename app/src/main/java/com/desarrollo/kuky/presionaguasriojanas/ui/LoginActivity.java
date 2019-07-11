@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        /** ACTUALIZAMOS LOS FORMATOS DE TABLAS*/
+        uControlador.actualizarTablas(this);
         // -----------------------------------------------------------------------------------------
         // CAPTURAMOS LOS ELEMENTOS
         etMail = findViewById(R.id.etMail);

@@ -83,8 +83,6 @@ public class UsuarioControlador {
         @Override
         protected void onPostExecute(String s) {
             pDialog.dismiss();
-            /** ACTUALIZAMOS LOS FORMATOS DE TABLAS*/
-            actualizarTablas(a);
             /***
              * ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA
              * LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
@@ -188,7 +186,7 @@ public class UsuarioControlador {
         }
     }
 
-    void actualizarTablas(Activity a) {
+    public void actualizarTablas(Activity a) {
         SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
         db.execSQL(BaseHelper.getInstance(a).dropTable("orden"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("historial_puntos_presion"));
