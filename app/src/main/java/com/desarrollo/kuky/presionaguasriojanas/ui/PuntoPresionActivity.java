@@ -47,8 +47,8 @@ public class PuntoPresionActivity extends AppCompatActivity {
             etTipoUnidad.setText(puntoPresion.getTipoUnidad());
             etUnidad.setText(String.valueOf(puntoPresion.getUnidad()));
         } else {
-            etTipoUnidad.setText("");
-            etUnidad.setText("Sin nº de unidad");
+            etTipoUnidad.setText("--------------");
+            etUnidad.setText("--------------");
         }
         etBarrio.setText(puntoPresion.getBarrio());
         /** SETEAMOS LOS TYPEFACES*/

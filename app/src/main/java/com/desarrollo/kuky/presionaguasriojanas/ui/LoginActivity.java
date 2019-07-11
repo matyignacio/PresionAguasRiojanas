@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        /** ACTUALIZAMOS LOS FORMATOS DE TABLAS*/
+        /** ACTUALIZAMOS LOS FORMATOS DE TABLAS (todas menos la de usuario) */
         uControlador.actualizarTablas(this);
         // -----------------------------------------------------------------------------------------
         // CAPTURAMOS LOS ELEMENTOS
