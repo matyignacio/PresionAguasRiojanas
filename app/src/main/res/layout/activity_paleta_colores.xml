@@ -5,7 +5,7 @@
     style="@style/layout_primary"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:context=".ui.PaletaColoresActivity">
+    tools:context=".ui.presion.PaletaColoresActivity">
 
     <TableLayout
         android:layout_width="wrap_content"

@@ -1,6 +1,9 @@
 package com.desarrollo.kuky.presionaguasriojanas.util;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,14 +35,14 @@ import java.util.concurrent.Callable;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-    //    public static final String DATA_BASE = "presion_aguas";
-//    public static final String HOST = "192.168.1.46";
-//    public static final String USER = "root";
-//    public static final String CLAVE = "root";
-    public static final String DATA_BASE = "u101901458_presi";
-    public static final String HOST = "sql200.main-hosting.eu";
-    public static final String USER = "u101901458_matia";
-    public static final String CLAVE = "Miseignacio11";
+    public static final String DATA_BASE = "presion_aguas";
+    public static final String HOST = "192.168.1.46";
+    public static final String USER = "root";
+    public static final String CLAVE = "root";
+    //    public static final String DATA_BASE = "u101901458_presi";
+//    public static final String HOST = "sql200.main-hosting.eu";
+//    public static final String USER = "u101901458_matia";
+//    public static final String CLAVE = "Miseignacio11";
     public static final String PUERTO = "3306";
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
@@ -84,6 +87,28 @@ public class Util {
         Intent intent = new Intent(a, destino);
         a.startActivity(intent);
         a.finish();
+    }
+
+
+    public static void abrirFragmento(Activity a, int layout, Fragment fragment) {
+        //Paso 1: Obtener la instancia del administrador de fragmentos
+        FragmentManager fragmentManager = a.getFragmentManager();
+
+        //Paso 2: Crear una nueva transacción
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        //Paso 3: Crear un nuevo fragmento y añadirlo
+        transaction.add(layout, fragment);
+
+        //Paso 4: Confirmar el cambio
+        transaction.commit();
+    }
+
+    public static void cerrarFragmento(Activity a, Fragment fragment) {
+        // SON LOS MISMOS PASOS QUE PARA AGREGAR UN FRAGMENT
+        // SOLAMENTE CAMBIA EL ADD POR EL REMOVE
+        // EN ESTE CODIGO ESTA SIMPLIFICADO EN UNA SOLA INSTRUCCION.
+        a.getFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
     public static void mostrarMensaje(Context c, String mensaje) {

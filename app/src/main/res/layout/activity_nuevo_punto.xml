@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/layout_primary"
     android:orientation="vertical"
-    tools:context=".ui.NuevoPuntoActivity">
+    tools:context=".ui.presion.NuevoPuntoActivity">
 
     <RelativeLayout
         style="@style/layout_primary"

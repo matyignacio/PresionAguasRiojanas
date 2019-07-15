@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/layout_primary"
-    tools:context=".ui.HistorialActivity">
+    tools:context=".ui.presion.HistorialActivity">
 
     <ListView
         android:id="@+id/lvHistorial"

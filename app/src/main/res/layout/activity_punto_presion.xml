@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/layout_primary"
     android:orientation="vertical"
-    tools:context=".ui.PuntoPresionActivity">
+    tools:context=".ui.presion.PuntoPresionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

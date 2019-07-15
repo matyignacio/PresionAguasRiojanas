@@ -7,21 +7,31 @@
     tools:context=".ui.InicioActivity"
     tools:showIn="@layout/app_bar_inicio">
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:weightSum="100">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
 
-        <Button
-            android:id="@+id/bModuloPresion"
-            style="@style/b_primary"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="50"
-            android:text="@string/bModuloPresion" />
-    </LinearLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
+            <Button
+                android:id="@+id/bModuloPresion"
+                style="@style/b_primary"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:width="140dp"
+                android:text="@string/bModuloPresion" />
+
+            <Button
+                android:id="@+id/bModuloInspeccion"
+                style="@style/b_primary"
+                android:layout_marginTop="15dp"
+                android:width="140dp"
+                android:text="@string/bModuloInspeccion" />
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>

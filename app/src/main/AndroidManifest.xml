@@ -33,7 +33,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.MapActivity"
+            android:name=".ui.presion.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -49,21 +49,22 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.HistorialActivity"
+            android:name=".ui.presion.HistorialActivity"
             android:label="@string/title_activity_historial"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.NuevoPuntoActivity"
+            android:name=".ui.presion.NuevoPuntoActivity"
             android:label="@string/title_activity_nuevo_punto"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.PuntoPresionActivity" />
+        <activity android:name=".ui.presion.PuntoPresionActivity" />
         <activity
-            android:name=".ui.NuevaPresionActivity"
+            android:name=".ui.presion.NuevaPresionActivity"
             android:label="@string/title_activity_nueva_medicion"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.PaletaColoresActivity"
+            android:name=".ui.presion.PaletaColoresActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.inspeccion.InspeccionActivity"></activity>
     </application>
 
 </manifest>

@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -29,14 +31,15 @@ public class InicioActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
         Button bModuloPresion = findViewById(R.id.bModuloPresion);
+        Button bModuloInspeccion = findViewById(R.id.bModuloInspeccion);
         /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(this, bModuloInspeccion);
         setPrimaryFontBold(this, bModuloPresion);
         /**************************/
-        bModuloPresion.setOnClickListener(view -> abrirActivity(InicioActivity.this, MapActivity.class));
+        bModuloPresion.setOnClickListener(view -> abrirActivity(this, MapActivity.class));
+        bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

@@ -12,7 +12,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.Orden;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
-import com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -243,7 +243,7 @@ public class HistorialPuntosControlador {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
                 }
                 usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
-                if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.MapActivity")) {
+                if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity")) {
                     mostrarMensaje(a, "Se sincronizo con exito!");
                     abrirActivity(a, MapActivity.class);
                 } else {

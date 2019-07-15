@@ -47,7 +47,8 @@
     <string name="tv_confirmar_sincronizar">¿Esta seguro de sincronizar?</string>
     <string name="tv_debe_sincronizar">Debe sincronizar para poder cerrar sesion, desea hacerlo ahora?</string>
     <string name="tvUsuario">Bienvenido:</string>
-    <string name="bModuloPresion">Modulo Presion</string>
+    <string name="bModuloPresion">Presion</string>
+    <string name="bModuloInspeccion">Inspeccion</string>
     <string name="tv_presion_historial">Presion:</string>
     <string name="tv_fecha_historial">Fecha:</string>
     <string name="tv_mca">mca</string>
@@ -62,4 +63,9 @@
     <string name="tv_sifnificado_rojo">"El punto en rojo significa\nque tiene presion baja.\n(Menor a 8 mca)"</string>
     <string name="tv_significado_verde">"El punto en verde significa\nque tiene presion alta.\n(Mayor a 8 mca)"</string>
     <string name="tv_significado_amarillo">"En amarillo es el punto\nque se debe medir."</string>
+    <string name="bNuevaInspeccion">Nueva Inspeccion</string>
+    <string name="bSiguienteFragmento">Siguiente</string>
+    <string name="bGuardarInspeccion">Guardar</string>
+    <string name="bVolver">Volver</string>
+
 </resources>

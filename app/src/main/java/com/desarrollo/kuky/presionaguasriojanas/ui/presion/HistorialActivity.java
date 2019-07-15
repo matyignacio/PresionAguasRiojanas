@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.ui;
+package com.desarrollo.kuky.presionaguasriojanas.ui.presion;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
