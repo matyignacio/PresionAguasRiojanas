@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 
 import java.util.ArrayList;
 

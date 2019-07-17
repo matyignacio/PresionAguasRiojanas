@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.controlador;
+package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.desarrollo.kuky.presionaguasriojanas.objeto.Orden;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.Orden;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;

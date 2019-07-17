@@ -1,16 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fInspeccion"
-    style="@style/dialog_primary"
+    style="@style/layout_primary"
     tools:context=".ui.inspeccion.FormClienteInspeccionFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="79dp"
-        android:text="CLIENTE" />
-</RelativeLayout>
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvDatosCliente"
+            style="@style/tv_primary_bold_center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/tv_datos_del_cliente" />
+
+        <EditText
+            android:id="@+id/etRazonSocial"
+            style="@style/et_primary"
+            android:layout_below="@id/tvDatosCliente"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_razon_social"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etTelefono"
+            style="@style/et_primary"
+            android:layout_below="@id/etRazonSocial"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_telefono"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etDireccion"
+            style="@style/et_primary"
+            android:layout_below="@id/etTelefono"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_direccion"
+            android:inputType="textPostalAddress" />
+
+        <EditText
+            android:id="@+id/etBarrio"
+            style="@style/et_primary"
+            android:layout_below="@id/etDireccion"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_barrio"
+            android:inputType="textPostalAddress" />
+
+        <EditText
+            android:id="@+id/etUnidad"
+            style="@style/et_primary"
+            android:layout_below="@id/etBarrio"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_unidad"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etTramite"
+            style="@style/et_primary"
+            android:layout_below="@id/etUnidad"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_tramite"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etServ"
+            style="@style/et_primary"
+            android:layout_below="@id/etTramite"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_serv"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etNis"
+            style="@style/et_primary"
+            android:layout_below="@id/etServ"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_nis"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etMedidorAgua"
+            style="@style/et_primary"
+            android:layout_below="@id/etNis"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_medidor_de_agua"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etEstado"
+            style="@style/et_primary"
+            android:layout_below="@id/etMedidorAgua"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_estado"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etMedidorLuz"
+            style="@style/et_primary"
+            android:layout_below="@id/etEstado"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_medidor_de_luz"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etReclama"
+            style="@style/et_primary"
+            android:layout_below="@id/etMedidorLuz"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_reclama"
+            android:inputType="text" />
+    </RelativeLayout>
+
+
+</ScrollView>

@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fInspeccion"
-    style="@style/dialog_primary"
+    style="@style/layout_primary"
     tools:context=".ui.inspeccion.FormClienteInspeccionFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="79dp"
-        android:text="DATOS" />
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/fDatos"
+        style="@style/layout_primary">
+
+        <!-- A este textView le pongo ems:12 para alinear
+             el resto de los elementos                -->
+        <TextView
+            android:id="@+id/tvDatosRelevados"
+            style="@style/tv_primary_bold_center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:ems="12"
+            android:text="@string/tv_datos_relevados" />
+
+        <ImageButton
+            android:id="@+id/bNuevoDato"
+            style="@style/b_primary"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_add_white_24dp" />
+
+    </RelativeLayout>
+</ScrollView>

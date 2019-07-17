@@ -228,6 +228,36 @@ public class Util {
         alert.show();
     }
 
+    public static void showDialog(final Activity a, int dialog, String mensajeSI, Callable<Void> methodAcept, Callable<Void> methodCancel) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(mensajeSI, (dialog1, id) -> {
+                    try {
+                        methodAcept.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton("Cancelar", (dialog12, id) -> {
+
+                    try {
+                        methodCancel.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    dialog12.cancel();
+                });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
     public static void showStandarDialog(final Activity a,
                                          String titulo,
                                          View view,

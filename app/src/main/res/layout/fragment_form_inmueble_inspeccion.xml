@@ -1,16 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fInspeccion"
-    style="@style/dialog_primary"
+    style="@style/layout_primary"
     tools:context=".ui.inspeccion.FormClienteInspeccionFragment">
 
-    <TextView
-        android:id="@+id/textView2"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp"
-        android:text="INMUEBLE" />
-</RelativeLayout>
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvDatosInmueble"
+            style="@style/tv_primary_bold_center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/tv_caracteristicas_del_inmueble" />
+
+        <TextView
+            android:id="@+id/tvsTipoInmueble"
+            style="@style/tv_primary_mini"
+            android:layout_below="@id/tvDatosInmueble"
+            android:layout_marginTop="5dp"
+            android:text="@string/tv_tipo_de_inmueble" />
+
+        <Spinner
+            android:id="@+id/sTipoInmueble"
+            style="@style/et_primary"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvsTipoInmueble"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:layout_alignEnd="@id/tvDatosInmueble"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/sp_redondo" />
+
+        <TextView
+            android:id="@+id/tvsDestino"
+            style="@style/tv_primary_mini"
+            android:layout_below="@id/sTipoInmueble"
+            android:layout_marginTop="5dp"
+            android:text="@string/tv_destino" />
+
+        <Spinner
+            android:id="@+id/sDestino"
+            style="@style/et_primary"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvsDestino"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:layout_alignEnd="@id/tvDatosInmueble"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/sp_redondo" />
+
+        <Switch
+            android:id="@+id/swServicioCloacal"
+            style="@style/tv_primary_left"
+            android:background="@drawable/et_redondo_without_padding"
+            android:layout_below="@id/sDestino"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:text="Servicio cloacal" />
+
+        <TextView
+            android:id="@+id/tvsCoeficienteZonal"
+            style="@style/tv_primary_mini"
+            android:layout_below="@id/swServicioCloacal"
+            android:layout_marginTop="15dp"
+            android:text="@string/tv_coeficiente_zonal" />
+
+        <Spinner
+            android:id="@+id/sCoeficienteZonal"
+            style="@style/et_primary"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvsCoeficienteZonal"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:layout_alignEnd="@id/tvDatosInmueble"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/sp_redondo" />
+
+        <TextView
+            android:id="@+id/tvsTipoServicio"
+            style="@style/tv_primary_mini"
+            android:layout_below="@id/sCoeficienteZonal"
+            android:layout_marginTop="5dp"
+            android:text="@string/tv_tipo_de_servicio" />
+
+        <Spinner
+            android:id="@+id/sTipoServicio"
+            style="@style/et_primary"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvsTipoServicio"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:layout_alignEnd="@id/tvDatosInmueble"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/sp_redondo" />
+    </RelativeLayout>
+
+</ScrollView>

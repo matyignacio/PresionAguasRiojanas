@@ -160,7 +160,7 @@ public class UsuarioControlador {
         }
     }
 
-    void editarBanderaModuloPresion(Activity a, int bandera) {
+    public void editarBanderaModuloPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE susuario SET  'bandera_modulo_presion' =" +
@@ -173,7 +173,7 @@ public class UsuarioControlador {
         }
     }
 
-    void editarBanderaSyncModuloPresion(Activity a, int bandera) {
+    public void editarBanderaSyncModuloPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
             String sql = "UPDATE susuario SET 'bandera_sync_modulo_presion' = " +

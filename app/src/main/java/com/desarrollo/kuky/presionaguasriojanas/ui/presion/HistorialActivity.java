@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.HistorialPuntosControlador;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.ui.adapters.lvaHistorial;
 
 import java.util.ArrayList;

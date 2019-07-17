@@ -1,4 +1,6 @@
-package com.desarrollo.kuky.presionaguasriojanas.objeto;
+package com.desarrollo.kuky.presionaguasriojanas.objeto.presion;
+
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 
 public class PuntoPresion {
     private Integer id;

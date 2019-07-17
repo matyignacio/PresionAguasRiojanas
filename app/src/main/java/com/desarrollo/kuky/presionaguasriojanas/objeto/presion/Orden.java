@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.objeto;
+package com.desarrollo.kuky.presionaguasriojanas.objeto.presion;
 
 public class Orden {
 

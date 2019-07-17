@@ -28,7 +28,6 @@ public class FormMapaInspeccionFragment extends Fragment {
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         //Nueva Regla: EL fragmento estara debajo del boton add_fragment
-        params.addRule(RelativeLayout.BELOW, R.id.bNuevaInspeccion);
         params.addRule(RelativeLayout.ABOVE, R.id.bSiguienteFragmento);
         //Margenes: top:15dp
         params.setMargins(0, 15, 0, 15);

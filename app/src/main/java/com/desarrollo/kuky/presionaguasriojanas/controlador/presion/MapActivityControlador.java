@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.controlador;
+package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
 
 import android.app.Activity;
 

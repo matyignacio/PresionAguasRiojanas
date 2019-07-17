@@ -43,21 +43,30 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="tv_primary_left" parent="tv_primary">
+        <item name="android:gravity">left</item>
+    </style>
+
     <style name="tv_primary_mini" parent="tv_primary">
         <item name="android:textSize">12dp</item>
+        <item name="android:ems">8</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">left</item>
         <item name="android:layout_marginTop">0dp</item>
     </style>
 
-    <style name="tv_primary_bold" parent="tv_primary">
+    <style name="tv_primary_bold_left" parent="tv_primary">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">left</item>
         <item name="android:layout_marginTop">5dp</item>
     </style>
 
-    <style name="tv_primary_bold_background" parent="tv_primary_bold">
+    <style name="tv_primary_bold_center" parent="tv_primary_bold_left">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="tv_primary_bold_background" parent="tv_primary_bold_left">
         <item name="android:background">@drawable/tv_redondo</item>
     </style>
 
@@ -76,6 +85,7 @@
     </style>
 
     <style name="b_primary">
+        <item name="android:padding">5dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_height">50dp</item>

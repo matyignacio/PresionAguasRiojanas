@@ -6,8 +6,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.PuntoPresionControlador;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.PuntoPresionControlador;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;

@@ -14,8 +14,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USER;
  * Created by Kuky on 21/05/2019.
  */
 
-class Conexion {
-    static Connection GetConnection() {
+public class Conexion {
+    public static Connection GetConnection() {
         Connection conexion = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");

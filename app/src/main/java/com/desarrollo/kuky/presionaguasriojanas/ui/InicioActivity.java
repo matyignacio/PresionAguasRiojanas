@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.MapActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
@@ -25,17 +25,20 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 
 public class InicioActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Button bModuloPresion;
+    Button bModuloInspeccion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-        Button bModuloPresion = findViewById(R.id.bModuloPresion);
-        Button bModuloInspeccion = findViewById(R.id.bModuloInspeccion);
+        bModuloPresion = findViewById(R.id.bModuloPresion);
+        bModuloInspeccion = findViewById(R.id.bModuloInspeccion);
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, bModuloInspeccion);
         setPrimaryFontBold(this, bModuloPresion);
         /**************************/
+        evaluarUsuario();
         bModuloPresion.setOnClickListener(view -> abrirActivity(this, MapActivity.class));
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -96,5 +99,10 @@ public class InicioActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void evaluarUsuario() {
+        bModuloInspeccion.setEnabled(false);
+        bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo_disabled);
     }
 }

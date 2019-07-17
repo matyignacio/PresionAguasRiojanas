@@ -67,5 +67,25 @@
     <string name="bSiguienteFragmento">Siguiente</string>
     <string name="bGuardarInspeccion">Guardar</string>
     <string name="bVolver">Volver</string>
+    <string name="tv_datos_del_cliente">DATOS DEL CLIENTE</string>
+    <string name="hint_razon_social">Razon social</string>
+    <string name="hint_telefono">Telefono</string>
+    <string name="hint_direccion">Direccion</string>
+    <string name="hint_barrio">Barrio</string>
+    <string name="hint_unidad">Unidad</string>
+    <string name="hint_tramite">Tramite</string>
+    <string name="hint_serv">Serv</string>
+    <string name="hint_nis">Nis</string>
+    <string name="hint_medidor_de_agua">Medidor de agua</string>
+    <string name="hint_estado">Estado</string>
+    <string name="hint_medidor_de_luz">Medidor de Luz</string>
+    <string name="hint_reclama">Reclama</string>
+    <string name="tv_caracteristicas_del_inmueble">CARACTERISTICAS DEL INMUEBLE</string>
+    <string name="tv_tipo_de_inmueble">Tipo de inmueble</string>
+    <string name="tv_destino">Destino</string>
+    <string name="tv_coeficiente_zonal">Coeficiente zonal</string>
+    <string name="tv_tipo_de_servicio">Tipo de servicio</string>
+    <string name="b_agregar">Agregar</string>
+    <string name="tv_datos_relevados">DATOS RELEVADOS</string>
 
 </resources>

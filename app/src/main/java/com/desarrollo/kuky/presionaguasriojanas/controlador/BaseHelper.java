@@ -13,7 +13,7 @@ public class BaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PresionAguasRiojanas";
     private static final int DATABASE_VERSION = 1;
 
-    static synchronized BaseHelper getInstance(Context context) {
+    public static synchronized BaseHelper getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.

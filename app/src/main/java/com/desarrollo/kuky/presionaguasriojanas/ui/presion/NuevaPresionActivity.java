@@ -17,10 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.HistorialPuntosControlador;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.HistorialPuntos;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.HistorialPuntosControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
