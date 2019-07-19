@@ -425,6 +425,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         etPresion.setEnabled(enabled);
         sTipoPunto.setEnabled(enabled);
         sTipoUnidad.setEnabled(enabled);
+        sTipoUnidad2.setEnabled(enabled);
     }
 
 }
