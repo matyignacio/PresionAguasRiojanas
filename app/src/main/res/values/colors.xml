@@ -5,7 +5,7 @@
     <color name="colorAccent">#ef6c00</color>
     <color name="textColorPrimaryAppBar">#FFFFFF</color>
     <color name="textColorPrimary">#000000</color>
-    <color name="backgroundColor">#cfd8dc</color>
+    <color name="backgroundColor">#ededed</color>
     <!--<color name="backgroundDisabled">#d32f2f</color>-->
     <color name="backgroundDisabled">#6c6c6c</color>
     <color name="marcador_amarillo">#FFEB3B</color>

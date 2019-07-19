@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,14 +36,14 @@ import java.util.concurrent.Callable;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-    public static final String DATA_BASE = "presion_aguas";
-    public static final String HOST = "192.168.1.46";
-    public static final String USER = "root";
-    public static final String CLAVE = "root";
-    //    public static final String DATA_BASE = "u101901458_presi";
-//    public static final String HOST = "sql200.main-hosting.eu";
-//    public static final String USER = "u101901458_matia";
-//    public static final String CLAVE = "Miseignacio11";
+    //    public static final String DATA_BASE = "presion_aguas";
+//    public static final String HOST = "192.168.1.46";
+//    public static final String USER = "root";
+//    public static final String CLAVE = "root";
+    public static final String DATA_BASE = "u101901458_presi";
+    public static final String HOST = "sql200.main-hosting.eu";
+    public static final String USER = "u101901458_matia";
+    public static final String CLAVE = "Miseignacio11";
     public static final String PUERTO = "3306";
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
@@ -62,6 +63,7 @@ public class Util {
     public static final String TIPO_MAPA = "id_tipo_punto";
     public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
     public static final String SPINNER_TIPO_UNIDAD = "tipo_unidad";
+    public static final String SPINNER_TIPO_UNIDAD2 = "tipo_unidad2";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAXIMO_CIRCUITO = 2;
@@ -128,6 +130,7 @@ public class Util {
         for (i = 0; i < inputs.size(); i++) {
             if (inputs.get(i).getText().toString().equals("")) {
                 mostrarMensaje(a, "Debe llenar el campo " + inputs.get(i).getHint().toString());
+                inputs.get(i).requestFocus();
                 return ERROR;
             }
         }
@@ -177,6 +180,11 @@ public class Util {
     }
 
     public static void setPrimaryFontBold(Context a, Button bt) {
+        Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_bold_path);
+        bt.setTypeface(TF);
+    }
+
+    public static void setPrimaryFontBold(Context a, CheckBox bt) {
         Typeface TF = Typeface.createFromAsset(a.getAssets(), font_primary_bold_path);
         bt.setTypeface(TF);
     }
@@ -262,14 +270,14 @@ public class Util {
                                          String titulo,
                                          View view,
                                          String mensajeSI,
-                                         Callable<Void> methodParam) {
+                                         Callable<Void> methodAccept) {
         AlertDialog dialog = new AlertDialog.Builder(a)
                 .setTitle(titulo)
                 //.setMessage("Seleccione el circuito")
                 .setView(view)
                 .setPositiveButton(mensajeSI, (dialog13, which) -> {
                     try {
-                        methodParam.call();
+                        methodAccept.call();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

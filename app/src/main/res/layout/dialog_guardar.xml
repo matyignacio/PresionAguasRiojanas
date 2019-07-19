@@ -5,13 +5,13 @@
 
     <TextView
         android:id="@+id/tvConfirmarGuardar"
+        style="@style/tv_primary_bold_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/tv_confirmar_guardar"
-        android:textAlignment="center"
-        style="@style/tv_primary_bold_left" />
+        android:textAlignment="center" />
 
 
 </RelativeLayout>

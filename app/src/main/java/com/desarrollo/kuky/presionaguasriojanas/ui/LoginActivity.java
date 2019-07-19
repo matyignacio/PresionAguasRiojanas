@@ -33,8 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        /** ACTUALIZAMOS LOS FORMATOS DE TABLAS (todas menos la de usuario) */
-        uControlador.actualizarTablas(this);
         // -----------------------------------------------------------------------------------------
         // CAPTURAMOS LOS ELEMENTOS
         etMail = findViewById(R.id.etMail);
@@ -50,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         bLogin.setOnClickListener(view -> attemptLogin());
         if (uControlador.existeUsuario(this) == Util.EXITOSO) {
             abrirActivity(LoginActivity.this, InicioActivity.class);
+        } else {
+            /** ACTUALIZAMOS LOS FORMATOS DE TABLAS (todas menos la de usuario) */
+            uControlador.actualizarTablas(this);
         }
     }
 

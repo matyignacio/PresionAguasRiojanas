@@ -65,7 +65,11 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  `id_tipo_punto` int(11) DEFAULT '1'," +
             "  `id_usuario` char(10) DEFAULT NULL," +
             "  `unidad` int(20) DEFAULT NULL," +
-            "  `tipo_unidad` varchar(30) DEFAULT NULL"
+            "  `tipo_unidad` varchar(30) DEFAULT NULL," +
+            "  `unidad2` int(20) DEFAULT NULL," +
+            "  `tipo_unidad2` varchar(30) DEFAULT NULL," +
+            "  `cloro` float DEFAULT NULL," +
+            "  `muestra` varchar(45) DEFAULT NULL"
             + ")";
 
     private String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS `historial_puntos_presion` (" +

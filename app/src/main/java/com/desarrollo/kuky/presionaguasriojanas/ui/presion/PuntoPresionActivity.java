@@ -20,7 +20,7 @@ public class PuntoPresionActivity extends AppCompatActivity {
     PuntoPresion puntoPresion = new PuntoPresion();
     PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
     // UI References
-    TextView /*etCircuito,*/ etTipoUnidad, etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
+    TextView /*etCircuito,*/ etUnidad, etUnidad2, etBarrio, etCalle1, etCalle2, etPresion;
     Button bHistorialPunto, bNuevaMedicion;
 
     @Override
@@ -29,8 +29,8 @@ public class PuntoPresionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_punto_presion);
         // CAPTURAMOS LOS ELEMENTOS
         //etCircuito = findViewById(R.id.etCircuito);
-        etTipoUnidad = findViewById(R.id.etTipoUnidad);
         etUnidad = findViewById(R.id.etUnidad);
+        etUnidad2 = findViewById(R.id.etUnidad2);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
@@ -44,17 +44,17 @@ public class PuntoPresionActivity extends AppCompatActivity {
         puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(this, id, usuario);
         //etCircuito.setText(puntoPresion.getCircuito().toString());
         if (puntoPresion.getUnidad() > 0) {
-            etTipoUnidad.setText(puntoPresion.getTipoUnidad());
-            etUnidad.setText(String.valueOf(puntoPresion.getUnidad()));
+            etUnidad.setText(puntoPresion.getTipoUnidad() + " " + puntoPresion.getUnidad());
+            etUnidad2.setText(puntoPresion.getTipoUnidad2() + " " + puntoPresion.getUnidad2());
         } else {
-            etTipoUnidad.setText("--------------");
             etUnidad.setText("--------------");
+            etUnidad2.setText("--------------");
         }
         etBarrio.setText(puntoPresion.getBarrio());
         /** SETEAMOS LOS TYPEFACES*/
         //setPrimaryFontBold(this, etCircuito);
-        setPrimaryFontBold(this, etTipoUnidad);
         setPrimaryFontBold(this, etUnidad);
+        setPrimaryFontBold(this, etUnidad2);
         setPrimaryFontBold(this, etBarrio);
         setPrimaryFontBold(this, etCalle1);
         setPrimaryFontBold(this, etCalle2);

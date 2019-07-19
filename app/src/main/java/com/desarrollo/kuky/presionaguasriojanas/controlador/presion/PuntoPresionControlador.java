@@ -85,7 +85,11 @@ public class PuntoPresionControlador {
                             "`id_tipo_punto`," +
                             "`id_usuario`," +
                             "`unidad`," +
-                            "`tipo_unidad`)" +
+                            "`tipo_unidad`," +
+                            "`unidad2`," +
+                            "`tipo_unidad2`," +
+                            "`cloro`," +
+                            "`muestra`)" +
                             " VALUES " +
                             "('" + puntosPresionInsertar.get(i).getId() + "','" + //id
                             puntosPresionInsertar.get(i).getCircuito() + "','" + //circuito
@@ -99,7 +103,11 @@ public class PuntoPresionControlador {
                             puntosPresionInsertar.get(i).getTipoPunto().getId() + "','" + //tipo punto
                             LoginActivity.usuario.getId() + "','" + //id_usuario
                             puntosPresionInsertar.get(i).getUnidad() + "','" + //unidad
-                            puntosPresionInsertar.get(i).getTipoUnidad() + "');"; //tipo_unidad
+                            puntosPresionInsertar.get(i).getTipoUnidad() + "','" + //tipo_unidad
+                            puntosPresionInsertar.get(i).getUnidad2() + "','" + //unidad2
+                            puntosPresionInsertar.get(i).getTipoUnidad2() + "','" + //tipo_unidad2
+                            puntosPresionInsertar.get(i).getCloro() + "','" + //cloro
+                            puntosPresionInsertar.get(i).getMuestra() + "');"; //muestra
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -228,7 +236,11 @@ public class PuntoPresionControlador {
                             "id_tipo_punto," +
                             "id_usuario," +
                             "unidad," +
-                            "tipo_unidad)" +
+                            "tipo_unidad," +
+                            "unidad2," +
+                            "tipo_unidad2," +
+                            "cloro," +
+                            "muestra)" +
                             "VALUES" +
                             "(" + rs.getInt(1) + ",'" + // id
                             rs.getInt(2) + "','" + // circuito
@@ -243,7 +255,11 @@ public class PuntoPresionControlador {
                             rs.getInt(10) + "','" + // id_tipo_punto
                             rs.getString(11) + "','" + // id_usuario
                             rs.getInt(12) + "','" + // unidad
-                            rs.getString(13) + "');"; // tipo_unidad
+                            rs.getString(13) + "','" + // tipo_unidad
+                            rs.getInt(14) + "','" + // unidad2
+                            rs.getString(15) + "','" + // tipo_unidad2
+                            rs.getFloat(16) + "','" + // cloro
+                            rs.getString(17) + "');"; // muestra
                     db.execSQL(sql);
                 }
                 check++;
@@ -380,7 +396,8 @@ public class PuntoPresionControlador {
             /** SI BUSCAMOS LOS CLIENTES, QUE NO SEAN MAS ANTIGUOS QUE UNA SEMANA */
             c = db.rawQuery("SELECT pp.id, pp.circuito, pp.barrio, pp.calle1, pp.calle2, " +
                     " pp.latitud, pp.longitud, pp.pendiente, pp.presion, " +
-                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad, pp.tipo_unidad " +
+                    " pp.id_tipo_presion, pp.id_tipo_punto, pp.id_usuario, pp.unidad, pp.tipo_unidad, " +
+                    " pp.unidad2, pp.tipo_unidad2, pp.cloro, pp.muestra" +
                     " FROM puntos_presion AS pp, historial_puntos_presion AS hp " +
                     " WHERE julianday('now') - julianday(hp.fecha) < 7.12510325247422" +
                     " AND pp.id = hp.id_punto_presion" +
@@ -416,6 +433,10 @@ public class PuntoPresionControlador {
             puntoPresion.setUsuario(u);
             puntoPresion.setUnidad(c.getInt(12));
             puntoPresion.setTipoUnidad(c.getString(13));
+            puntoPresion.setUnidad(c.getInt(14));
+            puntoPresion.setTipoUnidad(c.getString(15));
+            puntoPresion.setCloro(c.getFloat(16));
+            puntoPresion.setMuestra(c.getString(17));
             puntosPresion.add(puntoPresion);
         }
         c.close();
@@ -449,6 +470,10 @@ public class PuntoPresionControlador {
             puntoPresion.setUsuario(u);
             puntoPresion.setUnidad(c.getInt(12));
             puntoPresion.setTipoUnidad(c.getString(13));
+            puntoPresion.setUnidad2(c.getInt(14));
+            puntoPresion.setTipoUnidad2(c.getString(15));
+            puntoPresion.setCloro(c.getFloat(16));
+            puntoPresion.setMuestra(c.getString(17));
         }
         c.close();
         db.close();
@@ -473,7 +498,11 @@ public class PuntoPresionControlador {
                     "`id_tipo_punto`," +
                     "`id_usuario`," +
                     "`unidad`," +
-                    "`tipo_unidad`)" +
+                    "`tipo_unidad`," +
+                    "`unidad2`," +
+                    "`tipo_unidad2`," +
+                    "`cloro`," +
+                    "`muestra`)" +
                     "VALUES" +
                     "('" + id + "','" + // id
                     puntoPresion.getCircuito() + "','" + // circuito
@@ -488,7 +517,11 @@ public class PuntoPresionControlador {
                     puntoPresion.getTipoPunto().getId() + "','" + // tipo_punto
                     LoginActivity.usuario.getId() + "','" + // id_usuario
                     puntoPresion.getUnidad() + "','" + // unidad
-                    puntoPresion.getTipoUnidad() + "');"; // tipo_unidad
+                    puntoPresion.getTipoUnidad() + "','" + // tipo_unidad
+                    puntoPresion.getUnidad2() + "','" + // unidad2
+                    puntoPresion.getTipoUnidad2() + "','" + // tipo_unidad2
+                    puntoPresion.getCloro() + "','" + // cloro
+                    puntoPresion.getMuestra() + "');"; // muestra
             db.execSQL(sql);
             /** SUBIMOS LA BANDERA DE SYNC MODULO PRESION **/
             UsuarioControlador usuarioControlador = new UsuarioControlador();
@@ -529,6 +562,10 @@ public class PuntoPresionControlador {
             pp.setUsuario(u);
             pp.setUnidad(c.getInt(12));
             pp.setTipoUnidad(c.getString(13));
+            pp.setUnidad2(c.getInt(14));
+            pp.setTipoUnidad2(c.getString(15));
+            pp.setCloro(c.getFloat(16));
+            pp.setMuestra(c.getString(17));
             puntosPresion.add(pp);
         }
         c.close();
@@ -562,6 +599,10 @@ public class PuntoPresionControlador {
             pp.setUsuario(u);
             pp.setUnidad(c.getInt(12));
             pp.setTipoUnidad(c.getString(13));
+            pp.setUnidad2(c.getInt(14));
+            pp.setTipoUnidad2(c.getString(15));
+            pp.setCloro(c.getFloat(16));
+            pp.setMuestra(c.getString(17));
             puntosPresion.add(pp);
         }
         c.close();

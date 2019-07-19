@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -41,7 +42,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
@@ -53,9 +53,11 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SPINNER_TIPO_UNIDAD;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SPINNER_TIPO_UNIDAD2;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
@@ -66,8 +68,9 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarPresion;
 public class NuevoPuntoActivity extends AppCompatActivity {
 
     private static final String TAG = NuevoPuntoActivity.class.getSimpleName();
-    @BindView(R.id.bEnviarNuevoPunto)
-    Button bEnviarNuevoPunto;
+    public static Button bEnviarNuevoPunto;
+    public static CheckBox cbCalidad;
+    private ControlCalidadFragment controlCalidadFragment = new ControlCalidadFragment();
 
     // bunch of location related apis
     private FusedLocationProviderClient mFusedLocationClient;
@@ -78,8 +81,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private Location mCurrentLocation;
     // boolean flag to toggle the ui
     public Boolean mRequestingLocationUpdates;
-    private EditText etUnidad, etBarrio, etCalle1, etCalle2, etPresion;
-    private Spinner sTipoPunto, sTipoUnidad;
+    private EditText etUnidad, etUnidad2, etBarrio, etCalle1, etCalle2, etPresion;
+    private Spinner sTipoPunto, sTipoUnidad, sTipoUnidad2;
     private ArrayList<EditText> inputs = new ArrayList<>();
     private ArrayList<TipoPunto> tipoPuntos = new ArrayList<>();
     private TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
@@ -91,15 +94,19 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_punto);
         ButterKnife.bind(this);
+        cbCalidad = findViewById(R.id.cbCalidad);
         tipoPuntos = tipoPuntoControlador.extraerTodos(this);
         //tvUnidad = findViewById(R.id.tvUnidad);
+        bEnviarNuevoPunto = findViewById(R.id.bEnviarNuevoPunto);
         etUnidad = findViewById(R.id.etUnidad);
+        etUnidad2 = findViewById(R.id.etUnidad2);
         etBarrio = findViewById(R.id.etBarrio);
         etCalle1 = findViewById(R.id.etCalle1);
         etCalle2 = findViewById(R.id.etCalle2);
         etPresion = findViewById(R.id.etPresion);
         sTipoPunto = findViewById(R.id.sTipoPunto);
         sTipoUnidad = findViewById(R.id.sTipoUnidad);
+        sTipoUnidad2 = findViewById(R.id.sTipoUnidad2);
         labelsTipoUnidad.add("Unidad");
         labelsTipoUnidad.add("Nis");
         labelsTipoUnidad.add("Medidor Aguas");
@@ -109,24 +116,38 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         /** SETEAMOS LOS TYPEFACES*/
         //setPrimaryFont(this, tvUnidad);
         setPrimaryFontBold(this, etUnidad);
+        setPrimaryFontBold(this, etUnidad2);
         setPrimaryFontBold(this, etBarrio);
         setPrimaryFontBold(this, etCalle1);
         setPrimaryFontBold(this, etCalle2);
         setPrimaryFontBold(this, etPresion);
         setPrimaryFontBold(this, bEnviarNuevoPunto);
+        setPrimaryFontBold(this, cbCalidad);
         /**************************/
         inputs.add(etBarrio);
         inputs.add(etCalle1);
         // inputs.add(etCalle2); A ESTE LO COMENTO PORQUE NO ES OBLIGATORIO EL CAMPO
         inputs.add(etPresion);
+        cbCalidad.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                abrirFragmento(NuevoPuntoActivity.this, R.id.rlNuevoPunto, controlCalidadFragment);
+                setEnabledInputs(false);
+            } else {
+                setEnabledInputs(true);
+            }
+        });
         request_permissions();
     }
 
     @Override
     public void onBackPressed() {
-        /* LO QUE HACE CUANDO VUELVA*/
-        stopLocationUpdates();
-        abrirActivity(this, MapActivity.class);
+        if (controlCalidadFragment.isVisible()) {
+            cbCalidad.setChecked(false);
+            Util.cerrarFragmento(this, controlCalidadFragment);
+        } else {
+            stopLocationUpdates();
+            abrirActivity(this, MapActivity.class);
+        }
     }
 
     private void init() {
@@ -219,9 +240,19 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                 if (inputs.size() == 4) {
                     puntoPresion.setTipoUnidad(labelsTipoUnidad.get(sTipoUnidad.getSelectedItemPosition()));
                     puntoPresion.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
+                    if (!etUnidad2.getText().toString().equals("")) { //VALIDAMOS QUE unidad2 TENGA ALGUN DATO PARA GUARDAR
+                        puntoPresion.setTipoUnidad2(labelsTipoUnidad.get(sTipoUnidad2.getSelectedItemPosition()));
+                        puntoPresion.setUnidad2(Integer.parseInt(etUnidad2.getText().toString()));
+                    } else {
+                        puntoPresion.setTipoUnidad2("-");
+                        puntoPresion.setUnidad2(0);
+                    }
                 } else {
                     puntoPresion.setUnidad(0);
+                    puntoPresion.setUnidad2(0);
                 }
+                puntoPresion.setCloro(controlCalidadFragment.calidad.getCloro());
+                puntoPresion.setMuestra(controlCalidadFragment.calidad.getMuestra());
                 // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
                 puntoPresion.setTipoPunto(tipoPunto);
                 // INSERTAMOS EL NUEVO REGISTRO
@@ -355,14 +386,45 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                     return null;
                 },
                 () -> null);
+        Util.cargarSpinner(sTipoUnidad2,
+                this,
+                1,
+                labelsTipoUnidad,
+                () -> {//ON ITEM SELECTED
+                    etUnidad2.setHint("Numero 2 de " + labelsTipoUnidad.get(sTipoUnidad2.getSelectedItemPosition()));
+                    setPreference(NuevoPuntoActivity.this, SPINNER_TIPO_UNIDAD2, sTipoUnidad2.getSelectedItemPosition() + 1);
+                    return null;
+                },
+                () -> null);
         if (getPreference(this, POSICION_SELECCIONADA, 1) == MAPA_CLIENTES) {
             //etUnidad.setHint("Numero de " + labelsTipoUnidad.get(sTipoUnidad.getSelectedItemPosition()));
             etUnidad.setBackgroundResource(R.drawable.et_redondo);
             sTipoUnidad.setBackgroundResource(R.drawable.sp_redondo);
+            /** REPLICO PARA EL OTRO SPINNER **/
+            etUnidad2.setBackgroundResource(R.drawable.et_redondo);
+            sTipoUnidad2.setBackgroundResource(R.drawable.sp_redondo);
         } else {
             etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
             sTipoUnidad.setBackgroundResource(R.drawable.sp_redondo_disabled);
             etUnidad.setHint("Sin n° de unidad");
+            /** REPLICO PARA EL OTRO SPINNER **/
+            etUnidad2.setBackgroundResource(R.drawable.et_redondo_disabled);
+            sTipoUnidad2.setBackgroundResource(R.drawable.sp_redondo_disabled);
+            etUnidad2.setHint("Sin n° de unidad");
         }
     }
+
+    private void setEnabledInputs(boolean enabled) {
+        cbCalidad.setEnabled(enabled);
+        bEnviarNuevoPunto.setEnabled(enabled);
+        etUnidad.setEnabled(enabled);
+        etUnidad2.setEnabled(enabled);
+        etBarrio.setEnabled(enabled);
+        etCalle1.setEnabled(enabled);
+        etCalle2.setEnabled(enabled);
+        etPresion.setEnabled(enabled);
+        sTipoPunto.setEnabled(enabled);
+        sTipoUnidad.setEnabled(enabled);
+    }
+
 }

@@ -34,22 +34,8 @@
                 android:layout_alignStart="@id/tvCircuito" />-->
 
             <TextView
-                android:id="@+id/tvTipoUnidad"
-                style="@style/tv_primary_mini"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/tv_tipo_unidad" />
-
-            <TextView
-                android:id="@+id/etTipoUnidad"
-                style="@style/tv_primary_bold_background"
-                android:layout_below="@id/tvTipoUnidad"
-                android:layout_alignStart="@id/tvUnidad" />
-
-            <TextView
                 android:id="@+id/tvUnidad"
                 style="@style/tv_primary_mini"
-                android:layout_below="@id/etTipoUnidad"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/tv_unidad" />
@@ -61,9 +47,23 @@
                 android:layout_alignStart="@id/tvUnidad" />
 
             <TextView
-                android:id="@+id/tvBarrio"
+                android:id="@+id/tvUnidad2"
                 style="@style/tv_primary_mini"
                 android:layout_below="@id/etUnidad"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/tv_unidad2" />
+
+            <TextView
+                android:id="@+id/etUnidad2"
+                style="@style/tv_primary_bold_background"
+                android:layout_below="@id/tvUnidad2"
+                android:layout_alignStart="@id/tvUnidad" />
+
+            <TextView
+                android:id="@+id/tvBarrio"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etUnidad2"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/tv_barrio" />

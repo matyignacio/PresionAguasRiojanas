@@ -33,7 +33,8 @@
     <string name="tv_circuito">Circuito </string>
     <string name="tv_barrio">Barrio </string>
     <string name="tv_tipo_unidad">Tipo de unidad </string>
-    <string name="tv_unidad">Numero </string>
+    <string name="tv_unidad">Unidad </string>
+    <string name="tv_unidad2">Unidad 2 </string>
     <string name="tv_calle1">Calle 1 </string>
     <string name="tv_calle2">Calle 2 </string>
     <string name="tv_presion">Presion </string>
@@ -87,5 +88,12 @@
     <string name="tv_tipo_de_servicio">Tipo de servicio</string>
     <string name="b_agregar">Agregar</string>
     <string name="tv_datos_relevados">DATOS RELEVADOS</string>
+    <string name="cb_control_de_calidad">Control de calidad</string>
+    <string name="tv_control_de_calidad">Control de calidad</string>
+    <string name="hint_cloro">Cloro</string>
+    <string name="cb_muestra_turbidez">Muestra de turbidez</string>
+    <string name="et_muestra">Numero de Muestra</string>
+    <string name="button_listo_guardar">Listo, Guardar</string>
+    <string name="button_cancelar">Cancelar</string>
 
 </resources>

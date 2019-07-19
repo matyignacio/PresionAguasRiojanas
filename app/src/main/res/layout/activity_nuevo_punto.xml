@@ -6,7 +6,9 @@
     tools:context=".ui.presion.NuevoPuntoActivity">
 
     <RelativeLayout
-        style="@style/layout_primary"
+        android:id="@+id/rlNuevoPunto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="15dp">
 
         <RelativeLayout
@@ -43,11 +45,29 @@
                 android:hint="@string/tv_unidad"
                 android:inputType="number" />
 
+            <Spinner
+                android:id="@+id/sTipoUnidad2"
+                style="@style/et_primary"
+                android:layout_height="40dp"
+                android:layout_below="@id/etUnidad"
+                android:layout_alignStart="@+id/etUnidad"
+                android:layout_alignEnd="@id/etUnidad"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/sp_redondo" />
+
+            <EditText
+                android:id="@+id/etUnidad2"
+                style="@style/et_primary"
+                android:layout_below="@id/sTipoUnidad2"
+                android:autofillHints=""
+                android:hint="@string/tv_unidad"
+                android:inputType="number" />
+
             <EditText
                 android:id="@+id/etBarrio"
                 style="@style/et_primary"
                 android:layout_width="wrap_content"
-                android:layout_below="@id/etUnidad"
+                android:layout_below="@id/etUnidad2"
                 android:autofillHints=""
                 android:focusedByDefault="true"
                 android:hint="@string/tv_barrio"
@@ -87,10 +107,17 @@
                 android:text="@string/tv_mca" />
 
 
+            <CheckBox
+                android:id="@+id/cbCalidad"
+                style="@style/et_primary"
+                android:layout_below="@+id/etPresion"
+                android:padding="2dp"
+                android:text="@string/cb_control_de_calidad" />
+
             <Button
                 android:id="@+id/bEnviarNuevoPunto"
                 style="@style/b_primary"
-                android:layout_below="@id/etPresion"
+                android:layout_below="@id/cbCalidad"
                 android:layout_alignStart="@id/etPresion"
                 android:layout_alignEnd="@id/etPresion"
                 android:layout_marginTop="15dp"
@@ -98,5 +125,6 @@
                 android:text="@string/b_enviar_nuevo_punto" />
 
         </RelativeLayout>
+
     </RelativeLayout>
 </ScrollView>

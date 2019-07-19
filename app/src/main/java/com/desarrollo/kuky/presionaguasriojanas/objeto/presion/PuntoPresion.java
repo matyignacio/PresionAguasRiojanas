@@ -17,6 +17,10 @@ public class PuntoPresion {
     private Usuario usuario;
     private int unidad;
     private String tipoUnidad;
+    private int unidad2;
+    private String tipoUnidad2;
+    private float cloro;
+    private String muestra;
 
     public Integer getId() {
         return id;
@@ -128,5 +132,37 @@ public class PuntoPresion {
 
     public void setTipoUnidad(String tipoUnidad) {
         this.tipoUnidad = tipoUnidad;
+    }
+
+    public int getUnidad2() {
+        return unidad2;
+    }
+
+    public void setUnidad2(int unidad2) {
+        this.unidad2 = unidad2;
+    }
+
+    public String getTipoUnidad2() {
+        return tipoUnidad2;
+    }
+
+    public void setTipoUnidad2(String tipoUnidad2) {
+        this.tipoUnidad2 = tipoUnidad2;
+    }
+
+    public float getCloro() {
+        return cloro;
+    }
+
+    public void setCloro(float cloro) {
+        this.cloro = cloro;
+    }
+
+    public String getMuestra() {
+        return muestra;
+    }
+
+    public void setMuestra(String muestra) {
+        this.muestra = muestra;
     }
 }
