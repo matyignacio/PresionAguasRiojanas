@@ -34,9 +34,10 @@ public class ControlCalidadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_control_calidad, container, false);
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_VERTICAL);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         params.setMargins(30, 15, 30, 15);
         view.setLayoutParams(params);
 
