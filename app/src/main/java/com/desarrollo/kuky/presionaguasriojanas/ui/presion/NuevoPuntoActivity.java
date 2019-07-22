@@ -362,16 +362,24 @@ public class NuevoPuntoActivity extends AppCompatActivity {
             //etUnidad.setHint("Numero de " + labelsTipoUnidad.get(sTipoUnidad.getSelectedItemPosition()));
             etUnidad.setBackgroundResource(R.drawable.et_redondo);
             sTipoUnidad.setBackgroundResource(R.drawable.sp_redondo);
+            sTipoUnidad.setEnabled(true);
+            etUnidad.setEnabled(true);
             /** REPLICO PARA EL OTRO SPINNER **/
             etUnidad2.setBackgroundResource(R.drawable.et_redondo);
             sTipoUnidad2.setBackgroundResource(R.drawable.sp_redondo);
+            sTipoUnidad2.setEnabled(true);
+            etUnidad2.setEnabled(true);
         } else {
             etUnidad.setBackgroundResource(R.drawable.et_redondo_disabled);
             sTipoUnidad.setBackgroundResource(R.drawable.sp_redondo_disabled);
+            sTipoUnidad.setEnabled(false);
+            etUnidad.setEnabled(false);
             etUnidad.setHint("Sin n° de unidad");
             /** REPLICO PARA EL OTRO SPINNER **/
             etUnidad2.setBackgroundResource(R.drawable.et_redondo_disabled);
             sTipoUnidad2.setBackgroundResource(R.drawable.sp_redondo_disabled);
+            sTipoUnidad2.setEnabled(false);
+            etUnidad2.setEnabled(false);
             etUnidad2.setHint("Sin n° de unidad");
         }
     }
