@@ -1,53 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/dialog_primary"
+    android:layout_width="wrap_content"
+    android:background="@color/textColorPrimaryAppBar"
+    android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     tools:context=".ui.presion.ControlCalidadFragment">
 
-    <TextView
-        android:id="@+id/tvControlCalidad"
-        style="@style/tv_primary_bold_center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-smallcaps"
-        android:text="@string/tv_control_de_calidad" />
+    <RelativeLayout
+        style="@style/dialog_primary"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlFormControlCalidad">
 
-    <EditText
-        android:id="@+id/etCloro"
-        style="@style/et_primary"
-        android:layout_below="@id/tvControlCalidad"
-        android:layout_centerHorizontal="true"
-        android:autofillHints=""
-        android:hint="@string/hint_cloro"
-        android:inputType="numberDecimal" />
+        <TextView
+            android:id="@+id/tvControlCalidad"
+            style="@style/tv_primary_bold_center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="@string/tv_control_de_calidad" />
 
-    <CheckBox
-        android:id="@+id/cbMuestra"
-        style="@style/et_primary"
-        android:layout_below="@id/etCloro"
-        android:layout_centerHorizontal="true"
-        android:padding="2dp"
-        android:text="@string/cb_muestra_turbidez" />
+        <EditText
+            android:id="@+id/etCloro"
+            style="@style/et_primary"
+            android:layout_below="@id/tvControlCalidad"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_cloro"
+            android:inputType="numberDecimal" />
 
-    <EditText
-        android:id="@+id/etMuestra"
-        style="@style/et_primary"
-        android:layout_below="@id/cbMuestra"
-        android:layout_centerHorizontal="true"
-        android:autofillHints=""
-        android:hint="@string/et_muestra"
-        android:inputType="number"
-        android:visibility="invisible" />
+        <CheckBox
+            android:id="@+id/cbMuestra"
+            style="@style/et_primary"
+            android:layout_below="@id/etCloro"
+            android:layout_centerHorizontal="true"
+            android:padding="2dp"
+            android:text="@string/cb_muestra_turbidez" />
+
+        <EditText
+            android:id="@+id/etMuestra"
+            style="@style/et_primary"
+            android:layout_below="@id/cbMuestra"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/et_muestra"
+            android:inputType="number"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/bAceptar"
         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etMuestra"
-        android:layout_alignEnd="@id/etMuestra"
-        android:layout_marginTop="15dp"
+        android:layout_below="@+id/rlFormControlCalidad"
+        android:layout_alignEnd="@id/rlFormControlCalidad"
         android:text="@string/button_listo_guardar" />
 
     <Button
@@ -55,8 +65,7 @@
         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etMuestra"
-        android:layout_marginTop="15dp"
+        android:layout_below="@+id/rlFormControlCalidad"
         android:layout_toStartOf="@+id/bAceptar"
         android:text="@string/button_cancelar" />
 </RelativeLayout>

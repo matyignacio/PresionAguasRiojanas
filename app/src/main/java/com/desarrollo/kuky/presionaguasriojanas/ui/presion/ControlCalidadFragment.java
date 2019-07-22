@@ -34,7 +34,7 @@ public class ControlCalidadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_control_calidad, container, false);
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_VERTICAL);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -79,7 +79,9 @@ public class ControlCalidadFragment extends Fragment {
                 etMuestra.setText("");
             }
         });
-        etCloro.setText(String.valueOf(calidad.getCloro()));
+        if (calidad.getCloro() != 0) {
+            etCloro.setText(String.valueOf(calidad.getCloro()));
+        }
         etMuestra.setText(calidad.getMuestra());
     }
 
