@@ -19,19 +19,9 @@
             android:gravity="center">
 
             <Spinner
-                android:id="@+id/sTipoPunto"
-                style="@style/et_primary"
-                android:layout_height="40dp"
-                android:layout_alignStart="@+id/etUnidad"
-                android:layout_alignEnd="@id/etUnidad"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/sp_redondo" />
-
-            <Spinner
                 android:id="@+id/sTipoUnidad"
                 style="@style/et_primary"
                 android:layout_height="40dp"
-                android:layout_below="@id/sTipoPunto"
                 android:layout_alignStart="@+id/etUnidad"
                 android:layout_alignEnd="@id/etUnidad"
                 android:layout_marginTop="15dp"
