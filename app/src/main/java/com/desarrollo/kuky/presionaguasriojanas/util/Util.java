@@ -59,6 +59,8 @@ public class Util {
     public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
     public static final String ULTIMA_LATITUD = "latitud";
     public static final String ULTIMA_LONGITUD = "longitud";
+    public static final String LATITUD_INSPECCION = "latitud_inspeccion";
+    public static final String LONGITUD_INSPECCION = "longitud_inspeccion";
     public static final String CIRCUITO_USUARIO = "circuito_usuario";
     public static final String TIPO_MAPA = "id_tipo_punto";
     public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
@@ -103,6 +105,14 @@ public class Util {
         transaction.add(layout, fragment);
 
         //Paso 4: Confirmar el cambio
+        transaction.commit();
+    }
+
+    public static void siguienteFragmento(Activity a, int layout, Fragment fragmentActual, Fragment fragmentSiguiente) {
+        a.getFragmentManager().beginTransaction().remove(fragmentActual).commit();
+        FragmentManager fragmentManager = a.getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(layout, fragmentSiguiente);
         transaction.commit();
     }
 

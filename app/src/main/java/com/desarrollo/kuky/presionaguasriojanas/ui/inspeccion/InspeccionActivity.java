@@ -1,41 +1,84 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.NuevaPresionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.ArrayList;
-
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class InspeccionActivity extends AppCompatActivity {
+    /**
+     * LAS DEFINICIONES ESTATICAS QUE NECESITO PARA LOS FRAGMENTOS
+     */
+    public static FormClienteInspeccionFragment formClienteInspeccionFragment = new FormClienteInspeccionFragment();
+    public static FormInmuebleInspeccionFragment formInmuebleInspeccionFragment = new FormInmuebleInspeccionFragment();
+    public static FormObservacionesInspeccionFragment formObservacionesInspeccionFragment = new FormObservacionesInspeccionFragment();
+    public static FormMapaInspeccionFragment formMapaInspeccionFragment = new FormMapaInspeccionFragment();
+    public static FormDatosInspeccionFragment formDatosInspeccionFragment = new FormDatosInspeccionFragment();
+    public static int posicionFormulario = 0;
     public static Button bSiguienteFragmento, bVolver, bGuardarInspeccion, bNuevaInspeccion;
-    FormClienteInspeccionFragment formClienteInspeccionFragment = new FormClienteInspeccionFragment();
-    FormInmuebleInspeccionFragment formInmuebleInspeccionFragment = new FormInmuebleInspeccionFragment();
-    FormMapaInspeccionFragment formMapaInspeccionFragment = new FormMapaInspeccionFragment();
-    FormDatosInspeccionFragment formDatosInspeccionFragment = new FormDatosInspeccionFragment();
-    ArrayList<android.app.Fragment> fragmentos = new ArrayList<>();
-    public int posicionFormulario = 0;
+    /**
+     * LO REFERENTE A OBTENER LA UBICACION
+     */
+    private static final String TAG = NuevaPresionActivity.class.getSimpleName();
+
+    // bunch of location related apis
+    private FusedLocationProviderClient mFusedLocationClient;
+    private SettingsClient mSettingsClient;
+    private LocationRequest mLocationRequest;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private LocationCallback mLocationCallback;
+    private Location mCurrentLocation;
+    // boolean flag to toggle the ui
+    public Boolean mRequestingLocationUpdates;
+
+    /**
+     * DEMAS INICIALIZACIONES
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspeccion);
-        /** AGREGO LOS FRAGMENTOS AL ARRAY, PARA LUEGO
-         RECORRERLO CON LOS BOTONES SIGUIENTE Y VOLVER  */
-        fragmentos.add(formClienteInspeccionFragment);
-        fragmentos.add(formInmuebleInspeccionFragment);
-        fragmentos.add(formMapaInspeccionFragment);
-        fragmentos.add(formDatosInspeccionFragment);
         /************************************************/
         bVolver = findViewById(R.id.bVolver);
         bNuevaInspeccion = findViewById(R.id.bNuevaInspeccion);
@@ -48,70 +91,280 @@ public class InspeccionActivity extends AppCompatActivity {
         setPrimaryFontBold(this, bNuevaInspeccion);
         /************************/
         bNuevaInspeccion.setOnClickListener(v -> {
-            abrirFragmento(this, R.id.LLInspeccion, formClienteInspeccionFragment);
-            setOnButtonsFragment();
+            posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
         });
         bSiguienteFragmento.setOnClickListener(v -> {
-            posicionFormulario = siguienteFragmento(this, fragmentos, R.id.LLInspeccion, posicionFormulario);
+            posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
         });
         bVolver.setOnClickListener(v -> {
-            posicionFormulario = volverFragmento(this, fragmentos, R.id.LLInspeccion, posicionFormulario);
+            posicionFormulario = volverFragmento(this, R.id.LLInspeccion, posicionFormulario);
         });
+        /************************/
+        request_permissions();
     }
 
     @Override
     public void onBackPressed() {
-        abrirActivity(this, InicioActivity.class);
+        if (formMapaInspeccionFragment.isVisible() ||
+                formClienteInspeccionFragment.isVisible() ||
+                formDatosInspeccionFragment.isVisible() ||
+                formInmuebleInspeccionFragment.isVisible() ||
+                formObservacionesInspeccionFragment.isVisible()) {
+            mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
+        } else {
+            stopLocationUpdates();
+            abrirActivity(this, InicioActivity.class);
+        }
     }
 
-    public int siguienteFragmento(Activity a, ArrayList<android.app.Fragment> fragmentos, int layout, int posicionFormulario) {
-        if (posicionFormulario == 0) {//SIGNIFICA POSICION INICIAL
-            // SIMPLEMENTE ABRIMOS EL SIGUIENTE FRAGMENTO
-            cerrarFragmento(a, fragmentos.get(posicionFormulario));
-            posicionFormulario++;
-            abrirFragmento(a, layout, fragmentos.get(posicionFormulario));
-            setOnButtonsFragment();
-        } else if (posicionFormulario > 0 && posicionFormulario != fragmentos.size() - 1) {
-            // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
-            cerrarFragmento(a, fragmentos.get(posicionFormulario));
-            abrirFragmento(a, layout, fragmentos.get(posicionFormulario + 1));
-            posicionFormulario++;
-        } else if (posicionFormulario == fragmentos.size() - 1) {
-            posicionFormulario++;
-            bSiguienteFragmento.setVisibility(View.INVISIBLE);
+    private void init() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mSettingsClient = LocationServices.getSettingsClient(this);
 
-            Util.showDialog(this,
-                    R.layout.dialog_guardar,
-                    "Si, Guardar",
-                    () -> {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                // location is received
+                mCurrentLocation = locationResult.getLastLocation();
 
-                        return null;
-                    },
-                    () -> {
+                //updateLocationUI();
+            }
+        };
 
-                        bSiguienteFragmento.setVisibility(View.VISIBLE);
+        mRequestingLocationUpdates = false;
 
-                        return null;
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                request_permissions();
+                break;
+            }
+        }
+    }
+
+    private void request_permissions() {
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                        , MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+            return;
+        }
+        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
+        init();
+
+//        bEnviarMedicion.setOnClickListener(view -> {
+//            if (mCurrentLocation != null) {
+//                if (validarCampos(this, inputs) == EXITOSO) {
+//                    Util.showDialog(this,
+//                            R.layout.dialog_guardar,
+//                            "Si, Guardar",
+//                            () -> {
+//                                insertarMedicion();
+//                                return null;
+//                            }
+//                    );
+//                } /**else {
+//                 ESTE ELSE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL
+//                 }*/
+//            } else {
+//                mostrarMensaje(this, "Debe activar el GPS. Una vez activo, abra nuevamente esta pantalla");
+//            }
+//        });
+    }
+
+    /**
+     * Starting location updates
+     * Check whether location settings are satisfied and then
+     * location updates will be requested
+     */
+
+    private void startLocationUpdates() {
+        mSettingsClient
+                .checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.i(TAG, "Empezo a obtener la ubicacion!");
+
+                        //noinspection MissingPermission
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                                mLocationCallback, Looper.myLooper());
                     }
-            );
+                })
+                .addOnFailureListener(this, e -> {
+                    int statusCode = ((ApiException) e).getStatusCode();
+                    switch (statusCode) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " +
+                                    "location settings ");
+                            try {
+                                // Show the dialog by calling startResolutionForResult(), and check the
+                                // result in onActivityResult().
+                                ResolvableApiException rae = (ResolvableApiException) e;
+                                rae.startResolutionForResult(this, REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException sie) {
+                                Log.i(TAG, "PendingIntent unable to execute request.");
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            String errorMessage = "Location settings are inadequate, and cannot be " +
+                                    "fixed here. Fix in Settings.";
+                            Log.e(TAG, errorMessage);
+                            mostrarMensaje(getApplicationContext(), errorMessage);
+                    }
+                });
+    }
+
+    private void stopLocationUpdates() {
+        // Removing location updates
+        mFusedLocationClient
+                .removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(this, task -> Log.e(TAG, "Se detuvo la busqueda de ubicacion!"));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            // Check for the integer request code originally supplied to startResolutionForResult().
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        Log.e(TAG, "User agreed to make required location settings changes.");
+                        // Nothing to do. startLocationupdates() gets called in onResume again.
+                        startLocationUpdates();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Log.e(TAG, "User chose not to make required location settings changes.");
+                        mRequestingLocationUpdates = false;
+                        break;
+                }
+                break;
+        }
+    }
+
+    public int siguienteFragmento(Activity a, int layout, int posicionFormulario) {
+        switch (posicionFormulario) {
+            case 0: //SIGNIFICA POSICION INICIAL
+                // SIMPLEMENTE ABRIMOS EL SIGUIENTE FRAGMENTO
+                posicionFormulario++;
+                abrirFragmento(a, layout, formClienteInspeccionFragment);
+                setOnButtonsFragment();
+                break;
+            case 1:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
+                posicionFormulario++;
+                Util.siguienteFragmento(a, layout,
+                        formClienteInspeccionFragment,
+                        formInmuebleInspeccionFragment);
+                break;
+            case 2:
+                if (mCurrentLocation != null) {
+                    Util.setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
+                    Util.setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
+                }
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
+                posicionFormulario++;
+                Util.siguienteFragmento(a, layout,
+                        formInmuebleInspeccionFragment,
+                        formMapaInspeccionFragment);
+                break;
+            case 3:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
+                posicionFormulario++;
+                Util.siguienteFragmento(a, layout,
+                        formMapaInspeccionFragment,
+                        formDatosInspeccionFragment);
+                break;
+            case 4:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
+                posicionFormulario++;
+                Util.siguienteFragmento(a, layout,
+                        formDatosInspeccionFragment,
+                        formObservacionesInspeccionFragment);
+                break;
+            default:
+                posicionFormulario++;
+                bSiguienteFragmento.setVisibility(View.INVISIBLE);
+                Util.showDialog(this,
+                        R.layout.dialog_guardar,
+                        "Si, Guardar",
+                        () -> {
+
+                            return null;
+                        },
+                        () -> {
+                            this.posicionFormulario--;
+                            bSiguienteFragmento.setVisibility(View.VISIBLE);
+                            return null;
+                        }
+                );
+                break;
         }
         return posicionFormulario;
     }
 
-    public int volverFragmento(Activity a, ArrayList<android.app.Fragment> fragmentos, int layout, int posicionFormulario) {
-        if (posicionFormulario == 0) {//SIGNIFICA POSICION INICIAL
-            // SIMPLEMENTE CERRAMOS EL FRAGMENTO
-            setOffButtonsFragment();
-            cerrarFragmento(a, fragmentos.get(posicionFormulario));
-        } else if (posicionFormulario > 0 && posicionFormulario != fragmentos.size()) {
-            // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
-            cerrarFragmento(a, fragmentos.get(posicionFormulario));
-            posicionFormulario--;
-            abrirFragmento(a, layout, fragmentos.get(posicionFormulario));
-        } else if (posicionFormulario == fragmentos.size()) {
-            bGuardarInspeccion.setVisibility(View.INVISIBLE);
-            bSiguienteFragmento.setVisibility(View.VISIBLE);
-            posicionFormulario--;
+    public int volverFragmento(Activity a, int layout, int posicionFormulario) {
+        switch (posicionFormulario) {
+            case 1: //SIGNIFICA POSICION INICIAL
+                // SIMPLEMENTE CERRAMOS EL FRAGMENTO
+                setOffButtonsFragment();
+                posicionFormulario--;
+                cerrarFragmento(a, formClienteInspeccionFragment);
+                break;
+            case 2:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+                posicionFormulario--;
+                Util.siguienteFragmento(a, layout,
+                        formInmuebleInspeccionFragment,
+                        formClienteInspeccionFragment);
+                break;
+            case 3:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+                posicionFormulario--;
+                Util.siguienteFragmento(a, layout,
+                        formMapaInspeccionFragment,
+                        formInmuebleInspeccionFragment);
+                break;
+            case 4:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+                posicionFormulario--;
+                Util.siguienteFragmento(a, layout,
+                        formDatosInspeccionFragment,
+                        formMapaInspeccionFragment);
+                break;
+            case 5:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+                posicionFormulario--;
+                Util.siguienteFragmento(a, layout,
+                        formObservacionesInspeccionFragment,
+                        formDatosInspeccionFragment);
+                break;
+            default:
+                bGuardarInspeccion.setVisibility(View.INVISIBLE);
+                bSiguienteFragmento.setVisibility(View.VISIBLE);
+                posicionFormulario--;
+                break;
         }
         return posicionFormulario;
     }

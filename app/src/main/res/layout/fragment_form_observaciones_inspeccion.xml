@@ -8,13 +8,13 @@
         style="@style/tv_primary_bold_center"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/tv_geolocalizacion" />
+        android:text="@string/tv_observaciones" />
 
-    <com.google.android.gms.maps.MapView xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <EditText
+        android:id="@+id/etObservaciones"
+        style="@style/et_primary"
         android:layout_below="@+id/tvDatosGeolocalizacion"
-        map:cameraZoom="19" />
+        android:layout_centerHorizontal="true"
+        android:inputType="textMultiLine" />
 
 </RelativeLayout>

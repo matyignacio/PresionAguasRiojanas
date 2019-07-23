@@ -88,7 +88,9 @@ public class ControlCalidadFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        calidad.setCloro(Float.parseFloat(etCloro.getText().toString()));
+        if (!etCloro.getText().toString().equals("")) {
+            calidad.setCloro(Float.parseFloat(etCloro.getText().toString()));
+        }
         calidad.setMuestra(etMuestra.getText().toString());
     }
 

@@ -95,5 +95,7 @@
     <string name="et_muestra">Numero de Muestra</string>
     <string name="button_listo_guardar">Listo, Guardar</string>
     <string name="button_cancelar">Cancelar</string>
+    <string name="tv_geolocalizacion">GEOLOCALIZACION</string>
+    <string name="tv_observaciones">OBSERVACIONES</string>
 
 </resources>

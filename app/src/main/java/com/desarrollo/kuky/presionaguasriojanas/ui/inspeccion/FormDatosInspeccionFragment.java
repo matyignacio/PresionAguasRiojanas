@@ -27,13 +27,12 @@ public class FormDatosInspeccionFragment extends Fragment {
     int idEditText = 0;
     int cantidadEditText = 6;
     Spinner sEstado, sMedida;
-    EditText etUnidad, etEstado, etMedida, etMedidorAgua, etMedidorLuz, etNis;
+    EditText etUnidad, etMedidorAgua, etMedidorLuz, etNis;
 
 
     public FormDatosInspeccionFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +72,7 @@ public class FormDatosInspeccionFragment extends Fragment {
         super.onResume();
         bNuevoDato = getActivity().findViewById(R.id.bNuevoDato);
         bNuevoDato.setOnClickListener(v -> {
-            nuevoRegistro(marginTop + (addMargin * 0)
+            nuevoRegistro(marginTop
                     , idEditText);
             marginTop += (addMargin * cantidadEditText);
             idEditText++;
@@ -160,7 +159,7 @@ public class FormDatosInspeccionFragment extends Fragment {
         private RelativeLayout mRlayout;
         private RelativeLayout.LayoutParams mRparams;
 
-        public LayoutPersonalizada(int marginTop) {
+        LayoutPersonalizada(int marginTop) {
             mRlayout = getActivity().findViewById(R.id.fDatos);
             mRparams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -172,11 +171,11 @@ public class FormDatosInspeccionFragment extends Fragment {
             mRparams.setMargins(0, marginTop, 0, 0);
         }
 
-        public RelativeLayout getmRlayout() {
+        RelativeLayout getmRlayout() {
             return mRlayout;
         }
 
-        public RelativeLayout.LayoutParams getmRparams() {
+        RelativeLayout.LayoutParams getmRparams() {
             return mRparams;
         }
     }

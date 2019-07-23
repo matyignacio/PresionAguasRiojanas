@@ -102,7 +102,7 @@ public class InicioActivity extends AppCompatActivity
     }
 
     private void evaluarUsuario() {
-        boolean prueba = false;
+        boolean prueba = true;
         if (prueba) {
             bModuloInspeccion.setEnabled(true);
             bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo);
@@ -110,6 +110,5 @@ public class InicioActivity extends AppCompatActivity
             bModuloInspeccion.setEnabled(false);
             bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo_disabled);
         }
-
     }
 }

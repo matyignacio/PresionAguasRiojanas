@@ -20,6 +20,7 @@
             <Button
                 android:id="@+id/bModuloPresion"
                 style="@style/b_primary"
+                android:layout_height="80dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:width="140dp"
@@ -28,6 +29,7 @@
             <Button
                 android:id="@+id/bModuloInspeccion"
                 style="@style/b_primary"
+                android:layout_height="80dp"
                 android:layout_marginTop="15dp"
                 android:width="140dp"
                 android:text="@string/bModuloInspeccion" />
