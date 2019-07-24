@@ -40,6 +40,10 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaHistorialPuntosPresion);
         sqLiteDatabase.execSQL(sqlTablaTipoPunto);
         sqLiteDatabase.execSQL(sqlTablaOrden);
+        sqLiteDatabase.execSQL(sqlTablaTipoInmueble);
+        sqLiteDatabase.execSQL(sqlTablaDestinoInmueble);
+        sqLiteDatabase.execSQL(sqlTablaTipoServicio);
+        sqLiteDatabase.execSQL(sqlTablaCliente);
     }
 
     @Override
@@ -51,51 +55,51 @@ public class BaseHelper extends SQLiteOpenHelper {
         return "DROP TABLE IF EXISTS " + table;
     }
 
-    private String sqlTablaPuntosPresion = "CREATE TABLE IF NOT EXISTS `puntos_presion` (" +
-            "  `id` INTEGER NOT NULL," +
-            "  `circuito` int(11) NOT NULL," +
-            "  `barrio` varchar(30) NOT NULL," +
-            "  `calle1` varchar(50) NOT NULL," +
-            "  `calle2` varchar(50) DEFAULT NULL," +
-            "  `latitud` double NOT NULL," +
-            "  `longitud` double NOT NULL," +
-            "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
-            "  `presion` float NOT NULL," +
-            "  `id_tipo_presion` int(11) DEFAULT NULL," +
-            "  `id_tipo_punto` int(11) DEFAULT '1'," +
-            "  `id_usuario` char(10) DEFAULT NULL," +
-            "  `unidad` int(20) DEFAULT NULL," +
-            "  `tipo_unidad` varchar(30) DEFAULT NULL," +
-            "  `unidad2` int(20) DEFAULT NULL," +
-            "  `tipo_unidad2` varchar(30) DEFAULT NULL," +
-            "  `cloro` float DEFAULT NULL," +
-            "  `muestra` varchar(45) DEFAULT NULL"
+    private String sqlTablaPuntosPresion = "CREATE TABLE IF NOT EXISTS puntos_presion (" +
+            "  id INTEGER NOT NULL," +
+            "  circuito int(11) NOT NULL," +
+            "  barrio varchar(30) NOT NULL," +
+            "  calle1 varchar(50) NOT NULL," +
+            "  calle2 varchar(50) DEFAULT NULL," +
+            "  latitud double NOT NULL," +
+            "  longitud double NOT NULL," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  presion float NOT NULL," +
+            "  id_tipo_presion int(11) DEFAULT NULL," +
+            "  id_tipo_punto int(11) DEFAULT '1'," +
+            "  id_usuario char(10) DEFAULT NULL," +
+            "  unidad int(20) DEFAULT NULL," +
+            "  tipo_unidad varchar(30) DEFAULT NULL," +
+            "  unidad2 int(20) DEFAULT NULL," +
+            "  tipo_unidad2 varchar(30) DEFAULT NULL," +
+            "  cloro float DEFAULT NULL," +
+            "  muestra varchar(45) DEFAULT NULL"
             + ")";
 
-    private String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS `historial_puntos_presion` (" +
-            "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "  `latitud` double NOT NULL," +
-            "  `longitud` double NOT NULL," +
-            "  `pendiente` int(1) NOT NULL DEFAULT '1'," +
-            "  `presion` float NOT NULL," +
-            "  `fecha` timestamp DEFAULT (datetime('now','localtime'))," +
-            "  `id_punto_presion` int(11) DEFAULT NULL," +
-            "  `id_usuario` char(10) DEFAULT NULL," +
-            "  `id_usuario_historial` char(10) DEFAULT NULL"
+    private String sqlTablaHistorialPuntosPresion = "CREATE TABLE IF NOT EXISTS historial_puntos_presion (" +
+            "  id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "  latitud double NOT NULL," +
+            "  longitud double NOT NULL," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  presion float NOT NULL," +
+            "  fecha timestamp DEFAULT (datetime('now','localtime'))," +
+            "  id_punto_presion int(11) DEFAULT NULL," +
+            "  id_usuario char(10) DEFAULT NULL," +
+            "  id_usuario_historial char(10) DEFAULT NULL"
             + ")";
 
-    private String sqlTablaTipoPunto = "CREATE TABLE IF NOT EXISTS `tipo_punto` (" +
-            "  `id` int(11) NOT NULL," +
-            "  `nombre` varchar(20) NOT NULL," +
-            "  PRIMARY KEY (`id`)" + ") ";
+    private String sqlTablaTipoPunto = "CREATE TABLE IF NOT EXISTS tipo_punto (" +
+            "  id int(11) NOT NULL," +
+            "  nombre varchar(20) NOT NULL," +
+            "  PRIMARY KEY (id)" + ") ";
 
-    private String sqlTablaOrden = "CREATE TABLE IF NOT EXISTS `orden` (" +
-            "  `id` INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "  `id_pp_actual` int(11) DEFAULT NULL," +
-            "  `id_usuario_pp_actual` char(10) DEFAULT NULL," +
-            "  `id_pp_siguiente` int(11) DEFAULT NULL," +
-            "  `id_usuario_pp_siguiente` char(10) DEFAULT NULL," +
-            "  `activo` int(1) NOT NULL DEFAULT '0'" +
+    private String sqlTablaOrden = "CREATE TABLE IF NOT EXISTS orden (" +
+            "  id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "  id_pp_actual int(11) DEFAULT NULL," +
+            "  id_usuario_pp_actual char(10) DEFAULT NULL," +
+            "  id_pp_siguiente int(11) DEFAULT NULL," +
+            "  id_usuario_pp_siguiente char(10) DEFAULT NULL," +
+            "  activo int(1) NOT NULL DEFAULT '0'" +
             " )";
 
     private String sqlTablaUsuarios = "CREATE TABLE IF NOT EXISTS susuario (" +
@@ -107,7 +111,39 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  activo char(1) NOT NULL DEFAULT ''," +
             "  bandera_modulo_presion INTEGER default 0," +
             "  bandera_sync_modulo_presion INTEGER default 0," +
-            "  PRIMARY KEY (`usuario`)" + ")";
+            "  PRIMARY KEY (usuario)" + ")";
+
+    private String sqlTablaTipoInmueble = "CREATE TABLE IF NOT EXISTS tipo_inmueble (" +
+            "  id int(11) NOT NULL," +
+            "  nombre varchar(45) NOT NULL," +
+            "  PRIMARY KEY (id)" + ") ";
+
+    private String sqlTablaDestinoInmueble = "CREATE TABLE IF NOT EXISTS destino_inmueble (" +
+            "  id int(11) NOT NULL," +
+            "  nombre varchar(45) NOT NULL," +
+            "  PRIMARY KEY (id)" + ") ";
+
+    private String sqlTablaTipoServicio = "CREATE TABLE IF NOT EXISTS tipo_servicio (" +
+            "  id int(11) NOT NULL," +
+            "  nombre varchar(45) NOT NULL," +
+            "  PRIMARY KEY (id)" + ") ";
+
+    private String sqlTablaCliente = "CREATE TABLE IF NOT EXISTS cliente (" +
+            "  id int(11) NOT NULL," +
+            "  id_usuario char(10) NOT NULL," +
+            "  razon_social varchar(45) NOT NULL," +
+            "  direccion varchar(60) NOT NULL," +
+            "  barrio varchar(30) NOT NULL," +
+            "  telefono int(20) DEFAULT NULL," +
+            "  unidad int(10) DEFAULT NULL," +
+            "  nis int(10) DEFAULT NULL," +
+            "  med_agua int(10) DEFAULT NULL," +
+            "  med_luz int(10) DEFAULT NULL," +
+            "  tramite int(15) DEFAULT NULL," +
+            "  serv varchar(45) DEFAULT NULL," +
+            "  estado tinyint(4) DEFAULT '0'," +
+            "  reclama varchar(45) DEFAULT NULL," +
+            "  PRIMARY KEY (id,id_usuario) )";
 
     public String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
@@ -127,5 +163,21 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaOrden() {
         return sqlTablaOrden;
+    }
+
+    public String getSqlTablaTipoInmueble() {
+        return sqlTablaTipoInmueble;
+    }
+
+    public String getSqlTablaDestinoInmueble() {
+        return sqlTablaDestinoInmueble;
+    }
+
+    public String getSqlTablaTipoServicio() {
+        return sqlTablaTipoServicio;
+    }
+
+    public String getSqlTablaCliente() {
+        return sqlTablaCliente;
     }
 }

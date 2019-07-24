@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,10 +29,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
@@ -90,15 +89,9 @@ public class InspeccionActivity extends AppCompatActivity {
         setPrimaryFontBold(this, bGuardarInspeccion);
         setPrimaryFontBold(this, bNuevaInspeccion);
         /************************/
-        bNuevaInspeccion.setOnClickListener(v -> {
-            posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
-        });
-        bSiguienteFragmento.setOnClickListener(v -> {
-            posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
-        });
-        bVolver.setOnClickListener(v -> {
-            posicionFormulario = volverFragmento(this, R.id.LLInspeccion, posicionFormulario);
-        });
+        bNuevaInspeccion.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario));
+        bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario));
+        bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLInspeccion, posicionFormulario));
         /************************/
         request_permissions();
     }
@@ -147,7 +140,7 @@ public class InspeccionActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 request_permissions();
@@ -198,19 +191,16 @@ public class InspeccionActivity extends AppCompatActivity {
      * location updates will be requested
      */
 
+    @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
         mSettingsClient
                 .checkLocationSettings(mLocationSettingsRequest)
-                .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
-                    @SuppressLint("MissingPermission")
-                    @Override
-                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        Log.i(TAG, "Empezo a obtener la ubicacion!");
+                .addOnSuccessListener(this, locationSettingsResponse -> {
+                    Log.i(TAG, "Empezo a obtener la ubicacion!");
 
-                        //noinspection MissingPermission
-                        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                                mLocationCallback, Looper.myLooper());
-                    }
+                    //noinspection MissingPermission
+                    mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                            mLocationCallback, Looper.myLooper());
                 })
                 .addOnFailureListener(this, e -> {
                     int statusCode = ((ApiException) e).getStatusCode();

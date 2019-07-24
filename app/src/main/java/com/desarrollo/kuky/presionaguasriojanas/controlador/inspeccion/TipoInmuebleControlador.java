@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
+package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.TipoPunto;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,8 +21,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
-public class TipoPuntoControlador {
-
+public class TipoInmuebleControlador {
     private ProgressDialog pDialog;
 
     private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
@@ -35,8 +34,8 @@ public class TipoPuntoControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage((TOTAL_ASYNCTASKS - 3) + "/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo tipos de puntos...");
+            pDialog.setMessage("3/" + TOTAL_ASYNCTASKS +
+                    " - Recibiendo tipos de inmuebles...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -56,17 +55,17 @@ public class TipoPuntoControlador {
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
                 conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM tipo_punto ";
+                String consultaSql = "SELECT * FROM tipo_inmueble ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
                 rs = ps.getResultSet();
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM tipo_punto");
+                db.execSQL("DELETE FROM tipo_inmueble");
                 while (rs.next()) {
-                    String sql = "INSERT INTO `tipo_punto`" +
-                            "VALUES" +
-                            "('" + rs.getInt(1) + "','" + // id
+                    String sql = "INSERT INTO `tipo_inmueble`" +
+                            " VALUES" +
+                            " ('" + rs.getInt(1) + "','" + // id
                             rs.getString(2) + "');"; // nombre
                     db.execSQL(sql);
                 }
@@ -94,11 +93,10 @@ public class TipoPuntoControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                //mostrarMensaje(a, "3/6 - Se copio los tipos de puntos con exito");
-                OrdenControlador ordenControlador = new OrdenControlador();
-                ordenControlador.sincronizarDeMysqlToSqlite(a);
+                TipoServicioControlador tipoServicioControlador = new TipoServicioControlador();
+                tipoServicioControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                mostrarMensaje(a, "Error en el checkTipoPunto");
+                mostrarMensaje(a, "Error en el checkTipoInmueble");
             }
         }
 
@@ -109,22 +107,23 @@ public class TipoPuntoControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite TPC" + e.toString());
+            mostrarMensaje(a, "Eror SyncMysqlToSqlite TIC" + e.toString());
         }
     }
 
-    public ArrayList<TipoPunto> extraerTodos(Activity a) {
-        ArrayList<TipoPunto> tipoPuntos = new ArrayList<>();
+    public ArrayList<TipoInmueble> extraerTodos(Activity a) {
+        ArrayList<TipoInmueble> tipoInmuebles = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM tipo_punto", null);
+        Cursor c = db.rawQuery("SELECT * FROM tipo_inmueble", null);
         while (c.moveToNext()) {
-            TipoPunto tp = new TipoPunto();
-            tp.setId(c.getInt(0));
-            tp.setNombre(c.getString(1));
-            tipoPuntos.add(tp);
+            TipoInmueble tipoInmueble = new TipoInmueble();
+            tipoInmueble.setId(c.getInt(0));
+            tipoInmueble.setNombre(c.getString(1));
+            tipoInmuebles.add(tipoInmueble);
         }
         c.close();
         db.close();
-        return tipoPuntos;
+        return tipoInmuebles;
     }
+
 }

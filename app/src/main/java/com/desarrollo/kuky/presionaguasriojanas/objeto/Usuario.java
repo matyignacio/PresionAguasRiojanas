@@ -68,7 +68,7 @@ public class Usuario {
         this.activo = activo;
     }
 
-    public int getBandera_modulo_presion() {
+    public int getBanderaModuloPresion() {
         return bandera_modulo_presion;
     }
 

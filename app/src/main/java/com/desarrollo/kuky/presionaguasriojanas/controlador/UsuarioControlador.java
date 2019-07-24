@@ -115,7 +115,7 @@ public class UsuarioControlador {
                     + u.getClave() + "', '"
                     + u.getTipo() + "', '"
                     + u.getActivo() + "', '"
-                    + u.getBandera_modulo_presion() + "', '"
+                    + u.getBanderaModuloPresion() + "', '"
                     + u.getBandera_sync_modulo_presion() + "')";
             db.execSQL(sql);
             db.close();
@@ -189,11 +189,19 @@ public class UsuarioControlador {
     public void actualizarTablas(Activity a) {
         SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
         /** DROPEAMOS PARA QUE SE CREEN */
+        db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_inmueble"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("destino_inmueble"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_servicio"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("cliente"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("orden"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("historial_puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_punto"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaDestinoInmueble());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoServicio());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaCliente());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaOrden());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaHistorialPuntosPresion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaPuntosPresion());

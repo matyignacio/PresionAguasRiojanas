@@ -29,6 +29,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class PuntoPresionControlador {
@@ -44,7 +45,9 @@ public class PuntoPresionControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("1/6 - Enviando puntos...");
+            pDialog.setTitle("SINCRONIZANDO");
+            pDialog.setMessage("1/" +
+                    TOTAL_ASYNCTASKS + " - Enviando puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -193,7 +196,9 @@ public class PuntoPresionControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("5/6 - Recibiendo puntos...");
+            pDialog.setTitle("SINCRONIZANDO");
+            pDialog.setMessage((TOTAL_ASYNCTASKS - 1) + "/" + TOTAL_ASYNCTASKS +
+                    " - Recibiendo puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

@@ -94,11 +94,26 @@ public class InicioActivity extends AppCompatActivity
                         return null;
                     }
             );
+        } else if (id == R.id.action_sync) {
+            Util.showDialog(this,
+                    R.layout.dialog_sincronizar,
+                    "sincronizar",
+                    () -> {
+                        sincronizar();
+                        return null;
+                    }
+            );
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void sincronizar() {
+        MapActivityControlador mapActivityControlador = new MapActivityControlador();
+        if (mapActivityControlador.sync(this) == EXITOSO) {
+        }
     }
 
     private void evaluarUsuario() {

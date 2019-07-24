@@ -1,6 +1,8 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion;
 
 public class Cliente {
+    private int id;
+    private String id_usuario;
     private String razonSocial;
     private int telefono;
     private String direccion;
@@ -13,6 +15,22 @@ public class Cliente {
     private boolean estado;
     private int medidorLuz;
     private String reclama;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(String id_usuario) {
+        this.id_usuario = id_usuario;
+    }
 
     public String getRazonSocial() {
         return razonSocial;

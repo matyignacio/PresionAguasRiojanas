@@ -234,7 +234,7 @@ public class MapActivity extends AppCompatActivity
         /**
          * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.sincronizarDeMysqlToSqlite
          * */
-        if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
+        if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO_PRESION) {
             sincronizar();
         }
 

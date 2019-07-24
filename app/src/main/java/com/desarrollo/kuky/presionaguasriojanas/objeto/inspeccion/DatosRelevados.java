@@ -1,12 +1,14 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion;
 
 public class DatosRelevados {
+    private int id;
     private int unidad;
     private boolean estado;
     private boolean medida;
     private int medidorAgua;
     private int medidorLuz;
     private int nis;
+    private Inspeccion inspeccion;
 
     public int getUnidad() {
         return unidad;
@@ -54,5 +56,21 @@ public class DatosRelevados {
 
     public void setNis(int nis) {
         this.nis = nis;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Inspeccion getInspeccion() {
+        return inspeccion;
+    }
+
+    public void setInspeccion(Inspeccion inspeccion) {
+        this.inspeccion = inspeccion;
     }
 }

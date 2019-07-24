@@ -10,6 +10,7 @@ import android.util.Log;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.Orden;
@@ -32,6 +33,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -52,7 +54,9 @@ public class HistorialPuntosControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("2/6 - Enviando historial...");
+            pDialog.setTitle("SINCRONIZANDO");
+            pDialog.setMessage("2/" + TOTAL_ASYNCTASKS +
+                    " - Enviando historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -140,8 +144,8 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
-                TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
+                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
+                tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }
@@ -166,7 +170,9 @@ public class HistorialPuntosControlador {
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("6/6 - Recibiendo historial...");
+            pDialog.setTitle("SINCRONIZANDO");
+            pDialog.setMessage(TOTAL_ASYNCTASKS + "/" + TOTAL_ASYNCTASKS +
+                    " - Recibiendo historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -242,7 +248,7 @@ public class HistorialPuntosControlador {
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "6/6 - Se copio el historial con exito");
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
-                if (LoginActivity.usuario.getBandera_modulo_presion() == PRIMER_INICIO_MODULO_PRESION) {
+                if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO_PRESION) {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
                 }
                 usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
