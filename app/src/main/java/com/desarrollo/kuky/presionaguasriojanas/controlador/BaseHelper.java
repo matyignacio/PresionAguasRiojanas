@@ -143,6 +143,7 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  serv varchar(45) DEFAULT NULL," +
             "  estado tinyint(4) DEFAULT '0'," +
             "  reclama varchar(45) DEFAULT NULL," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
             "  PRIMARY KEY (id,id_usuario) )";
 
     public String getSqlTablaUsuarios() {

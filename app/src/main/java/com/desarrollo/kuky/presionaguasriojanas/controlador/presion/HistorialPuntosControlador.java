@@ -10,7 +10,7 @@ import android.util.Log;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.ClienteControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.Orden;
@@ -144,8 +144,8 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
-                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
-                tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
+                ClienteControlador clienteControlador = new ClienteControlador();
+                clienteControlador.sincronizarDeSqliteToMysql(a);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }

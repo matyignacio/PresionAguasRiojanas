@@ -34,7 +34,7 @@ public class TipoServicioControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("4/" + TOTAL_ASYNCTASKS +
+            pDialog.setMessage("7/" + TOTAL_ASYNCTASKS +
                     " - Recibiendo tipos de servicios...");
             pDialog.setCancelable(false);
             pDialog.show();

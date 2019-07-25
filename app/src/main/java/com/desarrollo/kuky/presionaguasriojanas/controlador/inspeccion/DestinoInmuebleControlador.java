@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.TipoPuntoControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
 
 import java.sql.Connection;
@@ -35,7 +34,7 @@ public class DestinoInmuebleControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("5/" + TOTAL_ASYNCTASKS +
+            pDialog.setMessage("8/" + TOTAL_ASYNCTASKS +
                     " - Recibiendo destino de inmuebles...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -94,8 +93,8 @@ public class DestinoInmuebleControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
+                ClienteControlador clienteControlador = new ClienteControlador();
+                clienteControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkDestinoInmueble");
             }

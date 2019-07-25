@@ -12,9 +12,11 @@ public class MapActivityControlador {
          * ORDEN:
          *  puntoPresionControlador.sincronizarDeSqliteToMysql(a)
          *  historialPuntosControlador.sincronizarDeSqliteToMysql(a)
+         *  clienteControlador.sincronizarDeSqliteToMysql(a)
          *  tipoInmueble.sincronizarDeMysqlToSqlite(a)
          *  tipoServicio.sincronizarDeMysqlToSqlite(a)
          *  destinoInmueble.sincronizarDeMysqlToSqlite(a)
+         *  clienteControlador.sincronizarDeMysqlToSqlite(a)
          *  tipoPuntoControlador.sincronizarDeMysqlToSqlite(a)
          *  ordenControlador.sincronizarDeMysqlToSqlite(a)
          *  puntoPresionControlador.sincronizarDeMysqlToSqlite(a)
