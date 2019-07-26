@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
+
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class FormClienteInspeccionFragment extends Fragment {
     EditText etRazonSocial, etTelefono, etDireccion,
@@ -41,8 +44,9 @@ public class FormClienteInspeccionFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
+        InspeccionActivity.cliente = new Cliente();
         etRazonSocial = getActivity().findViewById(R.id.etRazonSocial);
         etBarrio = getActivity().findViewById(R.id.etBarrio);
         etDireccion = getActivity().findViewById(R.id.etDireccion);
@@ -55,6 +59,80 @@ public class FormClienteInspeccionFragment extends Fragment {
         etMedidorLuz = getActivity().findViewById(R.id.etMedidorLuz);
         etTramite = getActivity().findViewById(R.id.etTramite);
         etUnidad = getActivity().findViewById(R.id.etUnidad);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        rellenarCliente();
+    }
+
+    private void rellenarCliente() {
+        try {
+            InspeccionActivity.cliente.setRazonSocial(etRazonSocial.getText().toString());
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setBarrio(etBarrio.getText().toString());
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setDireccion(etDireccion.getText().toString());
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setEstado(Boolean.valueOf(etEstado.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setMedidorAgua(Integer.parseInt(etMedidorAgua.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setNis(Integer.parseInt(etNis.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setTelefono(Long.parseLong(etTelefono.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setServ(etServ.getText().toString());
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setReclama(etReclama.getText().toString());
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setMedidorLuz(Integer.parseInt(etMedidorLuz.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setTramite(Integer.parseInt(etTramite.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
+        try {
+            InspeccionActivity.cliente.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
+        } catch (Exception e) {
+            mostrarMensajeLog(getActivity(), e.toString());
+        }
     }
 }

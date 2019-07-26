@@ -16,6 +16,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.Orden;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 
 import java.sql.Connection;
@@ -42,7 +43,6 @@ public class HistorialPuntosControlador {
 
     private ArrayList<HistorialPuntos> historiales;
     private ProgressDialog pDialog;
-
 
     private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
 
@@ -157,7 +157,7 @@ public class HistorialPuntosControlador {
             SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncSqliteToMysql HPC" + e.toString());
+            mostrarMensaje(a, "Error SyncSqliteToMysql HPC" + e.toString());
         }
     }
 
@@ -252,13 +252,15 @@ public class HistorialPuntosControlador {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
                 }
                 usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
-                if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity")) {
+                if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity")) {
+                    logOut(a);
+                } else if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity")) {
                     mostrarMensaje(a, "Se sincronizo con exito!");
                     abrirActivity(a, MapActivity.class);
                 } else {
-                    logOut(a);
+                    mostrarMensaje(a, "Se sincronizo con exito!");
+                    abrirActivity(a, InspeccionActivity.class);
                 }
-
             } else {
                 mostrarMensaje(a, "Error en el checkHistorial");
             }

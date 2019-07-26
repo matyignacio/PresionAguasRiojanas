@@ -82,7 +82,7 @@
     <string name="hint_medidor_de_luz">Medidor de Luz</string>
     <string name="hint_reclama">Reclama</string>
     <string name="tv_caracteristicas_del_inmueble">CARACTERISTICAS DEL INMUEBLE</string>
-    <string name="tv_tipo_de_inmueble">Tipo de tipoInmueble</string>
+    <string name="tv_tipo_de_inmueble">Tipo de Inmueble</string>
     <string name="tv_destino">Destino</string>
     <string name="tv_coeficiente_zonal">Coeficiente zonal</string>
     <string name="tv_tipo_de_servicio">Tipo de servicio</string>

@@ -2,6 +2,7 @@ package com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion;
 
 public class DatosRelevados {
     private int id;
+    private String id_usuario;
     private int unidad;
     private boolean estado;
     private boolean medida;
@@ -64,6 +65,14 @@ public class DatosRelevados {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(String id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public Inspeccion getInspeccion() {

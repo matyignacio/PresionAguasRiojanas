@@ -4,6 +4,13 @@ public class TipoInmueble {
     private int id;
     private String nombre;
 
+    public TipoInmueble() {
+    }
+
+    public TipoInmueble(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

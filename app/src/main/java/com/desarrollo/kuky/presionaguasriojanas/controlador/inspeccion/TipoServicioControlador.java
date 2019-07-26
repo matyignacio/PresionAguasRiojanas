@@ -107,7 +107,7 @@ public class TipoServicioControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite TSC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite TSC" + e.toString());
         }
     }
 

@@ -193,6 +193,8 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("destino_inmueble"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_servicio"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("cliente"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("inspeccion"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("datos_relevados"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("orden"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("historial_puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("puntos_presion"));
@@ -202,6 +204,8 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaDestinoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoServicio());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaCliente());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaInspeccion());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaDatosRelevados());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaOrden());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaHistorialPuntosPresion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaPuntosPresion());

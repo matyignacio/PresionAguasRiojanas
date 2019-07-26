@@ -115,7 +115,7 @@ public class OrdenControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite OC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite OC" + e.toString());
         }
     }
 

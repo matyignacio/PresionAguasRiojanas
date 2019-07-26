@@ -94,35 +94,20 @@ public class InicioActivity extends AppCompatActivity
                         return null;
                     }
             );
-        } else if (id == R.id.action_sync) {
-            Util.showDialog(this,
-                    R.layout.dialog_sincronizar,
-                    "sincronizar",
-                    () -> {
-                        sincronizar();
-                        return null;
-                    }
-            );
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void sincronizar() {
-        MapActivityControlador mapActivityControlador = new MapActivityControlador();
-        if (mapActivityControlador.sync(this) == EXITOSO) {
-        }
-    }
 
     private void evaluarUsuario() {
-        boolean prueba = false;
+        boolean prueba = true;
         if (prueba) {
-            bModuloInspeccion.setEnabled(true);
+            bModuloInspeccion.setVisibility(View.VISIBLE);
             bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo);
         } else {
-            bModuloInspeccion.setEnabled(false);
+            bModuloInspeccion.setVisibility(View.INVISIBLE);
             bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo_disabled);
         }
     }

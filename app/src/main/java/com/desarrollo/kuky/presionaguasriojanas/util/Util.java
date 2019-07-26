@@ -36,15 +36,15 @@ import java.util.concurrent.Callable;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-    public static final String DATA_BASE = "c1370466_aguas_out";
-    public static final String HOST = "66.97.39.77";
-    public static final String USER = "c1370466_consu";
-    public static final String CLAVE = "Consulta963";
-    //    public static final String DATA_BASE = "presion_aguas";
-//    public static final String HOST = "192.168.1.46";
-//    public static final String USER = "root";
-//    public static final String CLAVE = "root";
-//    public static final String DATA_BASE = "u101901458_presi";
+    //    public static final String DATA_BASE = "c1370466_aguas_out";
+//    public static final String HOST = "66.97.39.77";
+//    public static final String USER = "c1370466_consu";
+//    public static final String CLAVE = "Consulta963";
+    public static final String DATA_BASE = "presion_aguas";
+    public static final String HOST = "192.168.1.46";
+    public static final String USER = "root";
+    public static final String CLAVE = "root";
+    //    public static final String DATA_BASE = "u101901458_presi";
 //    public static final String HOST = "sql200.main-hosting.eu";
 //    public static final String USER = "u101901458_matia";
 //    public static final String CLAVE = "Miseignacio11";
@@ -73,7 +73,7 @@ public class Util {
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAXIMO_CIRCUITO = 2;
-    public static final int TOTAL_ASYNCTASKS = 13;
+    public static final int TOTAL_ASYNCTASKS = 15;
     private static final int MAXIMA_MEDICION = 20;
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String font_primary_path = "font/font_primary.ttf";
@@ -130,6 +130,10 @@ public class Util {
 
     public static void mostrarMensaje(Context c, String mensaje) {
         Toast.makeText(c, mensaje, Toast.LENGTH_SHORT).show();
+        Log.e("MOSTRARMENSAJE:::", mensaje);
+    }
+
+    public static void mostrarMensajeLog(Context c, String mensaje) {
         Log.e("MOSTRARMENSAJE:::", mensaje);
     }
 

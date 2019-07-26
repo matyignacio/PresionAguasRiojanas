@@ -107,7 +107,7 @@ public class TipoInmuebleControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite TIC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite TIC" + e.toString());
         }
     }
 

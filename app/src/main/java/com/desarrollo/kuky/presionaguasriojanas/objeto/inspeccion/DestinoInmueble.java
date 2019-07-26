@@ -4,6 +4,13 @@ public class DestinoInmueble {
     private int id;
     private String nombre;
 
+    public DestinoInmueble() {
+    }
+
+    public DestinoInmueble(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

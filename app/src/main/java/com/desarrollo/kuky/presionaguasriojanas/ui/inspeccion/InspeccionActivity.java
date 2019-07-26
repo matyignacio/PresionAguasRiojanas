@@ -11,14 +11,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.MapActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
 import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.NuevaPresionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
@@ -32,6 +44,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
@@ -44,10 +60,17 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
-public class InspeccionActivity extends AppCompatActivity {
+public class InspeccionActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     /**
      * LAS DEFINICIONES ESTATICAS QUE NECESITO PARA LOS FRAGMENTOS
      */
+    public static List<String> labelsTipoInmueble = new ArrayList<>();
+    public static List<String> labelsTipoServicio = new ArrayList<>();
+    public static List<String> labelsDestino = new ArrayList<>();
+    public static Cliente cliente;
+    public static Inspeccion inspeccion;
+    public static ArrayList<DatosRelevados> datosRelevados;
     public static FormClienteInspeccionFragment formClienteInspeccionFragment = new FormClienteInspeccionFragment();
     public static FormInmuebleInspeccionFragment formInmuebleInspeccionFragment = new FormInmuebleInspeccionFragment();
     public static FormObservacionesInspeccionFragment formObservacionesInspeccionFragment = new FormObservacionesInspeccionFragment();
@@ -89,11 +112,27 @@ public class InspeccionActivity extends AppCompatActivity {
         setPrimaryFontBold(this, bGuardarInspeccion);
         setPrimaryFontBold(this, bNuevaInspeccion);
         /************************/
-        bNuevaInspeccion.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
+        subTitle.setText(LoginActivity.usuario.getNombre());
+        /************************/
+        bNuevaInspeccion.setOnClickListener(v -> {
+            posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
+            /************************/
+            request_permissions();
+        });
         bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario));
         bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLInspeccion, posicionFormulario));
-        /************************/
-        request_permissions();
     }
 
     @Override
@@ -105,7 +144,6 @@ public class InspeccionActivity extends AppCompatActivity {
                 formObservacionesInspeccionFragment.isVisible()) {
             mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
         } else {
-            stopLocationUpdates();
             abrirActivity(this, InicioActivity.class);
         }
     }
@@ -321,6 +359,7 @@ public class InspeccionActivity extends AppCompatActivity {
                 setOffButtonsFragment();
                 posicionFormulario--;
                 cerrarFragmento(a, formClienteInspeccionFragment);
+                stopLocationUpdates();
                 break;
             case 2:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
@@ -371,4 +410,29 @@ public class InspeccionActivity extends AppCompatActivity {
         bNuevaInspeccion.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if (id == R.id.action_sync) {
+            Util.showDialog(this,
+                    R.layout.dialog_sincronizar,
+                    "sincronizar",
+                    () -> {
+                        sincronizar();
+                        return null;
+                    }
+            );
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void sincronizar() {
+        MapActivityControlador mapActivityControlador = new MapActivityControlador();
+        if (mapActivityControlador.sync(this) == EXITOSO) {
+        }
+    }
 }

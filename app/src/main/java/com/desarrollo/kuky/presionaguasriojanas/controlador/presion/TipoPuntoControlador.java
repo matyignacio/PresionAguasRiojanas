@@ -109,7 +109,7 @@ public class TipoPuntoControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite TPC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite TPC" + e.toString());
         }
     }
 

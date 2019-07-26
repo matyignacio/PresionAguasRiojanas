@@ -44,6 +44,8 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaDestinoInmueble);
         sqLiteDatabase.execSQL(sqlTablaTipoServicio);
         sqLiteDatabase.execSQL(sqlTablaCliente);
+        sqLiteDatabase.execSQL(sqlTablaInspeccion);
+        sqLiteDatabase.execSQL(sqlTablaDatosRelevados);
     }
 
     @Override
@@ -146,6 +148,38 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  pendiente int(1) NOT NULL DEFAULT '1'," +
             "  PRIMARY KEY (id,id_usuario) )";
 
+    private String sqlTablaInspeccion = "CREATE TABLE IF NOT EXISTS inspeccion (" +
+            "  id int(11) NOT NULL," +
+            "  id_usuario char(10) NOT NULL," +
+            "  id_cliente int(11) DEFAULT NULL," +
+            "  id_usuario_cliente char(10) NOT NULL," +
+            "  id_tipo_inmueble int(11) DEFAULT NULL," +
+            "  id_destino_inmueble int(11) DEFAULT NULL," +
+            "  id_tipo_servicio int(11) DEFAULT NULL," +
+            "  servicio_cloacal tinyint(4) NOT NULL DEFAULT '0'," +
+            "  coeficiente_zonal float NOT NULL DEFAULT '1'," +
+            "  latitiud double NOT NULL," +
+            "  longitud double NOT NULL," +
+            "  latitud_usuario double NOT NULL," +
+            "  longitud_usuario double NOT NULL," +
+            "  observaciones longtext," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  PRIMARY KEY (id,id_usuario))";
+
+    private String sqlTablaDatosRelevados = "CREATE TABLE IF NOT EXISTS datos_relevados (" +
+            "  id int(11) NOT NULL," +
+            "  id_usuario char(10) NOT NULL," +
+            "  unidad int(10) NOT NULL," +
+            "  estado tinyint(4) NOT NULL DEFAULT '0'," +
+            "  medida tinyint(4) DEFAULT '0'," +
+            "  med_agua int(10) DEFAULT NULL," +
+            "  med_luz int(10) DEFAULT NULL," +
+            "  nis int(10) DEFAULT NULL," +
+            "  id_inpseccion int(11) DEFAULT NULL," +
+            "  id_usuario_inspeccion char(10) DEFAULT NULL," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  PRIMARY KEY (id,id_usuario))";
+
     public String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
     }
@@ -180,5 +214,13 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaCliente() {
         return sqlTablaCliente;
+    }
+
+    public String getSqlTablaInspeccion() {
+        return sqlTablaInspeccion;
+    }
+
+    public String getSqlTablaDatosRelevados() {
+        return sqlTablaDatosRelevados;
     }
 }

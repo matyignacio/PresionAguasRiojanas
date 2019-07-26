@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.util.Lists;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity.bSiguienteFragmento;
@@ -51,9 +50,6 @@ public class FormDatosInspeccionFragment extends Fragment {
         params.setMargins(0, 15, 0, 15);
         //Setear los parametros al view
         view.setLayoutParams(params);
-        /** SETEO LISTAS QUE VOY A USAR EN EL FORM*/
-        Lists.formDatosRelevados();
-        /************************************************/
         return view;
     }
 

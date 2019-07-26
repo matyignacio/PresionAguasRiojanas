@@ -13,17 +13,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.siguienteFragmento;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class FormMapaInspeccionFragment extends Fragment {
 
     MapView mMapView;
+    Marker marcador;
     private GoogleMap googleMap;
 
     @Override
@@ -60,9 +63,14 @@ public class FormMapaInspeccionFragment extends Fragment {
             LatLng centroMapa = new LatLng(latitud, longitud);
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(centroMapa));
             googleMap.setOnMapClickListener(point -> {
-                //mostrarMensaje(getActivity(), point.toString());
-                InspeccionActivity.posicionFormulario++;
-                siguienteFragmento(getActivity(), R.id.LLInspeccion, this, InspeccionActivity.formDatosInspeccionFragment);
+                try {
+                    marcador.remove();
+                } catch (Exception e) {
+                    mostrarMensajeLog(getActivity(), e.toString());
+                }
+                marcador = googleMap.addMarker(new MarkerOptions()
+                        .position(point));
+                mostrarMensajeLog(getActivity(), marcador.getPosition().toString());
             });
         });
 
@@ -73,14 +81,12 @@ public class FormMapaInspeccionFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-        InspeccionActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        InspeccionActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
     }
 
     @Override

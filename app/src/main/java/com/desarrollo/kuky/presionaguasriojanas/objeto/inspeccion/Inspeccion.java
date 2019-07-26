@@ -1,11 +1,35 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion;
 
 public class Inspeccion {
+    private int id;
+    private String id_usuario;
     private Cliente cliente;
     private TipoInmueble tipoInmueble;
     private DestinoInmueble destinoInmueble;
     private TipoServicio tipoServicio;
+    private boolean servicioCloacal;
+    private float coeficienteZonal;
+    private double latitud;
+    private double longitud;
+    private double latitudUsuario;
+    private double longitudUsuario;
     private String observaciones;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(String id_usuario) {
+        this.id_usuario = id_usuario;
+    }
 
     public Cliente getCliente() {
         return cliente;
@@ -37,6 +61,54 @@ public class Inspeccion {
 
     public void setTipoServicio(TipoServicio tipoServicio) {
         this.tipoServicio = tipoServicio;
+    }
+
+    public boolean isServicioCloacal() {
+        return servicioCloacal;
+    }
+
+    public void setServicioCloacal(boolean servicioCloacal) {
+        this.servicioCloacal = servicioCloacal;
+    }
+
+    public float getCoeficienteZonal() {
+        return coeficienteZonal;
+    }
+
+    public void setCoeficienteZonal(float coeficienteZonal) {
+        this.coeficienteZonal = coeficienteZonal;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
+    public double getLatitudUsuario() {
+        return latitudUsuario;
+    }
+
+    public void setLatitudUsuario(double latitudUsuario) {
+        this.latitudUsuario = latitudUsuario;
+    }
+
+    public double getLongitudUsuario() {
+        return longitudUsuario;
+    }
+
+    public void setLongitudUsuario(double longitudUsuario) {
+        this.longitudUsuario = longitudUsuario;
     }
 
     public String getObservaciones() {

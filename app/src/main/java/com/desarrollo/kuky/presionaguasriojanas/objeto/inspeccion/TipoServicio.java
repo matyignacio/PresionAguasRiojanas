@@ -4,6 +4,13 @@ public class TipoServicio {
     private int id;
     private String nombre;
 
+    public TipoServicio() {
+    }
+
+    public TipoServicio(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

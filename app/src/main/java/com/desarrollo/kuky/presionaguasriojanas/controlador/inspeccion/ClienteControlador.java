@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.TipoPuntoControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 
 import java.sql.Connection;
@@ -66,6 +65,7 @@ public class ClienteControlador {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
+                    int estado = clientes.get(i).isEstado() ? 1 : 0;
                     PreparedStatement ps;
                     consultaSql = "INSERT INTO cliente" +
                             " (id, id_usuario, razon_social, direccion, barrio," +
@@ -84,7 +84,7 @@ public class ClienteControlador {
                             "'" + clientes.get(i).getMedidorLuz() + "', " +
                             "'" + clientes.get(i).getTramite() + "', " +
                             "'" + clientes.get(i).getServ() + "', " +
-                            "'" + clientes.get(i).isEstado() + "', " +
+                            "'" + estado + "', " +
                             "'" + clientes.get(i).getReclama() + "');";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
@@ -126,10 +126,10 @@ public class ClienteControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "2/6 - Se enviaron los clientes con exito");
-                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
-                tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
+                InspeccionControlador inspeccionControlador = new InspeccionControlador();
+                inspeccionControlador.sincronizarDeSqliteToMysql(a);
             } else {
-                mostrarMensaje(a, "Error en el checkHistorialToMysql");
+                mostrarMensaje(a, "Error en el checkClientesToMysql");
             }
         }
     }
@@ -197,7 +197,8 @@ public class ClienteControlador {
                             rs.getInt(11) + "','" + //tramite
                             rs.getString(12) + "','" + //serv
                             rs.getInt(13) + "','" + //estado
-                            rs.getString(14) + "');"; // reclama
+                            rs.getString(14) + "','" + //reclama
+                            "0');"; // pendiente
                     db.execSQL(sql);
                 }
                 check++;
@@ -224,8 +225,8 @@ public class ClienteControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
+                InspeccionControlador inspeccionControlador = new InspeccionControlador();
+                inspeccionControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkCliente");
             }
@@ -238,7 +239,7 @@ public class ClienteControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite CC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite CC" + e.toString());
         }
     }
 

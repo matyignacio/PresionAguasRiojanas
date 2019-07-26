@@ -4,7 +4,7 @@ public class Cliente {
     private int id;
     private String id_usuario;
     private String razonSocial;
-    private int telefono;
+    private long telefono;
     private String direccion;
     private String barrio;
     private int unidad;
@@ -15,6 +15,13 @@ public class Cliente {
     private boolean estado;
     private int medidorLuz;
     private String reclama;
+
+    public Cliente() {
+    }
+
+    public Cliente(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;
@@ -40,11 +47,11 @@ public class Cliente {
         this.razonSocial = razonSocial;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
