@@ -87,7 +87,9 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  fecha timestamp DEFAULT (datetime('now','localtime'))," +
             "  id_punto_presion int(11) DEFAULT NULL," +
             "  id_usuario char(10) DEFAULT NULL," +
-            "  id_usuario_historial char(10) DEFAULT NULL"
+            "  id_usuario_historial char(10) DEFAULT NULL," +
+            "  cloro float DEFAULT NULL," +
+            "  muestra varchar(45) DEFAULT NULL"
             + ")";
 
     private String sqlTablaTipoPunto = "CREATE TABLE IF NOT EXISTS tipo_punto (" +

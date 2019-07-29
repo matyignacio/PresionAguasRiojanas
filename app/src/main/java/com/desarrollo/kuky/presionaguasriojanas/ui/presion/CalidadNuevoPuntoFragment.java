@@ -15,14 +15,13 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
-public class ControlCalidadFragment extends Fragment {
+public class CalidadNuevoPuntoFragment extends Fragment {
     private EditText etCloro, etMuestra;
     private CheckBox cbMuestra;
-    private Button bCancelar, bAceptar;
     public Calidad calidad = new Calidad();
 
 
-    public ControlCalidadFragment() {
+    public CalidadNuevoPuntoFragment() {
         // Required empty public constructor
     }
 
@@ -31,7 +30,7 @@ public class ControlCalidadFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_control_calidad, container, false);
+        View view = inflater.inflate(R.layout.fragment_calidad_nuevo_punto, container, false);
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -48,8 +47,8 @@ public class ControlCalidadFragment extends Fragment {
     public void onStart() {
         super.onStart();
         etCloro = getActivity().findViewById(R.id.etCloro);
-        bAceptar = getActivity().findViewById(R.id.bAceptar);
-        bCancelar = getActivity().findViewById(R.id.bCancelar);
+        Button bAceptar = getActivity().findViewById(R.id.bAceptar);
+        Button bCancelar = getActivity().findViewById(R.id.bCancelar);
         etMuestra = getActivity().findViewById(R.id.etMuestra);
         cbMuestra = getActivity().findViewById(R.id.cbMuestra);
         /** SETEAMOS LOS TYPEFACES*/
@@ -98,19 +97,19 @@ public class ControlCalidadFragment extends Fragment {
         float cloro;
         String muestra;
 
-        public float getCloro() {
+        float getCloro() {
             return cloro;
         }
 
-        public void setCloro(float cloro) {
+        void setCloro(float cloro) {
             this.cloro = cloro;
         }
 
-        public String getMuestra() {
+        String getMuestra() {
             return muestra;
         }
 
-        public void setMuestra(String muestra) {
+        void setMuestra(String muestra) {
             this.muestra = muestra;
         }
     }

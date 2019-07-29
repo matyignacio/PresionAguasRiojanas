@@ -12,6 +12,8 @@ public class HistorialPuntos {
     private Timestamp fecha;
     private PuntoPresion puntoPresion;
     private Usuario usuario;
+    private float cloro;
+    private String muestra;
 
     public Integer getId() {
         return id;
@@ -67,5 +69,21 @@ public class HistorialPuntos {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public float getCloro() {
+        return cloro;
+    }
+
+    public void setCloro(float cloro) {
+        this.cloro = cloro;
+    }
+
+    public String getMuestra() {
+        return muestra;
+    }
+
+    public void setMuestra(String muestra) {
+        this.muestra = muestra;
     }
 }

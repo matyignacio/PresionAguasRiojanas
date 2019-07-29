@@ -39,8 +39,6 @@ import com.google.android.gms.location.SettingsClient;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
@@ -66,7 +64,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private static final String TAG = NuevoPuntoActivity.class.getSimpleName();
     public static Button bEnviarNuevoPunto;
     public static CheckBox cbCalidad;
-    private ControlCalidadFragment controlCalidadFragment = new ControlCalidadFragment();
+    private CalidadNuevoPuntoFragment calidadNuevoPuntoFragment = new CalidadNuevoPuntoFragment();
 
     // bunch of location related apis
     private FusedLocationProviderClient mFusedLocationClient;
@@ -87,7 +85,6 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_punto);
-        ButterKnife.bind(this);
         cbCalidad = findViewById(R.id.cbCalidad);
         bEnviarNuevoPunto = findViewById(R.id.bEnviarNuevoPunto);
         etUnidad = findViewById(R.id.etUnidad);
@@ -125,7 +122,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         }
         cbCalidad.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                abrirFragmento(this, R.id.rlNuevoPunto, controlCalidadFragment);
+                abrirFragmento(this, R.id.rlNuevoPunto, calidadNuevoPuntoFragment);
                 setEnabledInputs(false);
             } else {
                 setEnabledInputs(true);
@@ -136,9 +133,9 @@ public class NuevoPuntoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (controlCalidadFragment.isVisible()) {
+        if (calidadNuevoPuntoFragment.isVisible()) {
             cbCalidad.setChecked(false);
-            Util.cerrarFragmento(this, controlCalidadFragment);
+            Util.cerrarFragmento(this, calidadNuevoPuntoFragment);
         } else {
             stopLocationUpdates();
             abrirActivity(this, MapActivity.class);
@@ -246,8 +243,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                     puntoPresion.setUnidad(0);
                     puntoPresion.setUnidad2(0);
                 }
-                puntoPresion.setCloro(controlCalidadFragment.calidad.getCloro());
-                puntoPresion.setMuestra(controlCalidadFragment.calidad.getMuestra());
+                puntoPresion.setCloro(calidadNuevoPuntoFragment.calidad.getCloro());
+                puntoPresion.setMuestra(calidadNuevoPuntoFragment.calidad.getMuestra());
                 // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
                 // EDIT COMENTARIO ANTERIOR, ACA SE ASIGNA EL ID AL TIPO DE PUNTO
                 tipoPunto.setId(getPreference(NuevoPuntoActivity.this, TIPO_MAPA, MAPA_RECORRIDO));

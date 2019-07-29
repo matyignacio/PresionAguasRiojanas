@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -38,9 +39,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
@@ -49,6 +47,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_S
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
@@ -57,8 +56,9 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarPresion;
 
 public class NuevaPresionActivity extends AppCompatActivity {
     private static final String TAG = NuevaPresionActivity.class.getSimpleName();
-    @BindView(R.id.bEnviarMediicion)
-    Button bEnviarMedicion;
+    private CalidadNuevaMedicionFragment calidadNuevaMedicionFragment = new CalidadNuevaMedicionFragment();
+    public static CheckBox cbCalidad;
+    public static Button bEnviarMedicion;
 
     // bunch of location related apis
     private FusedLocationProviderClient mFusedLocationClient;
@@ -76,21 +76,35 @@ public class NuevaPresionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_presion);
-        ButterKnife.bind(this);
+        cbCalidad = findViewById(R.id.cbCalidad);
+        bEnviarMedicion = findViewById(R.id.bEnviarMediicion);
         etPresion = findViewById(R.id.etPresion);
         inputs.add(etPresion);
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, etPresion);
         setPrimaryFontBold(this, bEnviarMedicion);
         /**************************/
+        cbCalidad.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                abrirFragmento(this, R.id.rlNuevaMedicion, calidadNuevaMedicionFragment);
+                setEnabledInputs(false);
+            } else {
+                setEnabledInputs(true);
+            }
+        });
         request_permissions();
     }
 
     @Override
     public void onBackPressed() {
         /* LO QUE HACE CUANDO VUELVA*/
-        stopLocationUpdates();
-        abrirActivity(this, PuntoPresionActivity.class);
+        if (calidadNuevaMedicionFragment.isVisible()) {
+            cbCalidad.setChecked(false);
+            Util.cerrarFragmento(this, calidadNuevaMedicionFragment);
+        } else {
+            stopLocationUpdates();
+            abrirActivity(this, PuntoPresionActivity.class);
+        }
     }
 
     private void init() {
@@ -191,6 +205,8 @@ public class NuevaPresionActivity extends AppCompatActivity {
                 historialPuntos.setLongitud(mCurrentLocation.getLongitude());
                 historialPuntos.setPresion(Float.parseFloat(etPresion.getText().toString()));
                 historialPuntos.setPuntoPresion(puntoPresion);
+                historialPuntos.setCloro(calidadNuevaMedicionFragment.calidad.getCloro());
+                historialPuntos.setMuestra(calidadNuevaMedicionFragment.calidad.getMuestra());
                 historialPuntos.setUsuario(LoginActivity.usuario);
                 // INSERTAMOS EL NUEVO REGISTRO
                 historialPuntosControlador.insertar(historialPuntos, this);
@@ -274,5 +290,11 @@ public class NuevaPresionActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void setEnabledInputs(boolean enabled) {
+        cbCalidad.setEnabled(enabled);
+        etPresion.setEnabled(enabled);
+        bEnviarMedicion.setEnabled(enabled);
     }
 }

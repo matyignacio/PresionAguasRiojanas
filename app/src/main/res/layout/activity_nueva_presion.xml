@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlNuevaMedicion"
     style="@style/layout_primary"
     tools:context=".ui.presion.NuevaPresionActivity">
 
@@ -8,7 +9,6 @@
         android:id="@+id/etPresion"
         style="@style/et_primary"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
         android:hint="@string/tv_presion"
         android:inputType="numberDecimal" />
 
@@ -20,12 +20,21 @@
         android:paddingRight="10dp"
         android:text="@string/tv_mca" />
 
+    <CheckBox
+        android:id="@+id/cbCalidad"
+        style="@style/et_primary"
+        android:layout_below="@+id/etPresion"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp"
+        android:text="@string/cb_control_de_calidad" />
+
     <Button
         android:id="@+id/bEnviarMediicion"
         style="@style/b_primary"
-        android:layout_below="@id/etPresion"
+        android:layout_below="@id/cbCalidad"
         android:layout_alignStart="@id/etPresion"
         android:layout_alignEnd="@id/etPresion"
+        android:layout_marginTop="15dp"
         android:drawableEnd="@drawable/ic_save_white_24dp"
         android:text="@string/b_enviar_medicion" />
 
