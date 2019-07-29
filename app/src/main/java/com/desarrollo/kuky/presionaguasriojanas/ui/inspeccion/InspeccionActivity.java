@@ -25,7 +25,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.MapActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.InspeccionActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
@@ -127,7 +127,7 @@ public class InspeccionActivity extends AppCompatActivity
         subTitle.setText(LoginActivity.usuario.getNombre());
         /************************/
         bNuevaInspeccion.setOnClickListener(v -> {
-            posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
+
             /************************/
             request_permissions();
         });
@@ -149,6 +149,7 @@ public class InspeccionActivity extends AppCompatActivity
     }
 
     private void init() {
+        posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
@@ -342,7 +343,7 @@ public class InspeccionActivity extends AppCompatActivity
                             return null;
                         },
                         () -> {
-                            this.posicionFormulario--;
+                            InspeccionActivity.posicionFormulario--;
                             bSiguienteFragmento.setVisibility(View.VISIBLE);
                             return null;
                         }
@@ -431,8 +432,8 @@ public class InspeccionActivity extends AppCompatActivity
     }
 
     private void sincronizar() {
-        MapActivityControlador mapActivityControlador = new MapActivityControlador();
-        if (mapActivityControlador.sync(this) == EXITOSO) {
+        InspeccionActivityControlador inspeccionActivityControlador = new InspeccionActivityControlador();
+        if (inspeccionActivityControlador.sync(this) == EXITOSO) {
         }
     }
 }

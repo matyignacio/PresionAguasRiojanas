@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class ClienteControlador {
@@ -37,8 +36,8 @@ public class ClienteControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("3/" + TOTAL_ASYNCTASKS +
-                    " - Enviando clientes...");
+            pDialog.setMessage("1/" +
+                    "9 - Enviando clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -134,12 +133,14 @@ public class ClienteControlador {
         }
     }
 
-    public void sincronizarDeSqliteToMysql(Activity a) {
+    public int sincronizarDeSqliteToMysql(Activity a) {
         try {
             SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
+            return EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, "Eror SyncSqliteToMysql CC" + e.toString());
+            return ERROR;
         }
     }
 
@@ -153,8 +154,8 @@ public class ClienteControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("9/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo clientes...");
+            pDialog.setMessage("7/" +
+                    "9 - Recibiendo clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

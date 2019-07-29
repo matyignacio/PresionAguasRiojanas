@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class OrdenControlador {
@@ -37,8 +36,8 @@ public class OrdenControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage((TOTAL_ASYNCTASKS - 2) + "/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo orden...");
+            pDialog.setMessage("4/" +
+                    "6 - Recibiendo orden...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

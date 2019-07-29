@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class TipoInmuebleControlador {
@@ -34,8 +33,8 @@ public class TipoInmuebleControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("6/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo tipos de inmuebles...");
+            pDialog.setMessage("4/" +
+                    "9 - Recibiendo tipos de inmuebles...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

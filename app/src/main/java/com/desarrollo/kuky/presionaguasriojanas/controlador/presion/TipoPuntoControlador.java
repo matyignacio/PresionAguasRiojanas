@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class TipoPuntoControlador {
@@ -35,8 +34,8 @@ public class TipoPuntoControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage((TOTAL_ASYNCTASKS - 3) + "/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo tipos de puntos...");
+            pDialog.setMessage("3/" +
+                    "6 - Recibiendo tipos de puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

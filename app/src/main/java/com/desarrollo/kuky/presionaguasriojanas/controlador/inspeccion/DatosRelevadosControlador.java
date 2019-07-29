@@ -10,8 +10,8 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.TipoPuntoControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class DatosRelevadosControlador {
@@ -40,8 +40,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("5/" + TOTAL_ASYNCTASKS +
-                    " - Enviando Datos relevados...");
+            pDialog.setMessage("3/" +
+                    "9 - Enviando Datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -151,8 +151,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("11/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo datos relevados...");
+            pDialog.setMessage("9/" +
+                    "9 - Recibiendo datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -219,8 +219,8 @@ public class DatosRelevadosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
+                mostrarMensaje(a, "Se sincronizo con exito!");
+                abrirActivity(a, InspeccionActivity.class);
             } else {
                 mostrarMensaje(a, "Error en el checkDatosRelevados");
             }

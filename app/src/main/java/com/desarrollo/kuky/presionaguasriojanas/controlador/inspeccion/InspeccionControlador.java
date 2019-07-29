@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TOTAL_ASYNCTASKS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class InspeccionControlador {
@@ -43,8 +42,8 @@ public class InspeccionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("4/" + TOTAL_ASYNCTASKS +
-                    " - Enviando Inspecciones...");
+            pDialog.setMessage("2/" +
+                    "9 - Enviando Inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -158,8 +157,8 @@ public class InspeccionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("10/" + TOTAL_ASYNCTASKS +
-                    " - Recibiendo inspecciones...");
+            pDialog.setMessage("8/" +
+                    "9 - Recibiendo inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

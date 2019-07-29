@@ -10,17 +10,12 @@ public class MapActivityControlador {
     public int sync(Activity a) {
         /**
          * ORDEN:
-         *  puntoPresionControlador.sincronizarDeSqliteToMysql(a)
-         *  historialPuntosControlador.sincronizarDeSqliteToMysql(a)
-         *  clienteControlador.sincronizarDeSqliteToMysql(a)
-         *  tipoInmueble.sincronizarDeMysqlToSqlite(a)
-         *  tipoServicio.sincronizarDeMysqlToSqlite(a)
-         *  destinoInmueble.sincronizarDeMysqlToSqlite(a)
-         *  clienteControlador.sincronizarDeMysqlToSqlite(a)
-         *  tipoPuntoControlador.sincronizarDeMysqlToSqlite(a)
-         *  ordenControlador.sincronizarDeMysqlToSqlite(a)
-         *  puntoPresionControlador.sincronizarDeMysqlToSqlite(a)
-         *  historialPuntosControlador.sincronizarDeMysqlToSqlite(a)
+         *  puntoPresionControlador.sincronizarDeSqliteToMysql(a) 1/6
+         *  historialPuntosControlador.sincronizarDeSqliteToMysql(a) 2/6
+         *  tipoPuntoControlador.sincronizarDeMysqlToSqlite(a) 3/6
+         *  ordenControlador.sincronizarDeMysqlToSqlite(a) 4/6
+         *  puntoPresionControlador.sincronizarDeMysqlToSqlite(a) 5/6
+         *  historialPuntosControlador.sincronizarDeMysqlToSqlite(a) 6/6
          * */
         int check = ERROR;
         PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
