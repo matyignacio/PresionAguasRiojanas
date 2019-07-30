@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion;
+package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.cliente;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class FormClienteInspeccionFragment extends Fragment {
@@ -46,7 +47,7 @@ public class FormClienteInspeccionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        InspeccionActivity.cliente = new Cliente();
+        cliente = new Cliente();
         etRazonSocial = getActivity().findViewById(R.id.etRazonSocial);
         etBarrio = getActivity().findViewById(R.id.etBarrio);
         etDireccion = getActivity().findViewById(R.id.etDireccion);
@@ -75,62 +76,62 @@ public class FormClienteInspeccionFragment extends Fragment {
 
     private void rellenarCliente() {
         try {
-            InspeccionActivity.cliente.setRazonSocial(etRazonSocial.getText().toString());
+            cliente.setRazonSocial(etRazonSocial.getText().toString());
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setBarrio(etBarrio.getText().toString());
+            cliente.setBarrio(etBarrio.getText().toString());
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setDireccion(etDireccion.getText().toString());
+            cliente.setDireccion(etDireccion.getText().toString());
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setEstado(Boolean.valueOf(etEstado.getText().toString()));
+            cliente.setEstado(Boolean.valueOf(etEstado.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setMedidorAgua(Integer.parseInt(etMedidorAgua.getText().toString()));
+            cliente.setMedidorAgua(Integer.parseInt(etMedidorAgua.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setNis(Integer.parseInt(etNis.getText().toString()));
+            cliente.setNis(Integer.parseInt(etNis.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setTelefono(Long.parseLong(etTelefono.getText().toString()));
+            cliente.setTelefono(Long.parseLong(etTelefono.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setServ(etServ.getText().toString());
+            cliente.setServ(etServ.getText().toString());
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setReclama(etReclama.getText().toString());
+            cliente.setReclama(etReclama.getText().toString());
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setMedidorLuz(Integer.parseInt(etMedidorLuz.getText().toString()));
+            cliente.setMedidorLuz(Integer.parseInt(etMedidorLuz.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setTramite(Integer.parseInt(etTramite.getText().toString()));
+            cliente.setTramite(Integer.parseInt(etTramite.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }
         try {
-            InspeccionActivity.cliente.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
+            cliente.setUnidad(Integer.parseInt(etUnidad.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(), e.toString());
         }

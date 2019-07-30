@@ -60,8 +60,10 @@ public class UsuarioControlador {
                     LoginActivity.usuario.setClave(rs.getString(4));
                     LoginActivity.usuario.setTipo(rs.getString(5));
                     LoginActivity.usuario.setActivo(rs.getString(6));
-                    LoginActivity.usuario.setBandera_modulo_presion(0);
-                    LoginActivity.usuario.setBandera_sync_modulo_presion(0);
+                    LoginActivity.usuario.setBanderaModuloPresion(0);
+                    LoginActivity.usuario.setBanderaSyncModuloPresion(0);
+                    LoginActivity.usuario.setBanderaModuloInspeccion(0);
+                    LoginActivity.usuario.setBanderaSyncModuloInspeccion(0);
                     guardarUsuario(a, LoginActivity.usuario);
                 } else {
                     LoginActivity.usuario.setNombre(null);
@@ -116,7 +118,9 @@ public class UsuarioControlador {
                     + u.getTipo() + "', '"
                     + u.getActivo() + "', '"
                     + u.getBanderaModuloPresion() + "', '"
-                    + u.getBandera_sync_modulo_presion() + "')";
+                    + u.getBanderaSyncModuloPresion() + "', '"
+                    + u.getBanderaModuloInspeccion() + "', '"
+                    + u.getBanderaSyncModuloInspeccion() + "')";
             db.execSQL(sql);
             db.close();
         } catch (Exception e) {
@@ -147,8 +151,10 @@ public class UsuarioControlador {
                 LoginActivity.usuario.setNombre(c.getString(1));
                 LoginActivity.usuario.setTipo(c.getString(4));
                 LoginActivity.usuario.setActivo(c.getString(5));
-                LoginActivity.usuario.setBandera_modulo_presion(c.getInt(6));
-                LoginActivity.usuario.setBandera_sync_modulo_presion(c.getInt(7));
+                LoginActivity.usuario.setBanderaModuloPresion(c.getInt(6));
+                LoginActivity.usuario.setBanderaSyncModuloPresion(c.getInt(7));
+                LoginActivity.usuario.setBanderaModuloInspeccion(c.getInt(8));
+                LoginActivity.usuario.setBanderaSyncModuloInspeccion(c.getInt(9));
                 return EXITOSO;
             }
             c.close();
@@ -167,7 +173,33 @@ public class UsuarioControlador {
                     bandera;
             bh.execSQL(sql);
             bh.close();
-            LoginActivity.usuario.setBandera_modulo_presion(bandera);
+            LoginActivity.usuario.setBanderaModuloPresion(bandera);
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, e.toString());
+        }
+    }
+
+    public void editarBanderaSyncModuloInspeccion(Activity a, int bandera) {
+        try {
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE susuario SET 'bandera_sync_modulo_inspeccion' = " +
+                    bandera;
+            bh.execSQL(sql);
+            bh.close();
+            LoginActivity.usuario.setBanderaSyncModuloInspeccion(bandera);
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, e.toString());
+        }
+    }
+
+    public void editarBanderaModuloInspeccion(Activity a, int bandera) {
+        try {
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE susuario SET  'bandera_modulo_inspeccion' =" +
+                    bandera;
+            bh.execSQL(sql);
+            bh.close();
+            LoginActivity.usuario.setBanderaModuloInspeccion(bandera);
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
         }
@@ -180,7 +212,7 @@ public class UsuarioControlador {
                     bandera;
             bh.execSQL(sql);
             bh.close();
-            LoginActivity.usuario.setBandera_sync_modulo_presion(bandera);
+            LoginActivity.usuario.setBanderaSyncModuloPresion(bandera);
         } catch (Exception e) {
             Util.mostrarMensaje(a, e.toString());
         }
@@ -199,6 +231,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("historial_puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_punto"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("susuario"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaDestinoInmueble());
@@ -210,6 +243,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaHistorialPuntosPresion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaPuntosPresion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoPunto());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
         db.close();
     }
 

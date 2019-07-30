@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/layout_primary"
-    tools:context=".ui.inspeccion.FormClienteInspeccionFragment">
+    tools:context=".ui.inspeccion.nuevainspeccionfragments.FormClienteInspeccionFragment">
 
     <RelativeLayout
         android:id="@+id/fDatos"

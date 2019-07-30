@@ -17,7 +17,7 @@
         style="@style/tv_primary"
         android:layout_alignEnd="@+id/etPresion"
         android:paddingTop="2dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:text="@string/tv_mca" />
 
     <CheckBox

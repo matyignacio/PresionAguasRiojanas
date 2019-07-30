@@ -30,8 +30,8 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -251,8 +251,8 @@ public class HistorialPuntosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
-                if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO_PRESION) {
-                    usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO_PRESION);
+                if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO) {
+                    usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO);
                 }
                 usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
                 if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity")) {

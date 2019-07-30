@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion;
+package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -13,11 +13,19 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.DestinoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoServicioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoServicio;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Lists;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.inspeccion;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsDestino;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsTipoInmueble;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsTipoServicio;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Lists.labelsCoeficienteZonal;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class FormInmuebleInspeccionFragment extends Fragment {
     Spinner sTipoInmueble, sDestino, sCoeficienteZonal, sTipoServicio;
@@ -54,21 +62,22 @@ public class FormInmuebleInspeccionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        inspeccion = new Inspeccion();
         /** SETEO LISTAS QUE VOY A USAR EN EL FORM*/
         Lists.formInmueble();
         /************************************************/
-        if (InspeccionActivity.labelsTipoInmueble.size() == 0) {
+        if (labelsTipoInmueble.size() == 0) {
             // SOLO CARGAMOS LAS LISTAS ESTATICAS UNA VEZ (LA PRIMERA)
             for (int i = 0; i < tipoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {
-                InspeccionActivity.labelsTipoInmueble.add(
+                labelsTipoInmueble.add(
                         tipoInmuebleControlador.extraerTodos(getActivity()).get(i).getNombre());
             }
             for (int i = 0; i < tipoServicioControlador.extraerTodos(getActivity()).size(); i++) {
-                InspeccionActivity.labelsTipoServicio.add(
+                labelsTipoServicio.add(
                         tipoServicioControlador.extraerTodos(getActivity()).get(i).getNombre());
             }
             for (int i = 0; i < destinoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {
-                InspeccionActivity.labelsDestino.add(
+                labelsDestino.add(
                         destinoInmuebleControlador.extraerTodos(getActivity()).get(i).getNombre());
             }
         }
@@ -88,24 +97,26 @@ public class FormInmuebleInspeccionFragment extends Fragment {
         Util.cargarSpinner(sTipoInmueble,
                 getActivity(),
                 1,
-                InspeccionActivity.labelsTipoInmueble,
+                labelsTipoInmueble,
                 () -> {
+                    NuevaInspeccion.inspeccion.setTipoInmueble(
+                            new TipoInmueble(sTipoInmueble.getSelectedItemPosition() + 1));
                     return null;
                 },
                 () -> {
-
                     return null;
                 });
         ////////////////////////////////////////
         Util.cargarSpinner(sDestino,
                 getActivity(),
                 1,
-                InspeccionActivity.labelsDestino,
+                labelsDestino,
                 () -> {
+                    NuevaInspeccion.inspeccion.setDestinoInmueble(
+                            new DestinoInmueble(sDestino.getSelectedItemPosition() + 1));
                     return null;
                 },
                 () -> {
-
                     return null;
                 });
         ////////////////////////////////////////
@@ -114,32 +125,32 @@ public class FormInmuebleInspeccionFragment extends Fragment {
                 1,
                 labelsCoeficienteZonal,
                 () -> {
+                    NuevaInspeccion.inspeccion.setCoeficienteZonal(
+                            Float.parseFloat(sCoeficienteZonal.getSelectedItem().toString())
+                    );
                     return null;
                 },
                 () -> {
-
                     return null;
                 });
-////////////////////////////////////////
+        ////////////////////////////////////////
         Util.cargarSpinner(sTipoServicio,
                 getActivity(),
                 1,
-                InspeccionActivity.labelsTipoServicio,
+                labelsTipoServicio,
                 () -> {
+                    NuevaInspeccion.inspeccion.setTipoServicio(
+                            new TipoServicio(sTipoServicio.getSelectedItemPosition() + 1));
                     return null;
                 },
                 () -> {
-
                     return null;
                 });
-        swServicioCloacal.setOnClickListener(v -> {
-            mostrarMensaje(getActivity(), " " + swServicioCloacal.isChecked());
-        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //mostrarMensaje(getActivity(), " " + swServicioCloacal.isChecked());
+        NuevaInspeccion.inspeccion.setServicioCloacal(swServicioCloacal.isChecked());
     }
 }

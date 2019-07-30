@@ -68,6 +68,7 @@
             android:name=".ui.inspeccion.InspeccionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.inspeccion.NuevaInspeccion"></activity>
     </application>
 
 </manifest>

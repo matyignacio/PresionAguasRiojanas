@@ -8,12 +8,24 @@ public class Usuario {
     private String clave;
     private String tipo;
     private String activo;
-    private int bandera_modulo_presion;
+    private int banderaModuloPresion;
     /**
      * 0 ES QUE NUNCA INGRESO, DEBE SINCRONIZAR.
      * 1 YA INGRESO AL MENOS UNA VEZ
      */
-    private int bandera_sync_modulo_presion;
+    private int banderaSyncModuloPresion;
+
+    /**
+     * 0 ES QUE NO TIENE INFO NUEVA.
+     * 1 YA INGRESO AL MENOS REGISTRO, DEBE SINCRONIZAR.
+     */
+
+    private int banderaModuloInspeccion;
+    /**
+     * 0 ES QUE NUNCA INGRESO, DEBE SINCRONIZAR.
+     * 1 YA INGRESO AL MENOS UNA VEZ
+     */
+    private int banderaSyncModuloInspeccion;
 
     /**
      * 0 ES QUE NO TIENE INFO NUEVA.
@@ -69,19 +81,35 @@ public class Usuario {
     }
 
     public int getBanderaModuloPresion() {
-        return bandera_modulo_presion;
+        return banderaModuloPresion;
     }
 
-    public void setBandera_modulo_presion(int bandera_modulo_presion) {
-        this.bandera_modulo_presion = bandera_modulo_presion;
+    public void setBanderaModuloPresion(int banderaModuloPresion) {
+        this.banderaModuloPresion = banderaModuloPresion;
     }
 
-    public int getBandera_sync_modulo_presion() {
-        return bandera_sync_modulo_presion;
+    public int getBanderaSyncModuloPresion() {
+        return banderaSyncModuloPresion;
     }
 
-    public void setBandera_sync_modulo_presion(int bandera_sync_modulo_presion) {
-        this.bandera_sync_modulo_presion = bandera_sync_modulo_presion;
+    public void setBanderaSyncModuloPresion(int banderaSyncModuloPresion) {
+        this.banderaSyncModuloPresion = banderaSyncModuloPresion;
+    }
+
+    public int getBanderaModuloInspeccion() {
+        return banderaModuloInspeccion;
+    }
+
+    public void setBanderaModuloInspeccion(int banderaModuloInspeccion) {
+        this.banderaModuloInspeccion = banderaModuloInspeccion;
+    }
+
+    public int getBanderaSyncModuloInspeccion() {
+        return banderaSyncModuloInspeccion;
+    }
+
+    public void setBanderaSyncModuloInspeccion(int banderaSyncModuloInspeccion) {
+        this.banderaSyncModuloInspeccion = banderaSyncModuloInspeccion;
     }
 
     @Override

@@ -36,21 +36,21 @@ import java.util.concurrent.Callable;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
-    public static final String DATA_BASE = "c1370466_aguas_out";
-    public static final String HOST = "66.97.39.77";
-    public static final String USER = "c1370466_consu";
-    public static final String CLAVE = "Consulta963";
-    //    public static final String DATA_BASE = "presion_aguas";
-//    public static final String HOST = "192.168.1.46";
-//    public static final String USER = "root";
-//    public static final String CLAVE = "root";
+    //    public static final String DATA_BASE = "c1370466_aguas_out";
+//    public static final String HOST = "66.97.39.77";
+//    public static final String USER = "c1370466_consu";
+//    public static final String CLAVE = "Consulta963";
+    public static final String DATA_BASE = "presion_aguas";
+    public static final String HOST = "192.168.1.46";
+    public static final String USER = "root";
+    public static final String CLAVE = "root";
     public static final String PUERTO = "3306";
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
     public static final int BANDERA_ALTA = 1;
     public static final int BANDERA_BAJA = 0;
-    public static final int PRIMER_INICIO_MODULO_PRESION = 0;
-    public static final int SEGUNDO_INICIO_MODULO_PRESION = 1;
+    public static final int PRIMER_INICIO_MODULO = 0;
+    public static final int SEGUNDO_INICIO_MODULO = 1;
     public static final int INSERTAR_PUNTO = 1;
     public static final int ACTUALIZAR_PUNTO = 2;
     public static final int ESTANDAR_MEDICION = 6;
@@ -68,7 +68,7 @@ public class Util {
     public static final String SPINNER_TIPO_UNIDAD2 = "tipo_unidad2";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
-    public static final int MAXIMO_CIRCUITO = 2;
+    public static final int MAXIMO_CIRCUITO = 3;
     private static final int MAXIMA_MEDICION = 20;
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String font_primary_path = "font/font_primary.ttf";

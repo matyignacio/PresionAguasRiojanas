@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion;
+package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -68,9 +69,11 @@ public class FormMapaInspeccionFragment extends Fragment {
                 } catch (Exception e) {
                     mostrarMensajeLog(getActivity(), e.toString());
                 }
+                NuevaInspeccion.bSiguienteFragmento.setVisibility(View.VISIBLE);
                 marcador = googleMap.addMarker(new MarkerOptions()
                         .position(point));
-                mostrarMensajeLog(getActivity(), marcador.getPosition().toString());
+                NuevaInspeccion.inspeccion.setLatitud(point.latitude);
+                NuevaInspeccion.inspeccion.setLongitud(point.longitude);
             });
         });
 
@@ -93,5 +96,11 @@ public class FormMapaInspeccionFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        NuevaInspeccion.bSiguienteFragmento.setVisibility(View.INVISIBLE);
     }
 }

@@ -1,6 +1,7 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -68,7 +69,7 @@ public class InicioActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -77,7 +78,7 @@ public class InicioActivity extends AppCompatActivity
                     R.layout.dialog_cerrar_sesion,
                     "Si, cerrar",
                     () -> {
-                        if (LoginActivity.usuario.getBandera_sync_modulo_presion() == EXITOSO) {
+                        if (LoginActivity.usuario.getBanderaSyncModuloPresion() == EXITOSO) {
                             Util.showDialog(this,
                                     R.layout.dialog_debe_sincronizar,
                                     "sincronizar ahora",

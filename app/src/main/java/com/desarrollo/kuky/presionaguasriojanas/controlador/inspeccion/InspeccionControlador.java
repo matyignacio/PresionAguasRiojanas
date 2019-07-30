@@ -78,9 +78,9 @@ public class InspeccionControlador {
                             "latitiud, longitud, latitud_usuario, longitud_usuario, observaciones) " +
                             " VALUES " +
                             "('" + inspecciones.get(i).getId() + "', " +
-                            "'" + inspecciones.get(i).getId_usuario() + "', " +
+                            "'" + inspecciones.get(i).getIdUsuario() + "', " +
                             "'" + inspecciones.get(i).getCliente().getId() + "', " +
-                            "'" + inspecciones.get(i).getCliente().getId_usuario() + "', " +
+                            "'" + inspecciones.get(i).getCliente().getIdUsuario() + "', " +
                             "'" + inspecciones.get(i).getTipoInmueble().getId() + "', " +
                             "'" + inspecciones.get(i).getDestinoInmueble().getId() + "', " +
                             "'" + inspecciones.get(i).getTipoServicio().getId() + "', " +
@@ -253,7 +253,7 @@ public class InspeccionControlador {
             String sql = "UPDATE inspeccion" +
                     " SET pendiente = 0" +
                     " WHERE id=" + inspeccion.getId() +
-                    " AND id_usuario LIKE '" + inspeccion.getId_usuario() + "'";
+                    " AND id_usuario LIKE '" + inspeccion.getIdUsuario() + "'";
             db.execSQL(sql);
             db.close();
         } catch (Exception e) {
@@ -270,7 +270,7 @@ public class InspeccionControlador {
         while (c.moveToNext()) {
             Inspeccion inspeccion = new Inspeccion();
             inspeccion.setId(c.getInt(0));
-            inspeccion.setId_usuario(c.getString(1));
+            inspeccion.setIdUsuario(c.getString(1));
             inspeccion.setCliente(new Cliente(c.getInt(2)));
             inspeccion.setTipoInmueble(new TipoInmueble(c.getInt(3)));
             inspeccion.setDestinoInmueble(new DestinoInmueble(c.getInt(4)));

@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion;
+package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.bGuardarInspeccion;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.bSiguienteFragmento;
 
 public class FormObservacionesInspeccionFragment extends Fragment {
     EditText etObservaciones;
@@ -35,26 +37,19 @@ public class FormObservacionesInspeccionFragment extends Fragment {
     @Override
     public void onResume() {
         etObservaciones = getActivity().findViewById(R.id.etObservaciones);
-        InspeccionActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
-        InspeccionActivity.bGuardarInspeccion.setVisibility(View.VISIBLE);
-        InspeccionActivity.bGuardarInspeccion.setOnClickListener(v -> {
-            mostrarMensaje(getActivity(), etObservaciones.getText().toString());
+        bSiguienteFragmento.setVisibility(View.INVISIBLE);
+        bGuardarInspeccion.setVisibility(View.VISIBLE);
+        bGuardarInspeccion.setOnClickListener(v -> {
+            NuevaInspeccion.inspeccion.setObservaciones(etObservaciones.getText().toString());
         });
         super.onResume();
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        InspeccionActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
-        InspeccionActivity.bGuardarInspeccion.setVisibility(View.INVISIBLE);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+        bSiguienteFragmento.setVisibility(View.VISIBLE);
+        bGuardarInspeccion.setVisibility(View.INVISIBLE);
 
     }
 }

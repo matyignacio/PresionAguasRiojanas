@@ -115,6 +115,8 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  activo char(1) NOT NULL DEFAULT ''," +
             "  bandera_modulo_presion INTEGER default 0," +
             "  bandera_sync_modulo_presion INTEGER default 0," +
+            "  bandera_modulo_inspeccion INTEGER default 0," +
+            "  bandera_sync_modulo_inspeccion INTEGER default 0," +
             "  PRIMARY KEY (usuario)" + ")";
 
     private String sqlTablaTipoInmueble = "CREATE TABLE IF NOT EXISTS tipo_inmueble (" +

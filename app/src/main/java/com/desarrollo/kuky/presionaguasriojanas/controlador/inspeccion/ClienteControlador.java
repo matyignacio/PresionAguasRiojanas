@@ -72,7 +72,7 @@ public class ClienteControlador {
                             " serv, estado, reclama)" +
                             " VALUES " +
                             "('" + clientes.get(i).getId() + "', " +
-                            "'" + clientes.get(i).getId_usuario() + "', " +
+                            "'" + clientes.get(i).getIdUsuario() + "', " +
                             "'" + clientes.get(i).getRazonSocial() + "', " +
                             "'" + clientes.get(i).getDireccion() + "', " +
                             "'" + clientes.get(i).getBarrio() + "', " +
@@ -316,7 +316,7 @@ public class ClienteControlador {
         while (c.moveToNext()) {
             Cliente cliente = new Cliente();
             cliente.setId(c.getInt(0));
-            cliente.setId_usuario(c.getString(1));
+            cliente.setIdUsuario(c.getString(1));
             cliente.setRazonSocial(c.getString(2));
             cliente.setDireccion(c.getString(3));
             cliente.setBarrio(c.getString(4));
@@ -385,7 +385,7 @@ public class ClienteControlador {
         while (c.moveToNext()) {
             Cliente cliente = new Cliente();
             cliente.setId(c.getInt(0));
-            cliente.setId_usuario(c.getString(1));
+            cliente.setIdUsuario(c.getString(1));
             cliente.setRazonSocial(c.getString(2));
             cliente.setDireccion(c.getString(3));
             cliente.setBarrio(c.getString(4));
@@ -415,7 +415,7 @@ public class ClienteControlador {
             String sql = "UPDATE cliente" +
                     " SET pendiente = 0" +
                     " WHERE id=" + cliente.getId() +
-                    " AND id_usuario LIKE '" + cliente.getId_usuario() + "'";
+                    " AND id_usuario LIKE '" + cliente.getIdUsuario() + "'";
             db.execSQL(sql);
             db.close();
         } catch (Exception e) {

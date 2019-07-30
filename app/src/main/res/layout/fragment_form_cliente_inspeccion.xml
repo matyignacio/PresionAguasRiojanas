@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fInspeccion"
     style="@style/layout_primary"
-    tools:context=".ui.inspeccion.FormClienteInspeccionFragment">
+    tools:context=".ui.inspeccion.nuevainspeccionfragments.FormClienteInspeccionFragment">
 
     <RelativeLayout
         android:layout_width="wrap_content"

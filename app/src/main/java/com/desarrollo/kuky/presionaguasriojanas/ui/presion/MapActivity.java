@@ -45,7 +45,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD;
@@ -234,7 +234,7 @@ public class MapActivity extends AppCompatActivity
         /**
          * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.sincronizarDeMysqlToSqlite
          * */
-        if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO_PRESION) {
+        if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO) {
             sincronizar();
         }
 

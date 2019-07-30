@@ -10,7 +10,9 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 
 import java.sql.Connection;
@@ -19,8 +21,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
@@ -76,7 +81,7 @@ public class DatosRelevadosControlador {
                             "med_luz, nis, id_inpseccion, id_usuario_inspeccion)" +
                             " VALUES " +
                             "('" + datosRelevados.get(i).getId() + "', " +
-                            "'" + datosRelevados.get(i).getId_usuario() + "', " +
+                            "'" + datosRelevados.get(i).getIdUsuario() + "', " +
                             "'" + datosRelevados.get(i).getUnidad() + "', " +
                             "'" + estado + "', " +
                             "'" + medida + "', " +
@@ -84,7 +89,7 @@ public class DatosRelevadosControlador {
                             "'" + datosRelevados.get(i).getMedidorLuz() + "', " +
                             "'" + datosRelevados.get(i).getNis() + "', " +
                             "'" + datosRelevados.get(i).getInspeccion().getId() + "', " +
-                            "'" + datosRelevados.get(i).getInspeccion().getId_usuario() + "');";
+                            "'" + datosRelevados.get(i).getInspeccion().getIdUsuario() + "');";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -220,6 +225,11 @@ public class DatosRelevadosControlador {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
                 mostrarMensaje(a, "Se sincronizo con exito!");
+                UsuarioControlador usuarioControlador = new UsuarioControlador();
+                if (LoginActivity.usuario.getBanderaModuloInspeccion() == PRIMER_INICIO_MODULO) {
+                    usuarioControlador.editarBanderaModuloInspeccion(a, SEGUNDO_INICIO_MODULO);
+                }
+                usuarioControlador.editarBanderaSyncModuloInspeccion(a, BANDERA_BAJA);
                 abrirActivity(a, InspeccionActivity.class);
             } else {
                 mostrarMensaje(a, "Error en el checkDatosRelevados");
@@ -242,7 +252,7 @@ public class DatosRelevadosControlador {
             String sql = "UPDATE datos_relevados" +
                     " SET pendiente = 0" +
                     " WHERE id=" + datoRelevado.getId() +
-                    " AND id_usuario LIKE '" + datoRelevado.getId_usuario() + "'";
+                    " AND id_usuario LIKE '" + datoRelevado.getIdUsuario() + "'";
             db.execSQL(sql);
             db.close();
         } catch (Exception e) {
