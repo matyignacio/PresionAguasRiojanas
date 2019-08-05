@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fInspeccion"
     style="@style/layout_primary"
-    tools:context=".ui.inspeccion.nuevainspeccionfragments.FormCliente">
+    tools:context=".ui.inspeccion.nuevorelevamientofragments.FormInmueble">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal">
+
 
         <TextView
             android:id="@+id/tvDatosInmueble"
@@ -18,9 +19,26 @@
             android:text="@string/tv_caracteristicas_del_inmueble" />
 
         <TextView
-            android:id="@+id/tvsTipoInmueble"
+            android:id="@+id/tvsBarios"
             style="@style/tv_primary_mini"
             android:layout_below="@id/tvDatosInmueble"
+            android:layout_marginTop="5dp"
+            android:text="@string/tv_barrio" />
+
+        <Spinner
+            android:id="@+id/sBarrio"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvsBarios"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:layout_alignEnd="@id/tvDatosInmueble"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/sp_redondo" />
+
+        <TextView
+            android:id="@+id/tvsTipoInmueble"
+            style="@style/tv_primary_mini"
+            android:layout_below="@+id/sBarrio"
             android:layout_marginTop="5dp"
             android:text="@string/tv_tipo_de_inmueble" />
 
@@ -54,44 +72,30 @@
         <Switch
             android:id="@+id/swConexionVisible"
             style="@style/tv_primary_left"
-            android:background="@drawable/et_redondo_without_padding"
             android:layout_below="@id/sDestino"
             android:layout_alignStart="@+id/tvDatosInmueble"
-            android:text="Servicio cloacal" />
+            android:background="@drawable/et_redondo_without_padding"
+            android:text="Conexion Visible" />
 
-        <TextView
-            android:id="@+id/tvsCoeficienteZonal"
-            style="@style/tv_primary_mini"
+        <EditText
+            android:id="@+id/etMedidorLuz"
+            style="@style/et_primary"
             android:layout_below="@id/swConexionVisible"
-            android:layout_marginTop="15dp"
-            android:text="@string/tv_coeficiente_zonal" />
+            android:hint="@string/hint_medidor_de_luz" />
 
-        <Spinner
-            android:id="@+id/sCoeficienteZonal"
+        <EditText
+            android:id="@+id/etMedidorAgua"
             style="@style/et_primary"
-            android:layout_height="40dp"
-            android:layout_below="@+id/tvsCoeficienteZonal"
-            android:layout_alignStart="@+id/tvDatosInmueble"
-            android:layout_alignEnd="@id/tvDatosInmueble"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/sp_redondo" />
+            android:layout_below="@id/etMedidorLuz"
+            android:hint="@string/hint_medidor_de_agua" />
 
-        <TextView
-            android:id="@+id/tvsBarios"
-            style="@style/tv_primary_mini"
-            android:layout_below="@id/sCoeficienteZonal"
-            android:layout_marginTop="5dp"
-            android:text="@string/tv_tipo_de_servicio" />
-
-        <Spinner
-            android:id="@+id/sBarrio"
+        <EditText
+            android:id="@+id/etObservaciones"
             style="@style/et_primary"
-            android:layout_height="40dp"
-            android:layout_below="@+id/tvsBarios"
-            android:layout_alignStart="@+id/tvDatosInmueble"
-            android:layout_alignEnd="@id/tvDatosInmueble"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/sp_redondo" />
+            android:layout_below="@id/etMedidorAgua"
+            android:hint="@string/hint_observaciones"
+            android:inputType="textMultiLine" />
+
     </RelativeLayout>
 
 </ScrollView>

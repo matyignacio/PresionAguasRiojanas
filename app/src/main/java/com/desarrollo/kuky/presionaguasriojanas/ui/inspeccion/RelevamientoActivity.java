@@ -18,14 +18,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments.FormCliente;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments.FormDatos;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments.FormInmueble;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments.FormMapa;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments.FormObservaciones;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormFoto;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormInmueble;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormMapa;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.NuevaPresionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
@@ -39,12 +34,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
@@ -54,23 +44,12 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
-public class NuevaInspeccion extends AppCompatActivity {
-    /**
-     * LAS DEFINICIONES ESTATICAS QUE NECESITO PARA LOS FRAGMENTOS
-     */
-    public static List<String> labelsTipoInmueble = new ArrayList<>();
-    public static List<String> labelsTipoServicio = new ArrayList<>();
-    public static List<String> labelsDestino = new ArrayList<>();
-    public static Cliente cliente;
-    public static Inspeccion inspeccion;
-    public static ArrayList<DatosRelevados> datosRelevados;
-    public static FormCliente formCliente = new FormCliente();
-    public static FormInmueble formInmueble = new FormInmueble();
-    public static FormObservaciones formObservaciones = new FormObservaciones();
-    public static FormMapa formMapa = new FormMapa();
-    public static FormDatos formDatos = new FormDatos();
-    public static int posicionFormulario = 0;
+public class RelevamientoActivity extends AppCompatActivity {
     public static Button bSiguienteFragmento, bVolver, bGuardarInspeccion;
+    public static FormInmueble formInmueble = new FormInmueble();
+    public static FormMapa formMapa = new FormMapa();
+    public static FormFoto formFoto = new FormFoto();
+    public static int posicionFormulario = 0;
     /**
      * LO REFERENTE A OBTENER LA UBICACION
      */
@@ -89,7 +68,7 @@ public class NuevaInspeccion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nueva_inspeccion);
+        setContentView(R.layout.activity_relevamiento);
         /************************************************/
         bVolver = findViewById(R.id.bVolver);
         bSiguienteFragmento = findViewById(R.id.bSiguienteFragmento);
@@ -101,17 +80,14 @@ public class NuevaInspeccion extends AppCompatActivity {
         /************************/
         posicionFormulario = 0;
         request_permissions();
-        bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario));
-        bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLInspeccion, posicionFormulario));
+        bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLRelevamiento, posicionFormulario));
+        bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLRelevamiento, posicionFormulario));
     }
 
     @Override
     public void onBackPressed() {
-        if (formCliente.isVisible() ||
-                formMapa.isVisible() ||
-                formDatos.isVisible() ||
-                formInmueble.isVisible() ||
-                formObservaciones.isVisible()) {
+        if (formInmueble.isVisible() ||
+                formMapa.isVisible()) {
             mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
         } else {
             abrirActivity(this, InspeccionActivity.class);
@@ -119,7 +95,7 @@ public class NuevaInspeccion extends AppCompatActivity {
     }
 
     private void init() {
-        posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario);
+        posicionFormulario = siguienteFragmento(this, R.id.LLRelevamiento, posicionFormulario);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
@@ -129,7 +105,6 @@ public class NuevaInspeccion extends AppCompatActivity {
                 super.onLocationResult(locationResult);
                 // location is received
                 mCurrentLocation = locationResult.getLastLocation();
-
                 //updateLocationUI();
             }
         };
@@ -146,7 +121,6 @@ public class NuevaInspeccion extends AppCompatActivity {
         mLocationSettingsRequest = builder.build();
         startLocationUpdates();
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -176,13 +150,11 @@ public class NuevaInspeccion extends AppCompatActivity {
         init();
     }
 
-
     /**
      * Starting location updates
      * Check whether location settings are satisfied and then
      * location updates will be requested
      */
-
     @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
         mSettingsClient
@@ -247,43 +219,26 @@ public class NuevaInspeccion extends AppCompatActivity {
 
     public int siguienteFragmento(Activity a, int layout, int posicionFormulario) {
         switch (posicionFormulario) {
-            case 0: //SIGNIFICA POSICION INICIAL
+            case 0: // SIGNIFICA POSICION INICIAL
                 // SIMPLEMENTE ABRIMOS EL SIGUIENTE FRAGMENTO
+
                 posicionFormulario++;
-                abrirFragmento(a, layout, formCliente);
+                abrirFragmento(a, layout, formInmueble);
                 setOnButtonsFragment();
                 break;
             case 1:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
                 posicionFormulario++;
                 Util.siguienteFragmento(a, layout,
-                        formCliente,
-                        formInmueble);
-                break;
-            case 2:
-                if (mCurrentLocation != null) {
-                    Util.setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
-                    Util.setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
-                }
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
-                posicionFormulario++;
-                Util.siguienteFragmento(a, layout,
                         formInmueble,
                         formMapa);
                 break;
-            case 3:
+            case 2:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
                 posicionFormulario++;
                 Util.siguienteFragmento(a, layout,
                         formMapa,
-                        formDatos);
-                break;
-            case 4:
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
-                posicionFormulario++;
-                Util.siguienteFragmento(a, layout,
-                        formDatos,
-                        formObservaciones);
+                        formFoto);
                 break;
             default:
                 posicionFormulario++;
@@ -292,7 +247,6 @@ public class NuevaInspeccion extends AppCompatActivity {
                         R.layout.dialog_guardar,
                         "Si, Guardar",
                         () -> {
-
                             return null;
                         },
                         () -> {
@@ -308,11 +262,11 @@ public class NuevaInspeccion extends AppCompatActivity {
 
     public int volverFragmento(Activity a, int layout, int posicionFormulario) {
         switch (posicionFormulario) {
-            case 1: //SIGNIFICA POSICION INICIAL
+            case 1: // SIGNIFICA POSICION INICIAL
                 // SIMPLEMENTE CERRAMOS EL FRAGMENTO
                 setOffButtonsFragment();
                 posicionFormulario--;
-                cerrarFragmento(a, formCliente);
+                cerrarFragmento(a, formInmueble);
                 stopLocationUpdates();
                 abrirActivity(this, InspeccionActivity.class);
                 break;
@@ -320,29 +274,15 @@ public class NuevaInspeccion extends AppCompatActivity {
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
                 posicionFormulario--;
                 Util.siguienteFragmento(a, layout,
-                        formInmueble,
-                        formCliente);
+                        formMapa,
+                        formInmueble);
                 break;
             case 3:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
                 posicionFormulario--;
                 Util.siguienteFragmento(a, layout,
-                        formMapa,
-                        formInmueble);
-                break;
-            case 4:
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
-                posicionFormulario--;
-                Util.siguienteFragmento(a, layout,
-                        formDatos,
+                        formFoto,
                         formMapa);
-                break;
-            case 5:
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
-                posicionFormulario--;
-                Util.siguienteFragmento(a, layout,
-                        formObservaciones,
-                        formDatos);
                 break;
             default:
                 bGuardarInspeccion.setVisibility(View.INVISIBLE);

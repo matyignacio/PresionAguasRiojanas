@@ -10,6 +10,7 @@ import android.util.Log;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +38,7 @@ public class ClienteControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("1/" +
-                    "9 - Enviando clientes...");
+                    "10 - Enviando clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -154,8 +155,8 @@ public class ClienteControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("7/" +
-                    "9 - Recibiendo clientes...");
+            pDialog.setMessage("8/" +
+                    "10 - Recibiendo clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -420,6 +421,45 @@ public class ClienteControlador {
             db.close();
         } catch (Exception e) {
             mostrarMensaje(a, "Error actualizarPendiente CC " + e.toString());
+        }
+    }
+
+    private int obtenerSiguienteId(Activity a) {
+        int id = 1;
+        try {
+            SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();
+            String sql = "SELECT id FROM cliente ORDER BY id DESC LIMIT 1";
+            Cursor c3 = db3.rawQuery(sql, null);
+            while (c3.moveToNext()) {
+                id = c3.getInt(0) + 1;
+            }
+            return id;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error obtenerSiguienteId CC " + e.toString());
+            return Util.ERROR;
+        }
+    }
+
+    public Cliente buscarPorTramite(Activity a, int tramite) {
+        Cliente cliente = new Cliente();
+        try {
+            SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();
+            String sql = "select * from cliente where tramite = " + tramite;
+            Cursor c3 = db3.rawQuery(sql, null);
+            while (c3.moveToNext()) {
+                cliente.setId(c3.getInt(0));
+                cliente.setIdUsuario(c3.getString(1));
+                cliente.setRazonSocial(c3.getString(2));
+                cliente.setDireccion(c3.getString(3));
+                cliente.setBarrio(c3.getString(4));
+                cliente.setTelefono(c3.getInt(5));
+                cliente.setTramite(tramite);
+
+            }
+            return cliente;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error obtenerSiguienteId CC " + e.toString());
+            return null;
         }
     }
 }

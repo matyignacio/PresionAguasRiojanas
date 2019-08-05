@@ -46,6 +46,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaCliente);
         sqLiteDatabase.execSQL(sqlTablaInspeccion);
         sqLiteDatabase.execSQL(sqlTablaDatosRelevados);
+        sqLiteDatabase.execSQL(sqlTablaBarrios);
     }
 
     @Override
@@ -184,6 +185,12 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  pendiente int(1) NOT NULL DEFAULT '1'," +
             "  PRIMARY KEY (id,id_usuario))";
 
+    private String sqlTablaBarrios = "CREATE TABLE IF NOT EXISTS barrios (" +
+            "  codigo char(4) NOT NULL," +
+            "  des_codigo char(40) NOT NULL," +
+            "  zona char(2) NOT NULL," +
+            "  PRIMARY KEY (codigo))";
+
     public String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
     }
@@ -226,5 +233,9 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaDatosRelevados() {
         return sqlTablaDatosRelevados;
+    }
+
+    public String getSqlTablaBarrios() {
+        return sqlTablaBarrios;
     }
 }

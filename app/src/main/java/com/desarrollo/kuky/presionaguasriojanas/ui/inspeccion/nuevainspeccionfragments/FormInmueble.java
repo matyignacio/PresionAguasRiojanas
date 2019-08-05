@@ -27,7 +27,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspec
 import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsTipoServicio;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Lists.labelsCoeficienteZonal;
 
-public class FormInmuebleInspeccionFragment extends Fragment {
+public class FormInmueble extends Fragment {
     Spinner sTipoInmueble, sDestino, sCoeficienteZonal, sTipoServicio;
     Switch swServicioCloacal;
     TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
@@ -35,7 +35,7 @@ public class FormInmuebleInspeccionFragment extends Fragment {
     DestinoInmuebleControlador destinoInmuebleControlador = new DestinoInmuebleControlador();
 
 
-    public FormInmuebleInspeccionFragment() {
+    public FormInmueble() {
         // Required empty public constructor
     }
 
@@ -76,6 +76,7 @@ public class FormInmuebleInspeccionFragment extends Fragment {
                 labelsTipoServicio.add(
                         tipoServicioControlador.extraerTodos(getActivity()).get(i).getNombre());
             }
+            labelsDestino.add("Ninguno");
             for (int i = 0; i < destinoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {
                 labelsDestino.add(
                         destinoInmuebleControlador.extraerTodos(getActivity()).get(i).getNombre());
@@ -90,9 +91,9 @@ public class FormInmuebleInspeccionFragment extends Fragment {
         /** CAPTURAMOS LOS ELEMENTOS DE LA VISTA *********************/
         sTipoInmueble = getActivity().findViewById(R.id.sTipoInmueble);
         sDestino = getActivity().findViewById(R.id.sDestino);
-        swServicioCloacal = getActivity().findViewById(R.id.swServicioCloacal);
+        swServicioCloacal = getActivity().findViewById(R.id.swConexionVisible);
         sCoeficienteZonal = getActivity().findViewById(R.id.sCoeficienteZonal);
-        sTipoServicio = getActivity().findViewById(R.id.sTipoServicio);
+        sTipoServicio = getActivity().findViewById(R.id.sBarrio);
         /** CARGAMOS LOS SPINNERS ************************************/
         Util.cargarSpinner(sTipoInmueble,
                 getActivity(),

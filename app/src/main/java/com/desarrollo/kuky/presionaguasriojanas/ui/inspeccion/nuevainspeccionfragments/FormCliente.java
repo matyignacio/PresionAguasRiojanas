@@ -1,7 +1,10 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevainspeccionfragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +12,19 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.ClienteControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 
 import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.cliente;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
-public class FormClienteInspeccionFragment extends Fragment {
+public class FormCliente extends Fragment {
     EditText etRazonSocial, etTelefono, etDireccion,
             etBarrio, etUnidad, etTramite, etServ,
             etNis, etMedidorAgua, etEstado, etMedidorLuz,
             etReclama;
 
-    public FormClienteInspeccionFragment() {
+    public FormCliente() {
         // Required empty public constructor
     }
 
@@ -60,6 +64,7 @@ public class FormClienteInspeccionFragment extends Fragment {
         etMedidorLuz = getActivity().findViewById(R.id.etMedidorLuz);
         etTramite = getActivity().findViewById(R.id.etTramite);
         etUnidad = getActivity().findViewById(R.id.etUnidad);
+        etTramite.addTextChangedListener(new addListenerOnTextChange(getActivity(), etTramite));
     }
 
     @Override
@@ -136,4 +141,37 @@ public class FormClienteInspeccionFragment extends Fragment {
             mostrarMensajeLog(getActivity(), e.toString());
         }
     }
+
+    public class addListenerOnTextChange implements TextWatcher {
+        private Activity mContext;
+        EditText mEdittextview;
+
+        public addListenerOnTextChange(Activity context, EditText edittextview) {
+            super();
+            this.mContext = context;
+            this.mEdittextview = edittextview;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mEdittextview.getText().toString().length() > 3) {
+                ClienteControlador clienteControlador = new ClienteControlador();
+                Cliente cliente = clienteControlador.buscarPorTramite(mContext,
+                        Integer.valueOf(mEdittextview.getText().toString()));
+                etRazonSocial.setText(cliente.getRazonSocial());
+            }
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //What you want to do
+        }
+    }
+
 }

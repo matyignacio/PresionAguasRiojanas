@@ -2,28 +2,40 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
 import android.app.Activity;
 
+import com.desarrollo.kuky.presionaguasriojanas.util.InternetDetector;
+
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class InspeccionActivityControlador {
+    private InternetDetector internetDetector;
+    int check = ERROR;
 
     public int sync(Activity a) {
-        /**
-         * ORDEN:
-         *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/9
-         *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/9
-         *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 3/9
-         *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 4/9
-         *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 5/9
-         *  destinoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 6/9
-         *  clienteControlador.sincronizarDeMysqlToSqlite(a); 7/9
-         *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 8/9
-         *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 9/9
-         * */
-        int check = ERROR;
-        ClienteControlador clienteControlador = new ClienteControlador();
-        if (clienteControlador.sincronizarDeSqliteToMysql(a) == EXITOSO) {
-            check = EXITOSO;
+        // Initializing Internet Checker
+        internetDetector = new InternetDetector(a);
+        if (!internetDetector.checkMobileInternetConn()) {
+            mostrarMensaje(a, "No hay conexion de red disponible.");
+        } else {
+            /**
+             * ORDEN:
+             *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/10
+             *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/10
+             *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 3/10
+             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 4/10
+             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 5/10
+             *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 6/10
+             *  destinoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 7/10
+             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 8/10
+             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 9/10
+             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 10/10
+             * */
+            check = ERROR;
+            ClienteControlador clienteControlador = new ClienteControlador();
+            if (clienteControlador.sincronizarDeSqliteToMysql(a) == EXITOSO) {
+                check = EXITOSO;
+            }
         }
         return check;
     }

@@ -34,7 +34,7 @@ public class TipoInmuebleControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("4/" +
-                    "9 - Recibiendo tipos de inmuebles...");
+                    "10 - Recibiendo tipos de inmuebles...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -92,8 +92,8 @@ public class TipoInmuebleControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                TipoServicioControlador tipoServicioControlador = new TipoServicioControlador();
-                tipoServicioControlador.sincronizarDeMysqlToSqlite(a);
+                BarrioControlador barrioControlador = new BarrioControlador();
+                barrioControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkTipoInmueble");
             }

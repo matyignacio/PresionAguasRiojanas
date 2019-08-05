@@ -15,6 +15,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmuebl
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoServicio;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +44,7 @@ public class InspeccionControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("2/" +
-                    "9 - Enviando Inspecciones...");
+                    "10 - Enviando Inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -157,8 +158,8 @@ public class InspeccionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("8/" +
-                    "9 - Recibiendo inspecciones...");
+            pDialog.setMessage("9/" +
+                    "10 - Recibiendo inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -291,5 +292,21 @@ public class InspeccionControlador {
         c.close();
         db.close();
         return inspecciones;
+    }
+
+    private int obtenerSiguienteId(Activity a) {
+        int id = 1;
+        try {
+            SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();
+            String sql = "SELECT id FROM inspeccion ORDER BY id DESC LIMIT 1";
+            Cursor c3 = db3.rawQuery(sql, null);
+            while (c3.moveToNext()) {
+                id = c3.getInt(0) + 1;
+            }
+            return id;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error obtenerSiguienteId IC " + e.toString());
+            return Util.ERROR;
+        }
     }
 }

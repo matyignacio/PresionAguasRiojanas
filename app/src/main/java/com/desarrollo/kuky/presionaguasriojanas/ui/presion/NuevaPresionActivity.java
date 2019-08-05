@@ -23,6 +23,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.fragments.CalidadNuevaMedicion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -56,7 +57,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarPresion;
 
 public class NuevaPresionActivity extends AppCompatActivity {
     private static final String TAG = NuevaPresionActivity.class.getSimpleName();
-    private CalidadNuevaMedicionFragment calidadNuevaMedicionFragment = new CalidadNuevaMedicionFragment();
+    private CalidadNuevaMedicion calidadNuevaMedicion = new CalidadNuevaMedicion();
     public static CheckBox cbCalidad;
     public static Button bEnviarMedicion;
 
@@ -86,7 +87,7 @@ public class NuevaPresionActivity extends AppCompatActivity {
         /**************************/
         cbCalidad.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                abrirFragmento(this, R.id.rlNuevaMedicion, calidadNuevaMedicionFragment);
+                abrirFragmento(this, R.id.rlNuevaMedicion, calidadNuevaMedicion);
                 setEnabledInputs(false);
             } else {
                 setEnabledInputs(true);
@@ -98,9 +99,9 @@ public class NuevaPresionActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         /* LO QUE HACE CUANDO VUELVA*/
-        if (calidadNuevaMedicionFragment.isVisible()) {
+        if (calidadNuevaMedicion.isVisible()) {
             cbCalidad.setChecked(false);
-            Util.cerrarFragmento(this, calidadNuevaMedicionFragment);
+            Util.cerrarFragmento(this, calidadNuevaMedicion);
         } else {
             stopLocationUpdates();
             abrirActivity(this, PuntoPresionActivity.class);
@@ -205,8 +206,8 @@ public class NuevaPresionActivity extends AppCompatActivity {
                 historialPuntos.setLongitud(mCurrentLocation.getLongitude());
                 historialPuntos.setPresion(Float.parseFloat(etPresion.getText().toString()));
                 historialPuntos.setPuntoPresion(puntoPresion);
-                historialPuntos.setCloro(calidadNuevaMedicionFragment.calidad.getCloro());
-                historialPuntos.setMuestra(calidadNuevaMedicionFragment.calidad.getMuestra());
+                historialPuntos.setCloro(calidadNuevaMedicion.calidad.getCloro());
+                historialPuntos.setMuestra(calidadNuevaMedicion.calidad.getMuestra());
                 historialPuntos.setUsuario(LoginActivity.usuario);
                 // INSERTAMOS EL NUEVO REGISTRO
                 historialPuntosControlador.insertar(historialPuntos, this);

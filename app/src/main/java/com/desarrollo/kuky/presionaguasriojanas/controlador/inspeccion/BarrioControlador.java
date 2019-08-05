@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Barrio;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
-public class DestinoInmuebleControlador {
+public class BarrioControlador {
     private ProgressDialog pDialog;
 
     private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
@@ -33,8 +33,8 @@ public class DestinoInmuebleControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("7/" +
-                    "10 - Recibiendo destino de inmuebles...");
+            pDialog.setMessage("5/" +
+                    "10 - Recibiendo barrios...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -54,18 +54,19 @@ public class DestinoInmuebleControlador {
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
                 conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM destino_inmueble ";
+                String consultaSql = "SELECT * FROM barrios ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
                 rs = ps.getResultSet();
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM destino_inmueble");
+                db.execSQL("DELETE FROM barrios");
                 while (rs.next()) {
-                    String sql = "INSERT INTO `destino_inmueble`" +
+                    String sql = "INSERT INTO barrios" +
                             " VALUES" +
-                            " ('" + rs.getInt(1) + "','" + // id
-                            rs.getString(2) + "');"; // nombre
+                            " ('" + rs.getString(1) + "','" + // codigo
+                            rs.getString(2) + "','" + // des_codigo
+                            rs.getString(3) + "');"; // zona
                     db.execSQL(sql);
                 }
                 check++;
@@ -92,10 +93,10 @@ public class DestinoInmuebleControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                ClienteControlador clienteControlador = new ClienteControlador();
-                clienteControlador.sincronizarDeMysqlToSqlite(a);
+                TipoServicioControlador tipoServicioControlador = new TipoServicioControlador();
+                tipoServicioControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                mostrarMensaje(a, "Error en el checkDestinoInmueble");
+                mostrarMensaje(a, "Error en el checkBarrio");
             }
         }
 
@@ -106,23 +107,25 @@ public class DestinoInmuebleControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite DIC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite TIC" + e.toString());
         }
     }
 
-    public ArrayList<DestinoInmueble> extraerTodos(Activity a) {
-        ArrayList<DestinoInmueble> destinosInmuebles = new ArrayList<>();
+    public ArrayList<Barrio> extraerTodosPorLocalidad(Activity a, String zona) {
+        ArrayList<Barrio> barrios = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM destino_inmueble", null);
+        Cursor c = db.rawQuery("SELECT codigo, des_codigo " +
+                " FROM barrios " +
+                " WHERE zona='" + zona + "'" +
+                " ORDER BY des_codigo", null);
         while (c.moveToNext()) {
-            DestinoInmueble destinoInmueble = new DestinoInmueble();
-            destinoInmueble.setId(c.getInt(0));
-            destinoInmueble.setNombre(c.getString(1));
-            destinosInmuebles.add(destinoInmueble);
+            Barrio barrio = new Barrio();
+            barrio.setCodigo(c.getString(0));
+            barrio.setDesCodigo(c.getString(1));
+            barrios.add(barrio);
         }
         c.close();
         db.close();
-        return destinosInmuebles;
+        return barrios;
     }
-
 }

@@ -24,7 +24,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIO
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
-public class FormMapaInspeccionFragment extends Fragment {
+public class FormMapa extends Fragment {
 
     MapView mMapView;
     Marker marcador;
@@ -89,6 +89,7 @@ public class FormMapaInspeccionFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        NuevaInspeccion.bSiguienteFragmento.setVisibility(View.VISIBLE);
         mMapView.onPause();
     }
 

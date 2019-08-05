@@ -33,8 +33,10 @@ public class InspeccionActivity extends AppCompatActivity
         setContentView(R.layout.activity_inspeccion);
         /************************************************/
         Button bNuevaInspeccion = findViewById(R.id.bNuevaInspeccion);
+        Button bRelevamiento = findViewById(R.id.bRelevamiento);
         /** SETEAMOS TYPEFACES  */
         setPrimaryFontBold(this, bNuevaInspeccion);
+        setPrimaryFontBold(this, bRelevamiento);
         /************************/
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,6 +53,7 @@ public class InspeccionActivity extends AppCompatActivity
         subTitle.setText(LoginActivity.usuario.getNombre());
         /************************/
         bNuevaInspeccion.setOnClickListener(v -> abrirActivity(this, NuevaInspeccion.class));
+        bRelevamiento.setOnClickListener(v -> abrirActivity(this, RelevamientoActivity.class));
 
     }
 

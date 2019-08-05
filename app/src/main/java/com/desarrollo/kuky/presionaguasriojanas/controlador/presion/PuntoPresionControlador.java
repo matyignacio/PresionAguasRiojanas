@@ -308,7 +308,7 @@ public class PuntoPresionControlador {
         }
     }
 
-    /**public ArrayList<PuntoPresion> extraerTodos(Activity a) {
+    /**public ArrayList<PuntoPresion> extraerTodosPorLocalidad(Activity a) {
      //** Extrae todos los puntos *
      puntosPresion = new ArrayList<>();
      SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
@@ -341,7 +341,7 @@ public class PuntoPresionControlador {
      }**/
 
     /**
-     * public ArrayList<PuntoPresion> extraerTodos(Activity a, int idTipoPunto) {
+     * public ArrayList<PuntoPresion> extraerTodosPorLocalidad(Activity a, int idTipoPunto) {
      * //* Extrae todos los puntos que sean del tipo "idTipoPunto" *
      * puntosPresion = new ArrayList<>();
      * SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();

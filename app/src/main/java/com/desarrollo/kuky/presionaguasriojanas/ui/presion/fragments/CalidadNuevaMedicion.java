@@ -1,4 +1,4 @@
-package com.desarrollo.kuky.presionaguasriojanas.ui.presion;
+package com.desarrollo.kuky.presionaguasriojanas.ui.presion.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -11,17 +11,18 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.NuevaPresionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
-public class CalidadNuevoPuntoFragment extends Fragment {
+public class CalidadNuevaMedicion extends Fragment {
     private EditText etCloro, etMuestra;
     private CheckBox cbMuestra;
     public Calidad calidad = new Calidad();
 
 
-    public CalidadNuevoPuntoFragment() {
+    public CalidadNuevaMedicion() {
         // Required empty public constructor
     }
 
@@ -30,7 +31,7 @@ public class CalidadNuevoPuntoFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_calidad_nuevo_punto, container, false);
+        View view = inflater.inflate(R.layout.fragment_calidad_nueva_medicion, container, false);
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -57,12 +58,12 @@ public class CalidadNuevoPuntoFragment extends Fragment {
         setPrimaryFontBold(getActivity(), cbMuestra);
 
         bAceptar.setOnClickListener(v -> {
-            NuevoPuntoActivity.cbCalidad.setEnabled(true);
-            NuevoPuntoActivity.bEnviarNuevoPunto.setEnabled(true);
+            NuevaPresionActivity.cbCalidad.setEnabled(true);
+            NuevaPresionActivity.bEnviarMedicion.setEnabled(true);
             Util.cerrarFragmento(getActivity(), this);
         });
         bCancelar.setOnClickListener(v -> {
-            NuevoPuntoActivity.cbCalidad.setChecked(false);
+            NuevaPresionActivity.cbCalidad.setChecked(false);
             Util.cerrarFragmento(getActivity(), this);
         });
     }
@@ -97,19 +98,19 @@ public class CalidadNuevoPuntoFragment extends Fragment {
         float cloro;
         String muestra;
 
-        float getCloro() {
+        public float getCloro() {
             return cloro;
         }
 
-        void setCloro(float cloro) {
+        public void setCloro(float cloro) {
             this.cloro = cloro;
         }
 
-        String getMuestra() {
+        public String getMuestra() {
             return muestra;
         }
 
-        void setMuestra(String muestra) {
+        public void setMuestra(String muestra) {
             this.muestra = muestra;
         }
     }

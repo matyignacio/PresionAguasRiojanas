@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fInspeccion"
     style="@style/layout_primary"
-    tools:context=".ui.inspeccion.nuevainspeccionfragments.FormClienteInspeccionFragment">
+    tools:context=".ui.inspeccion.nuevainspeccionfragments.FormCliente">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -17,10 +17,20 @@
             android:layout_centerHorizontal="true"
             android:text="@string/tv_datos_del_cliente" />
 
+
+        <EditText
+            android:id="@+id/etTramite"
+            style="@style/et_primary"
+            android:layout_below="@id/tvDatosCliente"
+            android:layout_centerHorizontal="true"
+            android:autofillHints=""
+            android:hint="@string/hint_tramite"
+            android:inputType="number" />
+
         <EditText
             android:id="@+id/etRazonSocial"
             style="@style/et_primary"
-            android:layout_below="@id/tvDatosCliente"
+            android:layout_below="@id/etTramite"
             android:layout_centerHorizontal="true"
             android:autofillHints=""
             android:hint="@string/hint_razon_social"
@@ -63,18 +73,9 @@
             android:inputType="number" />
 
         <EditText
-            android:id="@+id/etTramite"
-            style="@style/et_primary"
-            android:layout_below="@id/etUnidad"
-            android:layout_centerHorizontal="true"
-            android:autofillHints=""
-            android:hint="@string/hint_tramite"
-            android:inputType="number" />
-
-        <EditText
             android:id="@+id/etServ"
             style="@style/et_primary"
-            android:layout_below="@id/etTramite"
+            android:layout_below="@id/etUnidad"
             android:layout_centerHorizontal="true"
             android:autofillHints=""
             android:hint="@string/hint_serv"

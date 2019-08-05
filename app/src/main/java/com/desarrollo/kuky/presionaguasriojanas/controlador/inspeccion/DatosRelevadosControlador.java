@@ -14,6 +14,7 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,7 +47,7 @@ public class DatosRelevadosControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("3/" +
-                    "9 - Enviando Datos relevados...");
+                    "10 - Enviando Datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -156,8 +157,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("9/" +
-                    "9 - Recibiendo datos relevados...");
+            pDialog.setMessage("10/" +
+                    "10 - Recibiendo datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -275,5 +276,22 @@ public class DatosRelevadosControlador {
         c.close();
         db.close();
         return datosRelevados;
+    }
+
+
+    private int obtenerSiguienteId(Activity a) {
+        int id = 1;
+        try {
+            SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();
+            String sql = "SELECT id FROM datos_relevados ORDER BY id DESC LIMIT 1";
+            Cursor c3 = db3.rawQuery(sql, null);
+            while (c3.moveToNext()) {
+                id = c3.getInt(0) + 1;
+            }
+            return id;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error obtenerSiguienteId CC " + e.toString());
+            return Util.ERROR;
+        }
     }
 }

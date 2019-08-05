@@ -24,6 +24,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.TipoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.TipoPunto;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.fragments.CalidadNuevoPunto;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -64,7 +65,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
     private static final String TAG = NuevoPuntoActivity.class.getSimpleName();
     public static Button bEnviarNuevoPunto;
     public static CheckBox cbCalidad;
-    private CalidadNuevoPuntoFragment calidadNuevoPuntoFragment = new CalidadNuevoPuntoFragment();
+    private CalidadNuevoPunto calidadNuevoPunto = new CalidadNuevoPunto();
 
     // bunch of location related apis
     private FusedLocationProviderClient mFusedLocationClient;
@@ -122,7 +123,7 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         }
         cbCalidad.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                abrirFragmento(this, R.id.rlNuevoPunto, calidadNuevoPuntoFragment);
+                abrirFragmento(this, R.id.rlNuevoPunto, calidadNuevoPunto);
                 setEnabledInputs(false);
             } else {
                 setEnabledInputs(true);
@@ -133,9 +134,9 @@ public class NuevoPuntoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (calidadNuevoPuntoFragment.isVisible()) {
+        if (calidadNuevoPunto.isVisible()) {
             cbCalidad.setChecked(false);
-            Util.cerrarFragmento(this, calidadNuevoPuntoFragment);
+            Util.cerrarFragmento(this, calidadNuevoPunto);
         } else {
             stopLocationUpdates();
             abrirActivity(this, MapActivity.class);
@@ -243,8 +244,8 @@ public class NuevoPuntoActivity extends AppCompatActivity {
                     puntoPresion.setUnidad(0);
                     puntoPresion.setUnidad2(0);
                 }
-                puntoPresion.setCloro(calidadNuevoPuntoFragment.calidad.getCloro());
-                puntoPresion.setMuestra(calidadNuevoPuntoFragment.calidad.getMuestra());
+                puntoPresion.setCloro(calidadNuevoPunto.calidad.getCloro());
+                puntoPresion.setMuestra(calidadNuevoPunto.calidad.getMuestra());
                 // AL TIPO PUNTO YA LO DEFINIMOS EN LA SELECCION DEL DROPDOWNLIST
                 // EDIT COMENTARIO ANTERIOR, ACA SE ASIGNA EL ID AL TIPO DE PUNTO
                 tipoPunto.setId(getPreference(NuevoPuntoActivity.this, TIPO_MAPA, MAPA_RECORRIDO));

@@ -24,7 +24,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Lists.labelsMedida;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
-public class FormDatosInspeccionFragment extends Fragment {
+public class FormDatos extends Fragment {
     ImageButton bNuevoDato;
     int marginTop = 15;
     int addMargin = 130;
@@ -36,11 +36,14 @@ public class FormDatosInspeccionFragment extends Fragment {
      * CREO ARRAYLIST PARA IR AGREGANDO LOS EDITTEXT EN TIEMPO DE EJECUCION
      * Y LUEGO EN "ON PAUSE" ASIGNARLOS AL ARRAYLIST DE DATOSRELEVADOS
      **/
-    ArrayList<EditText> unidades, medidoresAgua, medidoresLuz, nises;
-    ArrayList<Spinner> estados, medidas;
+    ArrayList<EditText> unidades = new ArrayList<>();
+    ArrayList<EditText> medidoresAgua = new ArrayList<>();
+    ArrayList<EditText> medidoresLuz = new ArrayList<>();
+    ArrayList<EditText> nises = new ArrayList<>();
+    ArrayList<Spinner> estados = new ArrayList<>();
+    ArrayList<Spinner> medidas = new ArrayList<>();
 
-
-    public FormDatosInspeccionFragment() {
+    public FormDatos() {
         // Required empty public constructor
     }
 
@@ -67,13 +70,9 @@ public class FormDatosInspeccionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        unidades = new ArrayList<>();
-        medidoresAgua = new ArrayList<>();
-        medidoresLuz = new ArrayList<>();
-        nises = new ArrayList<>();
-        estados = new ArrayList<>();
-        medidas = new ArrayList<>();
+
         idEditText = 0;
+        marginTop = 15;
     }
 
     @Override
@@ -102,8 +101,8 @@ public class FormDatosInspeccionFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        NuevaInspeccion.datosRelevados = new ArrayList<>();
         for (int i = 0; i < unidades.size(); i++) {
+            NuevaInspeccion.datosRelevados = new ArrayList<>();
             DatosRelevados datoRelevado = new DatosRelevados();
             datoRelevado.setIdUsuario(LoginActivity.usuario.getId());
             try {
@@ -216,6 +215,10 @@ public class FormDatosInspeccionFragment extends Fragment {
             etNis.setLayoutParams(lpNis.getmRparams());
             lpNis.getmRlayout().addView(etNis);
             nises.add(etNis);
+            /** MUEVO EL MARGINTOP Y SUMO EL IDEDITTEXT PARA SIMULAR QUE
+             *  SE APRETO EL BOTON DE NUEVO REGISTRO ******************/
+            this.marginTop += (addMargin * cantidadEditText);
+            this.idEditText++;
         }
     }
 

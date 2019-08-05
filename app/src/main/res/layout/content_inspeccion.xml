@@ -13,4 +13,12 @@
         android:layout_marginTop="15dp"
         android:text="@string/bNuevaInspeccion" />
 
+    <Button
+        android:id="@+id/bRelevamiento"
+        style="@style/b_primary"
+        android:layout_below="@id/bNuevaInspeccion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Nuevo Relevamiento" />
+
 </RelativeLayout>
