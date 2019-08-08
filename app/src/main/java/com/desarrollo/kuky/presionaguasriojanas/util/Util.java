@@ -132,6 +132,23 @@ public class Util {
         Log.e("MOSTRARMENSAJE:::", mensaje);
     }
 
+
+    /**
+     * Shows a {@link Toast} on the UI thread.
+     *
+     * @param text The message to show
+     */
+    public static void showToast(Activity activity, String text) {
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     public static void mostrarMensajeLog(Context c, String mensaje) {
         Log.e("MOSTRARMENSAJE:::", mensaje);
     }

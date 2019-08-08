@@ -107,7 +107,7 @@ public class BarrioControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncMysqlToSqlite TIC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite BC" + e.toString());
         }
     }
 

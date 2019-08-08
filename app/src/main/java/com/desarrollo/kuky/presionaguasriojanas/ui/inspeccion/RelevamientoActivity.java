@@ -236,9 +236,9 @@ public class RelevamientoActivity extends AppCompatActivity {
             case 2:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
                 posicionFormulario++;
-                Util.siguienteFragmento(a, layout,
-                        formMapa,
-                        formFoto);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.LLRelevamiento, FormFoto.newInstance())
+                        .commit();
                 break;
             default:
                 posicionFormulario++;
@@ -280,9 +280,9 @@ public class RelevamientoActivity extends AppCompatActivity {
             case 3:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
                 posicionFormulario--;
-                Util.siguienteFragmento(a, layout,
-                        formFoto,
-                        formMapa);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.LLRelevamiento, FormFoto.newInstance())
+                        .commit();
                 break;
             default:
                 bGuardarInspeccion.setVisibility(View.INVISIBLE);

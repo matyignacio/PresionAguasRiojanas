@@ -47,6 +47,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaInspeccion);
         sqLiteDatabase.execSQL(sqlTablaDatosRelevados);
         sqLiteDatabase.execSQL(sqlTablaBarrios);
+        sqLiteDatabase.execSQL(sqlTablaFoto);
     }
 
     @Override
@@ -191,6 +192,10 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  zona char(2) NOT NULL," +
             "  PRIMARY KEY (codigo))";
 
+    private String sqlTablaFoto = "CREATE TABLE IF NOT EXISTS fotos (" +
+            "  id TEXT," +
+            "  nombre BLOB)";
+
     public String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
     }
@@ -237,5 +242,9 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaBarrios() {
         return sqlTablaBarrios;
+    }
+
+    public String getSqlTablaFotos() {
+        return sqlTablaFoto;
     }
 }

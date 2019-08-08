@@ -52,7 +52,7 @@ public class InspeccionActivity extends AppCompatActivity
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         subTitle.setText(LoginActivity.usuario.getNombre());
         /************************/
-        bNuevaInspeccion.setOnClickListener(v -> abrirActivity(this, NuevaInspeccion.class));
+        bNuevaInspeccion.setOnClickListener(v -> abrirActivity(this, PhotoActivity.class));
         bRelevamiento.setOnClickListener(v -> abrirActivity(this, RelevamientoActivity.class));
 
     }

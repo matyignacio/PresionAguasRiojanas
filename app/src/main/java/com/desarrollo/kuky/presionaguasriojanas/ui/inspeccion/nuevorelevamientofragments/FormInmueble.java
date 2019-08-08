@@ -58,7 +58,6 @@ public class FormInmueble extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        inspeccion = new Inspeccion();
         if (labelsTipoInmueble.size() == 0) {
             // SOLO CARGAMOS LAS LISTAS ESTATICAS UNA VEZ (LA PRIMERA)
             for (int i = 0; i < tipoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {

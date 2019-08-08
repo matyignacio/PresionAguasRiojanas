@@ -11,6 +11,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -71,7 +77,8 @@
         <activity
             android:name=".ui.inspeccion.NuevaInspeccion"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.inspeccion.RelevamientoActivity"></activity>
+        <activity android:name=".ui.inspeccion.RelevamientoActivity" />
+        <activity android:name=".ui.inspeccion.PhotoActivity"></activity>
     </application>
 
 </manifest>
