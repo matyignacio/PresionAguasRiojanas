@@ -33,8 +33,8 @@ public class TipoInmuebleControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("4/" +
-                    "10 - Recibiendo tipos de inmuebles...");
+            pDialog.setMessage("5/" +
+                    "12 - Recibiendo tipos de inmuebles...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

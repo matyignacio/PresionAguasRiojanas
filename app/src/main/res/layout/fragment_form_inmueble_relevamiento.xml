@@ -81,13 +81,15 @@
             android:id="@+id/etMedidorLuz"
             style="@style/et_primary"
             android:layout_below="@id/swConexionVisible"
-            android:hint="@string/hint_medidor_de_luz" />
+            android:hint="@string/hint_medidor_de_luz"
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/etMedidorAgua"
             style="@style/et_primary"
             android:layout_below="@id/etMedidorLuz"
-            android:hint="@string/hint_medidor_de_agua" />
+            android:hint="@string/hint_medidor_de_agua"
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/etObservaciones"

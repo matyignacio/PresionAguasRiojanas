@@ -44,7 +44,7 @@ public class InspeccionControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("2/" +
-                    "10 - Enviando Inspecciones...");
+                    "12 - Enviando Inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -130,8 +130,8 @@ public class InspeccionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                DatosRelevadosControlador datosRelevadosControlador = new DatosRelevadosControlador();
-                datosRelevadosControlador.sincronizarDeSqliteToMysql(a);
+                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+                relevamientoControlador.sincronizarDeSqliteToMysql(a);
             } else {
                 mostrarMensaje(a, "Error en el checkInspeccionesToMysql");
             }
@@ -158,8 +158,8 @@ public class InspeccionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("9/" +
-                    "10 - Recibiendo inspecciones...");
+            pDialog.setMessage("10/" +
+                    "12 - Recibiendo inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

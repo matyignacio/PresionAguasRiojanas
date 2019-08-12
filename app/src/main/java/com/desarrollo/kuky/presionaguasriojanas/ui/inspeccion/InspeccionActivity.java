@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.InspeccionActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
@@ -52,8 +53,12 @@ public class InspeccionActivity extends AppCompatActivity
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         subTitle.setText(LoginActivity.usuario.getNombre());
         /************************/
-        bNuevaInspeccion.setOnClickListener(v -> abrirActivity(this, PhotoActivity.class));
-        bRelevamiento.setOnClickListener(v -> abrirActivity(this, RelevamientoActivity.class));
+        bNuevaInspeccion.setOnClickListener(v -> abrirActivity(this, NuevaInspeccion.class));
+        bRelevamiento.setOnClickListener(v -> {
+            RelevamientoActivityControlador relevamientoActivityControlador =
+                    new RelevamientoActivityControlador();
+            relevamientoActivityControlador.abrirActivityTask(this, "04");
+        });
 
     }
 
@@ -89,7 +94,7 @@ public class InspeccionActivity extends AppCompatActivity
 
     private void primerInicio() {
         /**
-         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.sincronizarDeMysqlToSqlite
+         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del DatosRelevadosControlador.sincronizarDeMysqlToSqlite
          * */
         if (LoginActivity.usuario.getBanderaModuloInspeccion() == PRIMER_INICIO_MODULO) {
             sincronizar();

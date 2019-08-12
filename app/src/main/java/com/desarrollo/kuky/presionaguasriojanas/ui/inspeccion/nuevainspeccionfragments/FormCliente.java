@@ -146,7 +146,7 @@ public class FormCliente extends Fragment {
         private Activity mContext;
         EditText mEdittextview;
 
-        public addListenerOnTextChange(Activity context, EditText edittextview) {
+        addListenerOnTextChange(Activity context, EditText edittextview) {
             super();
             this.mContext = context;
             this.mEdittextview = edittextview;

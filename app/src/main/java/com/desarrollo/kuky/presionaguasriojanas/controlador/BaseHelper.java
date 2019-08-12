@@ -47,7 +47,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaInspeccion);
         sqLiteDatabase.execSQL(sqlTablaDatosRelevados);
         sqLiteDatabase.execSQL(sqlTablaBarrios);
-        sqLiteDatabase.execSQL(sqlTablaFoto);
+        sqLiteDatabase.execSQL(sqlTablaRelevamiento);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String dropTable(String table) {
+    String dropTable(String table) {
         return "DROP TABLE IF EXISTS " + table;
     }
 
@@ -192,59 +192,73 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  zona char(2) NOT NULL," +
             "  PRIMARY KEY (codigo))";
 
-    private String sqlTablaFoto = "CREATE TABLE IF NOT EXISTS fotos (" +
-            "  id TEXT," +
-            "  nombre BLOB)";
+    private String sqlTablaRelevamiento = "CREATE TABLE IF NOT EXISTS relevamiento (" +
+            "  id int(11) NOT NULL," +
+            "  id_usuario char(10) NOT NULL," +
+            "  barrio char(40) DEFAULT NULL," +
+            "  tipo_inmueble varchar(45) DEFAULT NULL," +
+            "  destino_inmueble varchar(45) DEFAULT NULL," +
+            "  conexion_visible tinyint(4) DEFAULT NULL," +
+            "  medidor_luz int(11) DEFAULT NULL," +
+            "  medidor_agua int(11) DEFAULT NULL," +
+            "  latitud double DEFAULT NULL," +
+            "  longitud double DEFAULT NULL," +
+            "  latitud_usuario double DEFAULT NULL," +
+            "  longitud_usuario double DEFAULT NULL," +
+            "  observaciones longtext DEFAULT NULL," +
+            "  foto blob DEFAULT NULL," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  PRIMARY KEY (id,id_usuario))";
 
-    public String getSqlTablaUsuarios() {
+    String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
     }
 
-    public String getSqlTablaPuntosPresion() {
+    String getSqlTablaPuntosPresion() {
         return sqlTablaPuntosPresion;
     }
 
-    public String getSqlTablaHistorialPuntosPresion() {
+    String getSqlTablaHistorialPuntosPresion() {
         return sqlTablaHistorialPuntosPresion;
     }
 
-    public String getSqlTablaTipoPunto() {
+    String getSqlTablaTipoPunto() {
         return sqlTablaTipoPunto;
     }
 
-    public String getSqlTablaOrden() {
+    String getSqlTablaOrden() {
         return sqlTablaOrden;
     }
 
-    public String getSqlTablaTipoInmueble() {
+    String getSqlTablaTipoInmueble() {
         return sqlTablaTipoInmueble;
     }
 
-    public String getSqlTablaDestinoInmueble() {
+    String getSqlTablaDestinoInmueble() {
         return sqlTablaDestinoInmueble;
     }
 
-    public String getSqlTablaTipoServicio() {
+    String getSqlTablaTipoServicio() {
         return sqlTablaTipoServicio;
     }
 
-    public String getSqlTablaCliente() {
+    String getSqlTablaCliente() {
         return sqlTablaCliente;
     }
 
-    public String getSqlTablaInspeccion() {
+    String getSqlTablaInspeccion() {
         return sqlTablaInspeccion;
     }
 
-    public String getSqlTablaDatosRelevados() {
+    String getSqlTablaDatosRelevados() {
         return sqlTablaDatosRelevados;
     }
 
-    public String getSqlTablaBarrios() {
+    String getSqlTablaBarrios() {
         return sqlTablaBarrios;
     }
 
-    public String getSqlTablaFotos() {
-        return sqlTablaFoto;
+    String getSqlTablaRelevamiento() {
+        return sqlTablaRelevamiento;
     }
 }

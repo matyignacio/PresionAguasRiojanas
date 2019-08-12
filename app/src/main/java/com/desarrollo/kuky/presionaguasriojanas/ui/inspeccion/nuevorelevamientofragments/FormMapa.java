@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -72,8 +73,8 @@ public class FormMapa extends Fragment {
                 bSiguienteFragmento.setVisibility(View.VISIBLE);
                 marcador = googleMap.addMarker(new MarkerOptions()
                         .position(point));
-//                NuevaInspeccion.inspeccion.setLatitud(point.latitude);
-//                NuevaInspeccion.inspeccion.setLongitud(point.longitude);
+                RelevamientoActivity.relevamiento.setLatitud(point.latitude);
+                RelevamientoActivity.relevamiento.setLongitud(point.longitude);
             });
         });
 

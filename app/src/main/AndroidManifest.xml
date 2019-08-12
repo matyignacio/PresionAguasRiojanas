@@ -77,8 +77,9 @@
         <activity
             android:name=".ui.inspeccion.NuevaInspeccion"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.inspeccion.RelevamientoActivity" />
-        <activity android:name=".ui.inspeccion.PhotoActivity"></activity>
+        <activity
+            android:name=".ui.inspeccion.RelevamientoActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

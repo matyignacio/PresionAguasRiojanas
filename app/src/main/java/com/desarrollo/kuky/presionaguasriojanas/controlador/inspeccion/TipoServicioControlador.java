@@ -33,8 +33,8 @@ public class TipoServicioControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("6/" +
-                    "10 - Recibiendo tipos de servicios...");
+            pDialog.setMessage("7/" +
+                    "12 - Recibiendo tipos de servicios...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

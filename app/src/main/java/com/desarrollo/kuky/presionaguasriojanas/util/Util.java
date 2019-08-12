@@ -7,6 +7,9 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -25,6 +28,7 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -356,5 +360,20 @@ public class Util {
                 }
             }
         });
+    }
+
+
+    public static byte[] comprimirImagen(byte[] bytes) {
+        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 20, stream);
+        bytes = stream.toByteArray();
+        return bytes;
+    }
+
+    public static Bitmap rotarBitMap(Bitmap bmp, int angulo) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angulo);
+        return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
     }
 }

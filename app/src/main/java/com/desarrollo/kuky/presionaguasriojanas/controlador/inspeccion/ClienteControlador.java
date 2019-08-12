@@ -38,7 +38,7 @@ public class ClienteControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("1/" +
-                    "10 - Enviando clientes...");
+                    "12 - Enviando clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -155,8 +155,8 @@ public class ClienteControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("8/" +
-                    "10 - Recibiendo clientes...");
+            pDialog.setMessage("9/" +
+                    "12 - Recibiendo clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

@@ -33,8 +33,8 @@ public class DestinoInmuebleControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("7/" +
-                    "10 - Recibiendo destino de inmuebles...");
+            pDialog.setMessage("8/" +
+                    "12 - Recibiendo destino de inmuebles...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

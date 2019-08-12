@@ -20,16 +20,18 @@ public class InspeccionActivityControlador {
         } else {
             /**
              * ORDEN:
-             *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/10
-             *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/10
-             *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 3/10
-             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 4/10
-             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 5/10
-             *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 6/10
-             *  destinoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 7/10
-             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 8/10
-             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 9/10
-             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 10/10
+             *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/11
+             *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/11
+             *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 3/11
+             *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 4/11
+             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 5/11
+             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 6/11
+             *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 7/11
+             *  destinoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 8/11
+             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 9/11
+             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 10/11
+             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 11/11
+             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 12/12
              * */
             check = ERROR;
             ClienteControlador clienteControlador = new ClienteControlador();

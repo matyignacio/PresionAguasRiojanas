@@ -18,6 +18,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoControlador;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormFoto;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormMapa;
@@ -35,6 +38,8 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
@@ -45,11 +50,12 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class RelevamientoActivity extends AppCompatActivity {
-    public static Button bSiguienteFragmento, bVolver, bGuardarInspeccion;
+    public static Button bSiguienteFragmento, bVolver, bGuardarRelevamiento;
     public static FormInmueble formInmueble = new FormInmueble();
     public static FormMapa formMapa = new FormMapa();
     public static FormFoto formFoto = new FormFoto();
     public static int posicionFormulario = 0;
+    public static Relevamiento relevamiento;
     /**
      * LO REFERENTE A OBTENER LA UBICACION
      */
@@ -69,14 +75,15 @@ public class RelevamientoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relevamiento);
+        relevamiento = new Relevamiento();
         /************************************************/
         bVolver = findViewById(R.id.bVolver);
         bSiguienteFragmento = findViewById(R.id.bSiguienteFragmento);
-        bGuardarInspeccion = findViewById(R.id.bGuardarInspeccion);
+        bGuardarRelevamiento = findViewById(R.id.bGuardarRelevamiento);
         /** SETEAMOS TYPEFACES  */
         setPrimaryFontBold(this, bVolver);
         setPrimaryFontBold(this, bSiguienteFragmento);
-        setPrimaryFontBold(this, bGuardarInspeccion);
+        setPrimaryFontBold(this, bGuardarRelevamiento);
         /************************/
         posicionFormulario = 0;
         request_permissions();
@@ -87,11 +94,18 @@ public class RelevamientoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (formInmueble.isVisible() ||
-                formMapa.isVisible()) {
+                formMapa.isVisible() ||
+                formFoto.isVisible()) {
             mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
         } else {
             abrirActivity(this, InspeccionActivity.class);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLocationUpdates();
     }
 
     private void init() {
@@ -217,17 +231,36 @@ public class RelevamientoActivity extends AppCompatActivity {
         }
     }
 
+    private void insertar() {
+        try {
+            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+            relevamiento.setId(relevamientoControlador.obtenerSiguienteId(this));
+            relevamiento.setIdUsuario(LoginActivity.usuario.getId());
+            relevamientoControlador.insertar(relevamiento, this);
+            posicionFormulario = 0;
+        } catch (Exception e) {
+            mostrarMensaje(this, e.toString());
+        }
+    }
+
     public int siguienteFragmento(Activity a, int layout, int posicionFormulario) {
         switch (posicionFormulario) {
             case 0: // SIGNIFICA POSICION INICIAL
                 // SIMPLEMENTE ABRIMOS EL SIGUIENTE FRAGMENTO
-
                 posicionFormulario++;
                 abrirFragmento(a, layout, formInmueble);
                 setOnButtonsFragment();
                 break;
             case 1:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
+                if (mCurrentLocation != null) {
+                    // LE ASIGNAMOS AL RELEVAMIENTO LA UBICACION DEL USUARIO
+                    relevamiento.setLatitudUsuario(mCurrentLocation.getLatitude());
+                    relevamiento.setLongitudUsuario(mCurrentLocation.getLongitude());
+                    // Y TAMBIEN ACTUALIZAMOS EL CENTRO DEL MAPA QUE SE ABRIRA EN EL FRAGMENTO
+                    Util.setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
+                    Util.setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
+                }
                 posicionFormulario++;
                 Util.siguienteFragmento(a, layout,
                         formInmueble,
@@ -236,8 +269,9 @@ public class RelevamientoActivity extends AppCompatActivity {
             case 2:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
                 posicionFormulario++;
+                cerrarFragmento(a, formMapa);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.LLRelevamiento, FormFoto.newInstance())
+                        .replace(R.id.LLRelevamiento, formFoto)
                         .commit();
                 break;
             default:
@@ -247,10 +281,11 @@ public class RelevamientoActivity extends AppCompatActivity {
                         R.layout.dialog_guardar,
                         "Si, Guardar",
                         () -> {
+                            insertar();
                             return null;
                         },
                         () -> {
-                            NuevaInspeccion.posicionFormulario--;
+                            RelevamientoActivity.posicionFormulario--;
                             bSiguienteFragmento.setVisibility(View.VISIBLE);
                             return null;
                         }
@@ -280,12 +315,13 @@ public class RelevamientoActivity extends AppCompatActivity {
             case 3:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
                 posicionFormulario--;
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.LLRelevamiento, FormFoto.newInstance())
-                        .commit();
+                getSupportFragmentManager().beginTransaction().
+                        remove(formFoto).
+                        commit();
+                abrirFragmento(a, layout, formMapa);
                 break;
             default:
-                bGuardarInspeccion.setVisibility(View.INVISIBLE);
+                bGuardarRelevamiento.setVisibility(View.INVISIBLE);
                 bSiguienteFragmento.setVisibility(View.VISIBLE);
                 posicionFormulario--;
                 break;

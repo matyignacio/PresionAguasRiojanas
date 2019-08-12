@@ -5,6 +5,13 @@ public class Barrio {
     private String desCodigo;
     private String zona;
 
+    public Barrio() {
+    }
+
+    public Barrio(String codigo) {
+        this.codigo = codigo;
+    }
+
     public String getCodigo() {
         return codigo;
     }

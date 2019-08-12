@@ -4,11 +4,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -42,10 +42,12 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.AutoFitTextureView;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -57,10 +59,13 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.comprimirImagen;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.rotarBitMap;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.showToast;
 
 public class FormFoto extends Fragment
-        implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -68,6 +73,8 @@ public class FormFoto extends Fragment
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+    private ImageView ivFoto;
+    private ImageButton bCapturar;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -231,9 +238,7 @@ public class FormFoto extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(),
-                    mFile,
-                    getActivity()));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage()));
         }
 
     };
@@ -387,10 +392,6 @@ public class FormFoto extends Fragment
         }
     }
 
-    public static FormFoto newInstance() {
-        return new FormFoto();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -399,9 +400,14 @@ public class FormFoto extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
+        //view.findViewById(R.id.picture).setOnClickListener(this);
+        ivFoto = view.findViewById(R.id.ivFoto);
+        bCapturar = view.findViewById(R.id.picture);
+        ivFoto.setVisibility(View.INVISIBLE);
         mTextureView = view.findViewById(R.id.texture);
+        bCapturar.setOnClickListener(v -> {
+            takePicture();
+        });
     }
 
     @Override
@@ -809,7 +815,7 @@ public class FormFoto extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast(getActivity(), "Saved: " + mFile);
+                    mostrarMensajeLog(getActivity(), "Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
@@ -858,26 +864,6 @@ public class FormFoto extends Fragment
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                takePicture();
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
-            }
-        }
-    }
-
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
@@ -888,23 +874,15 @@ public class FormFoto extends Fragment
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
-    private static class ImageSaver implements Runnable {
+    private class ImageSaver implements Runnable {
 
         /**
          * The JPEG image
          */
         private final Image mImage;
-        /**
-         * The file we save the image into.
-         */
-        private final File mFile;
 
-        private final Activity activity;
-
-        ImageSaver(Image image, File file, Activity a) {
+        ImageSaver(Image image) {
             mImage = image;
-            mFile = file;
-            activity = a;
         }
 
         @Override
@@ -912,16 +890,30 @@ public class FormFoto extends Fragment
             ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
-            try {
-                SQLiteDatabase db = BaseHelper.getInstance(activity).getWritableDatabase();
-                ContentValues values = new ContentValues();
-                values.put("id", mFile.toString());
-                values.put("nombre", bytes);
-                db.insert("fotos", null, values);
-                db.close();
-            } finally {
-                mImage.close();
-            }
+            getActivity().runOnUiThread(() -> {
+                Bitmap bmp = BitmapFactory.decodeByteArray(
+                        bytes,
+                        0,
+                        bytes.length,
+                        null);
+                ivFoto.setImageBitmap(rotarBitMap(bmp, 90));
+                ivFoto.setVisibility(View.VISIBLE);
+                bCapturar.setVisibility(View.INVISIBLE);
+                mTextureView.setVisibility(View.INVISIBLE);
+            });
+            RelevamientoActivity.relevamiento.setFoto(comprimirImagen(bytes));
+
+            mImage.close();
+//            try {
+//                SQLiteDatabase db = BaseHelper.getInstance(activity).getWritableDatabase();
+//                ContentValues values = new ContentValues();
+//                values.put("id", mFile.toString());
+//                values.put("nombre", comprimirImagen(bytes));
+//                db.insert("fotos", null, values);
+//                db.close();
+//            } finally {
+//                mImage.close();
+//            }
         }
 
     }

@@ -10,10 +10,7 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
-import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
@@ -22,12 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class DatosRelevadosControlador {
@@ -46,8 +39,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("3/" +
-                    "10 - Enviando Datos relevados...");
+            pDialog.setMessage("4/" +
+                    "12 - Enviando Datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -157,8 +150,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("10/" +
-                    "10 - Recibiendo datos relevados...");
+            pDialog.setMessage("11/" +
+                    "12 - Recibiendo datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -225,13 +218,8 @@ public class DatosRelevadosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                mostrarMensaje(a, "Se sincronizo con exito!");
-                UsuarioControlador usuarioControlador = new UsuarioControlador();
-                if (LoginActivity.usuario.getBanderaModuloInspeccion() == PRIMER_INICIO_MODULO) {
-                    usuarioControlador.editarBanderaModuloInspeccion(a, SEGUNDO_INICIO_MODULO);
-                }
-                usuarioControlador.editarBanderaSyncModuloInspeccion(a, BANDERA_BAJA);
-                abrirActivity(a, InspeccionActivity.class);
+                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+                relevamientoControlador.sincronizarDeMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkDatosRelevados");
             }

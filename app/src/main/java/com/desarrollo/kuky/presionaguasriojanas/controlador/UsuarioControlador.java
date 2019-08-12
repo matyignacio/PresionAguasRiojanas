@@ -233,7 +233,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_punto"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("susuario"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("fotos"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaDestinoInmueble());
@@ -247,7 +247,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoPunto());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaFotos());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamiento());
         db.close();
     }
 

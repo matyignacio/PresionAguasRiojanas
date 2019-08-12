@@ -33,8 +33,8 @@ public class BarrioControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("5/" +
-                    "10 - Recibiendo barrios...");
+            pDialog.setMessage("6/" +
+                    "12 - Recibiendo barrios...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -66,7 +66,7 @@ public class BarrioControlador {
                             " VALUES" +
                             " ('" + rs.getString(1) + "','" + // codigo
                             rs.getString(2) + "','" + // des_codigo
-                            rs.getString(3) + "');"; // zona
+                            rs.getString(3) + "');"; // zonaBarrios
                     db.execSQL(sql);
                 }
                 check++;
