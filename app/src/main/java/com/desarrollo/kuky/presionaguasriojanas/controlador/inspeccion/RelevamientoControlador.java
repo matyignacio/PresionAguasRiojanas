@@ -317,7 +317,7 @@ public class RelevamientoControlador {
         return relevamientos;
     }
 
-    public void insertar(Relevamiento relevamiento, Activity a) {
+    public int insertar(Relevamiento relevamiento, Activity a) {
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             ContentValues values = new ContentValues();
@@ -337,10 +337,15 @@ public class RelevamientoControlador {
             values.put("observaciones", relevamiento.getObservaciones());
             values.put("foto", relevamiento.getFoto());
             values.put("pendiente", INSERTAR_PUNTO);
-            db.insert("relevamiento", null, values);
+            if (db.insert("relevamiento", null, values) > 0) {
+                db.close();
+                return EXITOSO;
+            }
             db.close();
+            return ERROR;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar RC " + e.toString());
+            return ERROR;
         }
     }
 

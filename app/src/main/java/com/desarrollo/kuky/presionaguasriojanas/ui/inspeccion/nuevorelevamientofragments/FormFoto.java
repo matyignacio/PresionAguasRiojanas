@@ -753,17 +753,18 @@ public class FormFoto extends Fragment
      * Lock the focus as the first step for a still image capture.
      */
     private void lockFocus() {
-        try {
-            // This is how to tell the camera to lock focus.
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-                    CameraMetadata.CONTROL_AF_TRIGGER_START);
-            // Tell #mCaptureCallback to wait for the lock.
-            mState = STATE_WAITING_LOCK;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
+        // This is how to tell the camera to lock focus.
+        mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+                CameraMetadata.CONTROL_AF_TRIGGER_START);
+        // Tell #mCaptureCallback to wait for the lock.
+        mState = STATE_WAITING_LOCK;
+        /** ACA COMENTAMOS LA LINEA Y REEMPLAZAMOS POR captureStillPicture();
+         * PARA QUE CAPTURE SIEMPRE Y NO ESPERE POR EL FOCUS.
+         * https://stackoverflow.com/questions/33127258/front-camera-in-camera2-not-capturing-image
+         * */
+//            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+//                    mBackgroundHandler);
+        captureStillPicture();
     }
 
     /**
@@ -902,18 +903,7 @@ public class FormFoto extends Fragment
                 mTextureView.setVisibility(View.INVISIBLE);
             });
             RelevamientoActivity.relevamiento.setFoto(comprimirImagen(bytes));
-
             mImage.close();
-//            try {
-//                SQLiteDatabase db = BaseHelper.getInstance(activity).getWritableDatabase();
-//                ContentValues values = new ContentValues();
-//                values.put("id", mFile.toString());
-//                values.put("nombre", comprimirImagen(bytes));
-//                db.insert("fotos", null, values);
-//                db.close();
-//            } finally {
-//                mImage.close();
-//            }
         }
 
     }

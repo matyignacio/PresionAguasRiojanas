@@ -40,7 +40,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
@@ -58,18 +57,15 @@ public class NuevaInspeccion extends AppCompatActivity {
     /**
      * LAS DEFINICIONES ESTATICAS QUE NECESITO PARA LOS FRAGMENTOS
      */
-    public static List<String> labelsTipoInmueble = new ArrayList<>();
-    public static List<String> labelsTipoServicio = new ArrayList<>();
-    public static List<String> labelsDestino = new ArrayList<>();
     public static Cliente cliente;
     public static Inspeccion inspeccion;
     public static ArrayList<DatosRelevados> datosRelevados;
-    public static FormCliente formCliente = new FormCliente();
-    public static FormInmueble formInmueble = new FormInmueble();
-    public static FormObservaciones formObservaciones = new FormObservaciones();
-    public static FormMapa formMapa = new FormMapa();
-    public static FormDatos formDatos = new FormDatos();
-    public static int posicionFormulario = 0;
+    public static FormCliente formCliente;
+    public static FormInmueble formInmueble;
+    public static FormObservaciones formObservaciones;
+    public static FormMapa formMapa;
+    public static FormDatos formDatos;
+    public static int posicionFormulario;
     public static Button bSiguienteFragmento, bVolver, bGuardarInspeccion;
     /**
      * LO REFERENTE A OBTENER LA UBICACION
@@ -90,6 +86,13 @@ public class NuevaInspeccion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_inspeccion);
+        inspeccion = new Inspeccion();
+        formCliente = new FormCliente();
+        formInmueble = new FormInmueble();
+        formObservaciones = new FormObservaciones();
+        formMapa = new FormMapa();
+        formDatos = new FormDatos();
+        posicionFormulario = 0;
         /************************************************/
         bVolver = findViewById(R.id.bVolver);
         bSiguienteFragmento = findViewById(R.id.bSiguienteFragmento);
@@ -99,7 +102,6 @@ public class NuevaInspeccion extends AppCompatActivity {
         setPrimaryFontBold(this, bSiguienteFragmento);
         setPrimaryFontBold(this, bGuardarInspeccion);
         /************************/
-        posicionFormulario = 0;
         request_permissions();
         bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLInspeccion, posicionFormulario));
         bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLInspeccion, posicionFormulario));
@@ -116,6 +118,12 @@ public class NuevaInspeccion extends AppCompatActivity {
         } else {
             abrirActivity(this, InspeccionActivity.class);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLocationUpdates();
     }
 
     private void init() {

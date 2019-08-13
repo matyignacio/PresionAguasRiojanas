@@ -21,13 +21,16 @@ import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion;
 import com.desarrollo.kuky.presionaguasriojanas.util.Lists;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.inspeccion;
-import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsDestino;
-import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsTipoInmueble;
-import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevaInspeccion.labelsTipoServicio;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Lists.labelsCoeficienteZonal;
 
 public class FormInmueble extends Fragment {
+    public static List<String> labelsTipoInmueble = new ArrayList<>();
+    public static List<String> labelsTipoServicio = new ArrayList<>();
+    public static List<String> labelsDestino = new ArrayList<>();
     Spinner sTipoInmueble, sDestino, sCoeficienteZonal, sTipoServicio;
     Switch swServicioCloacal;
     TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
