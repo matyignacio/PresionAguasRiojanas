@@ -24,7 +24,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:width="140dp"
-                android:text="@string/bModuloPresion" />
+                android:text="@string/bModuloPresion"
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/bModuloInspeccion"
@@ -32,7 +33,8 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="15dp"
                 android:width="140dp"
-                android:text="@string/bModuloInspeccion" />
+                android:text="@string/bModuloInspeccion"
+                android:visibility="invisible" />
         </TableRow>
     </TableLayout>
 

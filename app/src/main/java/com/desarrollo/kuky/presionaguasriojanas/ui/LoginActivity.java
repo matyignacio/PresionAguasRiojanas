@@ -99,14 +99,13 @@ public class LoginActivity extends AppCompatActivity {
             } catch (Exception e) {
                 regreso = "Error en la conexion";
             }
-
             return regreso;
         }
 
         @Override
         protected void onPostExecute(String s) {
             if (s.equals("correcto")) {
-                abrirActivity(LoginActivity.this, InicioActivity.class);
+                //abrirActivity(LoginActivity.this, InicioActivity.class);
             } else {
                 mostrarMensaje(a, s);
             }

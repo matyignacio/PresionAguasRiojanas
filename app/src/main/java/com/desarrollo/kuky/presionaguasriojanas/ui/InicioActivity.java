@@ -101,15 +101,16 @@ public class InicioActivity extends AppCompatActivity
         return true;
     }
 
-
     private void evaluarUsuario() {
-        boolean prueba = true;
-        if (prueba) {
-            bModuloInspeccion.setVisibility(View.VISIBLE);
-            bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo);
-        } else {
-            bModuloInspeccion.setVisibility(View.INVISIBLE);
-            bModuloInspeccion.setBackgroundResource(R.drawable.boton_redondo_disabled);
+        for (int i = 0; i < LoginActivity.usuario.getModulos().size(); i++) {
+            switch (LoginActivity.usuario.getModulos().get(i).getNombre()) {
+                case "presion":
+                    bModuloPresion.setVisibility(View.VISIBLE);
+                    break;
+                case "inspeccion":
+                    bModuloInspeccion.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
     }
 }

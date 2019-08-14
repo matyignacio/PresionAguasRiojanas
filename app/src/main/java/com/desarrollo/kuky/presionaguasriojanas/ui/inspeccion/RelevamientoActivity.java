@@ -109,7 +109,7 @@ public class RelevamientoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startLocationUpdates();
+        //startLocationUpdates();
     }
 
     private void init() {
@@ -242,6 +242,7 @@ public class RelevamientoActivity extends AppCompatActivity {
             relevamiento.setIdUsuario(LoginActivity.usuario.getId());
             if (relevamientoControlador.insertar(relevamiento, this) == EXITOSO) {
                 mostrarMensaje(this, "Se guardo el relevamiento con exito!");
+                stopLocationUpdates();
                 abrirActivity(this, InspeccionActivity.class);
             } else {
                 mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento");

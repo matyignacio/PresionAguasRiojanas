@@ -1,5 +1,7 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto;
 
+import java.util.ArrayList;
+
 public class Usuario {
 
     private String usuario;
@@ -31,6 +33,8 @@ public class Usuario {
      * 0 ES QUE NO TIENE INFO NUEVA.
      * 1 YA INGRESO AL MENOS REGISTRO, DEBE SINCRONIZAR.
      */
+
+    private ArrayList<Modulo> modulos;
 
     public String getId() {
         return usuario;
@@ -110,6 +114,14 @@ public class Usuario {
 
     public void setBanderaSyncModuloInspeccion(int banderaSyncModuloInspeccion) {
         this.banderaSyncModuloInspeccion = banderaSyncModuloInspeccion;
+    }
+
+    public ArrayList<Modulo> getModulos() {
+        return modulos;
+    }
+
+    public void setModulos(ArrayList<Modulo> modulos) {
+        this.modulos = modulos;
     }
 
     @Override

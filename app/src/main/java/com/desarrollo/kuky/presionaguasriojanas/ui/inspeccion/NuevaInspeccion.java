@@ -123,7 +123,7 @@ public class NuevaInspeccion extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startLocationUpdates();
+        //startLocationUpdates();
     }
 
     private void init() {

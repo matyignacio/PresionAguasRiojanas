@@ -6,17 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.desarrollo.kuky.presionaguasriojanas.objeto.Modulo;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class UsuarioControlador {
     private ProgressDialog pDialog;
@@ -64,7 +69,6 @@ public class UsuarioControlador {
                     LoginActivity.usuario.setBanderaSyncModuloPresion(0);
                     LoginActivity.usuario.setBanderaModuloInspeccion(0);
                     LoginActivity.usuario.setBanderaSyncModuloInspeccion(0);
-                    guardarUsuario(a, LoginActivity.usuario);
                 } else {
                     LoginActivity.usuario.setNombre(null);
                 }
@@ -85,6 +89,12 @@ public class UsuarioControlador {
         @Override
         protected void onPostExecute(String s) {
             pDialog.dismiss();
+            if (s.equals("")) {
+                extraerPermisos(a, LoginActivity.usuario.getId());
+            } else {
+                mostrarMensaje(a, s);
+            }
+
             /***
              * ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA
              * LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
@@ -102,7 +112,91 @@ public class UsuarioControlador {
             UsuarioPorMailYClave usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
             usuarioPorMailYClave.execute();
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
+        }
+    }
+
+    private class ExtraerPermisos extends AsyncTask<String, Float, String> {
+        Activity a;
+        String usuario;
+
+        @Override
+        protected void onPreExecute() {
+            /** VACIAMOS LA TABLA DE MODULOS */
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "DELETE FROM modulos";
+            db.execSQL(sql);
+            db.close();
+            /*********************************/
+            pDialog = new ProgressDialog(a);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pDialog.setMessage("Iniciando sesion...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        ExtraerPermisos(Activity a, String usuario) {
+            this.a = a;
+            this.usuario = usuario;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            guardarUsuario(a, LoginActivity.usuario);
+            Connection conn;
+            PreparedStatement ps;
+            ResultSet rs;
+            try {
+                ArrayList<Modulo> modulos = new ArrayList<>();
+                conn = Conexion.GetConnection();
+                String consultaSql = "SELECT m.id, m.nombre FROM susuario u, permisos p, modulos m" +
+                        " WHERE u.usuario = p.id_usuario" +
+                        " AND p.id_modulo = m.id" +
+                        " AND u.usuario='" + usuario + "'";
+                ps = conn.prepareStatement(consultaSql);
+                ps.execute();
+                rs = ps.getResultSet();
+                while (rs.next()) {
+                    // CARGAMOS LOS MODULOS EN EL USUARIO
+                    Modulo modulo = new Modulo();
+                    modulo.setId(rs.getInt(1));
+                    modulo.setNombre(rs.getString(2));
+                    modulos.add(modulo);
+                    // Y TAMBIEN LOS GUARDAMOS
+                    guardarModulo(a, modulo);
+                }
+                LoginActivity.usuario.setModulos(modulos);
+                rs.close();
+                ps.close();
+                conn.close();
+                if (modulos.size() == 0) {
+                    return "El usuario no tiene permisos";
+                } else {
+                    return "";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return e.toString();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            pDialog.dismiss();
+            if (s.equals("")) {
+                abrirActivity(a, InicioActivity.class);
+            } else {
+                mostrarMensaje(a, s);
+            }
+        }
+    }
+
+    public void extraerPermisos(Activity a, String usuario) {
+        try {
+            ExtraerPermisos extraerPermisos = new ExtraerPermisos(a, usuario);
+            extraerPermisos.execute();
+        } catch (Exception e) {
+            mostrarMensaje(a, e.toString());
         }
     }
 
@@ -124,7 +218,21 @@ public class UsuarioControlador {
             db.execSQL(sql);
             db.close();
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensajeLog(a, e.toString());
+        }
+    }
+
+    private void guardarModulo(Activity a, Modulo m) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
+            String sql = "INSERT INTO modulos VALUES( '" +
+                    m.getId() + "', '"
+                    + m.getNombre() + "')";
+            db.execSQL(sql);
+            db.close();
+        } catch (Exception e) {
+            mostrarMensaje(a, e.toString());
         }
     }
 
@@ -136,13 +244,14 @@ public class UsuarioControlador {
             db.close();
             return EXITOSO;
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
             return ERROR;
         }
     }
 
     public int existeUsuario(Activity a) {
         try {
+            ArrayList<Modulo> modulos = new ArrayList<>();
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
             Cursor c = db.rawQuery("SELECT * FROM susuario", null);
@@ -155,13 +264,22 @@ public class UsuarioControlador {
                 LoginActivity.usuario.setBanderaSyncModuloPresion(c.getInt(7));
                 LoginActivity.usuario.setBanderaModuloInspeccion(c.getInt(8));
                 LoginActivity.usuario.setBanderaSyncModuloInspeccion(c.getInt(9));
+                Cursor c2 = db.rawQuery("SELECT * FROM modulos", null);
+                while (c2.moveToNext()) {
+                    Modulo modulo = new Modulo();
+                    modulo.setId(c2.getInt(0));
+                    modulo.setNombre(c2.getString(1));
+                    modulos.add(modulo);
+                }
+                LoginActivity.usuario.setModulos(modulos);
+                c2.close();
                 return EXITOSO;
             }
             c.close();
             db.close();
             return ERROR;
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
             return ERROR;
         }
     }
@@ -175,7 +293,7 @@ public class UsuarioControlador {
             bh.close();
             LoginActivity.usuario.setBanderaModuloPresion(bandera);
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
         }
     }
 
@@ -188,7 +306,7 @@ public class UsuarioControlador {
             bh.close();
             LoginActivity.usuario.setBanderaSyncModuloInspeccion(bandera);
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
         }
     }
 
@@ -201,7 +319,7 @@ public class UsuarioControlador {
             bh.close();
             LoginActivity.usuario.setBanderaModuloInspeccion(bandera);
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
         }
     }
 
@@ -214,7 +332,7 @@ public class UsuarioControlador {
             bh.close();
             LoginActivity.usuario.setBanderaSyncModuloPresion(bandera);
         } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
+            mostrarMensaje(a, e.toString());
         }
     }
 
@@ -234,6 +352,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("susuario"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("permisos"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaDestinoInmueble());
@@ -248,6 +367,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamiento());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaModulos());
         db.close();
     }
 

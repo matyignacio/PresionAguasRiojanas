@@ -268,7 +268,7 @@ public class Util {
                         e.printStackTrace();
                     }
                 })
-                .setNegativeButton("Cancelar", (dialog12, id) -> dialog12.cancel());
+                .setNegativeButton("Cancelar", (dialog2, id) -> dialog2.cancel());
 
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
@@ -290,14 +290,14 @@ public class Util {
                         e.printStackTrace();
                     }
                 })
-                .setNegativeButton("Cancelar", (dialog12, id) -> {
+                .setNegativeButton("Cancelar", (dialog2, id) -> {
 
                     try {
                         methodCancel.call();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    dialog12.cancel();
+                    dialog2.cancel();
                 });
 
         // create an alert dialog
@@ -314,7 +314,7 @@ public class Util {
                 .setTitle(titulo)
                 //.setMessage("Seleccione el circuito")
                 .setView(view)
-                .setPositiveButton(mensajeSI, (dialog13, which) -> {
+                .setPositiveButton(mensajeSI, (dialog1, which) -> {
                     try {
                         methodAccept.call();
                     } catch (Exception e) {
