@@ -130,7 +130,7 @@ public class UsuarioControlador {
             /*********************************/
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Iniciando sesion...");
+            pDialog.setMessage("Revisando permisos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

@@ -41,7 +41,6 @@ public class FormInmueble extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_form_inmueble_relevamiento, container, false);
         // Nuevos parametros para el view del fragmento
@@ -160,7 +159,7 @@ public class FormInmueble extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (mEdittextview.getText().toString().length() > 0) {
+            if (mEdittextview.getText().toString().length() > 4) {
                 RelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
             } else {
                 RelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);

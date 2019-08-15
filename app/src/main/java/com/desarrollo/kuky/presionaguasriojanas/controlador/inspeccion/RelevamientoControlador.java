@@ -30,6 +30,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_M
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class RelevamientoControlador {
     private ProgressDialog pDialog;
@@ -106,8 +107,9 @@ public class RelevamientoControlador {
                             "'" + relevamientos.get(i).getLatitudUsuario() + "', " +
                             "'" + relevamientos.get(i).getLongitudUsuario() + "', " +
                             "'" + relevamientos.get(i).getObservaciones() + "', " +
-                            "'" + relevamientos.get(i).getFoto() + "');";
+                            "?);";
                     ps = conn.prepareStatement(consultaSql);
+                    ps.setBytes(1, relevamientos.get(i).getFoto());
                     ps.execute();
                     conn.commit();
                     ps.close();
@@ -124,6 +126,7 @@ public class RelevamientoControlador {
                 }
             } catch (SQLException e) {
                 try {
+                    mostrarMensajeLog(a, e.toString());
                     Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
                     conn.rollback();
                 } catch (SQLException e1) {
@@ -206,7 +209,6 @@ public class RelevamientoControlador {
                 db.execSQL("DELETE FROM relevamiento");
                 while (rs.next()) {
                     ContentValues values = new ContentValues();
-
                     values.put("id", rs.getInt(1));
                     values.put("id_usuario", rs.getString(2));
                     values.put("barrio", rs.getString(3));
@@ -222,7 +224,6 @@ public class RelevamientoControlador {
                     values.put("longitud_usuario", rs.getDouble(12));
                     values.put("observaciones", rs.getString(13));
                     values.put("pendiente", 0);
-
                     db.insert("relevamiento", "foto", values);
                 }
                 check++;
@@ -272,12 +273,14 @@ public class RelevamientoControlador {
     }
 
     private void actualizarPendiente(Relevamiento relevamiento, Activity a) {
+        String[] whereArgs = {String.valueOf(relevamiento.getId()), relevamiento.getIdUsuario()};
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("id", relevamiento.getId());
-            values.put("id_usuario", relevamiento.getIdUsuario());
-            db.update("relevamiento", values, "pendiente = 0", null);
+            values.put("pendiente", 0);
+            db.update("relevamiento", values,
+                    "id = ? AND id_usuario = ?",
+                    whereArgs);
             db.close();
         } catch (Exception e) {
             mostrarMensaje(a, "Error actualizarPendiente RC " + e.toString());
@@ -358,6 +361,8 @@ public class RelevamientoControlador {
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
+            c3.close();
+            db3.close();
             return id;
         } catch (Exception e) {
             mostrarMensaje(a, "Error obtenerSiguienteId RC " + e.toString());
