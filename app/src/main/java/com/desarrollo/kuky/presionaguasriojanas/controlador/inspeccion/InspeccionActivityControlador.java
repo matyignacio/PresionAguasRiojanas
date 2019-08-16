@@ -24,14 +24,13 @@ public class InspeccionActivityControlador {
              *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/11
              *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 3/11
              *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 4/11
-             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 5/11
-             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 6/11
+             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 5/11
+             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 6/11
              *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 7/11
-             *  destinoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 8/11
-             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 9/11
-             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 10/11
-             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 11/11
-             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 12/12
+             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 8/11
+             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 9/11
+             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 10/11
+             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 11/11
              * */
             check = ERROR;
             ClienteControlador clienteControlador = new ClienteControlador();

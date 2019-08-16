@@ -52,27 +52,17 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/sp_redondo" />
 
-        <TextView
-            android:id="@+id/tvsDestino"
-            style="@style/tv_primary_mini"
-            android:layout_below="@id/sTipoInmueble"
-            android:layout_marginTop="5dp"
-            android:text="@string/tv_destino" />
-
-        <Spinner
-            android:id="@+id/sDestino"
+        <EditText
+            android:id="@+id/etRubro"
             style="@style/et_primary"
-            android:layout_height="40dp"
-            android:layout_below="@+id/tvsDestino"
-            android:layout_alignStart="@+id/tvDatosInmueble"
-            android:layout_alignEnd="@id/tvDatosInmueble"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/sp_redondo" />
+            android:inputType="text"
+            android:layout_below="@+id/sTipoInmueble"
+            android:hint="@string/tv_rubro" />
 
         <Switch
             android:id="@+id/swConexionVisible"
             style="@style/tv_primary_left"
-            android:layout_below="@id/sDestino"
+            android:layout_below="@id/etRubro"
             android:layout_alignStart="@+id/tvDatosInmueble"
             android:background="@drawable/et_redondo_without_padding"
             android:text="Conexion Visible" />
@@ -89,7 +79,7 @@
             style="@style/et_primary"
             android:layout_below="@id/etMedidorLuz"
             android:hint="@string/hint_medidor_de_agua"
-            android:inputType="number" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/etObservaciones"

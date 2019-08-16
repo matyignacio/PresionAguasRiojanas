@@ -38,7 +38,7 @@ public class ClienteControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("1/" +
-                    "12 - Enviando clientes...");
+                    "11 - Enviando clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -155,8 +155,8 @@ public class ClienteControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("9/" +
-                    "12 - Recibiendo clientes...");
+            pDialog.setMessage("8/" +
+                    "11 - Recibiendo clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -433,8 +433,6 @@ public class ClienteControlador {
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
-            c3.close();
-            db3.close();
             return id;
         } catch (Exception e) {
             mostrarMensaje(a, "Error obtenerSiguienteId CC " + e.toString());

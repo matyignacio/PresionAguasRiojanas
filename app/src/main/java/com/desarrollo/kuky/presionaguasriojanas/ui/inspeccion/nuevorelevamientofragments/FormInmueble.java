@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.DestinoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
@@ -27,12 +26,10 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 public class FormInmueble extends Fragment {
     ArrayList<String> labelsBarrios = new ArrayList<>();
     ArrayList<String> labelsTipoInmueble = new ArrayList<>();
-    ArrayList<String> labelsDestino = new ArrayList<>();
-    Spinner sTipoInmueble, sDestino, sBarrios;
+    Spinner sTipoInmueble, sBarrios;
     Switch swConexionVisible;
-    EditText etMedidorLuz, etMedidorAgua, etObservaciones;
+    EditText etRubro, etMedidorLuz, etMedidorAgua, etObservaciones;
     TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
-    DestinoInmuebleControlador destinoInmuebleControlador = new DestinoInmuebleControlador();
 
     public FormInmueble() {
         // Required empty public constructor
@@ -71,22 +68,18 @@ public class FormInmueble extends Fragment {
                 labelsBarrios.add(
                         RelevamientoActivityControlador.barrios.get(i).getDesCodigo());
             }
-            labelsDestino.add("Ninguno");
-            for (int i = 0; i < destinoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {
-                labelsDestino.add(
-                        destinoInmuebleControlador.extraerTodos(getActivity()).get(i).getNombre());
-            }
         }
         /** CAPTURAMOS LOS ELEMENTOS DE LA VISTA *********************/
         sBarrios = getActivity().findViewById(R.id.sBarrio);
         sTipoInmueble = getActivity().findViewById(R.id.sTipoInmueble);
-        sDestino = getActivity().findViewById(R.id.sDestino);
+        etRubro = getActivity().findViewById(R.id.etRubro);
         swConexionVisible = getActivity().findViewById(R.id.swConexionVisible);
         etMedidorLuz = getActivity().findViewById(R.id.etMedidorLuz);
         etMedidorAgua = getActivity().findViewById(R.id.etMedidorAgua);
         etObservaciones = getActivity().findViewById(R.id.etObservaciones);
         etMedidorLuz.addTextChangedListener(new addListenerOnTextChange(etMedidorLuz));
         /** SETEAMOS LOS TYPEFACES ***********************************/
+        setPrimaryFontBold(getActivity(), etRubro);
         setPrimaryFontBold(getActivity(), etMedidorLuz);
         setPrimaryFontBold(getActivity(), etMedidorAgua);
         setPrimaryFontBold(getActivity(), etObservaciones);
@@ -95,13 +88,6 @@ public class FormInmueble extends Fragment {
                 getActivity(),
                 1,
                 labelsTipoInmueble,
-                () -> null,
-                () -> null);
-        ////////////////////////////////////////
-        cargarSpinner(sDestino,
-                getActivity(),
-                1,
-                labelsDestino,
                 () -> null,
                 () -> null);
         ////////////////////////////////////////
@@ -128,9 +114,8 @@ public class FormInmueble extends Fragment {
         RelevamientoActivity.relevamiento.setTipoInmueble(
                 labelsTipoInmueble.get(sTipoInmueble.getSelectedItemPosition())
         );
-        RelevamientoActivity.relevamiento.setDestinoInmueble(
-                labelsDestino.get(sDestino.getSelectedItemPosition()));
-        RelevamientoActivity.relevamiento.setConexionVisible(swConexionVisible.isChecked());
+        RelevamientoActivity.relevamiento.setRubro(
+                etRubro.getText().toString());
         try {
             RelevamientoActivity.relevamiento.setMedidorLuz(
                     Integer.valueOf(etMedidorLuz.getText().toString()));

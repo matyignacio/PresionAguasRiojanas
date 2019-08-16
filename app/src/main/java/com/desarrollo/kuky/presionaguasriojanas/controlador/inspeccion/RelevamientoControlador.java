@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
@@ -49,7 +50,7 @@ public class RelevamientoControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("3/" +
-                    "12 - Enviando Relevamientos...");
+                    "11 - Enviando Relevamientos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -83,7 +84,7 @@ public class RelevamientoControlador {
                             "id_usuario," +
                             "barrio," +
                             "tipo_inmueble," +
-                            "destino_inmueble," +
+                            "rubro," +
                             "conexion_visible," +
                             "medidor_luz," +
                             "medidor_agua," +
@@ -92,13 +93,14 @@ public class RelevamientoControlador {
                             "latitud_usuario," +
                             "longitud_usuario," +
                             "observaciones," +
-                            "foto)" +
+                            "foto," +
+                            "fecha)" +
                             "VALUES " +
                             "('" + relevamientos.get(i).getId() + "', " +
                             "'" + relevamientos.get(i).getIdUsuario() + "', " +
                             "'" + relevamientos.get(i).getBarrio() + "', " +
                             "'" + relevamientos.get(i).getTipoInmueble() + "', " +
-                            "'" + relevamientos.get(i).getDestinoInmueble() + "', " +
+                            "'" + relevamientos.get(i).getRubro() + "', " +
                             "'" + conexionVisible + "', " +
                             "'" + relevamientos.get(i).getMedidorLuz() + "', " +
                             "'" + relevamientos.get(i).getMedidorAgua() + "', " +
@@ -107,7 +109,8 @@ public class RelevamientoControlador {
                             "'" + relevamientos.get(i).getLatitudUsuario() + "', " +
                             "'" + relevamientos.get(i).getLongitudUsuario() + "', " +
                             "'" + relevamientos.get(i).getObservaciones() + "', " +
-                            "?);";
+                            "?, " +
+                            "'" + relevamientos.get(i).getFecha() + "')";
                     ps = conn.prepareStatement(consultaSql);
                     ps.setBytes(1, relevamientos.get(i).getFoto());
                     ps.execute();
@@ -152,7 +155,7 @@ public class RelevamientoControlador {
                 datosRelevadosControlador.sincronizarDeSqliteToMysql(a);
                 // VACIAMOS LA TABLA ?????
                 // SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                //db.delete("relevamiento", null, null);
+                // db.delete("relevamiento", null, null);
             } else {
                 mostrarMensaje(a, "Error en el checkRelevamientoToMysql");
             }
@@ -179,8 +182,8 @@ public class RelevamientoControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("12/" +
-                    "12 - Recibiendo relevamientos...");
+            pDialog.setMessage("11/" +
+                    "11 - Recibiendo relevamientos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -213,7 +216,7 @@ public class RelevamientoControlador {
                     values.put("id_usuario", rs.getString(2));
                     values.put("barrio", rs.getString(3));
                     values.put("tipo_inmueble", rs.getString(4));
-                    values.put("destino_inmueble", rs.getString(5));
+                    values.put("rubro", rs.getString(5));
                     // atendeme ese IF ELSE :)
                     values.put("conexion_visible", rs.getInt(6) == 1 ? 1 : 0);
                     values.put("medidor_luz", rs.getInt(7));
@@ -223,6 +226,7 @@ public class RelevamientoControlador {
                     values.put("latitud_usuario", rs.getDouble(11));
                     values.put("longitud_usuario", rs.getDouble(12));
                     values.put("observaciones", rs.getString(13));
+                    values.put("fecha", String.valueOf(rs.getTimestamp(15)));
                     values.put("pendiente", 0);
                     db.insert("relevamiento", "foto", values);
                 }
@@ -258,7 +262,7 @@ public class RelevamientoControlador {
                 usuarioControlador.editarBanderaSyncModuloInspeccion(a, BANDERA_BAJA);
                 abrirActivity(a, InspeccionActivity.class);
             } else {
-                mostrarMensaje(a, "Error en el checkDatosRelevados");
+                mostrarMensaje(a, "Error en el checkRelevamientos");
             }
         }
     }
@@ -268,7 +272,7 @@ public class RelevamientoControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncMysqlToSqlite DRC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite RC" + e.toString());
         }
     }
 
@@ -299,7 +303,7 @@ public class RelevamientoControlador {
             relevamiento.setIdUsuario(c.getString(1));
             relevamiento.setBarrio(c.getString(2));
             relevamiento.setTipoInmueble(c.getString(3));
-            relevamiento.setDestinoInmueble(c.getString(4));
+            relevamiento.setRubro(c.getString(4));
             if (c.getInt(5) == 0) {
                 relevamiento.setConexionVisible(false);
             } else {
@@ -313,6 +317,7 @@ public class RelevamientoControlador {
             relevamiento.setLongitudUsuario(c.getDouble(11));
             relevamiento.setObservaciones(c.getString(12));
             relevamiento.setFoto(c.getBlob(13));
+            relevamiento.setFecha(Timestamp.valueOf(c.getString(14)));
             relevamientos.add(relevamiento);
         }
         c.close();
@@ -328,7 +333,7 @@ public class RelevamientoControlador {
             values.put("id_usuario", relevamiento.getIdUsuario());
             values.put("barrio", relevamiento.getBarrio());
             values.put("tipo_inmueble", relevamiento.getTipoInmueble());
-            values.put("destino_inmueble", relevamiento.getDestinoInmueble());
+            values.put("rubro", relevamiento.getRubro());
             // atendeme ese IF ELSE :)
             values.put("conexion_visible", relevamiento.isConexionVisible() ? 1 : 0);
             values.put("medidor_luz", relevamiento.getMedidorLuz());
@@ -361,8 +366,6 @@ public class RelevamientoControlador {
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
-            c3.close();
-            db3.close();
             return id;
         } catch (Exception e) {
             mostrarMensaje(a, "Error obtenerSiguienteId RC " + e.toString());

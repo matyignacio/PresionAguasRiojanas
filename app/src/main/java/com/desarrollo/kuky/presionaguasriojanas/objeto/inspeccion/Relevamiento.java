@@ -1,11 +1,13 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion;
 
+import java.util.Date;
+
 public class Relevamiento {
     private int id;
     private String idUsuario;
     private String barrio;
     private String tipoInmueble;
-    private String destinoInmueble;
+    private String rubro;
     private boolean conexionVisible;
     private int medidorLuz;
     private int medidorAgua;
@@ -15,13 +17,14 @@ public class Relevamiento {
     private double longitudUsuario;
     private String observaciones;
     private byte[] foto;
+    private Date fecha;
 //
 //    public Relevamiento() {
 //        this.id = 1;
 //        this.idUsuario = "";
 //        this.barrio = "";
 //        this.tipoInmueble = "";
-//        this.destinoInmueble = "";
+//        this.rubro = "";
 //        this.conexionVisible = false;
 //        this.medidorAgua = 0;
 //        this.medidorLuz = 0;
@@ -64,12 +67,12 @@ public class Relevamiento {
         this.tipoInmueble = tipoInmueble;
     }
 
-    public String getDestinoInmueble() {
-        return destinoInmueble;
+    public String getRubro() {
+        return rubro;
     }
 
-    public void setDestinoInmueble(String destinoInmueble) {
-        this.destinoInmueble = destinoInmueble;
+    public void setRubro(String rubro) {
+        this.rubro = rubro;
     }
 
     public boolean isConexionVisible() {
@@ -142,5 +145,13 @@ public class Relevamiento {
 
     public void setFoto(byte[] foto) {
         this.foto = foto;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 }

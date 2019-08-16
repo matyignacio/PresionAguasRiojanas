@@ -637,8 +637,6 @@ public class PuntoPresionControlador {
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
-            c3.close();
-            db3.close();
             return id;
         } catch (Exception e) {
             mostrarMensaje(a, "Error obtenerSiguienteId PPC " + e.toString());

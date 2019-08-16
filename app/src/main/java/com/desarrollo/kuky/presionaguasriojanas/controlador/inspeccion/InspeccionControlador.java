@@ -44,7 +44,7 @@ public class InspeccionControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("2/" +
-                    "12 - Enviando Inspecciones...");
+                    "11 - Enviando Inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -158,8 +158,8 @@ public class InspeccionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("10/" +
-                    "12 - Recibiendo inspecciones...");
+            pDialog.setMessage("9/" +
+                    "11 - Recibiendo inspecciones...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -303,8 +303,6 @@ public class InspeccionControlador {
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
-            c3.close();
-            db3.close();
             return id;
         } catch (Exception e) {
             mostrarMensaje(a, "Error obtenerSiguienteId IC " + e.toString());

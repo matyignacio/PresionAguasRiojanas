@@ -105,4 +105,5 @@
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="intro_message">Intro</string>
     <string name="b_nuevo_relevamiento">Nuevo Relevamiento</string>
+    <string name="tv_rubro">Rubro</string>
 </resources>

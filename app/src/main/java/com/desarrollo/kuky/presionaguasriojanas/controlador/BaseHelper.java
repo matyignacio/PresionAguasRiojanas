@@ -41,7 +41,6 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaTipoPunto);
         sqLiteDatabase.execSQL(sqlTablaOrden);
         sqLiteDatabase.execSQL(sqlTablaTipoInmueble);
-        sqLiteDatabase.execSQL(sqlTablaDestinoInmueble);
         sqLiteDatabase.execSQL(sqlTablaTipoServicio);
         sqLiteDatabase.execSQL(sqlTablaCliente);
         sqLiteDatabase.execSQL(sqlTablaInspeccion);
@@ -127,11 +126,6 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  nombre varchar(45) NOT NULL," +
             "  PRIMARY KEY (id)" + ") ";
 
-    private String sqlTablaDestinoInmueble = "CREATE TABLE IF NOT EXISTS destino_inmueble (" +
-            "  id int(11) NOT NULL," +
-            "  nombre varchar(45) NOT NULL," +
-            "  PRIMARY KEY (id)" + ") ";
-
     private String sqlTablaTipoServicio = "CREATE TABLE IF NOT EXISTS tipo_servicio (" +
             "  id int(11) NOT NULL," +
             "  nombre varchar(45) NOT NULL," +
@@ -198,7 +192,7 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  id_usuario char(10) NOT NULL," +
             "  barrio char(40) DEFAULT NULL," +
             "  tipo_inmueble varchar(45) DEFAULT NULL," +
-            "  destino_inmueble varchar(45) DEFAULT NULL," +
+            "  rubro varchar(45) DEFAULT NULL," +
             "  conexion_visible tinyint(4) DEFAULT NULL," +
             "  medidor_luz int(11) DEFAULT NULL," +
             "  medidor_agua int(11) DEFAULT NULL," +
@@ -208,6 +202,7 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  longitud_usuario double DEFAULT NULL," +
             "  observaciones longtext DEFAULT NULL," +
             "  foto blob DEFAULT NULL," +
+            "  fecha timestamp DEFAULT (datetime('now','localtime'))," +
             "  pendiente int(1) NOT NULL DEFAULT '1'," +
             "  PRIMARY KEY (id,id_usuario))";
 
@@ -238,10 +233,6 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     String getSqlTablaTipoInmueble() {
         return sqlTablaTipoInmueble;
-    }
-
-    String getSqlTablaDestinoInmueble() {
-        return sqlTablaDestinoInmueble;
     }
 
     String getSqlTablaTipoServicio() {

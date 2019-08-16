@@ -340,7 +340,6 @@ public class UsuarioControlador {
         SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
         /** DROPEAMOS PARA QUE SE CREEN */
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_inmueble"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("destino_inmueble"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_servicio"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("cliente"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("inspeccion"));
@@ -355,7 +354,6 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("permisos"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaDestinoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoServicio());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaCliente());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaInspeccion());

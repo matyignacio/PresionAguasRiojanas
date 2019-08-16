@@ -34,7 +34,7 @@ public class BarrioControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("6/" +
-                    "12 - Recibiendo barrios...");
+                    "11 - Recibiendo barrios...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

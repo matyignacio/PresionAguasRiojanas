@@ -10,7 +10,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.DestinoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoServicioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
@@ -35,7 +34,6 @@ public class FormInmueble extends Fragment {
     Switch swServicioCloacal;
     TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
     TipoServicioControlador tipoServicioControlador = new TipoServicioControlador();
-    DestinoInmuebleControlador destinoInmuebleControlador = new DestinoInmuebleControlador();
 
 
     public FormInmueble() {
@@ -78,11 +76,6 @@ public class FormInmueble extends Fragment {
             for (int i = 0; i < tipoServicioControlador.extraerTodos(getActivity()).size(); i++) {
                 labelsTipoServicio.add(
                         tipoServicioControlador.extraerTodos(getActivity()).get(i).getNombre());
-            }
-            labelsDestino.add("Ninguno");
-            for (int i = 0; i < destinoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {
-                labelsDestino.add(
-                        destinoInmuebleControlador.extraerTodos(getActivity()).get(i).getNombre());
             }
         }
         /************************************************/

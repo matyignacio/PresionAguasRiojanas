@@ -40,7 +40,7 @@ public class DatosRelevadosControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("4/" +
-                    "12 - Enviando Datos relevados...");
+                    "11 - Enviando Datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -150,8 +150,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("11/" +
-                    "12 - Recibiendo datos relevados...");
+            pDialog.setMessage("10/" +
+                    "11 - Recibiendo datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -276,8 +276,6 @@ public class DatosRelevadosControlador {
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
-            c3.close();
-            db3.close();
             return id;
         } catch (Exception e) {
             mostrarMensaje(a, "Error obtenerSiguienteId CC " + e.toString());
