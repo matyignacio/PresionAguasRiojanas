@@ -39,7 +39,7 @@ public class FormInmueble extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_form_inmueble_relevamiento, container, false);
+        View view = inflater.inflate(R.layout.fragment_relevamiento_form_inmueble, container, false);
         // Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,

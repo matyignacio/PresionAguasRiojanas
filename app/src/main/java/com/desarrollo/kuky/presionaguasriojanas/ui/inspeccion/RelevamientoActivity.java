@@ -20,10 +20,12 @@ import android.widget.Button;
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormFoto;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormMapa;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormMedidores;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.NuevaPresionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import com.google.android.gms.common.api.ApiException;
@@ -37,6 +39,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
+import java.util.ArrayList;
+
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
@@ -48,6 +52,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class RelevamientoActivity extends AppCompatActivity {
@@ -55,8 +60,10 @@ public class RelevamientoActivity extends AppCompatActivity {
     public static FormInmueble formInmueble;
     public static FormMapa formMapa;
     public static FormFoto formFoto;
+    public static FormMedidores formMedidores;
     public static int posicionFormulario;
     public static Relevamiento relevamiento;
+    public static ArrayList<RelevamientoMedidor> relevamientoMedidores;
     /**
      * LO REFERENTE A OBTENER LA UBICACION
      */
@@ -80,6 +87,7 @@ public class RelevamientoActivity extends AppCompatActivity {
         formInmueble = new FormInmueble();
         formMapa = new FormMapa();
         formFoto = new FormFoto();
+        formMedidores = new FormMedidores();
         posicionFormulario = 0;
         /************************************************/
         bVolver = findViewById(R.id.bVolver);
@@ -99,7 +107,8 @@ public class RelevamientoActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (formInmueble.isVisible() ||
                 formMapa.isVisible() ||
-                formFoto.isVisible()) {
+                formFoto.isVisible() ||
+                formMedidores.isVisible()) {
             mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
         } else {
             abrirActivity(this, InspeccionActivity.class);
@@ -235,23 +244,6 @@ public class RelevamientoActivity extends AppCompatActivity {
         }
     }
 
-    private void insertar() {
-        try {
-            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
-            relevamiento.setId(relevamientoControlador.obtenerSiguienteId(this));
-            relevamiento.setIdUsuario(LoginActivity.usuario.getId());
-            if (relevamientoControlador.insertar(relevamiento, this) == EXITOSO) {
-                mostrarMensaje(this, "Se guardo el relevamiento con exito!");
-                stopLocationUpdates();
-                abrirActivity(this, InspeccionActivity.class);
-            } else {
-                mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento");
-            }
-        } catch (Exception e) {
-            mostrarMensaje(this, e.toString());
-        }
-    }
-
     public int siguienteFragmento(Activity a, int layout, int posicionFormulario) {
         switch (posicionFormulario) {
             case 0: // SIGNIFICA POSICION INICIAL
@@ -267,8 +259,8 @@ public class RelevamientoActivity extends AppCompatActivity {
                     relevamiento.setLatitudUsuario(mCurrentLocation.getLatitude());
                     relevamiento.setLongitudUsuario(mCurrentLocation.getLongitude());
                     // Y TAMBIEN ACTUALIZAMOS EL CENTRO DEL MAPA QUE SE ABRIRA EN EL FRAGMENTO
-                    Util.setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
-                    Util.setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
+                    setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
+                    setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
                 }
                 posicionFormulario++;
                 Util.siguienteFragmento(a, layout,
@@ -284,6 +276,12 @@ public class RelevamientoActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.LLRelevamiento, formFoto)
                         .commit();
+                break;
+            case 3:
+                // EN ESTE CASO...
+                posicionFormulario++;
+                // ... UNICAMENTE ABRIMOS UN NUEVO FRAGMENTO formMedidores
+                abrirFragmento(a, layout, formMedidores);
                 break;
             default:
                 posicionFormulario++;
@@ -309,7 +307,7 @@ public class RelevamientoActivity extends AppCompatActivity {
     public int volverFragmento(Activity a, int layout, int posicionFormulario) {
         switch (posicionFormulario) {
             case 1: // SIGNIFICA POSICION INICIAL
-                // SIMPLEMENTE CERRAMOS EL FRAGMENTO
+                // CERRAMOS EL FRAGMENTO Y BACKEAMOS EL ACTIVITY
                 setOffButtonsFragment();
                 posicionFormulario--;
                 cerrarFragmento(a, formInmueble);
@@ -331,6 +329,12 @@ public class RelevamientoActivity extends AppCompatActivity {
                         commit();
                 abrirFragmento(a, layout, formMapa);
                 break;
+            case 4:
+                /* EN ESTE CASO CERRAMOS EL FRAGMENTO SOLAMENTE
+                 * YA QUE EL formFoto YA QUEDO ABIERTO DE ANTES */
+                posicionFormulario--;
+                cerrarFragmento(a, formMedidores);
+                break;
             default:
                 bGuardarRelevamiento.setVisibility(View.INVISIBLE);
                 bSiguienteFragmento.setVisibility(View.VISIBLE);
@@ -348,5 +352,23 @@ public class RelevamientoActivity extends AppCompatActivity {
     public void setOffButtonsFragment() {
         bSiguienteFragmento.setVisibility(View.INVISIBLE);
         bVolver.setVisibility(View.INVISIBLE);
+    }
+
+    private void insertar() {
+        try {
+            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+            relevamiento.setId(relevamientoControlador.obtenerSiguienteId(this));
+            relevamiento.setIdUsuario(LoginActivity.usuario.getId());
+            if (relevamientoControlador.insertar(relevamiento, this) == EXITOSO) {
+                mostrarMensaje(this, "Se guardo el relevamiento con exito!");
+                stopLocationUpdates();
+                abrirActivity(this, InspeccionActivity.class);
+            } else {
+                mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento");
+                stopLocationUpdates();
+            }
+        } catch (Exception e) {
+            mostrarMensaje(this, e.toString());
+        }
     }
 }

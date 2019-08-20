@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -39,8 +40,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("4/" +
-                    "11 - Enviando Datos relevados...");
+            pDialog.setMessage("5/" +
+                    +ASYNCTASK_INSPECCION + " - Enviando Datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -150,8 +151,8 @@ public class DatosRelevadosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("10/" +
-                    "11 - Recibiendo datos relevados...");
+            pDialog.setMessage("12/" +
+                    +ASYNCTASK_INSPECCION + " - Recibiendo datos relevados...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

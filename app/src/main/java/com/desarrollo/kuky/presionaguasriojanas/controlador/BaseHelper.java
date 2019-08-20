@@ -48,6 +48,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sqlTablaBarrios);
         sqLiteDatabase.execSQL(sqlTablaRelevamiento);
         sqLiteDatabase.execSQL(sqlTablaModulos);
+        sqLiteDatabase.execSQL(sqlTablaRelevamientoMedidores);
     }
 
     @Override
@@ -211,6 +212,15 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  nombre varchar(45) DEFAULT NULL," +
             "  PRIMARY KEY (id))";
 
+    private String sqlTablaRelevamientoMedidores = "CREATE TABLE IF NOT EXISTS relevamiento_medidores (" +
+            "  id int(11) NOT NULL," +
+            "  id_usuario char(10) DEFAULT NULL," +
+            "  numero int(11) DEFAULT NULL," +
+            "  id_relevamiento int(11) DEFAULT NULL," +
+            "  id_usuario_relevamiento char(10) DEFAULT NULL," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  PRIMARY KEY (id))";
+
     String getSqlTablaUsuarios() {
         return sqlTablaUsuarios;
     }
@@ -259,7 +269,11 @@ public class BaseHelper extends SQLiteOpenHelper {
         return sqlTablaRelevamiento;
     }
 
-    public String getSqlTablaModulos() {
+    String getSqlTablaModulos() {
         return sqlTablaModulos;
+    }
+
+    String getSqlTablaRelevamientoMedidores() {
+        return sqlTablaRelevamientoMedidores;
     }
 }

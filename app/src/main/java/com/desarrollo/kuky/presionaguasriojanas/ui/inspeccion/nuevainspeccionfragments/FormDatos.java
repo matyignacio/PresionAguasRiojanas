@@ -52,7 +52,7 @@ public class FormDatos extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_form_datos_inspeccion, container, false);
+        View view = inflater.inflate(R.layout.fragment_inspeccion_form_datos, container, false);
 
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(

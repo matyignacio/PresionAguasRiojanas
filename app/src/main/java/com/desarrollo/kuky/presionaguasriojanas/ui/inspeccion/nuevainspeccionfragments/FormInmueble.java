@@ -46,7 +46,7 @@ public class FormInmueble extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_form_inmueble_inspeccion, container, false);
+        View view = inflater.inflate(R.layout.fragment_inspeccion_form_inmueble, container, false);
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,

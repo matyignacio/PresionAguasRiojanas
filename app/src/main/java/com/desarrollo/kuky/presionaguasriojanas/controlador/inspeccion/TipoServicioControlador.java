@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -33,8 +34,8 @@ public class TipoServicioControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("7/" +
-                    "11 - Recibiendo tipos de servicios...");
+            pDialog.setMessage("8/" +
+                    +ASYNCTASK_INSPECCION + " - Recibiendo tipos de servicios...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

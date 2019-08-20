@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -50,7 +51,7 @@ public class RelevamientoControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("3/" +
-                    "11 - Enviando Relevamientos...");
+                    +ASYNCTASK_INSPECCION + " - Enviando Relevamientos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -151,8 +152,8 @@ public class RelevamientoControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                DatosRelevadosControlador datosRelevadosControlador = new DatosRelevadosControlador();
-                datosRelevadosControlador.sincronizarDeSqliteToMysql(a);
+                RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
+                relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a);
                 // VACIAMOS LA TABLA ?????
                 // SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 // db.delete("relevamiento", null, null);
@@ -182,8 +183,8 @@ public class RelevamientoControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("11/" +
-                    "11 - Recibiendo relevamientos...");
+            pDialog.setMessage("13/" +
+                    +ASYNCTASK_INSPECCION + " - Recibiendo relevamientos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -226,6 +227,9 @@ public class RelevamientoControlador {
                     values.put("latitud_usuario", rs.getDouble(11));
                     values.put("longitud_usuario", rs.getDouble(12));
                     values.put("observaciones", rs.getString(13));
+                    /* Al 14 no lo traigo por que es la foto, no quiero poblar mucho
+                     *  la bd del telefono. Pero si traigo los registros para que el
+                     *  obtenerSiguienteId() ande bien xD  **************************/
                     values.put("fecha", String.valueOf(rs.getTimestamp(15)));
                     values.put("pendiente", 0);
                     db.insert("relevamiento", "foto", values);

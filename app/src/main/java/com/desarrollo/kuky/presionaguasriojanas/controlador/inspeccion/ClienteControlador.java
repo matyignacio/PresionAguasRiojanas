@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -38,7 +39,7 @@ public class ClienteControlador {
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
             pDialog.setMessage("1/" +
-                    "11 - Enviando clientes...");
+                    +ASYNCTASK_INSPECCION + " - Enviando clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -155,8 +156,8 @@ public class ClienteControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("8/" +
-                    "11 - Recibiendo clientes...");
+            pDialog.setMessage("9/" +
+                    +ASYNCTASK_INSPECCION + " - Recibiendo clientes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

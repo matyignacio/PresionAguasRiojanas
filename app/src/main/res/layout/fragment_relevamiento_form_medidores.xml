@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/layout_primary"
+    tools:context=".ui.inspeccion.nuevorelevamientofragments.FormMedidores">
+
+    <RelativeLayout
+        android:id="@+id/fMedidores"
+        style="@style/layout_primary">
+
+        <!-- A este textView le pongo ems:12 para alinear
+             el resto de los elementos                -->
+        <TextView
+            android:id="@+id/tvMedidoresRelevados"
+            style="@style/tv_primary_bold_center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:ems="11"
+            android:text="@string/tv_medidores" />
+
+        <ImageButton
+            android:id="@+id/bNuevoMedidor"
+            style="@style/b_primary"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_add_white_24dp" />
+
+    </RelativeLayout>
+</ScrollView>

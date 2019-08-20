@@ -53,6 +53,8 @@ public class Util {
 //    public static final String USER = "root";
 //    public static final String CLAVE = "root";
     public static final String PUERTO = "3306";
+    public static final int ASYNCTASK_INSPECCION = 13;
+    public static final int ASYNCTASK_PRESION = 6;
     public static final int EXITOSO = 1;
     public static final int ERROR = 0;
     public static final int BANDERA_ALTA = 1;

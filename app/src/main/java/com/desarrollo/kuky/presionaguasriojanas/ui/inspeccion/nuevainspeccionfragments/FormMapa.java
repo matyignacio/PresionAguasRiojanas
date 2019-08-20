@@ -32,7 +32,7 @@ public class FormMapa extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_form_mapa_inspeccion, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_inspeccion_form_mapa, container, false);
         //Nuevos parametros para el view del fragmento
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,

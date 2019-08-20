@@ -1,5 +1,6 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
@@ -116,6 +117,7 @@ public class UsuarioControlador {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class ExtraerPermisos extends AsyncTask<String, Float, String> {
         Activity a;
         String usuario;
@@ -351,6 +353,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("susuario"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento_medidores"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("permisos"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
@@ -365,6 +368,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamiento());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamientoMedidores());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaModulos());
         db.close();
     }

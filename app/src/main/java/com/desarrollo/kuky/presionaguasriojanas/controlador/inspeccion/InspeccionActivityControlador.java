@@ -20,17 +20,19 @@ public class InspeccionActivityControlador {
         } else {
             /**
              * ORDEN:
-             *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/11
-             *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/11
-             *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 3/11
-             *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 4/11
-             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 5/11
-             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 6/11
-             *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 7/11
-             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 8/11
-             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 9/11
-             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 10/11
-             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 11/11
+             *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/13
+             *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/13
+             *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 3/13
+             *  relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a); 4/13
+             *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 5/13
+             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 6/13
+             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 7/13
+             *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 8/13
+             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 9/13
+             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 10/13
+             *  relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a); 11/13
+             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 12/13
+             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 13/13
              * */
             check = ERROR;
             ClienteControlador clienteControlador = new ClienteControlador();

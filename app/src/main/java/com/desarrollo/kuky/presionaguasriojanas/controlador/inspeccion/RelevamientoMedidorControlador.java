@@ -3,6 +3,7 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -10,12 +11,7 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoServicio;
-import com.desarrollo.kuky.presionaguasriojanas.util.Util;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,26 +22,28 @@ import java.util.ArrayList;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
-public class InspeccionControlador {
+public class RelevamientoMedidorControlador {
     private ProgressDialog pDialog;
-    private ArrayList<Inspeccion> inspecciones;
+    private ArrayList<RelevamientoMedidor> relevamientoMedidores;
 
     @SuppressLint("StaticFieldLeak")
     private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
 
         Activity a;
         private Integer check;
-        private ArrayList<Inspeccion> inspecciones;
+        private ArrayList<RelevamientoMedidor> relevamientoMedidores;
 
         @Override
         protected void onPreExecute() {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("2/" +
-                    +ASYNCTASK_INSPECCION + " - Enviando Inspecciones...");
+            pDialog.setMessage("4/" +
+                    +ASYNCTASK_INSPECCION + " - Enviando Relevamiento Medidores...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -53,7 +51,7 @@ public class InspeccionControlador {
         SyncSqliteToMysql(Activity a) {
             this.a = a;
             check = ERROR;
-            inspecciones = new ArrayList<>();
+            relevamientoMedidores = new ArrayList<>();
         }
 
         @Override
@@ -62,37 +60,29 @@ public class InspeccionControlador {
              IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
              DESDE EL TELEFONO HACIA EL SERVER
              */
-            inspecciones = extraerTodosPendientes(a);
+            relevamientoMedidores = extraerTodosPendientes(a);
             Connection conn;
             conn = Conexion.GetConnection();
             try {
                 conn.setAutoCommit(false);
                 String consultaSql;
-                for (int i = 0; i < inspecciones.size(); i++) {
+                for (int i = 0; i < relevamientoMedidores.size(); i++) {
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
-                    int servicioCloacal = inspecciones.get(i).isServicioCloacal() ? 1 : 0;
                     PreparedStatement ps;
-                    consultaSql = "INSERT INTO inspeccion " +
-                            "(id, id_usuario, id_cliente, id_usuario_cliente, id_tipo_inmueble, " +
-                            "id_destino_inmueble, id_tipo_servicio, servicio_cloacal, coeficiente_zonal, " +
-                            "latitiud, longitud, latitud_usuario, longitud_usuario, observaciones) " +
-                            " VALUES " +
-                            "('" + inspecciones.get(i).getId() + "', " +
-                            "'" + inspecciones.get(i).getIdUsuario() + "', " +
-                            "'" + inspecciones.get(i).getCliente().getId() + "', " +
-                            "'" + inspecciones.get(i).getCliente().getIdUsuario() + "', " +
-                            "'" + inspecciones.get(i).getTipoInmueble().getId() + "', " +
-                            "'" + inspecciones.get(i).getDestinoInmueble().getId() + "', " +
-                            "'" + inspecciones.get(i).getTipoServicio().getId() + "', " +
-                            "'" + servicioCloacal + "', " +
-                            "'" + inspecciones.get(i).getCoeficienteZonal() + "', " +
-                            "'" + inspecciones.get(i).getLatitud() + "', " +
-                            "'" + inspecciones.get(i).getLongitud() + "', " +
-                            "'" + inspecciones.get(i).getLatitudUsuario() + "', " +
-                            "'" + inspecciones.get(i).getLongitudUsuario() + "', " +
-                            "'" + inspecciones.get(i).getObservaciones() + "');";
+                    consultaSql = "INSERT INTO relevamiento_medidores" +
+                            "(id," +
+                            "id_usuario," +
+                            "numero," +
+                            "id_relevamiento," +
+                            "id_usuario_relevamiento)" +
+                            "VALUES " +
+                            "('" + relevamientoMedidores.get(i).getId() + "', " +
+                            "'" + relevamientoMedidores.get(i).getIdUsuario() + "', " +
+                            "'" + relevamientoMedidores.get(i).getNumero() + "', " +
+                            "'" + relevamientoMedidores.get(i).getRelevamiento().getId() + "', " +
+                            "'" + relevamientoMedidores.get(i).getRelevamiento().getIdUsuario() + "')";
                     ps = conn.prepareStatement(consultaSql);
                     ps.execute();
                     conn.commit();
@@ -100,16 +90,17 @@ public class InspeccionControlador {
                     /*//////////////////////////////////////////////////////////////////////////////////
                                             BAJAMOS EL PENDIENTE DEL inspeccion
                     //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(inspecciones.get(i), a);
+                    actualizarPendiente(relevamientoMedidores.get(i), a);
                     check++;
                 }
-                if (check == inspecciones.size()) {
+                if (check == relevamientoMedidores.size()) {
                     return "EXITO";
                 } else {
                     return "ERROR";
                 }
             } catch (SQLException e) {
                 try {
+                    mostrarMensajeLog(a, e.toString());
                     Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
                     conn.rollback();
                 } catch (SQLException e1) {
@@ -131,10 +122,13 @@ public class InspeccionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
-                relevamientoControlador.sincronizarDeSqliteToMysql(a);
+                DatosRelevadosControlador datosRelevadosControlador = new DatosRelevadosControlador();
+                datosRelevadosControlador.sincronizarDeSqliteToMysql(a);
+                // VACIAMOS LA TABLA ?????
+                // SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+                // db.delete("relevamiento", null, null);
             } else {
-                mostrarMensaje(a, "Error en el checkInspeccionesToMysql");
+                mostrarMensaje(a, "Error en el checkRelevamientoMedidoresToMysql");
             }
         }
     }
@@ -144,7 +138,7 @@ public class InspeccionControlador {
             SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
             syncSqliteToMysql.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncSqliteToMysql IC" + e.toString());
+            mostrarMensaje(a, "Error SyncSqliteToMysql RMC" + e.toString());
         }
     }
 
@@ -159,8 +153,8 @@ public class InspeccionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("10/" +
-                    +ASYNCTASK_INSPECCION + " - Recibiendo inspecciones...");
+            pDialog.setMessage("11/" +
+                    +ASYNCTASK_INSPECCION + " - Recibiendo Relevamiento Medidores...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -180,32 +174,22 @@ public class InspeccionControlador {
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
                 conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM inspeccion ";
+                String consultaSql = "SELECT * FROM relevamiento_medidores ";
                 ps = conn.prepareStatement(consultaSql);
                 ps.execute();
                 rs = ps.getResultSet();
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM inspeccion");
+                db.execSQL("DELETE FROM relevamiento_medidores");
                 while (rs.next()) {
-                    String sql = "INSERT INTO inspeccion" +
-                            " VALUES" +
-                            " ('" + rs.getInt(1) + "','" + // id
-                            rs.getString(2) + "','" + //id_usuario
-                            rs.getInt(3) + "','" + //id_cliente
-                            rs.getString(4) + "','" + //id_usuario_cliente
-                            rs.getInt(5) + "','" + //id_tipo_inmueble
-                            rs.getInt(6) + "','" + //id_destino_inmueble
-                            rs.getInt(7) + "','" + //id_tipo_servicio
-                            rs.getInt(8) + "','" + //servicio_cloacal
-                            rs.getFloat(9) + "','" + //coeficiente_zonal
-                            rs.getDouble(10) + "','" + //latitud
-                            rs.getDouble(11) + "','" + //longitud
-                            rs.getDouble(12) + "','" + //latitud_usuario
-                            rs.getDouble(13) + "','" + //longitud_usuario
-                            rs.getString(14) + "','" + //observaciones
-                            "0');"; // pendiente
-                    db.execSQL(sql);
+                    ContentValues values = new ContentValues();
+                    values.put("id", rs.getInt(1));
+                    values.put("id_usuario", rs.getString(2));
+                    values.put("numero", rs.getInt(3));
+                    values.put("id_relevamiento", rs.getInt(4));
+                    values.put("id_usuario_relevamiento", rs.getString(5));
+                    values.put("pendiente", 0);
+                    db.insert("relevamiento_medidores", null, values);
                 }
                 check++;
                 if (check == EXITOSO) {
@@ -231,13 +215,12 @@ public class InspeccionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
-                relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a);
+                DatosRelevadosControlador datosRelevadosControlador = new DatosRelevadosControlador();
+                datosRelevadosControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                mostrarMensaje(a, "Error en el checkinspeccion");
+                mostrarMensaje(a, "Error en el checkRelevamientoMedidores");
             }
         }
-
     }
 
     public void sincronizarDeMysqlToSqlite(Activity a) {
@@ -245,69 +228,77 @@ public class InspeccionControlador {
             SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
             syncMysqlToSqlite.execute();
         } catch (Exception e) {
-            mostrarMensaje(a, "Eror SyncMysqlToSqlite CC" + e.toString());
+            mostrarMensaje(a, "Error SyncMysqlToSqlite RMC" + e.toString());
         }
     }
 
-    private void actualizarPendiente(Inspeccion inspeccion, Activity a) {
+    private void actualizarPendiente(RelevamientoMedidor relevamientoMedidor, Activity a) {
+        String[] whereArgs = {String.valueOf(relevamientoMedidor.getId()), relevamientoMedidor.getIdUsuario()};
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE inspeccion" +
-                    " SET pendiente = 0" +
-                    " WHERE id=" + inspeccion.getId() +
-                    " AND id_usuario LIKE '" + inspeccion.getIdUsuario() + "'";
-            db.execSQL(sql);
+            ContentValues values = new ContentValues();
+            values.put("pendiente", 0);
+            db.update("relevamiento_medidores", values,
+                    "id = ? AND id_usuario = ?",
+                    whereArgs);
             db.close();
         } catch (Exception e) {
-            mostrarMensaje(a, "Error actualizarPendiente IC " + e.toString());
+            mostrarMensaje(a, "Error actualizarPendiente RMC " + e.toString());
         }
     }
 
-    private ArrayList<Inspeccion> extraerTodosPendientes(Activity a) {
-        inspecciones = new ArrayList<>();
+    private ArrayList<RelevamientoMedidor> extraerTodosPendientes(Activity a) {
+        relevamientoMedidores = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM inspeccion " +
+        Cursor c = db.rawQuery("SELECT * FROM relevamiento_medidores " +
                 "WHERE pendiente = 1 " +
                 "ORDER BY id ASC", null);
         while (c.moveToNext()) {
-            Inspeccion inspeccion = new Inspeccion();
-            inspeccion.setId(c.getInt(0));
-            inspeccion.setIdUsuario(c.getString(1));
-            inspeccion.setCliente(new Cliente(c.getInt(2)));
-            inspeccion.setTipoInmueble(new TipoInmueble(c.getInt(3)));
-            inspeccion.setDestinoInmueble(new DestinoInmueble(c.getInt(4)));
-            inspeccion.setTipoServicio(new TipoServicio(c.getInt(5)));
-            if (c.getInt(6) == 0) {
-                inspeccion.setServicioCloacal(false);
-            } else {
-                inspeccion.setServicioCloacal(true);
-            }
-            inspeccion.setCoeficienteZonal(c.getFloat(7));
-            inspeccion.setLatitud(c.getDouble(8));
-            inspeccion.setLongitud(c.getDouble(9));
-            inspeccion.setLatitudUsuario(c.getDouble(10));
-            inspeccion.setLongitudUsuario(c.getDouble(11));
-            inspeccion.setObservaciones(c.getString(12));
-            inspecciones.add(inspeccion);
+            RelevamientoMedidor relevamiento = new RelevamientoMedidor();
+            relevamiento.setId(c.getInt(0));
+            relevamiento.setIdUsuario(c.getString(1));
+            relevamientoMedidores.add(relevamiento);
         }
         c.close();
         db.close();
-        return inspecciones;
+        return relevamientoMedidores;
     }
 
-    private int obtenerSiguienteId(Activity a) {
+    public int insertar(RelevamientoMedidor relevamiento, Activity a) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("id", relevamiento.getId());
+            values.put("id_usuario", relevamiento.getIdUsuario());
+            values.put("numero", relevamiento.getNumero());
+            values.put("id_relevamiento", relevamiento.getRelevamiento().getId());
+            values.put("id_usuario_relevamiento", relevamiento.getRelevamiento().getIdUsuario());
+            values.put("pendiente", INSERTAR_PUNTO);
+            if (db.insert("relevamiento_medidores", null, values) > 0) {
+                db.close();
+                return EXITOSO;
+            }
+            db.close();
+            return ERROR;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error insertar RMC " + e.toString());
+            return ERROR;
+        }
+    }
+
+    public int obtenerSiguienteId(Activity a) {
         int id = 1;
         try {
             SQLiteDatabase db3 = BaseHelper.getInstance(a).getReadableDatabase();
-            String sql = "SELECT id FROM inspeccion ORDER BY id DESC LIMIT 1";
+            String sql = "SELECT id FROM relevamiento_medidores ORDER BY id DESC LIMIT 1";
             Cursor c3 = db3.rawQuery(sql, null);
             while (c3.moveToNext()) {
                 id = c3.getInt(0) + 1;
             }
             return id;
         } catch (Exception e) {
-            mostrarMensaje(a, "Error obtenerSiguienteId IC " + e.toString());
-            return Util.ERROR;
+            mostrarMensaje(a, "Error obtenerSiguienteId RMC " + e.toString());
+            return ERROR;
         }
     }
 }
