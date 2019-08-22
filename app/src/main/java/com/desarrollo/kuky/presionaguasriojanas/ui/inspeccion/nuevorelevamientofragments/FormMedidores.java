@@ -29,7 +29,7 @@ public class FormMedidores extends Fragment {
      * CREO ARRAYLIST PARA IR AGREGANDO LOS EDITTEXT EN TIEMPO DE EJECUCION
      * Y LUEGO EN "ON PAUSE" ASIGNARLOS AL ARRAYLIST RELEVAMIENTOMEDIDORES
      **/
-    ArrayList<EditText> medidoresLuz = new ArrayList<>();
+    public static ArrayList<EditText> medidoresLuz;
 
     public FormMedidores() {
         // Required empty public constructor
@@ -58,8 +58,11 @@ public class FormMedidores extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        medidoresLuz = new ArrayList<>();
         idEditText = 0;
         marginTop = 15;
+        RelevamientoActivity.bGuardarRelevamiento.setVisibility(View.VISIBLE);
+        RelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -82,9 +85,8 @@ public class FormMedidores extends Fragment {
                 RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
                 relevamientoMedidor.setNumero(
                         Integer.valueOf(
-                                medidoresLuz.get(i).getText().toString()
-                        )
-                );
+                                medidoresLuz.get(i).getText().toString()));
+                RelevamientoActivity.relevamientoMedidores.add(relevamientoMedidor);
             } catch (Exception e) {
                 mostrarMensajeLog(getActivity(), "No se pudo asignar " + e.toString());
             }
@@ -97,6 +99,8 @@ public class FormMedidores extends Fragment {
         /* Si se llama al onStop es porque se volvio un fragmento entonces
          *  reseteamos el ArrayList **************************************/
         RelevamientoActivity.relevamientoMedidores = new ArrayList<>();
+        RelevamientoActivity.bGuardarRelevamiento.setVisibility(View.INVISIBLE);
+        RelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
     }
 
     public void nuevoRegistro(int marginTop, int idEditText) {

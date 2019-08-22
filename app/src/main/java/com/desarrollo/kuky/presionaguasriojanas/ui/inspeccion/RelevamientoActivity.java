@@ -19,6 +19,7 @@ import android.widget.Button;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoMedidorControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
@@ -52,6 +53,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
@@ -101,6 +103,17 @@ public class RelevamientoActivity extends AppCompatActivity {
         request_permissions();
         bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLRelevamiento, posicionFormulario));
         bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLRelevamiento, posicionFormulario));
+        bGuardarRelevamiento.setOnClickListener(v -> {
+            Util.showDialog(this,
+                    R.layout.dialog_guardar,
+                    "Si, Guardar",
+                    () -> {
+                        insertar();
+                        return null;
+                    },
+                    () -> null
+            );
+        });
     }
 
     @Override
@@ -355,11 +368,24 @@ public class RelevamientoActivity extends AppCompatActivity {
     }
 
     private void insertar() {
+        RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
         try {
             RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
             relevamiento.setId(relevamientoControlador.obtenerSiguienteId(this));
             relevamiento.setIdUsuario(LoginActivity.usuario.getId());
             if (relevamientoControlador.insertar(relevamiento, this) == EXITOSO) {
+                for (int i = 0; i < FormMedidores.medidoresLuz.size(); i++) {
+                    RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
+                    relevamientoMedidor.setId(relevamientoMedidorControlador.obtenerSiguienteId(this));
+                    relevamientoMedidor.setIdUsuario(LoginActivity.usuario.getId());
+                    try {
+                        relevamientoMedidor.setNumero(Integer.parseInt(FormMedidores.medidoresLuz.get(i).getText().toString()));
+                        relevamientoMedidor.setRelevamiento(relevamiento);
+                        relevamientoMedidorControlador.insertar(relevamientoMedidor, this);
+                    } catch (Exception e2) {
+                        mostrarMensajeLog(this, "Ocurrio un error al insertar el relevamiento" + e2.toString());
+                    }
+                }
                 mostrarMensaje(this, "Se guardo el relevamiento con exito!");
                 stopLocationUpdates();
                 abrirActivity(this, InspeccionActivity.class);
@@ -368,7 +394,7 @@ public class RelevamientoActivity extends AppCompatActivity {
                 stopLocationUpdates();
             }
         } catch (Exception e) {
-            mostrarMensaje(this, e.toString());
+            mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento" + e.toString());
         }
     }
 }

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
+import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
 
 import java.sql.Connection;
@@ -254,10 +255,15 @@ public class RelevamientoMedidorControlador {
                 "WHERE pendiente = 1 " +
                 "ORDER BY id ASC", null);
         while (c.moveToNext()) {
-            RelevamientoMedidor relevamiento = new RelevamientoMedidor();
-            relevamiento.setId(c.getInt(0));
-            relevamiento.setIdUsuario(c.getString(1));
-            relevamientoMedidores.add(relevamiento);
+            RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
+            Relevamiento relevamiento = new Relevamiento();
+            relevamientoMedidor.setId(c.getInt(0));
+            relevamientoMedidor.setIdUsuario(c.getString(1));
+            relevamientoMedidor.setNumero(c.getInt(2));
+            relevamiento.setId(c.getInt(3));
+            relevamiento.setIdUsuario(c.getString(4));
+            relevamientoMedidor.setRelevamiento(relevamiento);
+            relevamientoMedidores.add(relevamientoMedidor);
         }
         c.close();
         db.close();
