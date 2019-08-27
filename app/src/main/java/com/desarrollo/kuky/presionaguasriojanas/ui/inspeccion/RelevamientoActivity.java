@@ -388,7 +388,7 @@ public class RelevamientoActivity extends AppCompatActivity {
                 }
                 mostrarMensaje(this, "Se guardo el relevamiento con exito!");
                 stopLocationUpdates();
-                abrirActivity(this, InspeccionActivity.class);
+                abrirActivity(this, RelevamientoActivity.class);
             } else {
                 mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento");
                 stopLocationUpdates();

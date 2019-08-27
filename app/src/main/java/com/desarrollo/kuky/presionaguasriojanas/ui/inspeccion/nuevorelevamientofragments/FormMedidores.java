@@ -99,6 +99,7 @@ public class FormMedidores extends Fragment {
         /* Si se llama al onStop es porque se volvio un fragmento entonces
          *  reseteamos el ArrayList **************************************/
         RelevamientoActivity.relevamientoMedidores = new ArrayList<>();
+        /* y mostramos de nuevo el boton SIGUIENTE ***********************/
         RelevamientoActivity.bGuardarRelevamiento.setVisibility(View.INVISIBLE);
         RelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
     }

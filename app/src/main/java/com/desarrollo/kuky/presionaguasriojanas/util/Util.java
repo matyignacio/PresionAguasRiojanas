@@ -76,6 +76,7 @@ public class Util {
     public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
     public static final String SPINNER_TIPO_UNIDAD = "tipo_unidad";
     public static final String SPINNER_TIPO_UNIDAD2 = "tipo_unidad2";
+    public static final String SPINNER_BARRIO_RELEVAMIENTO = "barrio_relevamiento";
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAXIMO_CIRCUITO = 3;

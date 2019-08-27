@@ -58,6 +58,8 @@ public class FormMapa extends Fragment {
 
         mMapView.getMapAsync(mMap -> {
             googleMap = mMap;
+            // DEFINIMOS EL TIPO DE MAPA
+            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
             Double latitud = Double.valueOf(getPreference(getActivity(), LATITUD_INSPECCION,
                     LATITUD_LA_RIOJA));
             Double longitud = Double.valueOf(getPreference(getActivity(), LONGITUD_INSPECCION,

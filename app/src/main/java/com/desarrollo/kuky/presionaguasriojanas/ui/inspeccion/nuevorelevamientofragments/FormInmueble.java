@@ -16,11 +16,14 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
+import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SPINNER_BARRIO_RELEVAMIENTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cargarSpinner;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class FormInmueble extends Fragment {
@@ -93,9 +96,12 @@ public class FormInmueble extends Fragment {
         ////////////////////////////////////////
         cargarSpinner(sBarrios,
                 getActivity(),
-                1,
+                Util.getPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, 1),
                 labelsBarrios,
-                () -> null,
+                () -> {
+                    setPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, sBarrios.getSelectedItemPosition() + 1);
+                    return null;
+                },
                 () -> null);
     }
 

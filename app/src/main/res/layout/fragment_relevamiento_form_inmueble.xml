@@ -55,9 +55,9 @@
         <EditText
             android:id="@+id/etRubro"
             style="@style/et_primary"
-            android:inputType="text"
             android:layout_below="@+id/sTipoInmueble"
-            android:hint="@string/tv_rubro" />
+            android:hint="@string/tv_rubro"
+            android:inputType="text" />
 
         <Switch
             android:id="@+id/swConexionVisible"
@@ -68,16 +68,9 @@
             android:text="Conexion Visible" />
 
         <EditText
-            android:id="@+id/etMedidorLuz"
-            style="@style/et_primary"
-            android:layout_below="@id/swConexionVisible"
-            android:hint="@string/hint_medidor_de_luz"
-            android:inputType="number" />
-
-        <EditText
             android:id="@+id/etMedidorAgua"
             style="@style/et_primary"
-            android:layout_below="@id/etMedidorLuz"
+            android:layout_below="@id/swConexionVisible"
             android:hint="@string/hint_medidor_de_agua"
             android:inputType="text" />
 
@@ -87,6 +80,13 @@
             android:layout_below="@id/etMedidorAgua"
             android:hint="@string/hint_observaciones"
             android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/etMedidorLuz"
+            style="@style/et_primary"
+            android:layout_below="@id/etObservaciones"
+            android:hint="@string/hint_medidor_de_luz"
+            android:inputType="number" />
 
     </RelativeLayout>
 
