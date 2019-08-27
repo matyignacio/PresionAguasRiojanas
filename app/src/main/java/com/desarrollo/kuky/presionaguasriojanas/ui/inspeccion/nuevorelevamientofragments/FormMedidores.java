@@ -108,6 +108,7 @@ public class FormMedidores extends Fragment {
         LayoutPersonalizada lpMedidorLuz = new LayoutPersonalizada(marginTop);
         etMedidorLuz = new EditText(getActivity());
         etMedidorLuz.setId(idEditText);
+        etMedidorLuz.requestFocus();
         etMedidorLuz.setBackgroundResource(R.drawable.et_redondo);
         etMedidorLuz.setHint("Medidor de Luz " + (idEditText + 1));
         etMedidorLuz.setInputType(InputType.TYPE_CLASS_NUMBER);

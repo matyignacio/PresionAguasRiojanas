@@ -281,16 +281,16 @@ public class RelevamientoActivity extends AppCompatActivity {
                         formMapa);
                 break;
             case 2:
-                // EN ESTE CASO...
-                posicionFormulario++;
-                // ... CERRAMOS EL FRAGMENTO Y ...
-                cerrarFragmento(a, formMapa);
-                // ... ABRIMOS EL SIGUIENTE
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.LLRelevamiento, formFoto)
-                        .commit();
-                break;
-            case 3:
+//                // EN ESTE CASO...
+//                posicionFormulario++;
+//                // ... CERRAMOS EL FRAGMENTO Y ...
+//                cerrarFragmento(a, formMapa);
+//                // ... ABRIMOS EL SIGUIENTE
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.LLRelevamiento, formFoto)
+//                        .commit();
+//                break;
+//            case 3:
                 // EN ESTE CASO...
                 posicionFormulario++;
                 // ... UNICAMENTE ABRIMOS UN NUEVO FRAGMENTO formMedidores
@@ -335,14 +335,14 @@ public class RelevamientoActivity extends AppCompatActivity {
                         formInmueble);
                 break;
             case 3:
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
-                posicionFormulario--;
-                getSupportFragmentManager().beginTransaction().
-                        remove(formFoto).
-                        commit();
-                abrirFragmento(a, layout, formMapa);
-                break;
-            case 4:
+//                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+//                posicionFormulario--;
+//                getSupportFragmentManager().beginTransaction().
+//                        remove(formFoto).
+//                        commit();
+//                abrirFragmento(a, layout, formMapa);
+//                break;
+//            case 4:
                 /* EN ESTE CASO CERRAMOS EL FRAGMENTO SOLAMENTE
                  * YA QUE EL formFoto YA QUEDO ABIERTO DE ANTES */
                 posicionFormulario--;

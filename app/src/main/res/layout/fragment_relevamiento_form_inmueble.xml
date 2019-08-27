@@ -68,9 +68,16 @@
             android:text="Conexion Visible" />
 
         <EditText
-            android:id="@+id/etMedidorAgua"
+            android:id="@+id/etMedidorLuz"
             style="@style/et_primary"
             android:layout_below="@id/swConexionVisible"
+            android:hint="@string/hint_medidor_de_luz"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etMedidorAgua"
+            style="@style/et_primary"
+            android:layout_below="@id/etMedidorLuz"
             android:hint="@string/hint_medidor_de_agua"
             android:inputType="text" />
 
@@ -80,13 +87,6 @@
             android:layout_below="@id/etMedidorAgua"
             android:hint="@string/hint_observaciones"
             android:inputType="textMultiLine" />
-
-        <EditText
-            android:id="@+id/etMedidorLuz"
-            style="@style/et_primary"
-            android:layout_below="@id/etObservaciones"
-            android:hint="@string/hint_medidor_de_luz"
-            android:inputType="number" />
 
     </RelativeLayout>
 
