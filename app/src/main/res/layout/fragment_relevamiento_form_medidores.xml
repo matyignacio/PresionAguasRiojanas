@@ -18,12 +18,6 @@
             android:ems="11"
             android:text="@string/tv_medidores" />
 
-        <ImageButton
-            android:id="@+id/bNuevoMedidor"
-            style="@style/b_primary"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_add_white_24dp" />
 
     </RelativeLayout>
 </ScrollView>

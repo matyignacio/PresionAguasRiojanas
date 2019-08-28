@@ -65,7 +65,7 @@
             android:layout_below="@id/etRubro"
             android:layout_alignStart="@+id/tvDatosInmueble"
             android:background="@drawable/et_redondo_without_padding"
-            android:text="Conexion Visible" />
+            android:text="@string/sw_conexion_visible" />
 
         <EditText
             android:id="@+id/etMedidorLuz"

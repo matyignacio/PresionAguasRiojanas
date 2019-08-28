@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoControlador;
@@ -59,6 +60,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 
 public class RelevamientoActivity extends AppCompatActivity {
     public static Button bSiguienteFragmento, bVolver, bGuardarRelevamiento;
+    public static ImageButton bNuevoMedidor;
     public static FormInmueble formInmueble;
     public static FormMapa formMapa;
     public static FormFoto formFoto;
@@ -281,19 +283,23 @@ public class RelevamientoActivity extends AppCompatActivity {
                         formMapa);
                 break;
             case 2:
-//                // EN ESTE CASO...
-//                posicionFormulario++;
-//                // ... CERRAMOS EL FRAGMENTO Y ...
-//                cerrarFragmento(a, formMapa);
-//                // ... ABRIMOS EL SIGUIENTE
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.LLRelevamiento, formFoto)
-//                        .commit();
-//                break;
-//            case 3:
                 // EN ESTE CASO...
                 posicionFormulario++;
-                // ... UNICAMENTE ABRIMOS UN NUEVO FRAGMENTO formMedidores
+                // ... CERRAMOS EL FRAGMENTO Y ...
+                cerrarFragmento(a, formMapa);
+                // ... ABRIMOS EL SIGUIENTE
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.LLRelevamiento, formFoto)
+                        .commit();
+                break;
+            case 3:
+                // EN ESTE CASO...
+                posicionFormulario++;
+                // ... CERRAMOS EL FRAGMENT formFoto...
+                getSupportFragmentManager().beginTransaction().
+                        remove(formFoto).
+                        commit();
+                // ... Y LUEGO  ABRIMOS UN NUEVO FRAGMENTO formMedidores
                 abrirFragmento(a, layout, formMedidores);
                 break;
             default:
@@ -335,16 +341,18 @@ public class RelevamientoActivity extends AppCompatActivity {
                         formInmueble);
                 break;
             case 3:
-//                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
-//                posicionFormulario--;
-//                getSupportFragmentManager().beginTransaction().
-//                        remove(formFoto).
-//                        commit();
-//                abrirFragmento(a, layout, formMapa);
-//                break;
-//            case 4:
-                /* EN ESTE CASO CERRAMOS EL FRAGMENTO SOLAMENTE
-                 * YA QUE EL formFoto YA QUEDO ABIERTO DE ANTES */
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+                posicionFormulario--;
+                getSupportFragmentManager().beginTransaction().
+                        remove(formFoto).
+                        commit();
+                abrirFragmento(a, layout, formMapa);
+                break;
+            case 4:
+                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.LLRelevamiento, formFoto)
+                        .commit();
                 posicionFormulario--;
                 cerrarFragmento(a, formMedidores);
                 break;

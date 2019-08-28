@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -16,10 +15,10 @@ import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivi
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity.bNuevoMedidor;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class FormMedidores extends Fragment {
-    ImageButton bNuevoMedidor;
     int marginTop = 15;
     int addMargin = 130;
     int idEditText = 0;
@@ -69,6 +68,7 @@ public class FormMedidores extends Fragment {
     public void onResume() {
         super.onResume();
         bNuevoMedidor = getActivity().findViewById(R.id.bNuevoMedidor);
+        bNuevoMedidor.setVisibility(View.VISIBLE);
         bNuevoMedidor.setOnClickListener(v -> {
             nuevoRegistro(marginTop
                     , idEditText);
@@ -80,6 +80,7 @@ public class FormMedidores extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        bNuevoMedidor.setVisibility(View.INVISIBLE);
         for (int i = 0; i < medidoresLuz.size(); i++) {
             try {
                 RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();

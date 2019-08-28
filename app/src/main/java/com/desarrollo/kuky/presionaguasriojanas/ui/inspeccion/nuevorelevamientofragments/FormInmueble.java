@@ -98,9 +98,12 @@ public class FormInmueble extends Fragment {
         ////////////////////////////////////////
         cargarSpinner(sBarrios,
                 getActivity(),
+                //el valor por defecto que toma es el ultimo barrio seleccionado, en caso de...
+                //... no tener ninguno, carga el primero
                 Util.getPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, 1),
                 labelsBarrios,
                 () -> {
+                    // se guarda el barrio seleccionado, para luego mostrarlo cuando se vuelva a cargar
                     setPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, sBarrios.getSelectedItemPosition() + 1);
                     return null;
                 },
@@ -138,6 +141,7 @@ public class FormInmueble extends Fragment {
             mostrarMensajeLog(getActivity(),
                     "No se pudo guardar " + etMedidorAgua.getHint());
         }
+        RelevamientoActivity.relevamiento.setConexionVisible(swConexionVisible.isChecked());
         RelevamientoActivity.relevamiento.setObservaciones(
                 etObservaciones.getText().toString());
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
