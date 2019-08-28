@@ -492,8 +492,11 @@ public class FormFoto extends Fragment
                 Size largest = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new CompareSizesByArea());
-                mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
+                mImageReader = ImageReader.newInstance(640, 480,
                         ImageFormat.JPEG, /*maxImages*/2);
+                /* EL ORIGINAL ERA ASI ...
+                mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
+                        ImageFormat.JPEG, 2);*/
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
 
@@ -700,7 +703,8 @@ public class FormFoto extends Fragment
                         @Override
                         public void onConfigureFailed(
                                 @NonNull CameraCaptureSession cameraCaptureSession) {
-                            showToast(getActivity(), "Failed");
+                            showToast(getActivity(), "Reopening");
+                            createCameraPreviewSession();
                         }
                     }, null
             );
