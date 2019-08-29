@@ -703,6 +703,8 @@ public class FormFoto extends Fragment
                         @Override
                         public void onConfigureFailed(
                                 @NonNull CameraCaptureSession cameraCaptureSession) {
+                            // SI FALLA, SE INTENTA ABRIR NUEVAMENTE LA VISTA PREVIA
+                            // SERIA UNA ESPECIE DE RECURSIVIDAD.
                             showToast(getActivity(), "Reopening");
                             createCameraPreviewSession();
                         }

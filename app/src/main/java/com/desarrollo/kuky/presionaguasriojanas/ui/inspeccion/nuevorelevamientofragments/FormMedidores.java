@@ -1,11 +1,13 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -91,6 +93,8 @@ public class FormMedidores extends Fragment {
             } catch (Exception e) {
                 mostrarMensajeLog(getActivity(), "No se pudo asignar " + e.toString());
             }
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(medidoresLuz.get(i).getWindowToken(), 0);
         }
     }
 
