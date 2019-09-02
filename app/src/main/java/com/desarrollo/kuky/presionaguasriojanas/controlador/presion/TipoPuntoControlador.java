@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -34,8 +35,8 @@ public class TipoPuntoControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("3/" +
-                    "6 - Recibiendo tipos de puntos...");
+            pDialog.setMessage("3/" + ASYNCTASK_PRESION +
+                    " - Recibiendo tipos de puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

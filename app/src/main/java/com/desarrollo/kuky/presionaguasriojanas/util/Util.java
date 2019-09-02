@@ -48,10 +48,6 @@ public class Util {
 //    public static final String HOST = "66.97.39.77";
 //    public static final String USER = "c1370466_consu";
 //    public static final String CLAVE = "Consulta963";
-//    public static final String DATA_BASE = "presion_aguas";
-//    public static final String HOST = "192.168.1.46";
-//    public static final String USER = "root";
-//    public static final String CLAVE = "root";
     public static final String PUERTO = "3306";
     public static final int ASYNCTASK_INSPECCION = 13;
     public static final int ASYNCTASK_PRESION = 6;

@@ -25,6 +25,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
@@ -52,8 +53,8 @@ public class HistorialPuntosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("2/" +
-                    "6 - Enviando historial...");
+            pDialog.setMessage("2/" + ASYNCTASK_PRESION +
+                    " - Enviando historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -171,8 +172,8 @@ public class HistorialPuntosControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("6/" +
-                    "6 - Recibiendo historial...");
+            pDialog.setMessage("6/" + ASYNCTASK_PRESION +
+                    " - Recibiendo historial...");
             pDialog.setCancelable(false);
             pDialog.show();
         }

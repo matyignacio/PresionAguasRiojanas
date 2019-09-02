@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -45,8 +46,8 @@ public class PuntoPresionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("1/" +
-                    "6 - Enviando puntos...");
+            pDialog.setMessage("1/" + ASYNCTASK_PRESION +
+                    " - Enviando puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -196,8 +197,8 @@ public class PuntoPresionControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("5/" +
-                    "6 - Recibiendo puntos...");
+            pDialog.setMessage("5/" + ASYNCTASK_PRESION +
+                    " - Recibiendo puntos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
