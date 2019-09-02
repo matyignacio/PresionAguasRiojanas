@@ -11,6 +11,8 @@
         style="@style/b_primary"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
+        android:background="@color/backgroundColor"
+        android:enabled="false"
         android:text="@string/bNuevaInspeccion" />
 
     <Button

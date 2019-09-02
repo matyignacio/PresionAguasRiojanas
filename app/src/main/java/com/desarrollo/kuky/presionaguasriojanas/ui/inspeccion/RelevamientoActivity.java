@@ -120,12 +120,12 @@ public class RelevamientoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (formInmueble.isVisible() ||
-                formMapa.isVisible() ||
+        if (formMapa.isVisible() ||
                 formFoto.isVisible() ||
                 formMedidores.isVisible()) {
             mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
         } else {
+            stopLocationUpdates();
             abrirActivity(this, InspeccionActivity.class);
         }
     }
