@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,7 +29,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeL
 public class FormMapa extends Fragment {
 
     MapView mMapView;
-    Marker marcador;
+    Marker marcador, posicionUsuario;
     private GoogleMap googleMap;
 
     @Override
@@ -66,6 +67,10 @@ public class FormMapa extends Fragment {
                     LONGITUD_LA_RIOJA));
             LatLng centroMapa = new LatLng(latitud, longitud);
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(centroMapa));
+            // INSERTAMOS EL MARCADOR DEL USUARIO
+            posicionUsuario = googleMap.addMarker(new MarkerOptions()
+                    .position(centroMapa)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_posicion_usuario)));
             googleMap.setOnMapClickListener(point -> {
                 try {
                     marcador.remove();
