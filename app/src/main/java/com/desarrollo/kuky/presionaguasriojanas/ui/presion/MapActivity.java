@@ -194,7 +194,10 @@ public class MapActivity extends AppCompatActivity
              */
             OrdenControlador ordenControlador = new OrdenControlador();
             Orden orden;
-            orden = ordenControlador.extraerActivo(this);
+            orden = ordenControlador.extraerActivo(this, getPreference(
+                    this,
+                    CIRCUITO_USUARIO,
+                    1));
             if (puntosPresion.get(i).getId().equals(orden.getPpActual().getId()) &&
                     puntosPresion.get(i).getUsuario().getId().equals(orden.getPpActual().getUsuario().getId())) {
                 puntoMarcador = googleMap.addMarker(new MarkerOptions()

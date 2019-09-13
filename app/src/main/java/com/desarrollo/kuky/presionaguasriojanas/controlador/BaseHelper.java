@@ -106,7 +106,8 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  id_usuario_pp_actual char(10) DEFAULT NULL," +
             "  id_pp_siguiente int(11) DEFAULT NULL," +
             "  id_usuario_pp_siguiente char(10) DEFAULT NULL," +
-            "  activo int(1) NOT NULL DEFAULT '0'" +
+            "  activo int(1) NOT NULL DEFAULT '0'," +
+            "  circuito INT(1) NOT NULL DEFAULT '1'" +
             " )";
 
     private String sqlTablaUsuarios = "CREATE TABLE IF NOT EXISTS susuario (" +

@@ -68,12 +68,13 @@ public class OrdenControlador {
                 while (rs.next()) {
                     String sql = "INSERT INTO `orden` " +
                             " VALUES " +
-                            "('" + rs.getInt(1) + "','" + // id_pp_actual
+                            "('" + rs.getInt(1) + "','" + // id
                             rs.getInt(2) + "','" + // id_pp_actual
-                            rs.getString(3) + "','" + // id_usuario_actual
+                            rs.getString(3) + "','" + // id_usuario_pp_actual
                             rs.getInt(4) + "','" + // id_pp_siguiente
-                            rs.getString(5) + "','" + // id_pp_siguiente
-                            rs.getInt(6) + "');"; // id_usuario_siguiente
+                            rs.getString(5) + "','" + // id_usuario_pp_siguiente
+                            rs.getInt(6) + "','" + // activo
+                            rs.getInt(7) + "');"; // circuito
                     db.execSQL(sql);
                 }
                 check++;
@@ -119,10 +120,23 @@ public class OrdenControlador {
         }
     }
 
-    public Orden extraerActivo(Activity a) {
+    void editarActivo(Activity a, int id_punto, String id_usuario, int bandera) {
+        try {
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE orden SET activo = " + bandera +
+                    " WHERE id_pp_actual =  " + id_punto +
+                    " AND id_usuario_pp_actual like '" + id_usuario + "'";
+            bh.execSQL(sql);
+            bh.close();
+        } catch (Exception e) {
+            Util.mostrarMensaje(a, e.toString());
+        }
+    }
+
+    public Orden extraerActivo(Activity a, int circuito) {
         Orden orden = new Orden();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM orden WHERE activo = 1", null);
+        Cursor c = db.rawQuery("SELECT * FROM orden WHERE activo = 1 AND circuito = " + circuito, null);
         while (c.moveToNext()) {
             orden.setId(c.getInt(0));
             /**
@@ -154,19 +168,6 @@ public class OrdenControlador {
         c.close();
         db.close();
         return orden;
-    }
-
-    void editarActivo(Activity a, int id_punto, String id_usuario, int bandera) {
-        try {
-            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE orden SET activo = " + bandera +
-                    " WHERE id_pp_actual =  " + id_punto +
-                    " AND id_usuario_pp_actual like '" + id_usuario + "'";
-            bh.execSQL(sql);
-            bh.close();
-        } catch (Exception e) {
-            Util.mostrarMensaje(a, e.toString());
-        }
     }
 
     Orden existePunto(Activity a, PuntoPresion puntoPresion) {
