@@ -185,7 +185,7 @@ public class Util {
                 Float.parseFloat(etPresion.getText().toString()) > 0) {
             return EXITOSO;
         } else {
-            mostrarMensaje(a, "La presion debe ser entre 0 mca y 20 mca");
+            mostrarMensaje(a, "La presion debe ser entre 0 mca y " + MAXIMA_MEDICION + " mca");
             return ERROR;
         }
     }
