@@ -40,6 +40,9 @@ import java.util.concurrent.Callable;
  * HACER CODIGO LIMPIO DURANTE EL DESARROLLO DE NUESTRA APP
  */
 public class Util {
+    /**
+     * CONEXION
+     ********************************************/
     public static final String DATA_BASE = "u101901458_presi";
     public static final String HOST = "sql200.main-hosting.eu";
     public static final String USER = "u101901458_matia";
@@ -49,50 +52,52 @@ public class Util {
 //    public static final String USER = "c1370466_consu";
 //    public static final String CLAVE = "Consulta963";
     public static final String PUERTO = "3306";
+    /**
+     * ENTEROS
+     ********************************************/
+    public static final int ACTUALIZAR_PUNTO = 2;
     public static final int ASYNCTASK_INSPECCION = 13;
     public static final int ASYNCTASK_PRESION = 6;
-    public static final int EXITOSO = 1;
-    public static final int ERROR = 0;
     public static final int BANDERA_ALTA = 1;
     public static final int BANDERA_BAJA = 0;
-    public static final int PRIMER_INICIO_MODULO = 0;
-    public static final int SEGUNDO_INICIO_MODULO = 1;
-    public static final int INSERTAR_PUNTO = 1;
-    public static final int ACTUALIZAR_PUNTO = 2;
     public static final int ESTANDAR_MEDICION = 6;
-    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
-    public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
-    public static final String ULTIMA_LATITUD = "latitud";
-    public static final String ULTIMA_LONGITUD = "longitud";
-    public static final String LATITUD_INSPECCION = "latitud_inspeccion";
-    public static final String LONGITUD_INSPECCION = "longitud_inspeccion";
-    public static final String CIRCUITO_USUARIO = "circuito_usuario";
-    public static final String TIPO_MAPA = "id_tipo_punto";
-    public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
-    public static final String SPINNER_TIPO_UNIDAD = "tipo_unidad";
-    public static final String SPINNER_TIPO_UNIDAD2 = "tipo_unidad2";
-    public static final String SPINNER_BARRIO_RELEVAMIENTO = "barrio_relevamiento";
-    public static final int MAPA_RECORRIDO = 1;
+    public static final int ERROR = 0;
+    public static final int EXITOSO = 1;
+    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+    public static final int INSERTAR_PUNTO = 1;
     public static final int MAPA_CLIENTES = 2;
-    public static final int MAXIMO_CIRCUITO = 3;
+    public static final int MAPA_RECORRIDO = 1;
     private static final int MAXIMA_MEDICION = 100;
-    private static final String PREFS_NAME = "MyPrefsFile";
+    public static final int MAXIMO_CIRCUITO = 3;
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    public static final int PRIMER_INICIO_MODULO = 0;
+    public static final int REQUEST_CHECK_SETTINGS = 100;
+    public static final int SEGUNDO_INICIO_MODULO = 1;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    /**
+     * STRINGS
+     ********************************************/
+    public static final String CIRCUITO_USUARIO = "circuito_usuario";
     private static final String font_primary_path = "font/font_primary.ttf";
     private static final String font_primary_bold_path = "font/font_primary_bold.ttf";
+    public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
+    public static final String LATITUD_INSPECCION = "latitud_inspeccion";
+    public static final String LONGITUD_INSPECCION = "longitud_inspeccion";
+    public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
+    private static final String PREFS_NAME = "MyPrefsFile";
+    public static final String SPINNER_BARRIO_RELEVAMIENTO = "barrio_relevamiento";
+    public static final String SPINNER_TIPO_UNIDAD = "tipo_unidad";
+    public static final String SPINNER_TIPO_UNIDAD2 = "tipo_unidad2";
+    public static final String TIPO_MAPA = "id_tipo_punto";
+    public static final String ULTIMA_LATITUD = "latitud";
+    public static final String ULTIMA_LONGITUD = "longitud";
+    public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
     /**
      * A LATITUD Y LONGITUD LAS DEFINO COMO STRINGS PARA PODER USARLAS COMO SHARED PREFERENCES
      * DESPUES LAS PARSEO A DOUBLE EN MAPACTIVITY
      **/
     public static final String LATITUD_LA_RIOJA = "-29.4126811";
     public static final String LONGITUD_LA_RIOJA = "-66.8576855";
-    // location updates interval - 10sec
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-    // fastest updates interval - 5 sec
-    // location updates will be received if another app is requesting the locations
-    // than your app can handle
-    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-    public static final int REQUEST_CHECK_SETTINGS = 100;
 
     public static void abrirActivity(Activity a, Class destino) {
         Intent intent = new Intent(a, destino);
