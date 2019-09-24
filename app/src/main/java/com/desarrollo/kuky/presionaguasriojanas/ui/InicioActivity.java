@@ -14,9 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.InicioActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
-import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -40,7 +40,10 @@ public class InicioActivity extends AppCompatActivity
         setPrimaryFontBold(this, bModuloPresion);
         /**************************/
         evaluarUsuario();
-        bModuloPresion.setOnClickListener(view -> abrirActivity(this, MapActivity.class));
+        bModuloPresion.setOnClickListener(view -> {
+            InicioActivityControlador inicioControlador = new InicioActivityControlador();
+            inicioControlador.abrirMapActivity(this);
+        });
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -36,6 +36,8 @@ public class Usuario {
 
     private ArrayList<Modulo> modulos;
 
+    private ArrayList<Integer> circuitos;
+
     public String getId() {
         return usuario;
     }
@@ -122,6 +124,14 @@ public class Usuario {
 
     public void setModulos(ArrayList<Modulo> modulos) {
         this.modulos = modulos;
+    }
+
+    public ArrayList<Integer> getCircuitos() {
+        return circuitos;
+    }
+
+    public void setCircuitos(ArrayList<Integer> circuitos) {
+        this.circuitos = circuitos;
     }
 
     @Override

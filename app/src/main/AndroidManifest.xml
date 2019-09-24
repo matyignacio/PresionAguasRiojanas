@@ -39,6 +39,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.ErrorActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.presion.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

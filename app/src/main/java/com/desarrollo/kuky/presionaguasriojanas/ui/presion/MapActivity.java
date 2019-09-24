@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_DEFECTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -43,7 +44,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJ
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_RECORRIDO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAXIMO_CIRCUITO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
@@ -164,7 +164,7 @@ public class MapActivity extends AppCompatActivity
                 getPreference(
                         this,
                         CIRCUITO_USUARIO,
-                        1));
+                        CIRCUITO_DEFECTO));
         // Recorremos el arrayList para ir creando los marcadores
         for (Integer i = 0; i < puntosPresion.size(); i++) {
             Marker puntoMarcador;
@@ -197,7 +197,7 @@ public class MapActivity extends AppCompatActivity
             orden = ordenControlador.extraerActivo(this, getPreference(
                     this,
                     CIRCUITO_USUARIO,
-                    1));
+                    CIRCUITO_DEFECTO));
             if (puntosPresion.get(i).getId().equals(orden.getPpActual().getId()) &&
                     puntosPresion.get(i).getUsuario().getId().equals(orden.getPpActual().getUsuario().getId())) {
                 puntoMarcador = googleMap.addMarker(new MarkerOptions()
@@ -245,7 +245,7 @@ public class MapActivity extends AppCompatActivity
 
     private void setNombreUsuario() {
         String usuario = LoginActivity.usuario.getNombre() + "\n" +
-                "Circuito " + getPreference(MapActivity.this, CIRCUITO_USUARIO, 1);
+                "Circuito " + getPreference(MapActivity.this, CIRCUITO_USUARIO, CIRCUITO_DEFECTO);
         subTitle.setText(usuario);
     }
 
@@ -258,20 +258,21 @@ public class MapActivity extends AppCompatActivity
     public void showDialogSetCircuito(final Activity a) {
         final Spinner taskSpinner = new Spinner(a);
         List<String> labels = new ArrayList<>();
-        for (int i = 1; i <= MAXIMO_CIRCUITO; i++) {
-            labels.add("Circuito " + i);
+        for (int i = 0; i < LoginActivity.usuario.getCircuitos().size(); i++) {
+            labels.add("Circuito " + LoginActivity.usuario.getCircuitos().get(i));
         }
         Util.cargarSpinner(taskSpinner,
                 a,
                 getPreference(
                         MapActivity.this,
-                        CIRCUITO_USUARIO,
-                        1),
+                        POSICION_SELECCIONADA,
+                        0),
                 labels,
                 () -> {// BUTTON ACEPTAR
-                    setPreference(MapActivity.this, CIRCUITO_USUARIO, getPreference(a,
-                            POSICION_SELECCIONADA,
-                            1));
+                    setPreference(MapActivity.this, CIRCUITO_USUARIO,
+                            LoginActivity.usuario.getCircuitos().get(getPreference(a,
+                                    POSICION_SELECCIONADA,
+                                    0)));
                     return null;
                 },
                 () -> {// BUTTON CANCELAR
