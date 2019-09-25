@@ -259,7 +259,7 @@ public class HistorialPuntosControlador {
                 if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity")) {
                     logOut(a);
                 } else if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity")) {
-                    mostrarMensaje(a, "Se sincronizo con exito!");
+                    mostrarMensaje(a, "Al iniciar sesion por primera vez debe seleccionar un circuito");
                     abrirActivity(a, MapActivity.class);
                 }
             } else {

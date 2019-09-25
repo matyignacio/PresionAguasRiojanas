@@ -60,7 +60,7 @@ public class Util {
     public static final int ASYNCTASK_PRESION = 6;
     public static final int BANDERA_ALTA = 1;
     public static final int BANDERA_BAJA = 0;
-    public static final int CIRCUITO_DEFECTO = 101;
+    public static final int CIRCUITO_DEFECTO = 0;
     public static final int ESTANDAR_MEDICION = 6;
     public static final int ERROR = 0;
     public static final int EXITOSO = 1;
