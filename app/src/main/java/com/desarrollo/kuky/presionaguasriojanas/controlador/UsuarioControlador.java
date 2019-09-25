@@ -18,11 +18,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class UsuarioControlador {
     private ProgressDialog pDialog;
@@ -244,6 +247,10 @@ public class UsuarioControlador {
             String sql = "DELETE FROM susuario";
             db.execSQL(sql);
             db.close();
+            // RESETEAMOS LA POSICION DEL SPINNER DE circuito A 0 PARA QUE NO TIRE ERROR.
+            setPreference(a, POSICION_SELECCIONADA, 0);
+            // RESETEAMOS EL CIRCUITO A 0 PARA QUE NO MUESTRE EL CIRCUITO DEL USUARIO ANTERIOR.
+            setPreference(a, CIRCUITO_USUARIO, 0);
             return EXITOSO;
         } catch (Exception e) {
             mostrarMensaje(a, e.toString());
