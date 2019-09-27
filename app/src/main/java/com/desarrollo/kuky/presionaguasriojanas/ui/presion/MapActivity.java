@@ -261,6 +261,17 @@ public class MapActivity extends AppCompatActivity
         for (int i = 0; i < LoginActivity.usuario.getCircuitos().size(); i++) {
             labels.add("Circuito " + LoginActivity.usuario.getCircuitos().get(i));
         }
+        /** ACA VAMOS A TENER QUE RESOLVER EL PROBLEMA DE QUE A VECES TENEMOS UNA POSICION SELECCIONADA
+         *  MAYOR AL TAMAÑO DE CIRCUITOS DISPONIBLES PARA EL USUARIO *********************************/
+        int posicionSeleccionada = getPreference(
+                MapActivity.this,
+                POSICION_SELECCIONADA,
+                0);
+        if (posicionSeleccionada >= LoginActivity.usuario.getCircuitos().size()) {
+            setPreference(this, POSICION_SELECCIONADA, 0);
+        }
+
+        /** ******************************************************************************************/
         Util.cargarSpinner(taskSpinner,
                 a,
                 getPreference(
@@ -269,10 +280,7 @@ public class MapActivity extends AppCompatActivity
                         0),
                 labels,
                 () -> {// BUTTON ACEPTAR
-                    setPreference(MapActivity.this, CIRCUITO_USUARIO,
-                            LoginActivity.usuario.getCircuitos().get(getPreference(a,
-                                    POSICION_SELECCIONADA,
-                                    0)));
+
                     return null;
                 },
                 () -> {// BUTTON CANCELAR
@@ -284,6 +292,10 @@ public class MapActivity extends AppCompatActivity
                 taskSpinner,
                 "Listo",
                 () -> {
+                    setPreference(MapActivity.this, CIRCUITO_USUARIO,
+                            LoginActivity.usuario.getCircuitos().get(getPreference(a,
+                                    POSICION_SELECCIONADA,
+                                    0)));
                     setNombreUsuario();
                     mostrarMensaje(MapActivity.this, "Se actualizo el circuito");
                     abrirActivity(MapActivity.this, MapActivity.class);
