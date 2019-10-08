@@ -38,4 +38,34 @@
         </TableRow>
     </TableLayout>
 
+    <RelativeLayout
+        android:id="@+id/rlProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/tvProgressBar"
+            android:layout_alignEnd="@+id/tvProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/backgroundColor"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvProgressBar"
+            style="@style/tv_primary_progress_bar"
+            android:layout_above="@+id/progressBar"
+            android:layout_centerHorizontal="true"
+            android:text="@string/tv_progress_bar"
+            android:textAlignment="center"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
 </RelativeLayout>

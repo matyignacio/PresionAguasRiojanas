@@ -2,8 +2,9 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
@@ -21,37 +22,41 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.progressBarVisibility;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setEnabledActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class InicioActivityControlador {
 
-    private ProgressDialog pDialog;
 
     @SuppressLint("StaticFieldLeak")
-    private class AbrirMapActivityTask extends AsyncTask<String, Float, String> {
+    private class AbrirMapActivityTask extends AsyncTask<String, Integer, String> {
         String RETURN = "ERROR";
         Activity a;
         ArrayList<Integer> circuitos = new ArrayList<>();
+        private ProgressBar progressBar;
+        private TextView tvProgressBar;
 
         @Override
         protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Cargando circuitos...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+            setEnabledActivity(a, false);
+            progressBar.setMax(10);
+            progressBar.setProgress(0);
+            progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
-        AbrirMapActivityTask(Activity a) {
+        AbrirMapActivityTask(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
             this.a = a;
+            this.progressBar = progressBar;
+            this.tvProgressBar = tvProgressBar;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
             try {
+                Connection conn;
+                PreparedStatement ps;
+                ResultSet rs;
                 conn = Conexion.GetConnection();
                 String consultaSql = "SELECT circuito " +
                         " FROM permisos_circuitos" +
@@ -74,8 +79,15 @@ public class InicioActivityControlador {
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+
+        @Override
         protected void onPostExecute(String s) {
-            pDialog.dismiss();
+            progressBarVisibility(progressBar, tvProgressBar, false);
+            setEnabledActivity(a, true);
             if (s.equals("")) {
                 LoginActivity.usuario.setCircuitos(circuitos);
                 abrirActivity(a, MapActivity.class);
@@ -87,10 +99,10 @@ public class InicioActivityControlador {
         }
     }
 
-    public void abrirMapActivity(Activity a) {
+    public void abrirMapActivity(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
         checkConnection(a, () -> {
             try {
-                AbrirMapActivityTask abrirMapActivityTask = new AbrirMapActivityTask(a);
+                AbrirMapActivityTask abrirMapActivityTask = new AbrirMapActivityTask(a, progressBar, tvProgressBar);
                 abrirMapActivityTask.execute();
             } catch (Exception e) {
                 mostrarMensaje(a, e.toString());

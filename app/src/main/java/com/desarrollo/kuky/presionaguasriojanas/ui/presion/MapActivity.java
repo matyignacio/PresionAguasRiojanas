@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,12 +60,16 @@ public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
     private int tipoPunto;
+    private ProgressBar progressBar;
+    private TextView tvProgressBar;
     TextView subTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        progressBar = findViewById(R.id.progressBar);
+        tvProgressBar = findViewById(R.id.tvProgressBar);
         primerInicio();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -98,10 +103,12 @@ public class MapActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            abrirActivity(this, InicioActivity.class);
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                abrirActivity(this, InicioActivity.class);
+            }
         }
     }
 
@@ -251,7 +258,7 @@ public class MapActivity extends AppCompatActivity
 
     private void sincronizar() {
         MapActivityControlador mapActivityControlador = new MapActivityControlador();
-        if (mapActivityControlador.sync(MapActivity.this) == EXITOSO) {
+        if (mapActivityControlador.sync(MapActivity.this, progressBar, tvProgressBar) == EXITOSO) {
         }
     }
 

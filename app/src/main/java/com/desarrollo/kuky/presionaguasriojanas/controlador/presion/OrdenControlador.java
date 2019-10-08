@@ -1,10 +1,11 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
@@ -17,43 +18,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.progressBarVisibility;
 
 public class OrdenControlador {
 
-    private ProgressDialog pDialog;
 
-    private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
+    private class SyncMysqlToSqlite extends AsyncTask<String, Integer, String> {
 
         Activity a;
         private Integer check;
+        private ProgressBar progressBar;
+        private TextView tvProgressBar;
 
         @Override
         protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("4/" + ASYNCTASK_PRESION +
-                    " - Recibiendo orden...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressBar.setMax(10);
+            progressBar.setProgress(0);
+            progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
-        SyncMysqlToSqlite(Activity a) {
+        SyncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
             this.a = a;
             check = ERROR;
+            this.progressBar = progressBar;
+            this.tvProgressBar = tvProgressBar;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
             try {
+                Connection conn;
+                PreparedStatement ps;
+                ResultSet rs;
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
@@ -98,12 +99,18 @@ public class OrdenControlador {
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+
+        @Override
         protected void onPostExecute(String s) {
-            pDialog.dismiss();
+            progressBarVisibility(progressBar, tvProgressBar, false);
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "4/6 - Se copio el orden con exito");
                 PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-                puntoPresionControlador.sincronizarDeMysqlToSqlite(a);
+                puntoPresionControlador.sincronizarDeMysqlToSqlite(a, progressBar, tvProgressBar);
             } else {
                 mostrarMensaje(a, "Error en el checkOrden");
             }
@@ -111,13 +118,16 @@ public class OrdenControlador {
 
     }
 
-    void sincronizarDeMysqlToSqlite(Activity a) {
-        try {
-            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
-            syncMysqlToSqlite.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncMysqlToSqlite OC" + e.toString());
-        }
+    void sincronizarDeMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        checkConnection(a, () -> {
+            try {
+                SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a, progressBar, tvProgressBar);
+                syncMysqlToSqlite.execute();
+            } catch (Exception e) {
+                mostrarMensaje(a, "Error SyncMysqlToSqlite OC" + e.toString());
+            }
+            return null;
+        });
     }
 
     void editarActivo(Activity a, int id_punto, String id_usuario, int bandera) {

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -28,11 +29,15 @@ public class InicioActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Button bModuloPresion;
     Button bModuloInspeccion;
+    private ProgressBar progressBar;
+    private TextView tvProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        progressBar = findViewById(R.id.progressBar);
+        tvProgressBar = findViewById(R.id.tvProgressBar);
         bModuloPresion = findViewById(R.id.bModuloPresion);
         bModuloInspeccion = findViewById(R.id.bModuloInspeccion);
         /** SETEAMOS LOS TYPEFACES*/
@@ -42,7 +47,7 @@ public class InicioActivity extends AppCompatActivity
         evaluarUsuario();
         bModuloPresion.setOnClickListener(view -> {
             InicioActivityControlador inicioControlador = new InicioActivityControlador();
-            inicioControlador.abrirMapActivity(this);
+            inicioControlador.abrirMapActivity(this, progressBar, tvProgressBar);
         });
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -63,10 +68,12 @@ public class InicioActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            this.finish();
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                this.finish();
+            }
         }
     }
 
@@ -87,7 +94,7 @@ public class InicioActivity extends AppCompatActivity
                                     "sincronizar ahora",
                                     () -> {
                                         MapActivityControlador mapActivityControlador = new MapActivityControlador();
-                                        if (mapActivityControlador.sync(InicioActivity.this) == EXITOSO) {
+                                        if (mapActivityControlador.sync(InicioActivity.this, progressBar, tvProgressBar) == EXITOSO) {
                                         }
                                         return null;
                                     });

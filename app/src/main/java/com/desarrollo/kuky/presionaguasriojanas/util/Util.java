@@ -15,11 +15,13 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -374,6 +376,15 @@ public class Util {
         return bytes;
     }
 
+    public static void setEnabledActivity(Activity a, Boolean estado) {
+        if (estado) {
+            a.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else {
+            a.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
+    }
+
     public static Bitmap rotarBitMap(Bitmap bmp, int angulo) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angulo);
@@ -391,6 +402,16 @@ public class Util {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void progressBarVisibility(ProgressBar progressBar, TextView tvProgressBar, Boolean visible) {
+        if (visible) {
+            progressBar.setVisibility(View.VISIBLE);
+            tvProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            tvProgressBar.setVisibility(View.GONE);
         }
     }
 }

@@ -1,11 +1,12 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
@@ -25,7 +26,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
@@ -34,35 +34,37 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.progressBarVisibility;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setEnabledActivity;
 
 public class HistorialPuntosControlador {
 
     private ArrayList<HistorialPuntos> historiales;
-    private ProgressDialog pDialog;
 
-    private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
+    private class SyncSqliteToMysql extends AsyncTask<String, Integer, String> {
 
         Activity a;
         private Integer check;
         private ArrayList<HistorialPuntos> historiales;
+        private ProgressBar progressBar;
+        private TextView tvProgressBar;
 
         @Override
         protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("2/" + ASYNCTASK_PRESION +
-                    " - Enviando historial...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressBar.setMax(10);
+            progressBar.setProgress(0);
+            progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
-        SyncSqliteToMysql(Activity a) {
+        SyncSqliteToMysql(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
             this.a = a;
             check = ERROR;
             historiales = new ArrayList<>();
+            this.progressBar = progressBar;
+            this.tvProgressBar = tvProgressBar;
         }
 
         @Override
@@ -139,56 +141,64 @@ public class HistorialPuntosControlador {
             }
         }
 
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
 
         @Override
         protected void onPostExecute(String s) {
-            pDialog.dismiss();
+            progressBarVisibility(progressBar, tvProgressBar, false);
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
                 TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a);
+                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a, progressBar, tvProgressBar);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }
         }
     }
 
-    void sincronizarDeSqliteToMysql(Activity a) {
-        try {
-            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
-            syncSqliteToMysql.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncSqliteToMysql HPC" + e.toString());
-        }
+    void sincronizarDeSqliteToMysql(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        checkConnection(a, () -> {
+            try {
+                SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a, progressBar, tvProgressBar);
+                syncSqliteToMysql.execute();
+            } catch (Exception e) {
+                mostrarMensaje(a, "Error SyncSqliteToMysql HPC" + e.toString());
+            }
+            return null;
+        });
     }
 
-    private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
+    private class SyncMysqlToSqlite extends AsyncTask<String, Integer, String> {
 
         Activity a;
         private Integer check;
+        private ProgressBar progressBar;
+        private TextView tvProgressBar;
 
         @Override
         protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("6/" + ASYNCTASK_PRESION +
-                    " - Recibiendo historial...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+            progressBar.setMax(10);
+            progressBar.setProgress(0);
+            progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
-        SyncMysqlToSqlite(Activity a) {
+        SyncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
             this.a = a;
             check = ERROR;
+            this.progressBar = progressBar;
+            this.tvProgressBar = tvProgressBar;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
             try {
+                Connection conn;
+                PreparedStatement ps;
+                ResultSet rs;
                 /*//////////////////////////////////////////////////////////////////////////////////
                                             INSERTAMOS
                 //////////////////////////////////////////////////////////////////////////////////*/
@@ -248,8 +258,15 @@ public class HistorialPuntosControlador {
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+
+        @Override
         protected void onPostExecute(String s) {
-            pDialog.dismiss();
+            progressBarVisibility(progressBar, tvProgressBar, false);
+            setEnabledActivity(a, true);
             if (s.equals("EXITO")) {
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
                 if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO) {
@@ -259,7 +276,7 @@ public class HistorialPuntosControlador {
                 if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity")) {
                     logOut(a);
                 } else if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity")) {
-                    mostrarMensaje(a, "Debe seleccionar un CIRCUITO en el menu izquierdo");
+                    mostrarMensaje(a, "Para seleccionar o modificar el CIRCUITO ingrese al menu izquierdo");
                     abrirActivity(a, MapActivity.class);
                 }
             } else {
@@ -269,13 +286,16 @@ public class HistorialPuntosControlador {
 
     }
 
-    void sincronizarDeMysqlToSqlite(Activity a) {
-        try {
-            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
-            syncMysqlToSqlite.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncMysqlToSqlite HPC" + e.toString());
-        }
+    void sincronizarDeMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        checkConnection(a, () -> {
+            try {
+                SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a, progressBar, tvProgressBar);
+                syncMysqlToSqlite.execute();
+            } catch (Exception e) {
+                mostrarMensaje(a, "Error SyncMysqlToSqlite HPC" + e.toString());
+            }
+            return null;
+        });
     }
 
     public ArrayList<HistorialPuntos> extraerTodosPorPunto(Activity a, int id, String usuario) {

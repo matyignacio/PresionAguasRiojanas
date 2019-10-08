@@ -109,4 +109,5 @@
     <string name="tv_medidores">MEDIDORES</string>
     <string name="sw_conexion_visible">Conexion Visible</string>
     <string name="tv_error">ERROR</string>
+    <string name="tv_progress_bar">SINCRONIZANDO</string>
 </resources>

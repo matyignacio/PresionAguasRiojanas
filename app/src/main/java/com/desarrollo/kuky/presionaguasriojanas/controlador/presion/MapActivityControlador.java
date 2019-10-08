@@ -1,6 +1,8 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
 
 import android.app.Activity;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.util.InternetDetector;
 
@@ -12,7 +14,7 @@ public class MapActivityControlador {
     private InternetDetector internetDetector;
     int check = ERROR;
 
-    public int sync(Activity a) {
+    public int sync(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
         // Initializing Internet Checker
         internetDetector = new InternetDetector(a);
         if (!internetDetector.checkMobileInternetConn()) {
@@ -29,7 +31,7 @@ public class MapActivityControlador {
              * */
             check = ERROR;
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            if (puntoPresionControlador.sincronizarDeSqliteToMysql(a) == EXITOSO) {
+            if (puntoPresionControlador.sincronizarDeSqliteToMysql(a, progressBar, tvProgressBar) == EXITOSO) {
                 check = EXITOSO;
             }
         }
