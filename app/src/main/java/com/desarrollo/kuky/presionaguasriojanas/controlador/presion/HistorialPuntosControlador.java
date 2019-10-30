@@ -54,8 +54,6 @@ public class HistorialPuntosControlador {
 
         @Override
         protected void onPreExecute() {
-            progressBar.setMax(10);
-            progressBar.setProgress(0);
             progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
@@ -181,8 +179,6 @@ public class HistorialPuntosControlador {
 
         @Override
         protected void onPreExecute() {
-            progressBar.setMax(10);
-            progressBar.setProgress(0);
             progressBarVisibility(progressBar, tvProgressBar, true);
         }
 

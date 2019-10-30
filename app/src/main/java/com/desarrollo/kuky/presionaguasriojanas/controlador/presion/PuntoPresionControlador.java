@@ -48,8 +48,6 @@ public class PuntoPresionControlador {
         @Override
         protected void onPreExecute() {
             setEnabledActivity(a, false);
-            progressBar.setMax(10);
-            progressBar.setProgress(0);
             progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
@@ -210,8 +208,6 @@ public class PuntoPresionControlador {
 
         @Override
         protected void onPreExecute() {
-            progressBar.setMax(10);
-            progressBar.setProgress(0);
             progressBarVisibility(progressBar, tvProgressBar, true);
         }
 

@@ -47,13 +47,23 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
         <item name="android:typeface">sans</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/backgroundColor</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">5dp</item>
-        <item name="android:background">@color/backgroundColor</item>
+        <item name="android:background">@color/textColorPrimary</item>
+    </style>
+
+    <style name="progress_bar" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/backgroundColor</item>
+        <item name="android:background">@color/textColorPrimary</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
     </style>
 
     <style name="tv_primary_left" parent="tv_primary">
