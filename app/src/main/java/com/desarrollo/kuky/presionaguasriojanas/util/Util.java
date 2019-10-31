@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -413,5 +414,10 @@ public class Util {
             progressBar.setVisibility(View.GONE);
             tvProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    public static void ocultarTeclado(Activity a, View view) {
+        InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

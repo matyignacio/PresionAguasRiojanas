@@ -2,10 +2,11 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Modulo;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
@@ -23,40 +24,46 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ocultarTeclado;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.progressBarVisibility;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setEnabledActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class UsuarioControlador {
-    private ProgressDialog pDialog;
 
     private class UsuarioPorMailYClave extends AsyncTask<String, Float, String> {
         Activity a;
         String eMail;
         String clave;
+        private ProgressBar progressBar;
+        private TextView tvProgressBar;
 
         @Override
         protected void onPreExecute() {
+            setEnabledActivity(a, false);
+            ocultarTeclado(a, progressBar);
+            tvProgressBar.setText("Iniciando sesion...");
+            progressBarVisibility(progressBar, tvProgressBar, true);
             LoginActivity.usuario = new Usuario();
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Iniciando sesion...");
-            pDialog.setCancelable(false);
-            pDialog.show();
         }
 
-        UsuarioPorMailYClave(Activity a, String eMail, String clave) {
+        UsuarioPorMailYClave(Activity a, String eMail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
             this.a = a;
             this.eMail = eMail;
             this.clave = clave;
+            this.progressBar = progressBar;
+            this.tvProgressBar = tvProgressBar;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
             try {
+                Connection conn;
+                PreparedStatement ps;
+                ResultSet rs;
                 conn = Conexion.GetConnection();
                 String consultaSql = "SELECT * FROM susuario WHERE email LIKE '" + eMail + "' AND clave LIKE '" + clave + "' AND activo LIKE 's'";
                 ps = conn.prepareStatement(consultaSql);
@@ -92,9 +99,10 @@ public class UsuarioControlador {
 
         @Override
         protected void onPostExecute(String s) {
-            pDialog.dismiss();
+            setEnabledActivity(a, true);
+            progressBarVisibility(progressBar, tvProgressBar, false);
             if (s.equals("")) {
-                extraerPermisos(a, LoginActivity.usuario.getId());
+                extraerPermisos(a, LoginActivity.usuario.getId(), progressBar, tvProgressBar);
             } else {
                 mostrarMensaje(a, s);
             }
@@ -111,19 +119,24 @@ public class UsuarioControlador {
         }
     }
 
-    public void extraerPorMailYClave(Activity a, String mail, String clave) {
-        try {
-            UsuarioPorMailYClave usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave);
-            usuarioPorMailYClave.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, e.toString());
-        }
+    public void extraerPorMailYClave(Activity a, String mail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
+        checkConnection(a, () -> {
+            try {
+                UsuarioPorMailYClave usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave, progressBar, tvProgressBar);
+                usuarioPorMailYClave.execute();
+            } catch (Exception e) {
+                mostrarMensaje(a, e.toString());
+            }
+            return null;
+        });
     }
 
     @SuppressLint("StaticFieldLeak")
     private class ExtraerPermisos extends AsyncTask<String, Float, String> {
         Activity a;
         String usuario;
+        private ProgressBar progressBar;
+        private TextView tvProgressBar;
 
         @Override
         protected void onPreExecute() {
@@ -133,25 +146,25 @@ public class UsuarioControlador {
             db.execSQL(sql);
             db.close();
             /*********************************/
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Revisando permisos...");
-            pDialog.setCancelable(false);
-            pDialog.show();
+            setEnabledActivity(a, false);
+            tvProgressBar.setText("Revisando permisos...");
+            progressBarVisibility(progressBar, tvProgressBar, true);
         }
 
-        ExtraerPermisos(Activity a, String usuario) {
+        ExtraerPermisos(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar) {
             this.a = a;
             this.usuario = usuario;
+            this.progressBar = progressBar;
+            this.tvProgressBar = tvProgressBar;
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            guardarUsuario(a, LoginActivity.usuario);
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
             try {
+                guardarUsuario(a, LoginActivity.usuario);
+                Connection conn;
+                PreparedStatement ps;
+                ResultSet rs;
                 ArrayList<Modulo> modulos = new ArrayList<>();
                 conn = Conexion.GetConnection();
                 String consultaSql = "SELECT m.id, m.nombre FROM susuario u, permisos p, modulos m" +
@@ -187,7 +200,8 @@ public class UsuarioControlador {
 
         @Override
         protected void onPostExecute(String s) {
-            pDialog.dismiss();
+            setEnabledActivity(a, true);
+            progressBarVisibility(progressBar, tvProgressBar, false);
             if (s.equals("")) {
                 abrirActivity(a, InicioActivity.class);
             } else {
@@ -196,13 +210,16 @@ public class UsuarioControlador {
         }
     }
 
-    public void extraerPermisos(Activity a, String usuario) {
-        try {
-            ExtraerPermisos extraerPermisos = new ExtraerPermisos(a, usuario);
-            extraerPermisos.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, e.toString());
-        }
+    public void extraerPermisos(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar) {
+        checkConnection(a, () -> {
+            try {
+                ExtraerPermisos extraerPermisos = new ExtraerPermisos(a, usuario, progressBar, tvProgressBar);
+                extraerPermisos.execute();
+            } catch (Exception e) {
+                mostrarMensaje(a, e.toString());
+            }
+            return null;
+        });
     }
 
     private void guardarUsuario(Activity a, Usuario u) {

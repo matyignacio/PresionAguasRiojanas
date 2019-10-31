@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
@@ -28,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etMail;
     private EditText etClave;
     private UsuarioControlador uControlador = new UsuarioControlador();
+    private ProgressBar progressBar;
+    private TextView tvProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // -----------------------------------------------------------------------------------------
         // CAPTURAMOS LOS ELEMENTOS
+        progressBar = findViewById(R.id.progressBar);
+        tvProgressBar = findViewById(R.id.tvProgressBar);
         etMail = findViewById(R.id.etMail);
         etClave = findViewById(R.id.etClave);
         inputs.add(etMail);
@@ -49,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         if (uControlador.existeUsuario(this) == Util.EXITOSO) {
             abrirActivity(LoginActivity.this, InicioActivity.class);
         } else {
-            /** ACTUALIZAMOS LOS FORMATOS DE TABLAS (todas menos la de usuario) */
+            /** ACTUALIZAMOS LOS FORMATOS DE TABLAS */
             uControlador.actualizarTablas(this);
         }
     }
@@ -81,7 +87,9 @@ public class LoginActivity extends AppCompatActivity {
             pass = String.valueOf(etClave.getText());
             uControlador.extraerPorMailYClave(LoginActivity.this,
                     String.valueOf(etMail.getText()),
-                    String.valueOf(etClave.getText()));
+                    String.valueOf(etClave.getText()),
+                    progressBar,
+                    tvProgressBar);
         }
 
         @Override

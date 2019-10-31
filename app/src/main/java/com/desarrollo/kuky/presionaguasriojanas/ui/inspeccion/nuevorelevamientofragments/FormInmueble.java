@@ -1,14 +1,12 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -25,6 +23,7 @@ import java.util.ArrayList;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SPINNER_BARRIO_RELEVAMIENTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cargarSpinner;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ocultarTeclado;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
@@ -144,8 +143,7 @@ public class FormInmueble extends Fragment {
         RelevamientoActivity.relevamiento.setConexionVisible(swConexionVisible.isChecked());
         RelevamientoActivity.relevamiento.setObservaciones(
                 etObservaciones.getText().toString());
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etObservaciones.getWindowToken(), 0);
+        ocultarTeclado(getActivity(), etObservaciones);
     }
 
     public class addListenerOnTextChange implements TextWatcher {
