@@ -20,11 +20,8 @@ public class Conexion {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(
-                    "jdbc:mysql://" + HOST + ":" +
-                            PUERTO + "/" +
-                            DATA_BASE,
-                    USER,
-                    CLAVE);
+                    "jdbc:mysql://" + HOST + ":" + PUERTO + "/" +
+                            DATA_BASE, USER, CLAVE);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {

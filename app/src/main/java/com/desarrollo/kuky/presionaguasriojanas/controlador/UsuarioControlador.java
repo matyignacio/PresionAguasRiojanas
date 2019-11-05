@@ -1,225 +1,140 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Modulo;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.POSICION_SELECCIONADA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ocultarTeclado;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.progressBarVisibility;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setEnabledActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class UsuarioControlador {
 
-    private class UsuarioPorMailYClave extends AsyncTask<String, Float, String> {
-        Activity a;
-        String eMail;
-        String clave;
-        private ProgressBar progressBar;
-        private TextView tvProgressBar;
-
-        @Override
-        protected void onPreExecute() {
-            setEnabledActivity(a, false);
-            ocultarTeclado(a, progressBar);
-            tvProgressBar.setText("Iniciando sesion...");
-            progressBarVisibility(progressBar, tvProgressBar, true);
-            LoginActivity.usuario = new Usuario();
-        }
-
-        UsuarioPorMailYClave(Activity a, String eMail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
-            this.a = a;
-            this.eMail = eMail;
-            this.clave = clave;
-            this.progressBar = progressBar;
-            this.tvProgressBar = tvProgressBar;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                Connection conn;
-                PreparedStatement ps;
-                ResultSet rs;
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM susuario WHERE email LIKE '" + eMail + "' AND clave LIKE '" + clave + "' AND activo LIKE 's'";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
-                if (rs.next()) {
-                    LoginActivity.usuario.setId(rs.getString(1));
-                    LoginActivity.usuario.setNombre(rs.getString(2));
-                    LoginActivity.usuario.setEmail(rs.getString(3));
-                    LoginActivity.usuario.setClave(rs.getString(4));
-                    LoginActivity.usuario.setTipo(rs.getString(5));
-                    LoginActivity.usuario.setActivo(rs.getString(6));
+    public void loguearUsuario(Activity a, String eMail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
+        displayProgressBar(a, progressBar, tvProgressBar);
+        tvProgressBar.setText("Iniciando sesion...");
+        LoginActivity.usuario = new Usuario();
+        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + "login.php", response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            if (!response.equals("ERROR_ARRAY_VACIO")) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    LoginActivity.usuario.setId(jsonObject.getString("usuario"));
+                    LoginActivity.usuario.setNombre(jsonObject.getString("nombre"));
+                    LoginActivity.usuario.setEmail(jsonObject.getString("email"));
+                    LoginActivity.usuario.setClave(jsonObject.getString("clave"));
+                    LoginActivity.usuario.setTipo(jsonObject.getString("tipo"));
+                    LoginActivity.usuario.setActivo(jsonObject.getString("activo"));
                     LoginActivity.usuario.setBanderaModuloPresion(0);
                     LoginActivity.usuario.setBanderaSyncModuloPresion(0);
                     LoginActivity.usuario.setBanderaModuloInspeccion(0);
                     LoginActivity.usuario.setBanderaSyncModuloInspeccion(0);
-                } else {
-                    LoginActivity.usuario.setNombre(null);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                rs.close();
-                ps.close();
-                conn.close();
-                if (LoginActivity.usuario.getNombre() == null) {
-                    return "El nombre de usuario es inexistente o esta dado de baja.";
-                } else {
-                    return "";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            setEnabledActivity(a, true);
-            progressBarVisibility(progressBar, tvProgressBar, false);
-            if (s.equals("")) {
-                extraerPermisos(a, LoginActivity.usuario.getId(), progressBar, tvProgressBar);
+                // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
+                validarUsuario(a, LoginActivity.usuario.getId(), progressBar, tvProgressBar);
             } else {
-                mostrarMensaje(a, s);
+                Toast.makeText(a, "No existe ningun usuario con esa clave", Toast.LENGTH_SHORT).show();
             }
+        }, error -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        }) {
 
-            /***
-             * ACA NO MUESTRO NADA, LO USE PARA DEPURAR NOMAS. A LOS MENSAJES DE RESPUESTA
-             * LOS MUESTRO EN LA ASYNCTASK DE LOGINACTIVITY
-             if (s.equals("")) {
-             Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
-             } else {
-             Toast.makeText(a, s, Toast.LENGTH_SHORT).show();
-             }
-             */
-        }
+            //Pass Your Parameters here
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user", eMail);
+                params.put("clave", clave);
+                return params;
+            }
+        };
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
-    public void extraerPorMailYClave(Activity a, String mail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
-        checkConnection(a, () -> {
-            try {
-                UsuarioPorMailYClave usuarioPorMailYClave = new UsuarioPorMailYClave(a, mail, clave, progressBar, tvProgressBar);
-                usuarioPorMailYClave.execute();
-            } catch (Exception e) {
-                mostrarMensaje(a, e.toString());
-            }
-            return null;
-        });
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class ExtraerPermisos extends AsyncTask<String, Float, String> {
-        Activity a;
-        String usuario;
-        private ProgressBar progressBar;
-        private TextView tvProgressBar;
-
-        @Override
-        protected void onPreExecute() {
-            /** VACIAMOS LA TABLA DE MODULOS */
-            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "DELETE FROM modulos";
-            db.execSQL(sql);
-            db.close();
-            /*********************************/
-            setEnabledActivity(a, false);
-            tvProgressBar.setText("Revisando permisos...");
-            progressBarVisibility(progressBar, tvProgressBar, true);
-        }
-
-        ExtraerPermisos(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar) {
-            this.a = a;
-            this.usuario = usuario;
-            this.progressBar = progressBar;
-            this.tvProgressBar = tvProgressBar;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                guardarUsuario(a, LoginActivity.usuario);
-                Connection conn;
-                PreparedStatement ps;
-                ResultSet rs;
-                ArrayList<Modulo> modulos = new ArrayList<>();
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT m.id, m.nombre FROM susuario u, permisos p, modulos m" +
-                        " WHERE u.usuario = p.id_usuario" +
-                        " AND p.id_modulo = m.id" +
-                        " AND u.usuario='" + usuario + "'";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
-                while (rs.next()) {
-                    // CARGAMOS LOS MODULOS EN EL USUARIO
-                    Modulo modulo = new Modulo();
-                    modulo.setId(rs.getInt(1));
-                    modulo.setNombre(rs.getString(2));
-                    modulos.add(modulo);
-                    // Y TAMBIEN LOS GUARDAMOS
-                    guardarModulo(a, modulo);
+    public void validarUsuario(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar) {
+        /** VACIAMOS LA TABLA DE MODULOS */
+        SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+        String sql = "DELETE FROM modulos";
+        db.execSQL(sql);
+        db.close();
+        /*********************************/
+        ArrayList<Modulo> modulos = new ArrayList<>();
+        displayProgressBar(a, progressBar, tvProgressBar);
+        tvProgressBar.setText("Revisando permisos...");
+        guardarUsuario(a, LoginActivity.usuario);
+        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + "permisos.php", response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            if (!response.equals("ERROR_ARRAY_VACIO")) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        // CARGAMOS LOS MODULOS EN EL USUARIO
+                        Modulo modulo = new Modulo();
+                        modulo.setId(jsonArray.getJSONObject(i).getInt("id"));
+                        modulo.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
+                        modulos.add(modulo);
+                        // Y TAMBIEN LOS GUARDAMOS
+                        guardarModulo(a, modulo);
+                    }
+                    LoginActivity.usuario.setModulos(modulos);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                LoginActivity.usuario.setModulos(modulos);
-                rs.close();
-                ps.close();
-                conn.close();
-                if (modulos.size() == 0) {
-                    return "El usuario no tiene permisos";
-                } else {
-                    return "";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            setEnabledActivity(a, true);
-            progressBarVisibility(progressBar, tvProgressBar, false);
-            if (s.equals("")) {
+                // Y AL FINAL ABRIMOS LA OTRA ACTIVITY
                 abrirActivity(a, InicioActivity.class);
             } else {
-                mostrarMensaje(a, s);
+                mostrarMensaje(a, "El usuario no tiene permisos.");
             }
-        }
-    }
-
-    public void extraerPermisos(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar) {
-        checkConnection(a, () -> {
-            try {
-                ExtraerPermisos extraerPermisos = new ExtraerPermisos(a, usuario, progressBar, tvProgressBar);
-                extraerPermisos.execute();
-            } catch (Exception e) {
-                mostrarMensaje(a, e.toString());
+        }, error -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        }) {
+            //Pass Your Parameters here
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user", usuario);
+                return params;
             }
-            return null;
-        });
+        };
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
     private void guardarUsuario(Activity a, Usuario u) {
@@ -365,34 +280,40 @@ public class UsuarioControlador {
     public void actualizarTablas(Activity a) {
         SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
         /** DROPEAMOS PARA QUE SE CREEN */
+        /* MODULO INSPECCION */
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_inmueble"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_servicio"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("cliente"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("inspeccion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("datos_relevados"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento_medidores"));
+        /* MODULO PRESION */
         db.execSQL(BaseHelper.getInstance(a).dropTable("orden"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("historial_puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("puntos_presion"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_punto"));
+        /* GENERAL */
         db.execSQL(BaseHelper.getInstance(a).dropTable("susuario"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento_medidores"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("permisos"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("modulos"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
+        /* MODULO INSPECCION */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoServicio());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaCliente());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaInspeccion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaDatosRelevados());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamiento());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamientoMedidores());
+        /* MODULO PRESION */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaOrden());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaHistorialPuntosPresion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaPuntosPresion());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoPunto());
+        /* GENERAL */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaUsuarios());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamiento());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamientoMedidores());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaModulos());
         db.close();
     }

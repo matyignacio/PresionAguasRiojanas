@@ -1,7 +1,5 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui;
 
-import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -18,7 +16,6 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
@@ -67,56 +64,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin() {
         if (validarCampos(this, inputs) == EXITOSO) {
-            AttemptLogin attemptLogin = new AttemptLogin(this);
-            attemptLogin.execute();
-        }
-    }
-
-    private class AttemptLogin extends AsyncTask<String, String, String> {
-
-        Activity a;
-        String nombre, pass, regreso;
-
-        AttemptLogin(Activity a) {
-            this.a = a;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            nombre = String.valueOf(etMail.getText());
-            pass = String.valueOf(etClave.getText());
-            uControlador.extraerPorMailYClave(LoginActivity.this,
-                    String.valueOf(etMail.getText()),
-                    String.valueOf(etClave.getText()),
+            uControlador.loguearUsuario(this,
+                    etMail.getText().toString(),
+                    etClave.getText().toString(),
                     progressBar,
                     tvProgressBar);
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                if (nombre.equalsIgnoreCase(usuario.getEmail())) {
-                    if (pass.equals(usuario.getClave())) {
-                        regreso = "correcto";
-                    } else {
-                        regreso = "La clave no coincide con el usuario";
-                    }
-                } else {
-                    regreso = "La clave no coincide con el usuario";
-                }
-            } catch (Exception e) {
-                regreso = "Error en la conexion";
-            }
-            return regreso;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (s.equals("correcto")) {
-                //abrirActivity(LoginActivity.this, InicioActivity.class);
-            } else {
-                mostrarMensaje(a, s);
-            }
         }
     }
 

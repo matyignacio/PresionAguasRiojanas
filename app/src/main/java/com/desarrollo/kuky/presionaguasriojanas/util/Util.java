@@ -46,14 +46,15 @@ public class Util {
     /**
      * CONEXION
      ********************************************/
-//    public static final String DATA_BASE = "u101901458_presi";
-//    public static final String HOST = "sql200.main-hosting.eu";
-//    public static final String USER = "u101901458_matia";
-//    public static final String CLAVE = "Miseignacio11";
-    public static final String DATA_BASE = "c1370466_aguas_out";
-    public static final String HOST = "66.97.39.77";
-    public static final String USER = "c1370466_consu";
-    public static final String CLAVE = "Consulta963";
+    public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
+    public static final String DATA_BASE = "u101901458_presi";
+    public static final String HOST = "sql200.main-hosting.eu";
+    public static final String USER = "u101901458_matia";
+    public static final String CLAVE = "Miseignacio11";
+    //    public static final String DATA_BASE = "c1370466_aguas_out";
+//    public static final String HOST = "66.97.39.77";
+//    public static final String USER = "c1370466_consu";
+//    public static final String CLAVE = "Consulta963";
     public static final String PUERTO = "3306";
     /**
      * ENTEROS
@@ -419,5 +420,16 @@ public class Util {
     public static void ocultarTeclado(Activity a, View view) {
         InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void displayProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        setEnabledActivity(a, false);
+        ocultarTeclado(a, progressBar);
+        progressBarVisibility(progressBar, tvProgressBar, true);
+    }
+
+    public static void lockProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        setEnabledActivity(a, true);
+        progressBarVisibility(progressBar, tvProgressBar, false);
     }
 }

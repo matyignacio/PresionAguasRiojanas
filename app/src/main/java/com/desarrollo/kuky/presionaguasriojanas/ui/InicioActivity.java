@@ -29,6 +29,7 @@ public class InicioActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Button bModuloPresion;
     Button bModuloInspeccion;
+    Button bModuloReclamo;
     private ProgressBar progressBar;
     private TextView tvProgressBar;
 
@@ -40,9 +41,11 @@ public class InicioActivity extends AppCompatActivity
         tvProgressBar = findViewById(R.id.tvProgressBar);
         bModuloPresion = findViewById(R.id.bModuloPresion);
         bModuloInspeccion = findViewById(R.id.bModuloInspeccion);
+        bModuloReclamo = findViewById(R.id.bModuloReclamo);
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, bModuloInspeccion);
         setPrimaryFontBold(this, bModuloPresion);
+        setPrimaryFontBold(this, bModuloReclamo);
         /**************************/
         evaluarUsuario();
         bModuloPresion.setOnClickListener(view -> {
@@ -50,6 +53,7 @@ public class InicioActivity extends AppCompatActivity
             inicioControlador.abrirMapActivity(this, progressBar, tvProgressBar);
         });
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
+        //bModuloReclamo.setOnClickListener(view -> );
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -119,6 +123,9 @@ public class InicioActivity extends AppCompatActivity
                     break;
                 case "inspeccion":
                     bModuloInspeccion.setVisibility(View.VISIBLE);
+                    break;
+                case "reclamo":
+                    bModuloReclamo.setVisibility(View.VISIBLE);
                     break;
             }
         }

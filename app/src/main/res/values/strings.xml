@@ -50,6 +50,7 @@
     <string name="tvUsuario">Bienvenido:</string>
     <string name="bModuloPresion">Presion</string>
     <string name="bModuloInspeccion">Inspeccion</string>
+    <string name="bModuloReclamo">Reclamo</string>
     <string name="tv_presion_historial">Presion:</string>
     <string name="tv_fecha_historial">Fecha:</string>
     <string name="tv_mca">mca</string>

@@ -4,20 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Created by Kuky on 01/08/2019.
- */
-
 public class ConexionCorvette {
-    public static Connection GetConnection(String database) {
+    private static final String DATA_BASE = "CAPITALPRUEBA";
+    private static final String HOST = "192.168.1.112";
+    private static final String USER = "root";
+    private static final String CLAVE = "sqlibmlr963*";
+    private static final String PUERTO = "3306";
+
+    public static Connection GetConnection() {
         Connection conexion = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(
-                    "jdbc:mysql://192.168.1.112:3306/" +
-                            database,
-                    "consulta",
-                    "Consulta123");
+                    "jdbc:mysql://" + HOST + ":" + PUERTO + "/" +
+                            DATA_BASE, USER, CLAVE);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
