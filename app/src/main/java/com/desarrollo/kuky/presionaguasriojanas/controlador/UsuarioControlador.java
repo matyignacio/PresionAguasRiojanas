@@ -39,8 +39,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 public class UsuarioControlador {
 
     public void loguearUsuario(Activity a, String eMail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
-        displayProgressBar(a, progressBar, tvProgressBar);
-        tvProgressBar.setText("Iniciando sesion...");
+        displayProgressBar(a, progressBar, tvProgressBar, "Iniciando sesion...");
         LoginActivity.usuario = new Usuario();
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + "login.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
@@ -93,8 +92,7 @@ public class UsuarioControlador {
         db.close();
         /*********************************/
         ArrayList<Modulo> modulos = new ArrayList<>();
-        displayProgressBar(a, progressBar, tvProgressBar);
-        tvProgressBar.setText("Revisando permisos...");
+        displayProgressBar(a, progressBar, tvProgressBar, "Revisando permisos...");
         guardarUsuario(a, LoginActivity.usuario);
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + "permisos.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);

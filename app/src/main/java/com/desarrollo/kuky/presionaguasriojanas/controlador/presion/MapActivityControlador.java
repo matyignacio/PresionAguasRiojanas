@@ -31,9 +31,11 @@ public class MapActivityControlador {
              * */
             check = ERROR;
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-            if (puntoPresionControlador.sincronizarDeSqliteToMysql(a, progressBar, tvProgressBar) == EXITOSO) {
-                check = EXITOSO;
-            }
+            puntoPresionControlador.insertToMySQL(a, progressBar, tvProgressBar);
+            check = EXITOSO;
+//            if (puntoPresionControlador.sincronizarDeSqliteToMysql(a, progressBar, tvProgressBar) == EXITOSO) {
+//                check = EXITOSO;
+//            }
         }
         return check;
     }

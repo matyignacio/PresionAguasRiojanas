@@ -7,42 +7,108 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.HistorialPuntos;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.Orden;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
+import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.progressBarVisibility;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setEnabledActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class HistorialPuntosControlador {
 
     private ArrayList<HistorialPuntos> historiales;
+    private JSONArray puntosInserts;
+    private JSONArray puntosUpdates;
+
+    public void insertToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        puntosInserts = new JSONArray();
+        displayProgressBar(a, progressBar, tvProgressBar, "Enviando historial...");
+        ArrayList<HistorialPuntos> historialesInsertar = extraerTodosPendientes(a);
+        for (int i = 0; i < historialesInsertar.size(); i++) {
+            try {
+                JSONObject punto = new JSONObject();
+                punto.put("latitud", historialesInsertar.get(i).getLatitud());
+                punto.put("longitud", historialesInsertar.get(i).getLongitud());
+                punto.put("presion", historialesInsertar.get(i).getPresion());
+                punto.put("fecha", historialesInsertar.get(i).getFecha());
+                punto.put("id_punto_presion", historialesInsertar.get(i).getPuntoPresion().getId());
+                punto.put("id_usuario", historialesInsertar.get(i).getPuntoPresion().getUsuario().getId());
+                punto.put("id_usuario_historial", LoginActivity.usuario.getId());
+                punto.put("cloro", historialesInsertar.get(i).getCloro());
+                punto.put("muestra", historialesInsertar.get(i).getMuestra());
+                puntosInserts.put(punto);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "historial_puntos_presion_insert.php", puntosInserts, response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            mostrarMensajeLog(a, response.toString());
+            try {
+                if (response.getJSONObject(0).getString("status").equals("OK")) {
+                    Log.d("RESPUESTASERVER", "OK");
+                    // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
+                    for (int i = 0; i < historialesInsertar.size(); i++) {
+                        actualizarPendiente(historialesInsertar.get(i), a);
+                    }
+                    // Y PASAMOS A LA SIGUIENTE REQUEST
+                    TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
+                    tipoPuntoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
+                } else {
+                    Log.e("RESPUESTASERVER", "ERROR");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("RESPUESTASERVER", e.toString());
+            }
+        }, error -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        });
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
+    }
 
     private class SyncSqliteToMysql extends AsyncTask<String, Integer, String> {
 
@@ -54,7 +120,7 @@ public class HistorialPuntosControlador {
 
         @Override
         protected void onPreExecute() {
-            progressBarVisibility(progressBar, tvProgressBar, true);
+            displayProgressBar(a, progressBar, tvProgressBar, "Enviando historial...");
         }
 
         SyncSqliteToMysql(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
@@ -147,11 +213,11 @@ public class HistorialPuntosControlador {
 
         @Override
         protected void onPostExecute(String s) {
-            progressBarVisibility(progressBar, tvProgressBar, false);
+            lockProgressBar(a, progressBar, tvProgressBar);
             if (s.equals("EXITO")) {
                 //mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
                 TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.sincronizarDeMysqlToSqlite(a, progressBar, tvProgressBar);
+                tipoPuntoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
             } else {
                 mostrarMensaje(a, "Error en el checkHistorialToMysql");
             }
@@ -170,100 +236,39 @@ public class HistorialPuntosControlador {
         });
     }
 
-    private class SyncMysqlToSqlite extends AsyncTask<String, Integer, String> {
-
-        Activity a;
-        private Integer check;
-        private ProgressBar progressBar;
-        private TextView tvProgressBar;
-
-        @Override
-        protected void onPreExecute() {
-            progressBarVisibility(progressBar, tvProgressBar, true);
-        }
-
-        SyncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-            this.a = a;
-            check = ERROR;
-            this.progressBar = progressBar;
-            this.tvProgressBar = tvProgressBar;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                Connection conn;
-                PreparedStatement ps;
-                ResultSet rs;
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM historial_puntos_presion ";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo historial...");
+        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "historial_puntos_presion_select.php", response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            Log.d("response", response);
+            if (!response.equals("ERROR_ARRAY_VACIO")) {
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
                 db.execSQL("DELETE FROM historial_puntos_presion");
-                while (rs.next()) {
-                    String sql = "INSERT INTO historial_puntos_presion" +
-                            "(id," +
-                            "latitud," +
-                            "longitud," +
-                            "pendiente," +
-                            "presion," +
-                            "fecha," +
-                            "id_punto_presion," +
-                            "id_usuario," +
-                            "id_usuario_historial," +
-                            "cloro," +
-                            "muestra)" +
-                            "VALUES" +
-                            "('" + rs.getInt(1) + "','" + // id
-                            rs.getDouble(2) + "','" + // latitud
-                            rs.getDouble(3) + "','" + // longitud
-                            "0','" + // pendiente
-                            rs.getFloat(4) + "','" + // presion
-                            rs.getTimestamp(5) + "','" + // fecha
-                            rs.getInt(6) + "','" + // id_tipo_presion
-                            rs.getString(7) + "','" + // id_usuario
-                            rs.getString(8) + "','" + // id_usuario_historial
-                            rs.getFloat(9) + "','" + // cloro
-                            rs.getString(10) + "');"; // muestra
-                    db.execSQL(sql);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        String sql = "INSERT INTO historial_puntos_presion" +
+                                "(id,latitud,longitud,pendiente,presion,fecha,id_punto_presion," +
+                                "id_usuario,id_usuario_historial,cloro,muestra) VALUES" +
+                                "('" + jsonArray.getJSONObject(i).getInt("id") + "','" + // id
+                                jsonArray.getJSONObject(i).getDouble("latitud") + "','" + // latitud
+                                jsonArray.getJSONObject(i).getDouble("longitud") + "','" + // longitud
+                                "0','" + // pendiente
+                                jsonArray.getJSONObject(i).getString("presion") + "','" + // presion
+                                jsonArray.getJSONObject(i).getString("fecha") + "','" + // fecha
+                                jsonArray.getJSONObject(i).getInt("id_punto_presion") + "','" + // id_tipo_presion
+                                jsonArray.getJSONObject(i).getString("id_usuario") + "','" + // id_usuario
+                                jsonArray.getJSONObject(i).getString("id_usuario_historial") + "','" + // id_usuario_historial
+                                jsonArray.getJSONObject(i).getString("cloro") + "','" + // cloro
+                                jsonArray.getJSONObject(i).getString("muestra") + "');"; // muestra
+                        db.execSQL(sql);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                check++;
-                if (check == EXITOSO) {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "EXITO";
-                } else {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            progressBar.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            progressBarVisibility(progressBar, tvProgressBar, false);
-            setEnabledActivity(a, true);
-            if (s.equals("EXITO")) {
+                db.close();
+                // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
                 UsuarioControlador usuarioControlador = new UsuarioControlador();
                 if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO) {
                     usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO);
@@ -276,22 +281,16 @@ public class HistorialPuntosControlador {
                     abrirActivity(a, MapActivity.class);
                 }
             } else {
-                mostrarMensaje(a, "Error en el checkHistorial");
+                Toast.makeText(a, "No existe historial de presion", Toast.LENGTH_SHORT).show();
             }
-        }
-
-    }
-
-    void sincronizarDeMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-        checkConnection(a, () -> {
-            try {
-                SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a, progressBar, tvProgressBar);
-                syncMysqlToSqlite.execute();
-            } catch (Exception e) {
-                mostrarMensaje(a, "Error SyncMysqlToSqlite HPC" + e.toString());
-            }
-            return null;
+        }, error -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
         });
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
     public ArrayList<HistorialPuntos> extraerTodosPorPunto(Activity a, int id, String usuario) {

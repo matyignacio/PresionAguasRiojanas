@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
@@ -29,10 +30,9 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 public class InicioActivityControlador {
 
     public void abrirMapActivity(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-        displayProgressBar(a, progressBar, tvProgressBar);
-        tvProgressBar.setText("Revisando circuitos...");
+        displayProgressBar(a, progressBar, tvProgressBar, "Revisando circuitos...");
         ArrayList<Integer> circuitos = new ArrayList<>();
-        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + "permisos_circuitos.php", response -> {
+        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "permisos_circuitos.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
             if (!response.equals("ERROR_ARRAY_VACIO")) {
                 try {

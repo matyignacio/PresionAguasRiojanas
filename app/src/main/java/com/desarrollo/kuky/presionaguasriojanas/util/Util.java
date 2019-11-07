@@ -47,6 +47,7 @@ public class Util {
      * CONEXION
      ********************************************/
     public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
+    public static final String MODULO_PRESION = "presion/";
     public static final String DATA_BASE = "u101901458_presi";
     public static final String HOST = "sql200.main-hosting.eu";
     public static final String USER = "u101901458_matia";
@@ -68,6 +69,7 @@ public class Util {
     public static final int ESTANDAR_MEDICION = 6;
     public static final int ERROR = 0;
     public static final int EXITOSO = 1;
+    public static final int EN_ESPERA = 1;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
     public static final int INSERTAR_PUNTO = 1;
     public static final int MAPA_CLIENTES = 2;
@@ -422,10 +424,11 @@ public class Util {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void displayProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public static void displayProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar, String mensajeTV) {
         setEnabledActivity(a, false);
         ocultarTeclado(a, progressBar);
         progressBarVisibility(progressBar, tvProgressBar, true);
+        tvProgressBar.setText(mensajeTV);
     }
 
     public static void lockProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
