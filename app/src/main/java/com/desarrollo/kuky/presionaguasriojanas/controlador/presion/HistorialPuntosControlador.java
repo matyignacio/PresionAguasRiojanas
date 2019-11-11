@@ -3,7 +3,6 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador.presion;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
@@ -28,9 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -38,14 +33,12 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFER
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
@@ -108,132 +101,6 @@ public class HistorialPuntosControlador {
         });
         // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(a).addToRequestQueue(request);
-    }
-
-    private class SyncSqliteToMysql extends AsyncTask<String, Integer, String> {
-
-        Activity a;
-        private Integer check;
-        private ArrayList<HistorialPuntos> historiales;
-        private ProgressBar progressBar;
-        private TextView tvProgressBar;
-
-        @Override
-        protected void onPreExecute() {
-            displayProgressBar(a, progressBar, tvProgressBar, "Enviando historial...");
-        }
-
-        SyncSqliteToMysql(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-            this.a = a;
-            check = ERROR;
-            historiales = new ArrayList<>();
-            this.progressBar = progressBar;
-            this.tvProgressBar = tvProgressBar;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            /**
-             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
-             DESDE EL TELEFONO HACIA EL SERVER
-             */
-            historiales = extraerTodosPendientes(a);
-            Connection conn;
-            conn = Conexion.GetConnection();
-            try {
-                conn.setAutoCommit(false);
-                String consultaSql;
-                for (int i = 0; i < historiales.size(); i++) {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                    PreparedStatement ps;
-                    consultaSql = "INSERT INTO historial_puntos_presion " +
-                            "(latitud, longitud, presion, fecha, id_punto_presion, " +
-                            "id_usuario, id_usuario_historial, cloro, muestra) " +
-                            "VALUES " +
-                            "('" + historiales.get(i).getLatitud() + "', " +
-                            "'" + historiales.get(i).getLongitud() + "', " +
-                            "'" + historiales.get(i).getPresion() + "', " +
-                            "'" + historiales.get(i).getFecha() + "', " +
-                            "'" + historiales.get(i).getPuntoPresion().getId() + "', " +
-                            "'" + historiales.get(i).getPuntoPresion().getUsuario().getId() + "', " +
-                            "'" + historiales.get(i).getUsuario().getId() + "', " +
-                            "'" + historiales.get(i).getCloro() + "', " +
-                            "'" + historiales.get(i).getMuestra() + "');";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.execute();
-                    conn.commit();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            UPDETEAMOS LA PRESION
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    consultaSql = "UPDATE puntos_presion " +
-                            " SET presion = '" + historiales.get(i).getPresion() + "' " +
-                            " WHERE id = " + historiales.get(i).getPuntoPresion().getId() +
-                            " AND id_usuario like '" + historiales.get(i).getPuntoPresion().getUsuario().getId() + "' ;";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.execute();
-                    conn.commit();
-                    ps.close();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            BAJAMOS EL PENDIENTE DEL HISTORIAL
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(historiales.get(i), a);
-                    check++;
-                }
-                if (check == historiales.size()) {
-                    return "EXITO";
-                } else {
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                try {
-                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            progressBar.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            lockProgressBar(a, progressBar, tvProgressBar);
-            if (s.equals("EXITO")) {
-                //mostrarMensaje(a, "2/6 - Se enviaron los historiales con exito");
-                TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                tipoPuntoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
-            } else {
-                mostrarMensaje(a, "Error en el checkHistorialToMysql");
-            }
-        }
-    }
-
-    void sincronizarDeSqliteToMysql(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-        checkConnection(a, () -> {
-            try {
-                SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a, progressBar, tvProgressBar);
-                syncSqliteToMysql.execute();
-            } catch (Exception e) {
-                mostrarMensaje(a, "Error SyncSqliteToMysql HPC" + e.toString());
-            }
-            return null;
-        });
     }
 
     public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {

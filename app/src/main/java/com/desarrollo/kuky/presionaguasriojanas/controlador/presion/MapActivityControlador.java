@@ -4,39 +4,30 @@ import android.app.Activity;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.desarrollo.kuky.presionaguasriojanas.util.InternetDetector;
-
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.checkConnection;
 
 public class MapActivityControlador {
-    private InternetDetector internetDetector;
     int check = ERROR;
 
     public int sync(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-        // Initializing Internet Checker
-        internetDetector = new InternetDetector(a);
-        if (!internetDetector.checkMobileInternetConn()) {
-            mostrarMensaje(a, "No hay conexion de red disponible.");
-        } else {
+        checkConnection(a, () -> {
             /**
              * ORDEN:
-             *  puntoPresionControlador.sincronizarDeSqliteToMysql(a) 1/6
-             *  historialPuntosControlador.sincronizarDeSqliteToMysql(a) 2/6
-             *  tipoPuntoControlador.sincronizarDeMysqlToSqlite(a) 3/6
-             *  ordenControlador.sincronizarDeMysqlToSqlite(a) 4/6
-             *  puntoPresionControlador.sincronizarDeMysqlToSqlite(a) 5/6
-             *  historialPuntosControlador.sincronizarDeMysqlToSqlite(a) 6/6
+             *  puntoPresionControlador.insertToMySQL(a, progressBar, tvProgressBar)
+             *  puntoPresionControlador.updateToMySQL(a, progressBar, tvProgressBar)
+             *  historialPuntosControlador.insertToMySQL(a, progressBar, tvProgressBar)
+             *  tipoPuntoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar)
+             *  ordenControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar)
+             *  puntoPresionControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar)
+             *  historialPuntosControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar)
              * */
-            check = ERROR;
             PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
             puntoPresionControlador.insertToMySQL(a, progressBar, tvProgressBar);
             check = EXITOSO;
-//            if (puntoPresionControlador.sincronizarDeSqliteToMysql(a, progressBar, tvProgressBar) == EXITOSO) {
-//                check = EXITOSO;
-//            }
-        }
+            return null;
+        });
         return check;
     }
 }
