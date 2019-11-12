@@ -6,22 +6,15 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DatosRelevados;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class DatosRelevadosControlador {
@@ -54,69 +47,70 @@ public class DatosRelevadosControlador {
 
         @Override
         protected String doInBackground(String... strings) {
-            /**
-             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
-             DESDE EL TELEFONO HACIA EL SERVER
-             */
-            datosRelevados = extraerTodosPendientes(a);
-            Connection conn;
-            conn = Conexion.GetConnection();
-            try {
-                conn.setAutoCommit(false);
-                String consultaSql;
-                for (int i = 0; i < datosRelevados.size(); i++) {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                    int estado = datosRelevados.get(i).isEstado() ? 1 : 0;
-                    int medida = datosRelevados.get(i).isMedida() ? 1 : 0;
-                    PreparedStatement ps;
-                    consultaSql = "INSERT INTO datos_relevados" +
-                            "(id, id_usuario, unidad, estado, medida, med_agua, " +
-                            "med_luz, nis, id_inpseccion, id_usuario_inspeccion)" +
-                            " VALUES " +
-                            "('" + datosRelevados.get(i).getId() + "', " +
-                            "'" + datosRelevados.get(i).getIdUsuario() + "', " +
-                            "'" + datosRelevados.get(i).getUnidad() + "', " +
-                            "'" + estado + "', " +
-                            "'" + medida + "', " +
-                            "'" + datosRelevados.get(i).getMedidorAgua() + "', " +
-                            "'" + datosRelevados.get(i).getMedidorLuz() + "', " +
-                            "'" + datosRelevados.get(i).getNis() + "', " +
-                            "'" + datosRelevados.get(i).getInspeccion().getId() + "', " +
-                            "'" + datosRelevados.get(i).getInspeccion().getIdUsuario() + "');";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.execute();
-                    conn.commit();
-                    ps.close();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            BAJAMOS EL PENDIENTE DEL datos_relevados
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(datosRelevados.get(i), a);
-                    check++;
-                }
-                if (check == datosRelevados.size()) {
-                    return "EXITO";
-                } else {
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                try {
-                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+//            /**
+//             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
+//             DESDE EL TELEFONO HACIA EL SERVER
+//             */
+//            datosRelevados = extraerTodosPendientes(a);
+//            Connection conn;
+//            conn = Conexion.GetConnection();
+//            try {
+//                conn.setAutoCommit(false);
+//                String consultaSql;
+//                for (int i = 0; i < datosRelevados.size(); i++) {
+//                /*//////////////////////////////////////////////////////////////////////////////////
+//                                            INSERTAMOS
+//                //////////////////////////////////////////////////////////////////////////////////*/
+//                    int estado = datosRelevados.get(i).isEstado() ? 1 : 0;
+//                    int medida = datosRelevados.get(i).isMedida() ? 1 : 0;
+//                    PreparedStatement ps;
+//                    consultaSql = "INSERT INTO datos_relevados" +
+//                            "(id, id_usuario, unidad, estado, medida, med_agua, " +
+//                            "med_luz, nis, id_inpseccion, id_usuario_inspeccion)" +
+//                            " VALUES " +
+//                            "('" + datosRelevados.get(i).getId() + "', " +
+//                            "'" + datosRelevados.get(i).getIdUsuario() + "', " +
+//                            "'" + datosRelevados.get(i).getUnidad() + "', " +
+//                            "'" + estado + "', " +
+//                            "'" + medida + "', " +
+//                            "'" + datosRelevados.get(i).getMedidorAgua() + "', " +
+//                            "'" + datosRelevados.get(i).getMedidorLuz() + "', " +
+//                            "'" + datosRelevados.get(i).getNis() + "', " +
+//                            "'" + datosRelevados.get(i).getInspeccion().getId() + "', " +
+//                            "'" + datosRelevados.get(i).getInspeccion().getIdUsuario() + "');";
+//                    ps = conn.prepareStatement(consultaSql);
+//                    ps.execute();
+//                    conn.commit();
+//                    ps.close();
+//                    /*//////////////////////////////////////////////////////////////////////////////////
+//                                            BAJAMOS EL PENDIENTE DEL datos_relevados
+//                    //////////////////////////////////////////////////////////////////////////////////*/
+//                    actualizarPendiente(datosRelevados.get(i), a);
+//                    check++;
+//                }
+//                if (check == datosRelevados.size()) {
+//                    return "EXITO";
+//                } else {
+//                    return "ERROR";
+//                }
+//            } catch (SQLException e) {
+//                try {
+//                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
+//                    conn.rollback();
+//                } catch (SQLException e1) {
+//                    e1.printStackTrace();
+//                }
+//                e.printStackTrace();
+//                return e.toString();
+//            } finally {
+//                try {
+//                    conn.setAutoCommit(true);
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            return "ERROR"; // ESTO LO DEJO ASI PARA BORRARLO DESPUES
         }
 
         @Override
@@ -164,55 +158,56 @@ public class DatosRelevadosControlador {
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
-            try {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM datos_relevados ";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
-                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM datos_relevados");
-                while (rs.next()) {
-                    String sql = "INSERT INTO datos_relevados" +
-                            " VALUES" +
-                            " ('" + rs.getInt(1) + "','" + // id
-                            rs.getString(2) + "','" + //id_usuario
-                            rs.getInt(3) + "','" + //unidad
-                            rs.getInt(4) + "','" + //estado
-                            rs.getInt(5) + "','" + //medida
-                            rs.getInt(6) + "','" + //med_agua
-                            rs.getInt(7) + "','" + //med_luz
-                            rs.getInt(8) + "','" + //nis
-                            rs.getInt(9) + "','" + //id_inspeccion
-                            rs.getString(10) + "','" + //id_usuario_inspeccion
-                            "0');"; // pendiente
-                    db.execSQL(sql);
-                }
-                check++;
-                if (check == EXITOSO) {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "EXITO";
-                } else {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
+//            Connection conn;
+//            PreparedStatement ps;
+//            ResultSet rs;
+//            try {
+//                /*//////////////////////////////////////////////////////////////////////////////////
+//                                            INSERTAMOS
+//                //////////////////////////////////////////////////////////////////////////////////*/
+//                conn = Conexion.GetConnection();
+//                String consultaSql = "SELECT * FROM datos_relevados ";
+//                ps = conn.prepareStatement(consultaSql);
+//                ps.execute();
+//                rs = ps.getResultSet();
+//                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+//                /* LIMPIAMOS LA TABLA */
+//                db.execSQL("DELETE FROM datos_relevados");
+//                while (rs.next()) {
+//                    String sql = "INSERT INTO datos_relevados" +
+//                            " VALUES" +
+//                            " ('" + rs.getInt(1) + "','" + // id
+//                            rs.getString(2) + "','" + //id_usuario
+//                            rs.getInt(3) + "','" + //unidad
+//                            rs.getInt(4) + "','" + //estado
+//                            rs.getInt(5) + "','" + //medida
+//                            rs.getInt(6) + "','" + //med_agua
+//                            rs.getInt(7) + "','" + //med_luz
+//                            rs.getInt(8) + "','" + //nis
+//                            rs.getInt(9) + "','" + //id_inspeccion
+//                            rs.getString(10) + "','" + //id_usuario_inspeccion
+//                            "0');"; // pendiente
+//                    db.execSQL(sql);
+//                }
+//                check++;
+//                if (check == EXITOSO) {
+//                    db.close();
+//                    rs.close();
+//                    ps.close();
+//                    conn.close();
+//                    return "EXITO";
+//                } else {
+//                    db.close();
+//                    rs.close();
+//                    ps.close();
+//                    conn.close();
+//                    return "ERROR";
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                return e.toString();
+//            }
+            return "ERROR"; // ESTO LO DEJO ASI PARA BORRARLO DESPUES
         }
 
         @Override

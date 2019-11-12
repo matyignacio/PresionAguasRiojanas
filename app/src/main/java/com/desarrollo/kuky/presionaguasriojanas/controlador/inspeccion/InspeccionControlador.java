@@ -6,10 +6,8 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
@@ -17,15 +15,10 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoServicio;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class InspeccionControlador {
@@ -58,73 +51,74 @@ public class InspeccionControlador {
 
         @Override
         protected String doInBackground(String... strings) {
-            /**
-             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
-             DESDE EL TELEFONO HACIA EL SERVER
-             */
-            inspecciones = extraerTodosPendientes(a);
-            Connection conn;
-            conn = Conexion.GetConnection();
-            try {
-                conn.setAutoCommit(false);
-                String consultaSql;
-                for (int i = 0; i < inspecciones.size(); i++) {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                    int servicioCloacal = inspecciones.get(i).isServicioCloacal() ? 1 : 0;
-                    PreparedStatement ps;
-                    consultaSql = "INSERT INTO inspeccion " +
-                            "(id, id_usuario, id_cliente, id_usuario_cliente, id_tipo_inmueble, " +
-                            "id_destino_inmueble, id_tipo_servicio, servicio_cloacal, coeficiente_zonal, " +
-                            "latitiud, longitud, latitud_usuario, longitud_usuario, observaciones) " +
-                            " VALUES " +
-                            "('" + inspecciones.get(i).getId() + "', " +
-                            "'" + inspecciones.get(i).getIdUsuario() + "', " +
-                            "'" + inspecciones.get(i).getCliente().getId() + "', " +
-                            "'" + inspecciones.get(i).getCliente().getIdUsuario() + "', " +
-                            "'" + inspecciones.get(i).getTipoInmueble().getId() + "', " +
-                            "'" + inspecciones.get(i).getDestinoInmueble().getId() + "', " +
-                            "'" + inspecciones.get(i).getTipoServicio().getId() + "', " +
-                            "'" + servicioCloacal + "', " +
-                            "'" + inspecciones.get(i).getCoeficienteZonal() + "', " +
-                            "'" + inspecciones.get(i).getLatitud() + "', " +
-                            "'" + inspecciones.get(i).getLongitud() + "', " +
-                            "'" + inspecciones.get(i).getLatitudUsuario() + "', " +
-                            "'" + inspecciones.get(i).getLongitudUsuario() + "', " +
-                            "'" + inspecciones.get(i).getObservaciones() + "');";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.execute();
-                    conn.commit();
-                    ps.close();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            BAJAMOS EL PENDIENTE DEL inspeccion
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(inspecciones.get(i), a);
-                    check++;
-                }
-                if (check == inspecciones.size()) {
-                    return "EXITO";
-                } else {
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                try {
-                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+//            /**
+//             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
+//             DESDE EL TELEFONO HACIA EL SERVER
+//             */
+//            inspecciones = extraerTodosPendientes(a);
+//            Connection conn;
+//            conn = Conexion.GetConnection();
+//            try {
+//                conn.setAutoCommit(false);
+//                String consultaSql;
+//                for (int i = 0; i < inspecciones.size(); i++) {
+//                /*//////////////////////////////////////////////////////////////////////////////////
+//                                            INSERTAMOS
+//                //////////////////////////////////////////////////////////////////////////////////*/
+//                    int servicioCloacal = inspecciones.get(i).isServicioCloacal() ? 1 : 0;
+//                    PreparedStatement ps;
+//                    consultaSql = "INSERT INTO inspeccion " +
+//                            "(id, id_usuario, id_cliente, id_usuario_cliente, id_tipo_inmueble, " +
+//                            "id_destino_inmueble, id_tipo_servicio, servicio_cloacal, coeficiente_zonal, " +
+//                            "latitiud, longitud, latitud_usuario, longitud_usuario, observaciones) " +
+//                            " VALUES " +
+//                            "('" + inspecciones.get(i).getId() + "', " +
+//                            "'" + inspecciones.get(i).getIdUsuario() + "', " +
+//                            "'" + inspecciones.get(i).getCliente().getId() + "', " +
+//                            "'" + inspecciones.get(i).getCliente().getIdUsuario() + "', " +
+//                            "'" + inspecciones.get(i).getTipoInmueble().getId() + "', " +
+//                            "'" + inspecciones.get(i).getDestinoInmueble().getId() + "', " +
+//                            "'" + inspecciones.get(i).getTipoServicio().getId() + "', " +
+//                            "'" + servicioCloacal + "', " +
+//                            "'" + inspecciones.get(i).getCoeficienteZonal() + "', " +
+//                            "'" + inspecciones.get(i).getLatitud() + "', " +
+//                            "'" + inspecciones.get(i).getLongitud() + "', " +
+//                            "'" + inspecciones.get(i).getLatitudUsuario() + "', " +
+//                            "'" + inspecciones.get(i).getLongitudUsuario() + "', " +
+//                            "'" + inspecciones.get(i).getObservaciones() + "');";
+//                    ps = conn.prepareStatement(consultaSql);
+//                    ps.execute();
+//                    conn.commit();
+//                    ps.close();
+//                    /*//////////////////////////////////////////////////////////////////////////////////
+//                                            BAJAMOS EL PENDIENTE DEL inspeccion
+//                    //////////////////////////////////////////////////////////////////////////////////*/
+//                    actualizarPendiente(inspecciones.get(i), a);
+//                    check++;
+//                }
+//                if (check == inspecciones.size()) {
+//                    return "EXITO";
+//                } else {
+//                    return "ERROR";
+//                }
+//            } catch (SQLException e) {
+//                try {
+//                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
+//                    conn.rollback();
+//                } catch (SQLException e1) {
+//                    e1.printStackTrace();
+//                }
+//                e.printStackTrace();
+//                return e.toString();
+//            } finally {
+//                try {
+//                    conn.setAutoCommit(true);
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            return "ERROR"; // ESTO LO DEJO ASI PARA BORRARLO DESPUES
         }
 
         @Override
@@ -172,59 +166,60 @@ public class InspeccionControlador {
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
-            try {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM inspeccion ";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
-                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM inspeccion");
-                while (rs.next()) {
-                    String sql = "INSERT INTO inspeccion" +
-                            " VALUES" +
-                            " ('" + rs.getInt(1) + "','" + // id
-                            rs.getString(2) + "','" + //id_usuario
-                            rs.getInt(3) + "','" + //id_cliente
-                            rs.getString(4) + "','" + //id_usuario_cliente
-                            rs.getInt(5) + "','" + //id_tipo_inmueble
-                            rs.getInt(6) + "','" + //id_destino_inmueble
-                            rs.getInt(7) + "','" + //id_tipo_servicio
-                            rs.getInt(8) + "','" + //servicio_cloacal
-                            rs.getFloat(9) + "','" + //coeficiente_zonal
-                            rs.getDouble(10) + "','" + //latitud
-                            rs.getDouble(11) + "','" + //longitud
-                            rs.getDouble(12) + "','" + //latitud_usuario
-                            rs.getDouble(13) + "','" + //longitud_usuario
-                            rs.getString(14) + "','" + //observaciones
-                            "0');"; // pendiente
-                    db.execSQL(sql);
-                }
-                check++;
-                if (check == EXITOSO) {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "EXITO";
-                } else {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
+//            Connection conn;
+//            PreparedStatement ps;
+//            ResultSet rs;
+//            try {
+//                /*//////////////////////////////////////////////////////////////////////////////////
+//                                            INSERTAMOS
+//                //////////////////////////////////////////////////////////////////////////////////*/
+//                conn = Conexion.GetConnection();
+//                String consultaSql = "SELECT * FROM inspeccion ";
+//                ps = conn.prepareStatement(consultaSql);
+//                ps.execute();
+//                rs = ps.getResultSet();
+//                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+//                /* LIMPIAMOS LA TABLA */
+//                db.execSQL("DELETE FROM inspeccion");
+//                while (rs.next()) {
+//                    String sql = "INSERT INTO inspeccion" +
+//                            " VALUES" +
+//                            " ('" + rs.getInt(1) + "','" + // id
+//                            rs.getString(2) + "','" + //id_usuario
+//                            rs.getInt(3) + "','" + //id_cliente
+//                            rs.getString(4) + "','" + //id_usuario_cliente
+//                            rs.getInt(5) + "','" + //id_tipo_inmueble
+//                            rs.getInt(6) + "','" + //id_destino_inmueble
+//                            rs.getInt(7) + "','" + //id_tipo_servicio
+//                            rs.getInt(8) + "','" + //servicio_cloacal
+//                            rs.getFloat(9) + "','" + //coeficiente_zonal
+//                            rs.getDouble(10) + "','" + //latitud
+//                            rs.getDouble(11) + "','" + //longitud
+//                            rs.getDouble(12) + "','" + //latitud_usuario
+//                            rs.getDouble(13) + "','" + //longitud_usuario
+//                            rs.getString(14) + "','" + //observaciones
+//                            "0');"; // pendiente
+//                    db.execSQL(sql);
+//                }
+//                check++;
+//                if (check == EXITOSO) {
+//                    db.close();
+//                    rs.close();
+//                    ps.close();
+//                    conn.close();
+//                    return "EXITO";
+//                } else {
+//                    db.close();
+//                    rs.close();
+//                    ps.close();
+//                    conn.close();
+//                    return "ERROR";
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                return e.toString();
+//            }
+            return "ERROR"; // ESTO LO DEJO ASI PARA BORRARLO DESPUES
         }
 
         @Override

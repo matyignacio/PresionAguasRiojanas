@@ -5,17 +5,11 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
@@ -52,73 +46,74 @@ public class ClienteControlador {
 
         @Override
         protected String doInBackground(String... strings) {
-            /**
-             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
-             DESDE EL TELEFONO HACIA EL SERVER
-             */
-            clientes = extraerTodosPendientes(a);
-            Connection conn;
-            conn = Conexion.GetConnection();
-            try {
-                conn.setAutoCommit(false);
-                String consultaSql;
-                for (int i = 0; i < clientes.size(); i++) {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                    int estado = clientes.get(i).isEstado() ? 1 : 0;
-                    PreparedStatement ps;
-                    consultaSql = "INSERT INTO cliente" +
-                            " (id, id_usuario, razon_social, direccion, barrio," +
-                            " telefono, unidad, nis, med_agua, med_luz, tramite," +
-                            " serv, estado, reclama)" +
-                            " VALUES " +
-                            "('" + clientes.get(i).getId() + "', " +
-                            "'" + clientes.get(i).getIdUsuario() + "', " +
-                            "'" + clientes.get(i).getRazonSocial() + "', " +
-                            "'" + clientes.get(i).getDireccion() + "', " +
-                            "'" + clientes.get(i).getBarrio() + "', " +
-                            "'" + clientes.get(i).getTelefono() + "', " +
-                            "'" + clientes.get(i).getUnidad() + "', " +
-                            "'" + clientes.get(i).getNis() + "', " +
-                            "'" + clientes.get(i).getMedidorAgua() + "', " +
-                            "'" + clientes.get(i).getMedidorLuz() + "', " +
-                            "'" + clientes.get(i).getTramite() + "', " +
-                            "'" + clientes.get(i).getServ() + "', " +
-                            "'" + estado + "', " +
-                            "'" + clientes.get(i).getReclama() + "');";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.execute();
-                    conn.commit();
-                    ps.close();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            BAJAMOS EL PENDIENTE DEL CLIENTE
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(clientes.get(i), a);
-                    check++;
-                }
-                if (check == clientes.size()) {
-                    return "EXITO";
-                } else {
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                try {
-                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+//            /**
+//             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
+//             DESDE EL TELEFONO HACIA EL SERVER
+//             */
+//            clientes = extraerTodosPendientes(a);
+//            Connection conn;
+//            conn = Conexion.GetConnection();
+//            try {
+//                conn.setAutoCommit(false);
+//                String consultaSql;
+//                for (int i = 0; i < clientes.size(); i++) {
+//                /*//////////////////////////////////////////////////////////////////////////////////
+//                                            INSERTAMOS
+//                //////////////////////////////////////////////////////////////////////////////////*/
+//                    int estado = clientes.get(i).isEstado() ? 1 : 0;
+//                    PreparedStatement ps;
+//                    consultaSql = "INSERT INTO cliente" +
+//                            " (id, id_usuario, razon_social, direccion, barrio," +
+//                            " telefono, unidad, nis, med_agua, med_luz, tramite," +
+//                            " serv, estado, reclama)" +
+//                            " VALUES " +
+//                            "('" + clientes.get(i).getId() + "', " +
+//                            "'" + clientes.get(i).getIdUsuario() + "', " +
+//                            "'" + clientes.get(i).getRazonSocial() + "', " +
+//                            "'" + clientes.get(i).getDireccion() + "', " +
+//                            "'" + clientes.get(i).getBarrio() + "', " +
+//                            "'" + clientes.get(i).getTelefono() + "', " +
+//                            "'" + clientes.get(i).getUnidad() + "', " +
+//                            "'" + clientes.get(i).getNis() + "', " +
+//                            "'" + clientes.get(i).getMedidorAgua() + "', " +
+//                            "'" + clientes.get(i).getMedidorLuz() + "', " +
+//                            "'" + clientes.get(i).getTramite() + "', " +
+//                            "'" + clientes.get(i).getServ() + "', " +
+//                            "'" + estado + "', " +
+//                            "'" + clientes.get(i).getReclama() + "');";
+//                    ps = conn.prepareStatement(consultaSql);
+//                    ps.execute();
+//                    conn.commit();
+//                    ps.close();
+//                    /*//////////////////////////////////////////////////////////////////////////////////
+//                                            BAJAMOS EL PENDIENTE DEL CLIENTE
+//                    //////////////////////////////////////////////////////////////////////////////////*/
+//                    actualizarPendiente(clientes.get(i), a);
+//                    check++;
+//                }
+//                if (check == clientes.size()) {
+//                    return "EXITO";
+//                } else {
+//                    return "ERROR";
+//                }
+//            } catch (SQLException e) {
+//                try {
+//                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
+//                    conn.rollback();
+//                } catch (SQLException e1) {
+//                    e1.printStackTrace();
+//                }
+//                e.printStackTrace();
+//                return e.toString();
+//            } finally {
+//                try {
+//                    conn.setAutoCommit(true);
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            return "ERROR"; // ESTO LO DEJO ASI PARA BORRARLO DESPUES
         }
 
 
@@ -169,59 +164,60 @@ public class ClienteControlador {
 
         @Override
         protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
-            try {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM cliente ";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
-                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM cliente");
-                while (rs.next()) {
-                    String sql = "INSERT INTO cliente" +
-                            " VALUES" +
-                            " ('" + rs.getInt(1) + "','" + // id
-                            rs.getString(2) + "','" + //id_usuario
-                            rs.getString(3) + "','" + //razon_social
-                            rs.getString(4) + "','" + //direccion
-                            rs.getString(5) + "','" + //barrio
-                            rs.getInt(6) + "','" + //telefono
-                            rs.getInt(7) + "','" + //unidad
-                            rs.getInt(8) + "','" + //nis
-                            rs.getInt(9) + "','" + //med_agua
-                            rs.getInt(10) + "','" + //med_luz
-                            rs.getInt(11) + "','" + //tramite
-                            rs.getString(12) + "','" + //serv
-                            rs.getInt(13) + "','" + //estado
-                            rs.getString(14) + "','" + //reclama
-                            "0');"; // pendiente
-                    db.execSQL(sql);
-                }
-                check++;
-                if (check == EXITOSO) {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "EXITO";
-                } else {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
+//            Connection conn;
+//            PreparedStatement ps;
+//            ResultSet rs;
+//            try {
+//                /*//////////////////////////////////////////////////////////////////////////////////
+//                                            INSERTAMOS
+//                //////////////////////////////////////////////////////////////////////////////////*/
+//                conn = Conexion.GetConnection();
+//                String consultaSql = "SELECT * FROM cliente ";
+//                ps = conn.prepareStatement(consultaSql);
+//                ps.execute();
+//                rs = ps.getResultSet();
+//                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+//                /* LIMPIAMOS LA TABLA */
+//                db.execSQL("DELETE FROM cliente");
+//                while (rs.next()) {
+//                    String sql = "INSERT INTO cliente" +
+//                            " VALUES" +
+//                            " ('" + rs.getInt(1) + "','" + // id
+//                            rs.getString(2) + "','" + //id_usuario
+//                            rs.getString(3) + "','" + //razon_social
+//                            rs.getString(4) + "','" + //direccion
+//                            rs.getString(5) + "','" + //barrio
+//                            rs.getInt(6) + "','" + //telefono
+//                            rs.getInt(7) + "','" + //unidad
+//                            rs.getInt(8) + "','" + //nis
+//                            rs.getInt(9) + "','" + //med_agua
+//                            rs.getInt(10) + "','" + //med_luz
+//                            rs.getInt(11) + "','" + //tramite
+//                            rs.getString(12) + "','" + //serv
+//                            rs.getInt(13) + "','" + //estado
+//                            rs.getString(14) + "','" + //reclama
+//                            "0');"; // pendiente
+//                    db.execSQL(sql);
+//                }
+//                check++;
+//                if (check == EXITOSO) {
+//                    db.close();
+//                    rs.close();
+//                    ps.close();
+//                    conn.close();
+//                    return "EXITO";
+//                } else {
+//                    db.close();
+//                    rs.close();
+//                    ps.close();
+//                    conn.close();
+//                    return "ERROR";
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                return e.toString();
+//            }
+            return "ERROR"; // ESTO LO DEJO ASI PARA BORRARLO DESPUES
         }
 
         @Override

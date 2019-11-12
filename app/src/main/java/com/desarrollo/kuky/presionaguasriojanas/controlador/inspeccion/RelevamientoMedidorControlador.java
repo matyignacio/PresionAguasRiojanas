@@ -1,19 +1,16 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
@@ -23,9 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
@@ -98,118 +92,6 @@ public class RelevamientoMedidorControlador {
         // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
-
-    @SuppressLint("StaticFieldLeak")
-    private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
-
-        Activity a;
-        private Integer check;
-        private ArrayList<RelevamientoMedidor> relevamientoMedidores;
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("2/" +
-                    +ASYNCTASK_INSPECCION + " - Enviando Relevamiento Medidores...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        SyncSqliteToMysql(Activity a) {
-            this.a = a;
-            check = ERROR;
-            relevamientoMedidores = new ArrayList<>();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            /**
-             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
-             DESDE EL TELEFONO HACIA EL SERVER
-             */
-            relevamientoMedidores = extraerTodosPendientes(a);
-            Connection conn;
-            conn = Conexion.GetConnection();
-            try {
-                conn.setAutoCommit(false);
-                String consultaSql;
-                for (int i = 0; i < relevamientoMedidores.size(); i++) {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                    PreparedStatement ps;
-                    consultaSql = "INSERT INTO relevamiento_medidores" +
-                            "(id," +
-                            "id_usuario," +
-                            "numero," +
-                            "id_relevamiento," +
-                            "id_usuario_relevamiento)" +
-                            "VALUES " +
-                            "('" + relevamientoMedidores.get(i).getId() + "', " +
-                            "'" + relevamientoMedidores.get(i).getIdUsuario() + "', " +
-                            "'" + relevamientoMedidores.get(i).getNumero() + "', " +
-                            "'" + relevamientoMedidores.get(i).getRelevamiento().getId() + "', " +
-                            "'" + relevamientoMedidores.get(i).getRelevamiento().getIdUsuario() + "')";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.execute();
-                    conn.commit();
-                    ps.close();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            BAJAMOS EL PENDIENTE DEL inspeccion
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(relevamientoMedidores.get(i), a);
-                    check++;
-                }
-                if (check == relevamientoMedidores.size()) {
-                    return "EXITO";
-                } else {
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                try {
-                    mostrarMensajeLog(a, e.toString());
-                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            pDialog.dismiss();
-            if (s.equals("EXITO")) {
-                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
-                tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
-                // VACIAMOS LA TABLA ?????
-                // SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                // db.delete("relevamiento", null, null);
-            } else {
-                mostrarMensaje(a, "Error en el checkRelevamientoMedidoresToMysql");
-            }
-        }
-    }
-
-//    void sincronizarDeSqliteToMysql(Activity a) {
-//        try {
-//            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
-//            syncSqliteToMysql.execute();
-//        } catch (Exception e) {
-//            mostrarMensaje(a, "Error SyncSqliteToMysql RMC" + e.toString());
-//        }
-//    }
 
     public void sincronizarDeMysqlToSqlite(Activity a) {
         pDialog = new ProgressDialog(a);
