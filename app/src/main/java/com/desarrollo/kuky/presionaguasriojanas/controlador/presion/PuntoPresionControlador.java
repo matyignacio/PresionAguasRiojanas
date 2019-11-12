@@ -127,7 +127,7 @@ public class PuntoPresionControlador {
                     Log.d("RESPUESTASERVER", "OK");
                     // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
                     for (int i = 0; i < puntosPresionActualizar.size(); i++) {
-                        //actualizarPendiente(puntosPresionActualizar.get(i), a);
+                        actualizarPendiente(puntosPresionActualizar.get(i), a);
                     }
                     // Y PASAMOS A LA SIGUIENTE REQUEST
                     HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();

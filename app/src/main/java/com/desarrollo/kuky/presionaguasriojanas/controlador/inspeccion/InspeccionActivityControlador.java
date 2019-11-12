@@ -20,25 +20,17 @@ public class InspeccionActivityControlador {
         } else {
             /**
              * ORDEN:
-             *  clienteControlador.sincronizarDeSqliteToMysql(a) 1/13
-             *  inspeccionControlador.sincronizarDeSqliteToMysql(a); 2/13
-             *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 3/13
-             *  relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a); 4/13
-             *  datosRelevadosControlador.sincronizarDeSqliteToMysql(a); 5/13
-             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 6/13
-             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 7/13
-             *  tipoServicioControlador.sincronizarDeMysqlToSqlite(a); 8/13
-             *  clienteControlador.sincronizarDeMysqlToSqlite(a); 9/13
-             *  inspeccionControlador.sincronizarDeMysqlToSqlite(a); 10/13
-             *  relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a); 11/13
-             *  datosRelevadosControlador.sincronizarDeMysqlToSqlite(a); 12/13
-             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 13/13
+             *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 1
+             *  relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a); 2
+             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 3
+             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 4
+             *  relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a); 5
+             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 6
              * */
             check = ERROR;
-            ClienteControlador clienteControlador = new ClienteControlador();
-            if (clienteControlador.sincronizarDeSqliteToMysql(a) == EXITOSO) {
-                check = EXITOSO;
-            }
+            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+            relevamientoControlador.sincronizarDeSqliteToMysql(a);
+            check = EXITOSO;
         }
         return check;
     }

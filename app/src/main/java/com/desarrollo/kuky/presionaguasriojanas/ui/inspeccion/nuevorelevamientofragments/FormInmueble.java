@@ -90,7 +90,7 @@ public class FormInmueble extends Fragment {
         /** CARGAMOS LOS SPINNERS ************************************/
         cargarSpinner(sTipoInmueble,
                 getActivity(),
-                1,
+                0,
                 labelsTipoInmueble,
                 () -> null,
                 () -> null);
@@ -99,11 +99,11 @@ public class FormInmueble extends Fragment {
                 getActivity(),
                 //el valor por defecto que toma es el ultimo barrio seleccionado, en caso de...
                 //... no tener ninguno, carga el primero
-                Util.getPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, 1),
+                Util.getPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, 0),
                 labelsBarrios,
                 () -> {
                     // se guarda el barrio seleccionado, para luego mostrarlo cuando se vuelva a cargar
-                    setPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, sBarrios.getSelectedItemPosition() + 1);
+                    setPreference(getActivity(), SPINNER_BARRIO_RELEVAMIENTO, sBarrios.getSelectedItemPosition());
                     return null;
                 },
                 () -> null);

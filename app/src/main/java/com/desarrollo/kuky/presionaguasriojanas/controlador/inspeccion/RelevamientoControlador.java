@@ -1,283 +1,176 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
+import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class RelevamientoControlador {
     private ProgressDialog pDialog;
-    private ArrayList<Relevamiento> relevamientos;
+    private ArrayList<Relevamiento> relevamientos = new ArrayList<>();
+    private JSONArray relevamientosInserts;
 
-    @SuppressLint("StaticFieldLeak")
-    private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
-
-        Activity a;
-        private Integer check;
-        private ArrayList<Relevamiento> relevamientos;
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("3/" +
-                    +ASYNCTASK_INSPECCION + " - Enviando Relevamientos...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        SyncSqliteToMysql(Activity a) {
-            this.a = a;
-            check = ERROR;
-            relevamientos = new ArrayList<>();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            /**
-             IMPLEMENTO TRANSACCIONES CON COMMIT Y ROLLBACK EN LAS TAREAS ASYNCRONAS
-             DESDE EL TELEFONO HACIA EL SERVER
-             */
-            relevamientos = extraerTodosPendientes(a);
-            Connection conn;
-            conn = Conexion.GetConnection();
+    public void sincronizarDeSqliteToMysql(Activity a) {
+        relevamientosInserts = new JSONArray();
+        relevamientos = extraerTodosPendientes(a);
+        pDialog = new ProgressDialog(a);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pDialog.setTitle("SINCRONIZANDO");
+        pDialog.setMessage("1/" +
+                +ASYNCTASK_INSPECCION + " - Enviando Relevamientos...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        for (int i = 0; i < relevamientos.size(); i++) {
+            int conexionVisible = relevamientos.get(i).isConexionVisible() ? 1 : 0;
             try {
-                conn.setAutoCommit(false);
-                String consultaSql;
-                for (int i = 0; i < relevamientos.size(); i++) {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                    int conexionVisible = relevamientos.get(i).isConexionVisible() ? 1 : 0;
-                    PreparedStatement ps;
-                    consultaSql = "INSERT INTO relevamiento" +
-                            "(id," +
-                            "id_usuario," +
-                            "barrio," +
-                            "tipo_inmueble," +
-                            "rubro," +
-                            "conexion_visible," +
-                            "medidor_luz," +
-                            "medidor_agua," +
-                            "latitud," +
-                            "longitud," +
-                            "latitud_usuario," +
-                            "longitud_usuario," +
-                            "observaciones," +
-                            "foto," +
-                            "fecha)" +
-                            "VALUES " +
-                            "('" + relevamientos.get(i).getId() + "', " +
-                            "'" + relevamientos.get(i).getIdUsuario() + "', " +
-                            "'" + relevamientos.get(i).getBarrio() + "', " +
-                            "'" + relevamientos.get(i).getTipoInmueble() + "', " +
-                            "'" + relevamientos.get(i).getRubro() + "', " +
-                            "'" + conexionVisible + "', " +
-                            "'" + relevamientos.get(i).getMedidorLuz() + "', " +
-                            "'" + relevamientos.get(i).getMedidorAgua() + "', " +
-                            "'" + relevamientos.get(i).getLatitud() + "', " +
-                            "'" + relevamientos.get(i).getLongitud() + "', " +
-                            "'" + relevamientos.get(i).getLatitudUsuario() + "', " +
-                            "'" + relevamientos.get(i).getLongitudUsuario() + "', " +
-                            "'" + relevamientos.get(i).getObservaciones() + "', " +
-                            "?, " +
-                            "'" + relevamientos.get(i).getFecha() + "')";
-                    ps = conn.prepareStatement(consultaSql);
-                    ps.setBytes(1, relevamientos.get(i).getFoto());
-                    ps.execute();
-                    conn.commit();
-                    ps.close();
-                    /*//////////////////////////////////////////////////////////////////////////////////
-                                            BAJAMOS EL PENDIENTE DEL inspeccion
-                    //////////////////////////////////////////////////////////////////////////////////*/
-                    actualizarPendiente(relevamientos.get(i), a);
-                    check++;
-                }
-                if (check == relevamientos.size()) {
-                    return "EXITO";
-                } else {
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                try {
-                    mostrarMensajeLog(a, e.toString());
-                    Log.e("MOSTRARMENSAJE:::", "Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
+                JSONObject relevamiento = new JSONObject();
+                relevamiento.put("id", relevamientos.get(i).getId());
+                relevamiento.put("id_usuario", relevamientos.get(i).getIdUsuario());
+                relevamiento.put("barrio", relevamientos.get(i).getBarrio());
+                relevamiento.put("tipo_inmueble", relevamientos.get(i).getTipoInmueble());
+                relevamiento.put("rubro", relevamientos.get(i).getRubro());
+                relevamiento.put("conexion_visible", conexionVisible);
+                relevamiento.put("medidor_luz", relevamientos.get(i).getMedidorLuz());
+                relevamiento.put("medidor_agua", relevamientos.get(i).getMedidorAgua());
+                relevamiento.put("latitud", relevamientos.get(i).getLatitud());
+                relevamiento.put("longitud", relevamientos.get(i).getLongitud());
+                relevamiento.put("latitud_usuario", relevamientos.get(i).getLatitudUsuario());
+                relevamiento.put("longitud_usuario", relevamientos.get(i).getLatitudUsuario());
+                relevamiento.put("observaciones", relevamientos.get(i).getLatitudUsuario());
+                relevamiento.put("foto", relevamientos.get(i).getFoto());
+                relevamiento.put("fecha", relevamientos.get(i).getFecha());
+                relevamientosInserts.put(relevamiento);
+            } catch (JSONException e) {
                 e.printStackTrace();
-                return e.toString();
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
-
-        @Override
-        protected void onPostExecute(String s) {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_insert.php", relevamientosInserts, response -> {
             pDialog.dismiss();
-            if (s.equals("EXITO")) {
-                RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
-                relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a);
-                // VACIAMOS LA TABLA ?????
-                // SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                // db.delete("relevamiento", null, null);
-            } else {
-                mostrarMensaje(a, "Error en el checkRelevamientoToMysql");
-            }
-        }
-    }
-
-    void sincronizarDeSqliteToMysql(Activity a) {
-        try {
-            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
-            syncSqliteToMysql.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncSqliteToMysql RC" + e.toString());
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
-
-        Activity a;
-        private Integer check;
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("13/" +
-                    +ASYNCTASK_INSPECCION + " - Recibiendo relevamientos...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        SyncMysqlToSqlite(Activity a) {
-            this.a = a;
-            check = ERROR;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
+            mostrarMensajeLog(a, response.toString());
             try {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM relevamiento ";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
-                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM relevamiento");
-                while (rs.next()) {
-                    ContentValues values = new ContentValues();
-                    values.put("id", rs.getInt(1));
-                    values.put("id_usuario", rs.getString(2));
-                    values.put("barrio", rs.getString(3));
-                    values.put("tipo_inmueble", rs.getString(4));
-                    values.put("rubro", rs.getString(5));
-                    // atendeme ese IF ELSE :)
-                    values.put("conexion_visible", rs.getInt(6) == 1 ? 1 : 0);
-                    values.put("medidor_luz", rs.getInt(7));
-                    values.put("medidor_agua", rs.getInt(8));
-                    values.put("latitud", rs.getDouble(9));
-                    values.put("longitud", rs.getDouble(10));
-                    values.put("latitud_usuario", rs.getDouble(11));
-                    values.put("longitud_usuario", rs.getDouble(12));
-                    values.put("observaciones", rs.getString(13));
-                    /* Al 14 no lo traigo por que es la foto, no quiero poblar mucho
-                     *  la bd del telefono. Pero si traigo los registros para que el
-                     *  obtenerSiguienteId() ande bien xD  **************************/
-                    values.put("fecha", String.valueOf(rs.getTimestamp(15)));
-                    values.put("pendiente", 0);
-                    db.insert("relevamiento", "foto", values);
-                }
-                check++;
-                if (check == EXITOSO) {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "EXITO";
+                if (response.getJSONObject(0).getString("status").equals("OK")) {
+                    Log.d("RESPUESTASERVER", "OK");
+                    // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
+                    for (int i = 0; i < relevamientos.size(); i++) {
+                        actualizarPendiente(relevamientos.get(i), a);
+                    }
+                    // Y PASAMOS A LA SIGUIENTE REQUEST
+                    RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
+                    relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a);
                 } else {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "ERROR";
+                    Log.e("RESPUESTASERVER", "ERROR");
                 }
-            } catch (SQLException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
-                return e.toString();
+                Log.e("RESPUESTASERVER", e.toString());
             }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
+        }, error -> {
             pDialog.dismiss();
-            if (s.equals("EXITO")) {
-                mostrarMensaje(a, "Se sincronizo con exito!");
-                UsuarioControlador usuarioControlador = new UsuarioControlador();
-                if (LoginActivity.usuario.getBanderaModuloInspeccion() == PRIMER_INICIO_MODULO) {
-                    usuarioControlador.editarBanderaModuloInspeccion(a, SEGUNDO_INICIO_MODULO);
-                }
-                usuarioControlador.editarBanderaSyncModuloInspeccion(a, BANDERA_BAJA);
-                abrirActivity(a, InspeccionActivity.class);
-            } else {
-                mostrarMensaje(a, "Error en el checkRelevamientos");
-            }
-        }
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        });
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
     public void sincronizarDeMysqlToSqlite(Activity a) {
-        try {
-            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
-            syncMysqlToSqlite.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncMysqlToSqlite RC" + e.toString());
-        }
+        pDialog = new ProgressDialog(a);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pDialog.setTitle("SINCRONIZANDO");
+        pDialog.setMessage("6/" +
+                +ASYNCTASK_INSPECCION + " - Recibiendo relevamientos...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_select.php", response -> {
+            if (!response.equals("ERROR_ARRAY_VACIO")) {
+                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+                /* LIMPIAMOS LA TABLA */
+                db.execSQL("DELETE FROM relevamiento");
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ContentValues values = new ContentValues();
+                        values.put("id", jsonArray.getJSONObject(i).getInt("id"));
+                        values.put("id_usuario", jsonArray.getJSONObject(i).getString("id_usuario"));
+                        values.put("barrio", jsonArray.getJSONObject(i).getString("barrio"));
+                        values.put("tipo_inmueble", jsonArray.getJSONObject(i).getString("tipo_inmueble"));
+                        values.put("rubro", jsonArray.getJSONObject(i).getString("rubro"));
+                        // atendeme ese IF ELSE :)
+                        values.put("conexion_visible", jsonArray.getJSONObject(i).getInt("conexion_visible") == 1 ? 1 : 0);
+                        values.put("medidor_luz", jsonArray.getJSONObject(i).getInt("medidor_luz"));
+                        values.put("medidor_agua", jsonArray.getJSONObject(i).getInt("medidor_agua"));
+                        values.put("latitud", jsonArray.getJSONObject(i).getDouble("latitud"));
+                        values.put("longitud", jsonArray.getJSONObject(i).getDouble("longitud"));
+                        values.put("latitud_usuario", jsonArray.getJSONObject(i).getDouble("latitud_usuario"));
+                        values.put("longitud_usuario", jsonArray.getJSONObject(i).getDouble("longitud_usuario"));
+                        values.put("observaciones", jsonArray.getJSONObject(i).getString("observaciones"));
+                        /* Al 14 no lo traigo por que es la foto, no quiero poblar mucho
+                         *  la bd del telefono. Pero si traigo los registros para que el
+                         *  obtenerSiguienteId() ande bien xD  **************************/
+                        values.put("fecha", String.valueOf(jsonArray.getJSONObject(i).getString("fecha")));
+                        values.put("pendiente", 0);
+                        db.insert("relevamiento", "foto", values);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mostrarMensaje(a, "Sin relevamientos.");
+            }
+            // POR MAS QUE DEVUELVA UN ARRAY VACIO, EJECUTA LA SIGUIENTE TAREA
+            // (Porque puede que la tabla este vacia)
+            mostrarMensaje(a, "Se sincronizo con exito!");
+            UsuarioControlador usuarioControlador = new UsuarioControlador();
+            if (LoginActivity.usuario.getBanderaModuloInspeccion() == PRIMER_INICIO_MODULO) {
+                usuarioControlador.editarBanderaModuloInspeccion(a, SEGUNDO_INICIO_MODULO);
+            }
+            usuarioControlador.editarBanderaSyncModuloInspeccion(a, BANDERA_BAJA);
+            abrirActivity(a, InspeccionActivity.class);
+            pDialog.dismiss();
+        }, error -> {
+            pDialog.dismiss();
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        });
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
     private void actualizarPendiente(Relevamiento relevamiento, Activity a) {

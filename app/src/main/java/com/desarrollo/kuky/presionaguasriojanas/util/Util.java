@@ -48,6 +48,7 @@ public class Util {
      ********************************************/
     public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
     public static final String MODULO_PRESION = "presion/";
+    public static final String MODULO_INSPECCION = "inspeccion/";
     public static final String DATA_BASE = "u101901458_presi";
     public static final String HOST = "sql200.main-hosting.eu";
     public static final String USER = "u101901458_matia";
@@ -61,7 +62,7 @@ public class Util {
      * ENTEROS
      ********************************************/
     public static final int ACTUALIZAR_PUNTO = 2;
-    public static final int ASYNCTASK_INSPECCION = 13;
+    public static final int ASYNCTASK_INSPECCION = 6;
     public static final int ASYNCTASK_PRESION = 6;
     public static final int BANDERA_ALTA = 1;
     public static final int BANDERA_BAJA = 0;

@@ -9,27 +9,95 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.Conexion;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
+import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_INSPECCION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class RelevamientoMedidorControlador {
     private ProgressDialog pDialog;
     private ArrayList<RelevamientoMedidor> relevamientoMedidores;
+    private ArrayList<RelevamientoMedidor> relevamientos = new ArrayList<>();
+    private JSONArray relevamientosInserts;
+
+    void sincronizarDeSqliteToMysql(Activity a) {
+        relevamientosInserts = new JSONArray();
+        relevamientos = extraerTodosPendientes(a);
+        pDialog = new ProgressDialog(a);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pDialog.setTitle("SINCRONIZANDO");
+        pDialog.setMessage("2/" +
+                +ASYNCTASK_INSPECCION + " - Enviando Relevamiento Medidores...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        for (int i = 0; i < relevamientoMedidores.size(); i++) {
+            try {
+                JSONObject relevamiento = new JSONObject();
+                relevamiento.put("id", relevamientos.get(i).getId());
+                relevamiento.put("id_usuario", relevamientos.get(i).getIdUsuario());
+                relevamiento.put("numero", relevamientos.get(i).getNumero());
+                relevamiento.put("id_relevamiento", relevamientos.get(i).getRelevamiento().getId());
+                relevamiento.put("id_usuario_relevamiento", relevamientos.get(i).getRelevamiento().getIdUsuario());
+                relevamientosInserts.put(relevamiento);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_medidores_insert.php", relevamientosInserts, response -> {
+            pDialog.dismiss();
+            mostrarMensajeLog(a, response.toString());
+            try {
+                if (response.getJSONObject(0).getString("status").equals("OK")) {
+                    Log.d("RESPUESTASERVER", "OK");
+                    // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
+                    for (int i = 0; i < relevamientos.size(); i++) {
+                        actualizarPendiente(relevamientos.get(i), a);
+                    }
+                    // Y PASAMOS A LA SIGUIENTE REQUEST
+                    TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
+                    tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
+                } else {
+                    Log.e("RESPUESTASERVER", "ERROR");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("RESPUESTASERVER", e.toString());
+            }
+        }, error -> {
+            pDialog.dismiss();
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        });
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
+    }
 
     @SuppressLint("StaticFieldLeak")
     private class SyncSqliteToMysql extends AsyncTask<String, Float, String> {
@@ -43,7 +111,7 @@ public class RelevamientoMedidorControlador {
             pDialog = new ProgressDialog(a);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("4/" +
+            pDialog.setMessage("2/" +
                     +ASYNCTASK_INSPECCION + " - Enviando Relevamiento Medidores...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -123,8 +191,8 @@ public class RelevamientoMedidorControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                DatosRelevadosControlador datosRelevadosControlador = new DatosRelevadosControlador();
-                datosRelevadosControlador.sincronizarDeSqliteToMysql(a);
+                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
+                tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
                 // VACIAMOS LA TABLA ?????
                 // SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 // db.delete("relevamiento", null, null);
@@ -134,103 +202,59 @@ public class RelevamientoMedidorControlador {
         }
     }
 
-    void sincronizarDeSqliteToMysql(Activity a) {
-        try {
-            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
-            syncSqliteToMysql.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncSqliteToMysql RMC" + e.toString());
-        }
-    }
+//    void sincronizarDeSqliteToMysql(Activity a) {
+//        try {
+//            SyncSqliteToMysql syncSqliteToMysql = new SyncSqliteToMysql(a);
+//            syncSqliteToMysql.execute();
+//        } catch (Exception e) {
+//            mostrarMensaje(a, "Error SyncSqliteToMysql RMC" + e.toString());
+//        }
+//    }
 
-    @SuppressLint("StaticFieldLeak")
-    private class SyncMysqlToSqlite extends AsyncTask<String, Float, String> {
-
-        Activity a;
-        private Integer check;
-
-        @Override
-        protected void onPreExecute() {
-            pDialog = new ProgressDialog(a);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setTitle("SINCRONIZANDO");
-            pDialog.setMessage("11/" +
-                    +ASYNCTASK_INSPECCION + " - Recibiendo Relevamiento Medidores...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        SyncMysqlToSqlite(Activity a) {
-            this.a = a;
-            check = ERROR;
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Connection conn;
-            PreparedStatement ps;
-            ResultSet rs;
-            try {
-                /*//////////////////////////////////////////////////////////////////////////////////
-                                            INSERTAMOS
-                //////////////////////////////////////////////////////////////////////////////////*/
-                conn = Conexion.GetConnection();
-                String consultaSql = "SELECT * FROM relevamiento_medidores ";
-                ps = conn.prepareStatement(consultaSql);
-                ps.execute();
-                rs = ps.getResultSet();
+    public void sincronizarDeMysqlToSqlite(Activity a) {
+        pDialog = new ProgressDialog(a);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pDialog.setTitle("SINCRONIZANDO");
+        pDialog.setMessage("5/" +
+                +ASYNCTASK_INSPECCION + " - Recibiendo Relevamiento Medidores...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_medidores_select.php", response -> {
+            if (!response.equals("ERROR_ARRAY_VACIO")) {
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
                 db.execSQL("DELETE FROM relevamiento_medidores");
-                while (rs.next()) {
-                    ContentValues values = new ContentValues();
-                    values.put("id", rs.getInt(1));
-                    values.put("id_usuario", rs.getString(2));
-                    values.put("numero", rs.getInt(3));
-                    values.put("id_relevamiento", rs.getInt(4));
-                    values.put("id_usuario_relevamiento", rs.getString(5));
-                    values.put("pendiente", 0);
-                    db.insert("relevamiento_medidores", null, values);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ContentValues values = new ContentValues();
+                        values.put("id", jsonArray.getJSONObject(i).getInt("id"));
+                        values.put("id_usuario", jsonArray.getJSONObject(i).getString("id_usuario"));
+                        values.put("numero", jsonArray.getJSONObject(i).getInt("numero"));
+                        values.put("id_relevamiento", jsonArray.getJSONObject(i).getInt("id_relevamiento"));
+                        values.put("id_usuario_relevamiento", jsonArray.getJSONObject(i).getString("id_usuario_relevamiento"));
+                        values.put("pendiente", 0);
+                        db.insert("relevamiento_medidores", null, values);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                check++;
-                if (check == EXITOSO) {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "EXITO";
-                } else {
-                    db.close();
-                    rs.close();
-                    ps.close();
-                    conn.close();
-                    return "ERROR";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            pDialog.dismiss();
-            if (s.equals("EXITO")) {
-                DatosRelevadosControlador datosRelevadosControlador = new DatosRelevadosControlador();
-                datosRelevadosControlador.sincronizarDeMysqlToSqlite(a);
             } else {
-                mostrarMensaje(a, "Error en el checkRelevamientoMedidores");
+                mostrarMensaje(a, "Sin relevamientoMedidores.");
             }
-        }
-    }
-
-    public void sincronizarDeMysqlToSqlite(Activity a) {
-        try {
-            SyncMysqlToSqlite syncMysqlToSqlite = new SyncMysqlToSqlite(a);
-            syncMysqlToSqlite.execute();
-        } catch (Exception e) {
-            mostrarMensaje(a, "Error SyncMysqlToSqlite RMC" + e.toString());
-        }
+            // POR MAS QUE DEVUELVA UN ARRAY VACIO, EJECUTA LA SIGUIENTE TAREA
+            // (Porque puede que la tabla este vacia)
+            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+            relevamientoControlador.sincronizarDeMysqlToSqlite(a);
+            pDialog.dismiss();
+        }, error -> {
+            pDialog.dismiss();
+            setPreference(a, ERROR_PREFERENCE, error.toString());
+            mostrarMensajeLog(a, error.toString());
+            abrirActivity(a, ErrorActivity.class);
+        });
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
     private void actualizarPendiente(RelevamientoMedidor relevamientoMedidor, Activity a) {
