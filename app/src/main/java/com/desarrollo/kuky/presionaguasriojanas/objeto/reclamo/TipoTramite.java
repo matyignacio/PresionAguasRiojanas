@@ -4,6 +4,13 @@ public class TipoTramite { // tabla GTtpo_tram
     private String tipo;
     private String descripcion;
 
+    public TipoTramite() {
+    }
+
+    public TipoTramite(String tipo) {
+        this.tipo = tipo;
+    }
+
     public String getTipo() {
         return tipo;
     }

@@ -10,10 +10,10 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Relevamiento;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
+import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 
 import org.json.JSONArray;

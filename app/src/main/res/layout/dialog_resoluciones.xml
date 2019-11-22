@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/dialog_primary"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tvConfirmarGuardar"
+        style="@style/tv_primary_bold_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="@string/tv_confirmar_resolucion"
+        android:textAlignment="center" />
+
+
+</RelativeLayout>

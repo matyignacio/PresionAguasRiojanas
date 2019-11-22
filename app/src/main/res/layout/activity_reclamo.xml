@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/layout_primary"
+    tools:context=".ui.reclamo.ReclamoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDatosCliente"
+                style="@style/tv_primary_bold_center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="Datos del cliente" />
+
+            <TextView
+                android:id="@+id/tvCliente"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/tvDatosCliente"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:layout_marginTop="10dp"
+                android:text="Cliente" />
+
+            <TextView
+                android:id="@+id/etCliente"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvCliente"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <TextView
+                android:id="@+id/tvUnidad"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etCliente"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:layout_marginTop="10dp"
+                android:text="Nº de Unidad" />
+
+            <TextView
+                android:id="@+id/etUnidad"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvUnidad"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <TextView
+                android:id="@+id/tvBarrio"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etUnidad"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:layout_marginTop="0dp"
+                android:text="Barrio" />
+
+            <TextView
+                android:id="@+id/etBarrio"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvBarrio"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <TextView
+                android:id="@+id/tvCalle"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etBarrio"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:text="Calle" />
+
+            <TextView
+                android:id="@+id/etCalle"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvCalle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <TextView
+                android:id="@+id/tvNumeroCasa"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etCalle"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:text="Nº Casa" />
+
+            <TextView
+                android:id="@+id/etNumeroCasa"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvNumeroCasa"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <TextView
+                android:id="@+id/tvDatosComplementarios"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etNumeroCasa"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:minEms="15"
+                android:text="Datos complementarios" />
+
+            <TextView
+                android:id="@+id/etDatosComplementarios"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvDatosComplementarios"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <TextView
+                android:id="@+id/tvDescripcion"
+                style="@style/tv_primary_mini"
+                android:layout_below="@id/etDatosComplementarios"
+                android:layout_alignStart="@id/tvDatosCliente"
+                android:text="Descripcion" />
+
+            <TextView
+                android:id="@+id/etDescripcion"
+                style="@style/et_primary_bold"
+                android:layout_below="@id/tvDescripcion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp" />
+
+            <Button
+                android:id="@+id/bResolver"
+                style="@style/b_primary"
+                android:layout_below="@id/etDescripcion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="@string/b_resolver" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>
+
+

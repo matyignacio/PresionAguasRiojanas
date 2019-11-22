@@ -1,17 +1,17 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo;
 
 public class Tramite { // tabla GTtramite
-    private ClienteTramite clienteTramite;
+    private Reclamo reclamo;
     private TipoTramite tipoTramite;
-    private MotivoTramite motivoTramite;
+    private Motivo motivo;
     private String descripcion;
 
-    public ClienteTramite getClienteTramite() {
-        return clienteTramite;
+    public Reclamo getReclamo() {
+        return reclamo;
     }
 
-    public void setClienteTramite(ClienteTramite clienteTramite) {
-        this.clienteTramite = clienteTramite;
+    public void setReclamo(Reclamo reclamo) {
+        this.reclamo = reclamo;
     }
 
     public TipoTramite getTipoTramite() {
@@ -22,12 +22,12 @@ public class Tramite { // tabla GTtramite
         this.tipoTramite = tipoTramite;
     }
 
-    public MotivoTramite getMotivoTramite() {
-        return motivoTramite;
+    public Motivo getMotivo() {
+        return motivo;
     }
 
-    public void setMotivoTramite(MotivoTramite motivoTramite) {
-        this.motivoTramite = motivoTramite;
+    public void setMotivo(Motivo motivo) {
+        this.motivo = motivo;
     }
 
     public String getDescripcion() {

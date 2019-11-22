@@ -49,15 +49,7 @@ public class Util {
     public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
     public static final String MODULO_PRESION = "presion/";
     public static final String MODULO_INSPECCION = "inspeccion/";
-    public static final String DATA_BASE = "u101901458_presi";
-    public static final String HOST = "sql200.main-hosting.eu";
-    public static final String USER = "u101901458_matia";
-    public static final String CLAVE = "Miseignacio11";
-    //    public static final String DATA_BASE = "c1370466_aguas_out";
-//    public static final String HOST = "66.97.39.77";
-//    public static final String USER = "c1370466_consu";
-//    public static final String CLAVE = "Consulta963";
-    public static final String PUERTO = "3306";
+    public static final String MODULO_RECLAMO = "reclamo/";
     /**
      * ENTEROS
      ********************************************/
@@ -76,6 +68,7 @@ public class Util {
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RECORRIDO = 1;
     private static final int MAXIMA_MEDICION = 100;
+    public static final int MY_DEFAULT_TIMEOUT = 15000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final int PRIMER_INICIO_MODULO = 0;
     public static final int REQUEST_CHECK_SETTINGS = 100;
@@ -302,6 +295,36 @@ public class Util {
                     }
                 })
                 .setNegativeButton("Cancelar", (dialog2, id) -> {
+
+                    try {
+                        methodCancel.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    dialog2.cancel();
+                });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public static void showDialog(final Activity a, int dialog, String mensajeUno, String mensajeDos, Callable<Void> methodAcept, Callable<Void> methodCancel) {
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(a);
+        View promptView = layoutInflater.inflate(dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
+        alertDialogBuilder.setView(promptView);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(mensajeUno, (dialog1, id) -> {
+                    try {
+                        methodAcept.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton(mensajeDos, (dialog2, id) -> {
 
                     try {
                         methodCancel.call();

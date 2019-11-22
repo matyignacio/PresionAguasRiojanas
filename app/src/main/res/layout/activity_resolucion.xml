@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_primary"
+    tools:context=".ui.reclamo.ResolucionActivity">
+
+    <TextView
+        android:id="@+id/tvNuevaResolucion"
+        style="@style/tv_primary_bold_center"
+        android:layout_centerHorizontal="true"
+        android:text="@string/tv_nueva_resolucion" />
+
+    <TextView
+        android:id="@+id/tvsTipoResolucion"
+        style="@style/tv_primary_mini"
+        android:layout_below="@+id/tvNuevaResolucion"
+        android:layout_alignStart="@+id/tvNuevaResolucion"
+        android:layout_alignEnd="@id/tvNuevaResolucion"
+        android:layout_marginTop="15dp"
+        android:text="@string/tv_tipo_resolucion" />
+
+    <Spinner
+        android:id="@+id/sTipoResolucion"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvsTipoResolucion"
+        android:layout_alignStart="@+id/tvNuevaResolucion"
+        android:layout_alignEnd="@id/tvNuevaResolucion"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/sp_redondo" />
+
+</RelativeLayout>

@@ -11,6 +11,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Modulo;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
+import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
@@ -278,12 +279,15 @@ public class UsuarioControlador {
     public void actualizarTablas(Activity a) {
         SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
         /** DROPEAMOS PARA QUE SE CREEN */
+        /* MODULO RECLAMO */
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTtramite"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTreclamo"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTresolucion"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTres_mot"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTmot_req"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTtpo_tram"));
         /* MODULO INSPECCION */
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_inmueble"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_servicio"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("cliente"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("inspeccion"));
-        db.execSQL(BaseHelper.getInstance(a).dropTable("datos_relevados"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("relevamiento_medidores"));
@@ -296,12 +300,15 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("susuario"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("modulos"));
         /** Y AHORA LAS VOLVEMOS A CREAR CON FORMATO DEFINITIVO */
+        /* MODULO RECLAMO */
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoTramite());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaMotivoTramite());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoResolucion());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaResolucionMotivos());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaReclamoTramite());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaTramite());
         /* MODULO INSPECCION */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoServicio());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaCliente());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaInspeccion());
-        db.execSQL(BaseHelper.getInstance(a).getSqlTablaDatosRelevados());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamiento());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaRelevamientoMedidores());

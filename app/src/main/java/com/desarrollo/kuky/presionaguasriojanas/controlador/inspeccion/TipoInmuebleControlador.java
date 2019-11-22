@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
+import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 
 import org.json.JSONArray;

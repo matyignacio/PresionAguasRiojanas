@@ -7,12 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Cliente;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.DestinoInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Inspeccion;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoInmueble;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.TipoServicio;
+import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.util.ArrayList;

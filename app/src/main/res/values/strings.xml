@@ -32,6 +32,7 @@
     <string name="tv_titulo_dialgo_circuito">Deslice para seleccionar el circuito</string>
     <string name="tv_circuito">Circuito </string>
     <string name="tv_barrio">Barrio </string>
+    <string name="tv_tipo_resolucion">Tipo de Resolucion</string>
     <string name="tv_tipo_unidad">Tipo de unidad </string>
     <string name="tv_unidad">Unidad </string>
     <string name="tv_unidad2">Unidad 2 </string>
@@ -45,6 +46,7 @@
     <string name="GPSAlertDialogTitle">Error GPS</string>
     <string name="tipo_punto">Punto:</string>
     <string name="tv_confirmar_guardar">¿Confirma que desea guardar?</string>
+    <string name="tv_confirmar_resolucion">Elija una opcion</string>
     <string name="tv_confirmar_sincronizar">¿Esta seguro de sincronizar?</string>
     <string name="tv_debe_sincronizar">Debe sincronizar para poder cerrar sesion, desea hacerlo ahora?</string>
     <string name="tvUsuario">Bienvenido:</string>
@@ -83,6 +85,7 @@
     <string name="hint_medidor_de_luz">Medidor de Luz</string>
     <string name="hint_reclama">Reclama</string>
     <string name="tv_caracteristicas_del_inmueble">CARACTERISTICAS DEL INMUEBLE</string>
+    <string name="tv_nueva_resolucion">Nueva Resolucion</string>
     <string name="tv_tipo_de_inmueble">Tipo de Inmueble</string>
     <string name="tv_destino">Destino</string>
     <string name="tv_coeficiente_zonal">Coeficiente zonal</string>
@@ -111,4 +114,8 @@
     <string name="sw_conexion_visible">Conexion Visible</string>
     <string name="tv_error">ERROR</string>
     <string name="tv_progress_bar">SINCRONIZANDO</string>
+    <string name="title_activity_tramites">Tramites</string>
+    <string name="title_activity_reclamo">Reclamo</string>
+    <string name="title_activity_resolucion">Resolucion</string>
+    <string name="b_resolver">Resolver</string>
 </resources>

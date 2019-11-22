@@ -2,33 +2,52 @@ package com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Barrio;
 
-public class ClienteTramite { // tabla GTreclamo
+public class Reclamo { // tabla GTreclamo
+    private int numeroTramite;
     private TipoTramite tipoTramite;
-    private MotivoTramite motivoTramite;
+    private Motivo motivo;
     private int unidad;
     private String razonSocial;
     private Barrio barrio;
     private String calle;
     private int numeroCasa;
     private String datoComplementario;
+    private String descripcion;
+    //////////////////////////////////
     private int medidorAgua;
     private int medidorLuz;
     private int nis;
 
+    public Reclamo() {
+    }
+
+    public Reclamo(TipoTramite tipoTramite, int numeroTramite) {
+        this.tipoTramite = tipoTramite;
+        this.numeroTramite = numeroTramite;
+    }
+
     public TipoTramite getTipoTramite() {
         return tipoTramite;
+    }
+
+    public int getNumeroTramite() {
+        return numeroTramite;
+    }
+
+    public void setNumeroTramite(int numeroTramite) {
+        this.numeroTramite = numeroTramite;
     }
 
     public void setTipoTramite(TipoTramite tipoTramite) {
         this.tipoTramite = tipoTramite;
     }
 
-    public MotivoTramite getMotivoTramite() {
-        return motivoTramite;
+    public Motivo getMotivo() {
+        return motivo;
     }
 
-    public void setMotivoTramite(MotivoTramite motivoTramite) {
-        this.motivoTramite = motivoTramite;
+    public void setMotivo(Motivo motivo) {
+        this.motivo = motivo;
     }
 
     public int getUnidad() {
@@ -77,6 +96,14 @@ public class ClienteTramite { // tabla GTreclamo
 
     public void setDatoComplementario(String datoComplementario) {
         this.datoComplementario = datoComplementario;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public int getMedidorAgua() {

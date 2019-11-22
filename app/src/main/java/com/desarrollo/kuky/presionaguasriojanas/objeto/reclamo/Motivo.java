@@ -1,13 +1,16 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo;
 
-import java.util.ArrayList;
-
-public class MotivoTramite { // tabla GTmot_req
+public class Motivo { // tabla GTmot_req
     private TipoTramite tipoTramite;
     private String motivo;
     private String descripcion;
-    // ACA DEFINO UN ARRAY LIST DE MOTIVOS COMO SI LA RELACION FUESE DE 1 A MUCHOS
-    private ArrayList<Resolucion> resolucions;
+
+    public Motivo() {
+    }
+
+    public Motivo(String motivo) {
+        this.motivo = motivo;
+    }
 
     public TipoTramite getTipoTramite() {
         return tipoTramite;
@@ -33,11 +36,4 @@ public class MotivoTramite { // tabla GTmot_req
         this.descripcion = descripcion;
     }
 
-    public ArrayList<Resolucion> getResoluciones() {
-        return resolucions;
-    }
-
-    public void setResoluciones(ArrayList<Resolucion> resolucions) {
-        this.resolucions = resolucions;
-    }
 }

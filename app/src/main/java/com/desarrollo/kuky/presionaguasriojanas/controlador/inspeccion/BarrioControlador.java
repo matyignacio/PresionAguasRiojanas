@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Barrio;
+import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 
 import org.json.JSONArray;
@@ -88,5 +88,20 @@ public class BarrioControlador {
         c.close();
         db.close();
         return barrios;
+    }
+
+    public Barrio extraer(Activity a, String codigo) {
+        Barrio barrio = new Barrio();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT des_codigo " +
+                " FROM barrios " +
+                " WHERE codigo='" + codigo + "'", null);
+        while (c.moveToNext()) {
+            barrio.setCodigo(codigo);
+            barrio.setDesCodigo(c.getString(0));
+        }
+        c.close();
+        db.close();
+        return barrio;
     }
 }

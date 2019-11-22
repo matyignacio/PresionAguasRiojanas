@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/llTitulos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="100">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="50">
+
+            <TextView
+                android:id="@+id/tvCliente"
+                style="@style/et_primary_mini"
+                android:layout_width="match_parent"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:text="@string/tv_fecha_historial" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="50">
+
+
+            <TextView
+                android:id="@+id/tvMotivo"
+                style="@style/et_primary_mini"
+                android:layout_width="match_parent"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:text="@string/tv_presion_historial" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCampos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llTitulos"
+        android:layout_marginBottom="10dp"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/tvDescripcion"
+            style="@style/et_primary_mini"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/tv_presion_historial" />
+    </LinearLayout>
+
+</RelativeLayout>

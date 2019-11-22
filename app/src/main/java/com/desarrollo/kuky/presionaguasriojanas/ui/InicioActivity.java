@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.InicioActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.MapActivityControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo.TramiteActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
@@ -53,7 +54,10 @@ public class InicioActivity extends AppCompatActivity
             inicioControlador.abrirMapActivity(this, progressBar, tvProgressBar);
         });
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
-        //bModuloReclamo.setOnClickListener(view -> );
+        bModuloReclamo.setOnClickListener(view -> {
+            TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+            tramiteActivityControlador.extraerTodos(this, progressBar, tvProgressBar);
+        });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
