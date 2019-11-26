@@ -33,6 +33,7 @@
     <string name="tv_circuito">Circuito </string>
     <string name="tv_barrio">Barrio </string>
     <string name="tv_tipo_resolucion">Tipo de Resolucion</string>
+    <string name="tv_observacion">Observacion</string>
     <string name="tv_tipo_unidad">Tipo de unidad </string>
     <string name="tv_unidad">Unidad </string>
     <string name="tv_unidad2">Unidad 2 </string>
@@ -116,6 +117,7 @@
     <string name="tv_progress_bar">SINCRONIZANDO</string>
     <string name="title_activity_tramites">Tramites</string>
     <string name="title_activity_reclamo">Reclamo</string>
-    <string name="title_activity_resolucion">Resolucion</string>
+    <string name="title_activity_nueva_resolucion">Nueva Resolucion</string>
     <string name="b_resolver">Resolver</string>
+    <string name="b_enviar_resolucion">Enviar Resolucion</string>
 </resources>

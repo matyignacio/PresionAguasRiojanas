@@ -150,7 +150,9 @@ public class UsuarioControlador {
                     + u.getBanderaModuloPresion() + "', '"
                     + u.getBanderaSyncModuloPresion() + "', '"
                     + u.getBanderaModuloInspeccion() + "', '"
-                    + u.getBanderaSyncModuloInspeccion() + "')";
+                    + u.getBanderaSyncModuloInspeccion() + "', '"
+                    + u.getBanderaModuloReclamo() + "', '"
+                    + u.getBanderaSyncModuloReclamo() + "')";
             db.execSQL(sql);
             db.close();
         } catch (Exception e) {
@@ -204,6 +206,8 @@ public class UsuarioControlador {
                 LoginActivity.usuario.setBanderaSyncModuloPresion(c.getInt(7));
                 LoginActivity.usuario.setBanderaModuloInspeccion(c.getInt(8));
                 LoginActivity.usuario.setBanderaSyncModuloInspeccion(c.getInt(9));
+                LoginActivity.usuario.setBanderaModuloReclamo(c.getInt(10));
+                LoginActivity.usuario.setBanderaSyncModuloReclamo(c.getInt(11));
                 Cursor c2 = db.rawQuery("SELECT * FROM modulos", null);
                 while (c2.moveToNext()) {
                     Modulo modulo = new Modulo();
@@ -237,14 +241,14 @@ public class UsuarioControlador {
         }
     }
 
-    public void editarBanderaSyncModuloInspeccion(Activity a, int bandera) {
+    public void editarBanderaSyncModuloPresion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE susuario SET 'bandera_sync_modulo_inspeccion' = " +
+            String sql = "UPDATE susuario SET 'bandera_sync_modulo_presion' = " +
                     bandera;
             bh.execSQL(sql);
             bh.close();
-            LoginActivity.usuario.setBanderaSyncModuloInspeccion(bandera);
+            LoginActivity.usuario.setBanderaSyncModuloPresion(bandera);
         } catch (Exception e) {
             mostrarMensaje(a, e.toString());
         }
@@ -263,14 +267,40 @@ public class UsuarioControlador {
         }
     }
 
-    public void editarBanderaSyncModuloPresion(Activity a, int bandera) {
+    public void editarBanderaSyncModuloInspeccion(Activity a, int bandera) {
         try {
             SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
-            String sql = "UPDATE susuario SET 'bandera_sync_modulo_presion' = " +
+            String sql = "UPDATE susuario SET 'bandera_sync_modulo_inspeccion' = " +
                     bandera;
             bh.execSQL(sql);
             bh.close();
-            LoginActivity.usuario.setBanderaSyncModuloPresion(bandera);
+            LoginActivity.usuario.setBanderaSyncModuloInspeccion(bandera);
+        } catch (Exception e) {
+            mostrarMensaje(a, e.toString());
+        }
+    }
+
+    public void editarBanderaModuloReclamo(Activity a, int bandera) {
+        try {
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE susuario SET 'bandera_modulo_reclamo' =" +
+                    bandera;
+            bh.execSQL(sql);
+            bh.close();
+            LoginActivity.usuario.setBanderaModuloReclamo(bandera);
+        } catch (Exception e) {
+            mostrarMensaje(a, e.toString());
+        }
+    }
+
+    public void editarBanderaSyncModuloReclamo(Activity a, int bandera) {
+        try {
+            SQLiteDatabase bh = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE susuario SET 'bandera_sync_modulo_reclamo' = " +
+                    bandera;
+            bh.execSQL(sql);
+            bh.close();
+            LoginActivity.usuario.setBanderaSyncModuloReclamo(bandera);
         } catch (Exception e) {
             mostrarMensaje(a, e.toString());
         }
@@ -286,6 +316,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).dropTable("GTres_mot"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("GTmot_req"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("GTtpo_tram"));
+        db.execSQL(BaseHelper.getInstance(a).dropTable("GTres_rec"));
         /* MODULO INSPECCION */
         db.execSQL(BaseHelper.getInstance(a).dropTable("tipo_inmueble"));
         db.execSQL(BaseHelper.getInstance(a).dropTable("barrios"));
@@ -307,6 +338,7 @@ public class UsuarioControlador {
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaResolucionMotivos());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaReclamoTramite());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTramite());
+        db.execSQL(BaseHelper.getInstance(a).getSqlTablaResolucionReclamo());
         /* MODULO INSPECCION */
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaTipoInmueble());
         db.execSQL(BaseHelper.getInstance(a).getSqlTablaBarrios());

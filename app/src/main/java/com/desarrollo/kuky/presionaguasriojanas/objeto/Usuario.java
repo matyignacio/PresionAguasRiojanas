@@ -34,6 +34,18 @@ public class Usuario {
      * 1 YA INGRESO AL MENOS REGISTRO, DEBE SINCRONIZAR.
      */
 
+    private int banderaModuloReclamo;
+    /**
+     * 0 ES QUE NUNCA INGRESO, DEBE SINCRONIZAR.
+     * 1 YA INGRESO AL MENOS UNA VEZ
+     */
+    private int banderaSyncModuloReclamo;
+
+    /**
+     * 0 ES QUE NO TIENE INFO NUEVA.
+     * 1 YA INGRESO AL MENOS REGISTRO, DEBE SINCRONIZAR.
+     */
+
     private ArrayList<Modulo> modulos;
 
     private ArrayList<Integer> circuitos;
@@ -116,6 +128,22 @@ public class Usuario {
 
     public void setBanderaSyncModuloInspeccion(int banderaSyncModuloInspeccion) {
         this.banderaSyncModuloInspeccion = banderaSyncModuloInspeccion;
+    }
+
+    public int getBanderaModuloReclamo() {
+        return banderaModuloReclamo;
+    }
+
+    public void setBanderaModuloReclamo(int banderaModuloReclamo) {
+        this.banderaModuloReclamo = banderaModuloReclamo;
+    }
+
+    public int getBanderaSyncModuloReclamo() {
+        return banderaSyncModuloReclamo;
+    }
+
+    public void setBanderaSyncModuloReclamo(int banderaSyncModuloReclamo) {
+        this.banderaSyncModuloReclamo = banderaSyncModuloReclamo;
     }
 
     public ArrayList<Modulo> getModulos() {

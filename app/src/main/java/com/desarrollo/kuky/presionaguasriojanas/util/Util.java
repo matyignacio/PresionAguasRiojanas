@@ -68,7 +68,7 @@ public class Util {
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RECORRIDO = 1;
     private static final int MAXIMA_MEDICION = 100;
-    public static final int MY_DEFAULT_TIMEOUT = 15000;
+    public static final int MY_DEFAULT_TIMEOUT = 30000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final int PRIMER_INICIO_MODULO = 0;
     public static final int REQUEST_CHECK_SETTINGS = 100;
@@ -78,6 +78,8 @@ public class Util {
      * STRINGS
      ********************************************/
     public static final String CIRCUITO_USUARIO = "circuito_usuario";
+    public static final String DATE_TIME = "yyyy-MM-dd hh:mm:ss";
+    public static final String HOUR_TIME = "hh:mm:ss";
     private static final String font_primary_path = "font/font_primary.ttf";
     private static final String font_primary_bold_path = "font/font_primary_bold.ttf";
     public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
@@ -444,8 +446,12 @@ public class Util {
     }
 
     public static void ocultarTeclado(Activity a, View view) {
-        InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        try {
+            InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Exception e) {
+            mostrarMensajeLog(a, e.toString());
+        }
     }
 
     public static void displayProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar, String mensajeTV) {

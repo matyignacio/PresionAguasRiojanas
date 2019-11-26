@@ -64,8 +64,9 @@ public class BarrioControlador {
             pDialog.dismiss();
         }, error -> {
             pDialog.dismiss();
-            setPreference(a, ERROR_PREFERENCE, error.toString());
-            mostrarMensajeLog(a, error.toString());
+            String problema = error.toString() + " en " + a.getClass().getName();
+            setPreference(a, ERROR_PREFERENCE, problema);
+            mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
         });
         // Access the RequestQueue through your singleton class.

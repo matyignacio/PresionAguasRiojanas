@@ -53,6 +53,7 @@ public class BaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(getSqlTablaResolucionMotivos());
         sqLiteDatabase.execSQL(getSqlTablaReclamoTramite());
         sqLiteDatabase.execSQL(getSqlTablaTramite());
+        sqLiteDatabase.execSQL(getSqlTablaResolucionReclamo());
     }
 
     @Override
@@ -76,6 +77,8 @@ public class BaseHelper extends SQLiteOpenHelper {
             "  bandera_sync_modulo_presion INTEGER default 0," +
             "  bandera_modulo_inspeccion INTEGER default 0," +
             "  bandera_sync_modulo_inspeccion INTEGER default 0," +
+            "  bandera_modulo_reclamo INTEGER default 0," +
+            "  bandera_sync_modulo_reclamo INTEGER default 0," +
             "  PRIMARY KEY (usuario)" + ")";
 
     private String sqlTablaModulos = "CREATE TABLE IF NOT EXISTS modulos (" +
@@ -146,5 +149,9 @@ public class BaseHelper extends SQLiteOpenHelper {
 
     public String getSqlTablaTramite() {
         return tablasReclamo.getSqlTablaTramite();
+    }
+
+    public String getSqlTablaResolucionReclamo() {
+        return tablasReclamo.getSqlTablaResolucionReclamo();
     }
 }

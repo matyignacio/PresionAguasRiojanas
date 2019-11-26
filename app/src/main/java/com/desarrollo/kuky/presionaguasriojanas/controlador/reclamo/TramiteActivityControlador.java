@@ -11,8 +11,8 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Reclamo;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.TipoTramite;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
 import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
+import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.NuevaResolucionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ReclamoActivity;
-import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ResolucionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.TramitesActivity;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class TramiteActivityControlador {
 
-    public void extraerTodos(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void abrirTramiteActivity(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
         displayProgressBar(a, progressBar, tvProgressBar, "Cargando tramites...");
         tramites = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
@@ -71,9 +71,9 @@ public class TramiteActivityControlador {
 
     public void abrirResolucionActivity(Activity a, String motivo) {
         TipoResolucionControlador tipoResolucionControlador = new TipoResolucionControlador();
-        ResolucionActivity.tipoResolucionSpinner = tipoResolucionControlador.extraerPorMotivo(a, motivo);
-        if (ResolucionActivity.tipoResolucionSpinner.getResoluciones().size() > 0) {
-            abrirActivity(a, ResolucionActivity.class);
+        NuevaResolucionActivity.tipoResolucionSpinner = tipoResolucionControlador.extraerPorMotivo(a, motivo);
+        if (NuevaResolucionActivity.tipoResolucionSpinner.getResoluciones().size() > 0) {
+            abrirActivity(a, NuevaResolucionActivity.class);
         } else {
             mostrarMensaje(a, "No existen resoluciones para este motivo");
         }

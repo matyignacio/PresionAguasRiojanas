@@ -47,6 +47,18 @@ public class StringTablasReclamo {
             "  PRIMARY KEY (tpo_tram,num_tram)" +
             ")";
 
+    private String sqlTablaResolucionReclamo = "CREATE TABLE GTres_rec (" +
+            "  tpo_tram char(8) NOT NULL DEFAULT ''," +
+            "  num_tram int(11) NOT NULL," +
+            "  cod_res char(8) NOT NULL DEFAULT ''," +
+            "  obs char(120) DEFAULT ''," +
+            "  usuario char(10) DEFAULT ''," +
+            "  fecha_d datetime DEFAULT NULL," +
+            "  hora_d char(8) DEFAULT ''," +
+            "  fecha_h datetime DEFAULT NULL," +
+            "  hora_h char(8) DEFAULT ''" +
+            ")";
+
     public String getSqlTablaTipoTramite() {
         return sqlTablaTipoTramite;
     }
@@ -69,5 +81,9 @@ public class StringTablasReclamo {
 
     public String getSqlTablaTramite() {
         return sqlTablaTramite;
+    }
+
+    public String getSqlTablaResolucionReclamo() {
+        return sqlTablaResolucionReclamo;
     }
 }

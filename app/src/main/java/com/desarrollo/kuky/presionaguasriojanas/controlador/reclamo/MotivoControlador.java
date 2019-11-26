@@ -66,8 +66,9 @@ public class MotivoControlador {
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            setPreference(a, ERROR_PREFERENCE, error.toString());
-            mostrarMensajeLog(a, error.toString());
+            String problema = error.toString() + " en " + a.getClass().getName();
+            setPreference(a, ERROR_PREFERENCE, problema);
+            mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
         }) {
             //Pass Your Parameters here

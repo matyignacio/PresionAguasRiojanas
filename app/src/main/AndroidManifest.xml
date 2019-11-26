@@ -25,8 +25,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.reclamo.ResolucionActivity"
-            android:label="@string/title_activity_resolucion"
+            android:name=".ui.reclamo.NuevaResolucionActivity"
+            android:label="@string/title_activity_nueva_resolucion"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.reclamo.ReclamoActivity"

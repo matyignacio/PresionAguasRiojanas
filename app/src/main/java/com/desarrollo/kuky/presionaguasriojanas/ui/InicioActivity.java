@@ -56,7 +56,7 @@ public class InicioActivity extends AppCompatActivity
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
         bModuloReclamo.setOnClickListener(view -> {
             TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-            tramiteActivityControlador.extraerTodos(this, progressBar, tvProgressBar);
+            tramiteActivityControlador.abrirTramiteActivity(this, progressBar, tvProgressBar);
         });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

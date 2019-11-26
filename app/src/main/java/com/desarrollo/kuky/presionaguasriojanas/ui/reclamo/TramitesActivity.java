@@ -25,6 +25,7 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 
 public class TramitesActivity extends AppCompatActivity
@@ -55,7 +56,7 @@ public class TramitesActivity extends AppCompatActivity
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         subTitle.setText(LoginActivity.usuario.getNombre());
         /////////////////////////////////////////////////////////////
-
+        primerInicio();
         ListView lvTramite = findViewById(R.id.lvTramites);
         lvaTramite adaptador = new lvaTramite(this, tramites);
         lvTramite.setAdapter(adaptador);
@@ -64,12 +65,30 @@ public class TramitesActivity extends AppCompatActivity
             TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
             tramiteActivityControlador.abrirReclamoActivity(this, tramites.get(position));
         });
+
     }
 
     @Override
     public void onBackPressed() {
         /* LO QUE HACE CUANDO VUELVA*/
-        abrirActivity(this, InicioActivity.class);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                abrirActivity(this, InicioActivity.class);
+            }
+        }
+    }
+
+    private void primerInicio() {
+        /**
+         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL TramiteControlador
+         * */
+        if (LoginActivity.usuario.getBanderaModuloReclamo() == PRIMER_INICIO_MODULO) {
+            sincronizar();
+        }
+
     }
 
     private void sincronizar() {

@@ -10,10 +10,12 @@ import android.widget.Toast;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
 import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +25,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_RECLAMO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_DEFAULT_TIMEOUT;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
@@ -60,15 +65,21 @@ public class TramiteControlador {
                 }
                 db.close();
                 // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
+                UsuarioControlador usuarioControlador = new UsuarioControlador();
+                if (LoginActivity.usuario.getBanderaModuloReclamo() == PRIMER_INICIO_MODULO) {
+                    usuarioControlador.editarBanderaModuloReclamo(a, SEGUNDO_INICIO_MODULO);
+                }
+                usuarioControlador.editarBanderaSyncModuloReclamo(a, BANDERA_BAJA);
                 TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-                tramiteActivityControlador.extraerTodos(a, progressBar, tvProgressBar);
+                tramiteActivityControlador.abrirTramiteActivity(a, progressBar, tvProgressBar);
             } else {
                 Toast.makeText(a, "No existen tramites", Toast.LENGTH_SHORT).show();
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            setPreference(a, ERROR_PREFERENCE, error.toString());
-            mostrarMensajeLog(a, error.toString());
+            String problema = error.toString() + " en " + a.getClass().getName();
+            setPreference(a, ERROR_PREFERENCE, problema);
+            mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
         }) {
             //Pass Your Parameters here

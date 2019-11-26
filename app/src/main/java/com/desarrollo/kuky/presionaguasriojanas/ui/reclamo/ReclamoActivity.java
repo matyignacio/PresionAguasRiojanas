@@ -52,22 +52,20 @@ public class ReclamoActivity extends AppCompatActivity {
         etNumero.setText(String.valueOf(tramite.getReclamo().getNumeroCasa()));
         etDatosComplementarios.setText(tramite.getReclamo().getDatoComplementario());
         etDescripcion.setText(tramite.getReclamo().getDescripcion());
-        bResolver.setOnClickListener(v -> {
-            Util.showDialog(this,
-                    R.layout.dialog_resoluciones,
-                    "Ver resoluciones",
-                    "Nueva resolucion",
-                    () -> {
-                        mostrarMensaje(this, "Ver resoluciones");
-                        return null;
-                    },
-                    () -> {
-                        TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-                        tramiteActivityControlador.abrirResolucionActivity(this, tramite.getMotivo().getMotivo());
-                        return null;
-                    }
-            );
-        });
+        bResolver.setOnClickListener(v -> Util.showDialog(this,
+                R.layout.dialog_resoluciones,
+                "Ver resoluciones",
+                "Nueva resolucion",
+                () -> {
+                    mostrarMensaje(this, "Ver resoluciones");
+                    return null;
+                },
+                () -> {
+                    TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+                    tramiteActivityControlador.abrirResolucionActivity(this, tramite.getMotivo().getMotivo());
+                    return null;
+                }
+        ));
     }
 
     @Override
