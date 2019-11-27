@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo.TipoTramiteControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo.TramiteActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
 import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
@@ -34,7 +33,6 @@ public class TramitesActivity extends AppCompatActivity
     public static ArrayList<Tramite> tramites;
     private ProgressBar progressBar;
     private TextView tvProgressBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,14 +84,9 @@ public class TramitesActivity extends AppCompatActivity
          * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL TramiteControlador
          * */
         if (LoginActivity.usuario.getBanderaModuloReclamo() == PRIMER_INICIO_MODULO) {
-            sincronizar();
+            new TramiteActivityControlador().sincronizar(this, progressBar, tvProgressBar);
         }
 
-    }
-
-    private void sincronizar() {
-        TipoTramiteControlador tipoTramiteControlador = new TipoTramiteControlador();
-        tipoTramiteControlador.syncMysqlToSqlite(this, progressBar, tvProgressBar);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -107,7 +100,7 @@ public class TramitesActivity extends AppCompatActivity
                     R.layout.dialog_sincronizar,
                     "sincronizar",
                     () -> {
-                        sincronizar();
+                        new TramiteActivityControlador().sincronizar(this, progressBar, tvProgressBar);
                         return null;
                     }
             );

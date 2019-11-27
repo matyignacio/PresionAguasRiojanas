@@ -44,6 +44,7 @@ public class StringTablasReclamo {
             "  num_tram int(11) NOT NULL," +
             "  descripcion char(200) DEFAULT ''," +
             "  motivo char(8) NOT NULL DEFAULT ''," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
             "  PRIMARY KEY (tpo_tram,num_tram)" +
             ")";
 
@@ -56,7 +57,8 @@ public class StringTablasReclamo {
             "  fecha_d datetime DEFAULT NULL," +
             "  hora_d char(8) DEFAULT ''," +
             "  fecha_h datetime DEFAULT NULL," +
-            "  hora_h char(8) DEFAULT ''" +
+            "  hora_h char(8) DEFAULT ''," +
+            "  pendiente int(1) NOT NULL DEFAULT '1'" +
             ")";
 
     public String getSqlTablaTipoTramite() {

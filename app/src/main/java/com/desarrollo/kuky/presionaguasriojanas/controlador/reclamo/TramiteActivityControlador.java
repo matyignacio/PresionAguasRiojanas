@@ -1,53 +1,45 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Motivo;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Reclamo;
-import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.TipoTramite;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.UsuarioControlador;
+import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.BarrioControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
-import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
+import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.NuevaResolucionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ReclamoActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ResolucionesActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.TramitesActivity;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ResolucionesActivity.resolucionReclamos;
 import static com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.TramitesActivity.tramites;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 
 public class TramiteActivityControlador {
+    private TipoTramiteControlador tipoTramiteControlador = new TipoTramiteControlador();
+    private MotivoControlador motivoControlador = new MotivoControlador();
+    private TipoResolucionControlador tipoResolucionControlador = new TipoResolucionControlador();
+    private ResolucionMotivoControlador resolucionMotivoControlador = new ResolucionMotivoControlador();
+    private ReclamoControlador reclamoControlador = new ReclamoControlador();
+    private BarrioControlador barrioControlador = new BarrioControlador();
+    private TramiteControlador tramiteControlador = new TramiteControlador();
+    private ResolucionReclamoControlador resolucionReclamoControlador = new ResolucionReclamoControlador();
 
     public void abrirTramiteActivity(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
         displayProgressBar(a, progressBar, tvProgressBar, "Cargando tramites...");
         tramites = new ArrayList<>();
-        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT t.tpo_tram, t.num_tram, r.descripcion, t.motivo, r.razon_sol, m.descripcion" +
-                "                            FROM GTtramite t, GTreclamo r, GTmot_req m" +
-                "                            WHERE t.tpo_tram = r.tpo_tram" +
-                "                            AND t.num_tram = r.num_tram" +
-                "                            AND t.motivo = m.motivo ", null);
-        while (c.moveToNext()) {
-            Tramite tramite = new Tramite();
-            Motivo motivo = new Motivo(c.getString(3));
-            motivo.setDescripcion(c.getString(5));
-            Reclamo reclamo = new Reclamo(new TipoTramite(c.getString(0)), c.getInt(1));
-            reclamo.setRazonSocial(c.getString(4));
-            tramite.setTipoTramite(new TipoTramite(c.getString(0)));
-            tramite.setReclamo(reclamo);
-            tramite.setDescripcion(c.getString(2));
-            tramite.setMotivo(motivo);
-            tramites.add(tramite);
-        }
-        c.close();
-        db.close();
+        TramiteControlador tramiteControlador = new TramiteControlador();
+        tramites = tramiteControlador.extraerTodos(a);
         lockProgressBar(a, progressBar, tvProgressBar);
 //        if (tramites.size() > 0) {
         abrirActivity(a, TramitesActivity.class);
@@ -77,6 +69,51 @@ public class TramiteActivityControlador {
         } else {
             mostrarMensaje(a, "No existen resoluciones para este motivo");
         }
+    }
+
+    public void abrirResolucionesActivity(Activity a, Tramite tramite) {
+        resolucionReclamos = new ArrayList<>();
+        ResolucionReclamoControlador resolucionReclamoControlador = new ResolucionReclamoControlador();
+        resolucionReclamos = resolucionReclamoControlador.extraerTodosPorTramite(a, tramite);
+        if (resolucionReclamos.size() > 0) {
+            abrirActivity(a, ResolucionesActivity.class);
+        } else {
+            mostrarMensaje(a, "Este tramite aun no tiene resoluciones");
+        }
+    }
+
+    public void sincronizar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+        tipoTramiteControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+            motivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                tipoResolucionControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                    resolucionMotivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                        reclamoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                            barrioControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                tramiteControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                    resolucionReclamoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                        UsuarioControlador usuarioControlador = new UsuarioControlador();
+                                        if (LoginActivity.usuario.getBanderaModuloReclamo() == PRIMER_INICIO_MODULO) {
+                                            usuarioControlador.editarBanderaModuloReclamo(a, SEGUNDO_INICIO_MODULO);
+                                        }
+                                        usuarioControlador.editarBanderaSyncModuloReclamo(a, BANDERA_BAJA);
+                                        TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+                                        tramiteActivityControlador.abrirTramiteActivity(a, progressBar, tvProgressBar);
+                                        return null;
+                                    });
+                                    return null;
+                                });
+                                return null;
+                            });
+                            return null;
+                        });
+                        return null;
+                    });
+                    return null;
+                });
+                return null;
+            });
+            return null;
+        });
     }
 
 }

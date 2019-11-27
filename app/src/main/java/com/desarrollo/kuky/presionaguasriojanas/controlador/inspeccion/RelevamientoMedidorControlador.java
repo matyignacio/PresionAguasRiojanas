@@ -85,7 +85,7 @@ public class RelevamientoMedidorControlador {
             }
         }, error -> {
             pDialog.dismiss();
-            String problema = error.toString() + " en " + a.getClass().getName();
+            String problema = error.toString() + " en " + this.getClass().getSimpleName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
@@ -132,7 +132,7 @@ public class RelevamientoMedidorControlador {
             pDialog.dismiss();
         }, error -> {
             pDialog.dismiss();
-            String problema = error.toString() + " en " + a.getClass().getName();
+            String problema = error.toString() + " en " + this.getClass().getSimpleName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);

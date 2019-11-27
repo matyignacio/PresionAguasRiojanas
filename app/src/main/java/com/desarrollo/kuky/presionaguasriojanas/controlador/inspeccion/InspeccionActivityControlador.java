@@ -22,10 +22,10 @@ public class InspeccionActivityControlador {
              * ORDEN:
              *  relevamientoControlador.sincronizarDeSqliteToMysql(a); 1
              *  relevamientoMedidorControlador.sincronizarDeSqliteToMysql(a); 2
-             *  tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a); 3
-             *  barrioControlador.sincronizarDeMysqlToSqlite(a); 4
-             *  relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a); 5
-             *  relevamientoControlador.sincronizarDeMysqlToSqlite(a); 6
+             *  tipoInmuebleControlador.syncMysqlToSqlite(a); 3
+             *  barrioControlador.syncMysqlToSqlite(a); 4
+             *  relevamientoMedidorControlador.syncMysqlToSqlite(a); 5
+             *  relevamientoControlador.syncMysqlToSqlite(a); 6
              * */
             check = ERROR;
             RelevamientoControlador relevamientoControlador = new RelevamientoControlador();

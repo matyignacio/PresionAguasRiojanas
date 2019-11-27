@@ -79,6 +79,7 @@ public class Util {
      ********************************************/
     public static final String CIRCUITO_USUARIO = "circuito_usuario";
     public static final String DATE_TIME = "yyyy-MM-dd hh:mm:ss";
+    public static final String DATE = "yyyy-MM-dd";
     public static final String HOUR_TIME = "hh:mm:ss";
     private static final String font_primary_path = "font/font_primary.ttf";
     private static final String font_primary_bold_path = "font/font_primary_bold.ttf";

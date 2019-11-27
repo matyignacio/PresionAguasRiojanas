@@ -16,7 +16,7 @@
             android:layout_weight="50">
 
             <TextView
-                android:id="@+id/tvCliente"
+                android:id="@+id/tvResolucion"
                 style="@style/et_primary_mini"
                 android:layout_width="match_parent"
                 android:layout_marginTop="0dp"
@@ -29,9 +29,8 @@
             android:layout_height="fill_parent"
             android:layout_weight="50">
 
-
             <TextView
-                android:id="@+id/tvMotivo"
+                android:id="@+id/tvFecha"
                 style="@style/et_primary_mini"
                 android:layout_width="match_parent"
                 android:layout_marginTop="0dp"
@@ -49,13 +48,13 @@
         android:weightSum="100">
 
         <TextView
-            android:id="@+id/tvDescripcion"
+            android:id="@+id/tvObservacion"
             style="@style/et_primary_mini"
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
-            android:gravity="center"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="5dp"
+            android:gravity="center"
             android:text="@string/tv_presion_historial" />
     </LinearLayout>
 

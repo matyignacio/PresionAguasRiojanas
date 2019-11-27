@@ -12,7 +12,6 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class ReclamoActivity extends AppCompatActivity {
@@ -57,7 +56,8 @@ public class ReclamoActivity extends AppCompatActivity {
                 "Ver resoluciones",
                 "Nueva resolucion",
                 () -> {
-                    mostrarMensaje(this, "Ver resoluciones");
+                    TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+                    tramiteActivityControlador.abrirResolucionesActivity(this, tramite);
                     return null;
                 },
                 () -> {

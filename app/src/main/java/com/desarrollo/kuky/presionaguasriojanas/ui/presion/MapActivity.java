@@ -242,7 +242,7 @@ public class MapActivity extends AppCompatActivity
 
     private void primerInicio() {
         /**
-         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.sincronizarDeMysqlToSqlite
+         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del historialPuntosControlador.syncMysqlToSqlite
          * */
         if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO) {
             sincronizar();

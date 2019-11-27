@@ -94,7 +94,7 @@ public class InspeccionActivity extends AppCompatActivity
 
     private void primerInicio() {
         /**
-         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del DatosRelevadosControlador.sincronizarDeMysqlToSqlite
+         * A LA MODIFICACION DE LA BANDERA LA HAGO EN EL onPostExecute del DatosRelevadosControlador.syncMysqlToSqlite
          * */
         if (LoginActivity.usuario.getBanderaModuloInspeccion() == PRIMER_INICIO_MODULO) {
             sincronizar();

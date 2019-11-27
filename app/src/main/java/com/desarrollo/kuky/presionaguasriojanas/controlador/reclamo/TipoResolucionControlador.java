@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -21,6 +20,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_RECLAMO;
@@ -29,12 +29,13 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class TipoResolucionControlador {
 
-    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo tipos de resolucion...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_RECLAMO + "tipo_resolucion_select.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
@@ -57,14 +58,17 @@ public class TipoResolucionControlador {
                 }
                 db.close();
                 // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
-                ResolucionMotivoControlador resolucionMotivoControlador = new ResolucionMotivoControlador();
-                resolucionMotivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
-                Toast.makeText(a, "No existen resoluciones de tramite", Toast.LENGTH_SHORT).show();
+                mostrarMensaje(a, "No existen resoluciones de tramite");
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            String problema = error.toString() + " en " + a.getClass().getName();
+            String problema = error.toString() + " en " + this.getClass().getSimpleName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
