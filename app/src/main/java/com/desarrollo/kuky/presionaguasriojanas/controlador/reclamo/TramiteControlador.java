@@ -94,7 +94,6 @@ public class TramiteControlador {
                 MY_DEFAULT_TIMEOUT,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
         // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }

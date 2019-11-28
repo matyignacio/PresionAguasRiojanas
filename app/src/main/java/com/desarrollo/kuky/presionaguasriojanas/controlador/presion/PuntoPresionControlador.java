@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
@@ -47,7 +48,7 @@ public class PuntoPresionControlador {
     private JSONArray puntosInserts;
     private JSONArray puntosUpdates;
 
-    public void insertToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void insertToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         puntosInserts = new JSONArray();
         displayProgressBar(a, progressBar, tvProgressBar, "Enviando puntos...");
         ArrayList<PuntoPresion> puntosPresionInsertar = extraerTodosPendientesInsertar(a);
@@ -87,7 +88,11 @@ public class PuntoPresionControlador {
                         actualizarPendiente(puntosPresionInsertar.get(i), a);
                     }
                     // Y PASAMOS A LA SIGUIENTE REQUEST
-                    updateToMySQL(a, progressBar, tvProgressBar);
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        mostrarMensajeLog(a, e.toString());
+                    }
                 } else {
                     Log.e("RESPUESTASERVER", "ERROR");
                 }
@@ -106,7 +111,7 @@ public class PuntoPresionControlador {
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
-    public void updateToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void updateToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         puntosUpdates = new JSONArray();
         displayProgressBar(a, progressBar, tvProgressBar, "Actualizando puntos...");
         ArrayList<PuntoPresion> puntosPresionActualizar = extraerTodosPendientesActualizar(a);
@@ -131,8 +136,11 @@ public class PuntoPresionControlador {
                         actualizarPendiente(puntosPresionActualizar.get(i), a);
                     }
                     // Y PASAMOS A LA SIGUIENTE REQUEST
-                    HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-                    historialPuntosControlador.insertToMySQL(a, progressBar, tvProgressBar);
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        mostrarMensajeLog(a, e.toString());
+                    }
                 } else {
                     Log.e("RESPUESTASERVER", "ERROR");
                 }
@@ -151,7 +159,7 @@ public class PuntoPresionControlador {
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
-    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo puntos... ");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "puntos_presion_select.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
@@ -192,9 +200,12 @@ public class PuntoPresionControlador {
                     e.printStackTrace();
                 }
                 db.close();
-                // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
-                HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-                historialPuntosControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
+                // Y PASAMOS A LA SIGUIENTE REQUEST
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
+                }
             } else {
                 Toast.makeText(a, "No existen puntos de presion", Toast.LENGTH_SHORT).show();
             }

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_PRESION;
@@ -31,7 +32,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class TipoPuntoControlador {
 
-    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo tipos de puntos...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "tipo_punto_select.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
@@ -53,9 +54,12 @@ public class TipoPuntoControlador {
                     e.printStackTrace();
                 }
                 db.close();
-                // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
-                OrdenControlador ordenControlador = new OrdenControlador();
-                ordenControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
+                // Y PASAMOS A LA SIGUIENTE REQUEST
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
+                }
             } else {
                 Toast.makeText(a, "No existe orden", Toast.LENGTH_SHORT).show();
             }

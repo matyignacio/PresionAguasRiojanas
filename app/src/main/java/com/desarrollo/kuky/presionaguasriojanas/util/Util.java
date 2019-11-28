@@ -67,6 +67,7 @@ public class Util {
     public static final int INSERTAR_PUNTO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RECORRIDO = 1;
+    public static final int MAX_LENGHT_MEDIDORES = 8;
     private static final int MAXIMA_MEDICION = 100;
     public static final int MY_DEFAULT_TIMEOUT = 30000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -420,20 +421,6 @@ public class Util {
         Matrix matrix = new Matrix();
         matrix.postRotate(angulo);
         return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-    }
-
-    public static void checkConnection(Activity a, Callable<Void> method) {
-        InternetDetector internetDetector;
-        internetDetector = new InternetDetector(a);
-        if (!internetDetector.checkMobileInternetConn()) {
-            mostrarMensaje(a, "No hay conexion de red disponible.");
-        } else {
-            try {
-                method.call();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static void progressBarVisibility(ProgressBar progressBar, TextView tvProgressBar, Boolean visible) {

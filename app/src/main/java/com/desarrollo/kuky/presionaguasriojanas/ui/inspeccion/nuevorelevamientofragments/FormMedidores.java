@@ -3,6 +3,7 @@ package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamiento
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivi
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity.bNuevoMedidor;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAX_LENGHT_MEDIDORES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
 public class FormMedidores extends Fragment {
@@ -114,6 +116,7 @@ public class FormMedidores extends Fragment {
         etMedidorLuz = new EditText(getActivity());
         etMedidorLuz.setId(idEditText);
         etMedidorLuz.requestFocus();
+        etMedidorLuz.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_LENGHT_MEDIDORES)});
         etMedidorLuz.setBackgroundResource(R.drawable.et_redondo);
         etMedidorLuz.setHint("Medidor de Luz " + (idEditText + 1));
         etMedidorLuz.setInputType(InputType.TYPE_CLASS_NUMBER);

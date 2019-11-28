@@ -1,9 +1,10 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -16,27 +17,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class TipoInmuebleControlador {
-    private ProgressDialog pDialog;
 
-    public void sincronizarDeMysqlToSqlite(Activity a) {
-        pDialog = new ProgressDialog(a);
-        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pDialog.setTitle("SINCRONIZANDO");
-        pDialog.setMessage("3/" +
-                +ASYNCTASK_INSPECCION + " - Recibiendo tipos de inmuebles...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
+        displayProgressBar(a, progressBar, tvProgressBar, "Recibiendo tipos de inmuebles...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "tipo_inmueble_select.php", response -> {
             if (!response.equals("ERROR_ARRAY_VACIO")) {
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
@@ -55,14 +51,17 @@ public class TipoInmuebleControlador {
                     e.printStackTrace();
                 }
                 // Y AL FINAL ABRIMOS LA OTRA ACTIVITY
-                BarrioControlador barrioControlador = new BarrioControlador();
-                barrioControlador.sincronizarDeMysqlToSqlite(a);
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
+                }
             } else {
                 mostrarMensaje(a, "Error en el checkTipoInmueble.");
             }
-            pDialog.dismiss();
+            lockProgressBar(a, progressBar, tvProgressBar);
         }, error -> {
-            pDialog.dismiss();
+            lockProgressBar(a, progressBar, tvProgressBar);
             String problema = error.toString() + " en " + this.getClass().getSimpleName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);

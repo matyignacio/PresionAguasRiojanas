@@ -1,11 +1,12 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -21,35 +22,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class RelevamientoMedidorControlador {
-    private ProgressDialog pDialog;
     private ArrayList<RelevamientoMedidor> relevamientoMedidores;
     private ArrayList<RelevamientoMedidor> relevamientos = new ArrayList<>();
     private JSONArray relevamientosInserts;
 
-    void sincronizarDeSqliteToMysql(Activity a) {
+    void sincronizarDeSqliteToMysql(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         relevamientosInserts = new JSONArray();
         relevamientos = extraerTodosPendientes(a);
-        pDialog = new ProgressDialog(a);
-        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pDialog.setTitle("SINCRONIZANDO");
-        pDialog.setMessage("2/" +
-                +ASYNCTASK_INSPECCION + " - Enviando Relevamiento Medidores...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+        displayProgressBar(a, progressBar, tvProgressBar, "Enviando Relevamiento Medidores...");
         for (int i = 0; i < relevamientoMedidores.size(); i++) {
             try {
                 JSONObject relevamiento = new JSONObject();
@@ -64,7 +60,7 @@ public class RelevamientoMedidorControlador {
             }
         }
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_medidores_insert.php", relevamientosInserts, response -> {
-            pDialog.dismiss();
+            lockProgressBar(a, progressBar, tvProgressBar);
             mostrarMensajeLog(a, response.toString());
             try {
                 if (response.getJSONObject(0).getString("status").equals("OK")) {
@@ -74,8 +70,11 @@ public class RelevamientoMedidorControlador {
                         actualizarPendiente(relevamientos.get(i), a);
                     }
                     // Y PASAMOS A LA SIGUIENTE REQUEST
-                    TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
-                    tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     Log.e("RESPUESTASERVER", "ERROR");
                 }
@@ -84,7 +83,7 @@ public class RelevamientoMedidorControlador {
                 Log.e("RESPUESTASERVER", e.toString());
             }
         }, error -> {
-            pDialog.dismiss();
+            lockProgressBar(a, progressBar, tvProgressBar);
             String problema = error.toString() + " en " + this.getClass().getSimpleName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
@@ -94,14 +93,8 @@ public class RelevamientoMedidorControlador {
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
-    public void sincronizarDeMysqlToSqlite(Activity a) {
-        pDialog = new ProgressDialog(a);
-        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pDialog.setTitle("SINCRONIZANDO");
-        pDialog.setMessage("5/" +
-                +ASYNCTASK_INSPECCION + " - Recibiendo Relevamiento Medidores...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
+        displayProgressBar(a, progressBar, tvProgressBar, "Recibiendo Relevamiento Medidores...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_medidores_select.php", response -> {
             if (!response.equals("ERROR_ARRAY_VACIO")) {
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
@@ -127,11 +120,14 @@ public class RelevamientoMedidorControlador {
             }
             // POR MAS QUE DEVUELVA UN ARRAY VACIO, EJECUTA LA SIGUIENTE TAREA
             // (Porque puede que la tabla este vacia)
-            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
-            relevamientoControlador.sincronizarDeMysqlToSqlite(a);
-            pDialog.dismiss();
+            try {
+                method.call();
+            } catch (Exception e) {
+                mostrarMensajeLog(a, e.toString());
+            }
+            lockProgressBar(a, progressBar, tvProgressBar);
         }, error -> {
-            pDialog.dismiss();
+            lockProgressBar(a, progressBar, tvProgressBar);
             String problema = error.toString() + " en " + this.getClass().getSimpleName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);

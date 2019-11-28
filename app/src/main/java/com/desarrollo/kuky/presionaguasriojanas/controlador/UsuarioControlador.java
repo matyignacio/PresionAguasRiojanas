@@ -13,7 +13,6 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.Modulo;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.Usuario;
 import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
-import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 
 import org.json.JSONArray;
@@ -23,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
@@ -39,7 +39,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class UsuarioControlador {
 
-    public void loguearUsuario(Activity a, String eMail, String clave, ProgressBar progressBar, TextView tvProgressBar) {
+    public void loguearUsuario(Activity a, String eMail, String clave, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Iniciando sesion...");
         LoginActivity.usuario = new Usuario();
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + "login.php", response -> {
@@ -61,14 +61,19 @@ public class UsuarioControlador {
                     e.printStackTrace();
                 }
                 // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
-                validarUsuario(a, LoginActivity.usuario.getId(), progressBar, tvProgressBar);
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
+                }
             } else {
                 Toast.makeText(a, "No existe ningun usuario con esa clave", Toast.LENGTH_SHORT).show();
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            setPreference(a, ERROR_PREFERENCE, error.toString());
-            mostrarMensajeLog(a, error.toString());
+            String problema = error.toString() + " en " + this.getClass().getSimpleName();
+            setPreference(a, ERROR_PREFERENCE, problema);
+            mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
         }) {
 
@@ -85,7 +90,7 @@ public class UsuarioControlador {
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
-    public void validarUsuario(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar) {
+    public void validarUsuario(Activity a, String usuario, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         /** VACIAMOS LA TABLA DE MODULOS */
         SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
         String sql = "DELETE FROM modulos";
@@ -114,14 +119,19 @@ public class UsuarioControlador {
                     e.printStackTrace();
                 }
                 // Y AL FINAL ABRIMOS LA OTRA ACTIVITY
-                abrirActivity(a, InicioActivity.class);
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
+                }
             } else {
                 mostrarMensaje(a, "El usuario no tiene permisos.");
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            setPreference(a, ERROR_PREFERENCE, error.toString());
-            mostrarMensajeLog(a, error.toString());
+            String problema = error.toString() + " en " + this.getClass().getSimpleName();
+            setPreference(a, ERROR_PREFERENCE, problema);
+            mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
         }) {
             //Pass Your Parameters here

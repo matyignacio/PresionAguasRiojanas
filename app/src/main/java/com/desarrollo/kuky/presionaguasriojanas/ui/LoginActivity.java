@@ -68,7 +68,14 @@ public class LoginActivity extends AppCompatActivity {
                     etMail.getText().toString(),
                     etClave.getText().toString(),
                     progressBar,
-                    tvProgressBar);
+                    tvProgressBar,
+                    () -> {
+                        uControlador.validarUsuario(this, LoginActivity.usuario.getId(), progressBar, tvProgressBar, () -> {
+                            abrirActivity(this, InicioActivity.class);
+                            return null;
+                        });
+                        return null;
+                    });
         }
     }
 

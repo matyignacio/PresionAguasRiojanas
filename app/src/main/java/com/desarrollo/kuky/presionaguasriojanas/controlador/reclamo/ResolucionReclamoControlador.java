@@ -110,16 +110,12 @@ public class ResolucionReclamoControlador {
             abrirActivity(a, ErrorActivity.class);
         });
         // Establecer una política de reintentos en mi petición Volley mediante el método setRetryPolicy
-        request.setRetryPolicy(new
-
-                DefaultRetryPolicy(
+        request.setRetryPolicy(new DefaultRetryPolicy(
                 MY_DEFAULT_TIMEOUT,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Access the RequestQueue through your singleton class.
-        VolleySingleton.getInstance(a).
-
-                addToRequestQueue(request);
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
 
     }
 

@@ -20,6 +20,8 @@ import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.concurrent.Callable;
+
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_PRESION;
@@ -32,7 +34,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class OrdenControlador {
 
-    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo orden...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "orden_select.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
@@ -59,9 +61,12 @@ public class OrdenControlador {
                     e.printStackTrace();
                 }
                 db.close();
-                // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
-                PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-                puntoPresionControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
+                // Y PASAMOS A LA SIGUIENTE REQUEST
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
+                }
             } else {
                 Toast.makeText(a, "No existe orden", Toast.LENGTH_SHORT).show();
             }

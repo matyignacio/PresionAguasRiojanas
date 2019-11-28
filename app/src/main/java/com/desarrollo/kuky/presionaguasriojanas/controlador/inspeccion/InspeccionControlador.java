@@ -125,8 +125,8 @@ public class InspeccionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
-                relevamientoControlador.sincronizarDeSqliteToMysql(a);
+//                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+//                relevamientoControlador.sincronizarDeSqliteToMysql(a);
             } else {
                 mostrarMensaje(a, "Error en el checkInspeccionesToMysql");
             }
@@ -226,8 +226,8 @@ public class InspeccionControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
-                relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a);
+//                RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
+//                relevamientoMedidorControlador.syncMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkinspeccion");
             }

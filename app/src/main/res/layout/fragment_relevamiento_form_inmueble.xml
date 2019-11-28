@@ -72,14 +72,16 @@
             style="@style/et_primary"
             android:layout_below="@id/swConexionVisible"
             android:hint="@string/hint_medidor_de_luz"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="8" />
 
         <EditText
             android:id="@+id/etMedidorAgua"
             style="@style/et_primary"
             android:layout_below="@id/etMedidorLuz"
             android:hint="@string/hint_medidor_de_agua"
-            android:inputType="text" />
+            android:inputType="text"
+            android:maxLength="8" />
 
         <EditText
             android:id="@+id/etObservaciones"

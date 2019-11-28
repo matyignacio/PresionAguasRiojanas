@@ -39,7 +39,6 @@ import java.util.List;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_DEFECTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
@@ -258,8 +257,7 @@ public class MapActivity extends AppCompatActivity
 
     private void sincronizar() {
         MapActivityControlador mapActivityControlador = new MapActivityControlador();
-        if (mapActivityControlador.sync(MapActivity.this, progressBar, tvProgressBar) == EXITOSO) {
-        }
+        mapActivityControlador.sincronizar(MapActivity.this, progressBar, tvProgressBar);
     }
 
     public void showDialogSetCircuito(final Activity a) {

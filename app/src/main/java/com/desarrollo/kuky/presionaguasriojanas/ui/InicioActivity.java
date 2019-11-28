@@ -15,10 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
-import com.desarrollo.kuky.presionaguasriojanas.controlador.InicioActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.MapActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo.TramiteActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.InspeccionActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
@@ -50,8 +50,11 @@ public class InicioActivity extends AppCompatActivity
         /**************************/
         evaluarUsuario();
         bModuloPresion.setOnClickListener(view -> {
-            InicioActivityControlador inicioControlador = new InicioActivityControlador();
-            inicioControlador.abrirMapActivity(this, progressBar, tvProgressBar);
+            MapActivityControlador mapActivityControlador = new MapActivityControlador();
+            mapActivityControlador.abrirMapActivity(this, progressBar, tvProgressBar, () -> {
+                abrirActivity(this, MapActivity.class);
+                return null;
+            });
         });
         bModuloInspeccion.setOnClickListener(view -> abrirActivity(this, InspeccionActivity.class));
         bModuloReclamo.setOnClickListener(view -> {
@@ -102,8 +105,7 @@ public class InicioActivity extends AppCompatActivity
                                     "sincronizar ahora",
                                     () -> {
                                         MapActivityControlador mapActivityControlador = new MapActivityControlador();
-                                        if (mapActivityControlador.sync(InicioActivity.this, progressBar, tvProgressBar) == EXITOSO) {
-                                        }
+                                        mapActivityControlador.sincronizar(InicioActivity.this, progressBar, tvProgressBar);
                                         return null;
                                     });
                             //mostrarMensaje(InicioActivity.this, "Debe sincronizar primero");

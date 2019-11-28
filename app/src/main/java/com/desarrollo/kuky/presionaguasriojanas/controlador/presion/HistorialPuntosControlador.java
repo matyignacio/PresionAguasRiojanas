@@ -20,7 +20,6 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 import com.desarrollo.kuky.presionaguasriojanas.sqlite.BaseHelper;
 import com.desarrollo.kuky.presionaguasriojanas.ui.ErrorActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
-import com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +27,7 @@ import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ACTUALIZAR_PUNTO;
@@ -35,13 +35,10 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_ALTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.BANDERA_BAJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_PRESION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SEGUNDO_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.lockProgressBar;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.logOut;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
@@ -52,7 +49,7 @@ public class HistorialPuntosControlador {
     private JSONArray puntosInserts;
     private JSONArray puntosUpdates;
 
-    public void insertToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void insertToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         puntosInserts = new JSONArray();
         displayProgressBar(a, progressBar, tvProgressBar, "Enviando historial...");
         ArrayList<HistorialPuntos> historialesInsertar = extraerTodosPendientes(a);
@@ -84,8 +81,11 @@ public class HistorialPuntosControlador {
                         actualizarPendiente(historialesInsertar.get(i), a);
                     }
                     // Y PASAMOS A LA SIGUIENTE REQUEST
-                    TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
-                    tipoPuntoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar);
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        mostrarMensajeLog(a, e.toString());
+                    }
                 } else {
                     Log.e("RESPUESTASERVER", "ERROR");
                 }
@@ -104,7 +104,7 @@ public class HistorialPuntosControlador {
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }
 
-    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo historial...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_PRESION + "historial_puntos_presion_select.php", response -> {
             lockProgressBar(a, progressBar, tvProgressBar);
@@ -136,24 +136,18 @@ public class HistorialPuntosControlador {
                     e.printStackTrace();
                 }
                 db.close();
-                // Y AL FINAL EJECUTAMOS LA SIGUIENTE REQUEST
-                UsuarioControlador usuarioControlador = new UsuarioControlador();
-                if (LoginActivity.usuario.getBanderaModuloPresion() == PRIMER_INICIO_MODULO) {
-                    usuarioControlador.editarBanderaModuloPresion(a, SEGUNDO_INICIO_MODULO);
-                }
-                usuarioControlador.editarBanderaSyncModuloPresion(a, BANDERA_BAJA);
-                if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity")) {
-                    logOut(a);
-                } else if (a.getClass().getName().equals("com.desarrollo.kuky.presionaguasriojanas.ui.presion.MapActivity")) {
-                    mostrarMensaje(a, "Para seleccionar o modificar el CIRCUITO ingrese al menu izquierdo");
-                    abrirActivity(a, MapActivity.class);
+                // Y AL FINAL EJECUTAMOS
+                try {
+                    method.call();
+                } catch (Exception e) {
+                    mostrarMensajeLog(a, e.toString());
                 }
             } else {
                 Toast.makeText(a, "No existe historial de presion", Toast.LENGTH_SHORT).show();
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            String problema = error.toString() + " en " + a.getClass().getName();
+            String problema = error.toString() + " en " + this.getClass().getName();
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);

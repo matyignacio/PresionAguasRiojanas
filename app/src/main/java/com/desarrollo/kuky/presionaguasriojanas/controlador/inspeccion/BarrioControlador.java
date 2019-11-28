@@ -1,7 +1,6 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ASYNCTASK_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
@@ -33,51 +31,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class BarrioControlador {
-    private ProgressDialog pDialog;
-
-    public void sincronizarDeMysqlToSqlite(Activity a) {
-        pDialog = new ProgressDialog(a);
-        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pDialog.setTitle("SINCRONIZANDO");
-        pDialog.setMessage("4/" +
-                +ASYNCTASK_INSPECCION + " - Recibiendo barrios...");
-        pDialog.setCancelable(false);
-        pDialog.show();
-        StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "barrios_select.php", response -> {
-            if (!response.equals("ERROR_ARRAY_VACIO")) {
-                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
-                /* LIMPIAMOS LA TABLA */
-                db.execSQL("DELETE FROM barrios");
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        String sql = "INSERT INTO barrios" +
-                                " VALUES" +
-                                " ('" + jsonArray.getJSONObject(i).getString("codigo") + "','" + // codigo
-                                jsonArray.getJSONObject(i).getString("des_codigo") + "','" + // des_codigo
-                                jsonArray.getJSONObject(i).getString("zona") + "');"; // zonaBarrios
-                        db.execSQL(sql);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // Y AL FINAL ABRIMOS LA OTRA ACTIVITY
-                RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
-                relevamientoMedidorControlador.sincronizarDeMysqlToSqlite(a);
-            } else {
-                mostrarMensaje(a, "Error en el checkBarrios.");
-            }
-            pDialog.dismiss();
-        }, error -> {
-            pDialog.dismiss();
-            String problema = error.toString() + " en " + this.getClass().getSimpleName();
-            setPreference(a, ERROR_PREFERENCE, problema);
-            mostrarMensajeLog(a, problema);
-            abrirActivity(a, ErrorActivity.class);
-        });
-        // Access the RequestQueue through your singleton class.
-        VolleySingleton.getInstance(a).addToRequestQueue(request);
-    }
 
     public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo barrios...");

@@ -117,8 +117,8 @@ public class DatosRelevadosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
-                tipoInmuebleControlador.sincronizarDeMysqlToSqlite(a);
+//                TipoInmuebleControlador tipoInmuebleControlador = new TipoInmuebleControlador();
+//                tipoInmuebleControlador.syncMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkDatosRelevadosToMysql");
             }
@@ -214,8 +214,8 @@ public class DatosRelevadosControlador {
         protected void onPostExecute(String s) {
             pDialog.dismiss();
             if (s.equals("EXITO")) {
-                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
-                relevamientoControlador.sincronizarDeMysqlToSqlite(a);
+//                RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+//                relevamientoControlador.syncMysqlToSqlite(a);
             } else {
                 mostrarMensaje(a, "Error en el checkDatosRelevados");
             }

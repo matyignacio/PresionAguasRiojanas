@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
@@ -20,7 +21,6 @@ import com.desarrollo.kuky.presionaguasriojanas.ui.InicioActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_MODULO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
@@ -28,10 +28,15 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 public class InspeccionActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private ProgressBar progressBar;
+    private TextView tvProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspeccion);
+        progressBar = findViewById(R.id.progressBar);
+        tvProgressBar = findViewById(R.id.tvProgressBar);
         /************************************************/
         Button bNuevaInspeccion = findViewById(R.id.bNuevaInspeccion);
         Button bRelevamiento = findViewById(R.id.bRelevamiento);
@@ -88,8 +93,7 @@ public class InspeccionActivity extends AppCompatActivity
 
     private void sincronizar() {
         InspeccionActivityControlador inspeccionActivityControlador = new InspeccionActivityControlador();
-        if (inspeccionActivityControlador.sync(this) == EXITOSO) {
-        }
+        inspeccionActivityControlador.sincronizar(this, progressBar, tvProgressBar);
     }
 
     private void primerInicio() {
