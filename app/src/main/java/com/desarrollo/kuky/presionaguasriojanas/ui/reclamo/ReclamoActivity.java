@@ -12,6 +12,7 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class ReclamoActivity extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class ReclamoActivity extends AppCompatActivity {
         TextView etNumero = findViewById(R.id.etNumeroCasa);
         TextView etDatosComplementarios = findViewById(R.id.etDatosComplementarios);
         TextView etDescripcion = findViewById(R.id.etDescripcion);
+        Button bVerEnElMapa = findViewById(R.id.bVerEnElMapa);
         Button bResolver = findViewById(R.id.bResolver);
         /** SETEAMOS LOS TYPEFACES*/
         setPrimaryFontBold(this, tvTramite);
@@ -41,6 +43,7 @@ public class ReclamoActivity extends AppCompatActivity {
         setPrimaryFontBold(this, etNumero);
         setPrimaryFontBold(this, etDatosComplementarios);
         setPrimaryFontBold(this, etDescripcion);
+        setPrimaryFontBold(this, bVerEnElMapa);
         setPrimaryFontBold(this, bResolver);
         /**************************/
         tvTramite.setText("Tramite: " + tramite.getTipoTramite().getTipo() + " - " + tramite.getReclamo().getNumeroTramite());
@@ -51,6 +54,13 @@ public class ReclamoActivity extends AppCompatActivity {
         etNumero.setText(String.valueOf(tramite.getReclamo().getNumeroCasa()));
         etDatosComplementarios.setText(tramite.getReclamo().getDatoComplementario());
         etDescripcion.setText(tramite.getReclamo().getDescripcion());
+        bVerEnElMapa.setOnClickListener(v -> {
+            if (!tramite.getReclamo().getUbicacion().equals("null")) {
+                abrirActivity(this, UbicacionReclamoActivity.class);
+            } else {
+                mostrarMensaje(this, "Este tramite aun no tiene asignada una ubicacion");
+            }
+        });
         bResolver.setOnClickListener(v -> Util.showDialog(this,
                 R.layout.dialog_resoluciones,
                 "Ver resoluciones",

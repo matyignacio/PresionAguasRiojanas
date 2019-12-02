@@ -4,10 +4,17 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <TextView
+        android:id="@+id/etTramite"
+        style="@style/tv_primary_bold_center"
+        android:layout_width="match_parent"
+        android:text="Tramite 002 - 320227" />
+
     <LinearLayout
         android:id="@+id/llTitulos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etTramite"
         android:weightSum="100">
 
         <LinearLayout
@@ -53,9 +60,9 @@
             style="@style/et_primary_mini"
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
-            android:gravity="center"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="5dp"
+            android:gravity="center"
             android:text="@string/tv_presion_historial" />
     </LinearLayout>
 

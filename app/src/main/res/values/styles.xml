@@ -88,6 +88,7 @@
 
     <style name="tv_primary_bold_center" parent="tv_primary_bold_left">
         <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/background_dark</item>
     </style>
 
     <style name="tv_primary_bold_background" parent="tv_primary_bold_left">

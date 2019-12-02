@@ -46,12 +46,75 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class ResolucionReclamoControlador {
-
+    private ArrayList<ResolucionReclamo> resoluciones;
     private TramiteControlador tramiteControlador = new TramiteControlador();
-    private JSONArray tramitesInserts;
+
+    @SuppressLint("SimpleDateFormat")
+    public void insertToMySQL(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
+        JSONArray resolucionesInserts = new JSONArray();
+        SimpleDateFormat formatDate = new SimpleDateFormat(DATE_TIME);
+        displayProgressBar(a, progressBar, tvProgressBar, "Enviando resoluciones...");
+        resoluciones = extraerTodosPendientes(a);
+        for (int i = 0; i < resoluciones.size(); i++) {
+            try {
+                JSONObject resolucion = new JSONObject();
+                String fechaDesde = formatDate.format(resoluciones.get(i).getFechaDesde());
+                String fechaHasta = formatDate.format(resoluciones.get(i).getFechaDesde());
+                resolucion.put("tpo_tram", resoluciones.get(i).getTipoTramite());
+                resolucion.put("num_tram", resoluciones.get(i).getNumeroTramite());
+                resolucion.put("cod_res", resoluciones.get(i).getCodigoResolucion());
+                resolucion.put("obs", resoluciones.get(i).getObservaciones());
+                resolucion.put("usuario", resoluciones.get(i).getUsuario());
+                resolucion.put("fecha_d", fechaDesde);
+                resolucion.put("hora_d", resoluciones.get(i).getHoraDesde());
+                resolucion.put("fecha_h", fechaHasta);
+                resolucion.put("hora_h", resoluciones.get(i).getHoraHasta());
+                resolucionesInserts.put(resolucion);
+            } catch (JSONException e) {
+                mostrarMensaje(a, e.toString());
+            }
+        }
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, VOLLEY_HOST + MODULO_RECLAMO + "resolucion_reclamo_insert.php", resolucionesInserts, response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            mostrarMensajeLog(a, response.toString());
+            try {
+                if (response.getJSONObject(0).getString("status").equals("OK")) {
+                    Log.d("RESPUESTASERVER", "OK");
+                    // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
+                    for (int i = 0; i < resoluciones.size(); i++) {
+                        actualizarPendiente(resoluciones.get(i), a);
+                    }
+                    // Y PASAMOS A LA SIGUIENTE REQUEST
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        mostrarMensajeLog(a, e.toString());
+                    }
+                } else {
+                    Log.e("RESPUESTASERVER", "ERROR");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("RESPUESTASERVER", e.toString());
+            }
+        }, error -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
+            String problema = error.toString() + " en " + this.getClass().getSimpleName();
+            setPreference(a, ERROR_PREFERENCE, problema);
+            mostrarMensajeLog(a, problema);
+            abrirActivity(a, ErrorActivity.class);
+        });
+        // Establecer una política de reintentos en mi petición Volley mediante el método setRetryPolicy
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_DEFAULT_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Access the RequestQueue through your singleton class.
+        VolleySingleton.getInstance(a).addToRequestQueue(request);
+    }
 
     public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> methodAcept) {
-        tramitesInserts = new JSONArray();
+        JSONArray tramitesInserts = new JSONArray();
         displayProgressBar(a, progressBar, tvProgressBar, "Obteniendo resoluciones...");
         ArrayList<Tramite> tramitesInsertar = tramiteControlador.extraerTodos(a);
         for (int i = 0; i < tramitesInsertar.size(); i++) {
@@ -86,8 +149,8 @@ public class ResolucionReclamoControlador {
                                 response.getJSONObject(i).getString("hora_h") + "'," +
                                 "0);"; //EN CERO AL PENDIENTE
                         db.execSQL(sql);
-                        db.close();
                     }
+                    db.close();
                 } else {
                     mostrarMensajeLog(a, "No existen resoluciones de tramites");
                 }
@@ -157,6 +220,7 @@ public class ResolucionReclamoControlador {
 
     @SuppressLint("SimpleDateFormat")
     public ArrayList<ResolucionReclamo> extraerTodosPorTramite(Activity a, Tramite tramite) {
+        TipoResolucionControlador tipoResolucionControlador = new TipoResolucionControlador();
         ArrayList<ResolucionReclamo> resolucionReclamos = new ArrayList<>();
         try {
             SimpleDateFormat format = new SimpleDateFormat(DATE_TIME);
@@ -172,6 +236,7 @@ public class ResolucionReclamoControlador {
                 resolucionReclamo.setTipoTramite(c.getString(0));
                 resolucionReclamo.setNumeroTramite(c.getInt(1));
                 resolucionReclamo.setCodigoResolucion(c.getString(2));
+                resolucionReclamo.setDescripcionResolucion(tipoResolucionControlador.extraer(a, c.getString(2)));
                 resolucionReclamo.setObservaciones(c.getString(3));
                 resolucionReclamo.setUsuario(c.getString(4));
                 resolucionReclamo.setFechaDesde(fechaDesde);
@@ -217,5 +282,19 @@ public class ResolucionReclamoControlador {
             mostrarMensaje(a, e.toString());
         }
         return resolucionReclamos;
+    }
+
+    private void actualizarPendiente(ResolucionReclamo resolucionReclamo, Activity a) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE GTres_rec" +
+                    " SET pendiente = 0" +
+                    " WHERE tpo_tram='" + resolucionReclamo.getTipoTramite() + "'" +
+                    " AND num_tram =" + resolucionReclamo.getNumeroTramite();
+            db.execSQL(sql);
+            db.close();
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error actualizarPendiente RRC " + e.toString());
+        }
     }
 }

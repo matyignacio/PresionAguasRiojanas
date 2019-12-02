@@ -106,4 +106,22 @@ public class TipoResolucionControlador {
         tipoResolucionSpinner.setLabelsResoluciones(labelsResoluciones);
         return tipoResolucionSpinner;
     }
+
+    public String extraer(Activity a, String resolucion) {
+        String descripcionResolucion = "";
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+            Cursor c = db.rawQuery("SELECT descripcion FROM GTresolucion " +
+                    "        WHERE resolucion ='" + resolucion + "'", null);
+            while (c.moveToNext()) {
+                descripcionResolucion = c.getString(0);
+            }
+            c.close();
+            db.close();
+            return descripcionResolucion;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error al extraer tipo de resolucion");
+            return null;
+        }
+    }
 }

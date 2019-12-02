@@ -25,6 +25,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".ui.reclamo.UbicacionReclamoActivity"
+            android:label="@string/title_activity_ubicacion_reclamo"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.reclamo.ResolucionesActivity"
             android:label="@string/title_activity_resoluciones"
             android:screenOrientation="portrait" />

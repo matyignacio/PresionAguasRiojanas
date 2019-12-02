@@ -117,8 +117,10 @@
     <string name="tv_progress_bar">SINCRONIZANDO</string>
     <string name="title_activity_tramites">Tramites</string>
     <string name="title_activity_reclamo">Reclamo</string>
+    <string name="title_activity_ubicacion_reclamo">Ubicacion de la unidad</string>
     <string name="title_activity_resoluciones">Resoluciones</string>
     <string name="title_activity_nueva_resolucion">Nueva Resolucion</string>
+    <string name="b_ver_en_el_mapa">Ver en el mapa</string>
     <string name="b_resolver">Resolver</string>
     <string name="b_enviar_resolucion">Enviar Resolucion</string>
 </resources>

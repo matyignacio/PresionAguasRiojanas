@@ -41,11 +41,7 @@ public class TramiteActivityControlador {
         TramiteControlador tramiteControlador = new TramiteControlador();
         tramites = tramiteControlador.extraerTodos(a);
         lockProgressBar(a, progressBar, tvProgressBar);
-//        if (tramites.size() > 0) {
         abrirActivity(a, TramitesActivity.class);
-//        } else {
-//            mostrarMensaje(a, "No hay tramites para mostrar");
-//        }
     }
 
     public void abrirReclamoActivity(Activity a, Tramite tramite) {
@@ -83,21 +79,27 @@ public class TramiteActivityControlador {
     }
 
     public void sincronizar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
-        tipoTramiteControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-            motivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                tipoResolucionControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                    resolucionMotivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                        reclamoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                            barrioControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                                tramiteControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                                    resolucionReclamoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
-                                        UsuarioControlador usuarioControlador = new UsuarioControlador();
-                                        if (LoginActivity.usuario.getBanderaModuloReclamo() == PRIMER_INICIO_MODULO) {
-                                            usuarioControlador.editarBanderaModuloReclamo(a, SEGUNDO_INICIO_MODULO);
-                                        }
-                                        usuarioControlador.editarBanderaSyncModuloReclamo(a, BANDERA_BAJA);
-                                        TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-                                        tramiteActivityControlador.abrirTramiteActivity(a, progressBar, tvProgressBar);
+        resolucionReclamoControlador.insertToMySQL(a, progressBar, tvProgressBar, () -> {
+            tramiteControlador.updateToMySQL(a, progressBar, tvProgressBar, () -> {
+                tipoTramiteControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                    motivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                        tipoResolucionControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                            resolucionMotivoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                reclamoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                    barrioControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                        tramiteControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                            resolucionReclamoControlador.syncMysqlToSqlite(a, progressBar, tvProgressBar, () -> {
+                                                UsuarioControlador usuarioControlador = new UsuarioControlador();
+                                                if (LoginActivity.usuario.getBanderaModuloReclamo() == PRIMER_INICIO_MODULO) {
+                                                    usuarioControlador.editarBanderaModuloReclamo(a, SEGUNDO_INICIO_MODULO);
+                                                }
+                                                usuarioControlador.editarBanderaSyncModuloReclamo(a, BANDERA_BAJA);
+                                                TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+                                                tramiteActivityControlador.abrirTramiteActivity(a, progressBar, tvProgressBar);
+                                                return null;
+                                            });
+                                            return null;
+                                        });
                                         return null;
                                     });
                                     return null;

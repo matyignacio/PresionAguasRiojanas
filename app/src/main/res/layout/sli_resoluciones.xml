@@ -34,7 +34,7 @@
                 style="@style/et_primary_mini"
                 android:layout_width="match_parent"
                 android:layout_marginTop="0dp"
-                android:gravity="center"
+                android:textAlignment="center"
                 android:text="@string/tv_presion_historial" />
         </LinearLayout>
     </LinearLayout>

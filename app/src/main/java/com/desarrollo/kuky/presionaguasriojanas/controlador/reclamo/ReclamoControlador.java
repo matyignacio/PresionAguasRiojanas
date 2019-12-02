@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_RECLAMO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_DEFAULT_TIMEOUT;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
@@ -59,7 +61,8 @@ public class ReclamoControlador {
                                 jsonArray.getJSONObject(i).getString("num_casa") + "','" +
                                 jsonArray.getJSONObject(i).getString("dat_complem") + "','" +
                                 jsonArray.getJSONObject(i).getString("cod_barrio") + "','" +
-                                jsonArray.getJSONObject(i).getString("descripcion") + "');";
+                                jsonArray.getJSONObject(i).getString("descripcion") + "','" +
+                                jsonArray.getJSONObject(i).getString("ubicacion") + "');";
                         db.execSQL(sql);
                     }
                 } catch (JSONException e) {
@@ -104,7 +107,7 @@ public class ReclamoControlador {
         Reclamo reclamo = new Reclamo();
         BarrioControlador barrioControlador = new BarrioControlador();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT unidad_sol,razon_sol,calle,numero,dat_complem,cod_barrio,descripcion " +
+        Cursor c = db.rawQuery("SELECT unidad_sol,razon_sol,calle,numero,dat_complem,cod_barrio,descripcion,ubicacion " +
                 "FROM GTreclamo " +
                 "WHERE tpo_tram like '" + tipoTramite + "' " +
                 "AND num_tram = " + numTramite, null);
@@ -118,9 +121,28 @@ public class ReclamoControlador {
             reclamo.setDatoComplementario(c.getString(4));
             reclamo.setBarrio(barrioControlador.extraer(a, c.getString(5)));
             reclamo.setDescripcion(c.getString(6));
+            reclamo.setUbicacion(c.getString(7));
         }
         c.close();
         db.close();
         return reclamo;
+    }
+
+    public int actualizarUbicacion(Reclamo reclamo, Activity a) {
+        int retorno = ERROR;
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            String sql = "UPDATE GTreclamo" +
+                    " SET ubicacion = '" + reclamo.getUbicacion() + "'" +
+                    " WHERE tpo_tram='" + reclamo.getTipoTramite().getTipo() + "'" +
+                    " AND num_tram =" + reclamo.getNumeroTramite();
+            db.execSQL(sql);
+            db.close();
+            mostrarMensaje(a, "Se actualizo la ubicacion del reclamo");
+            retorno = EXITOSO;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error actualizarUbicacion RC " + e.toString());
+        }
+        return retorno;
     }
 }

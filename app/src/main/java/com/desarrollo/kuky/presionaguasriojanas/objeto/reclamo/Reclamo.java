@@ -17,6 +17,7 @@ public class Reclamo { // tabla GTreclamo
     private int medidorAgua;
     private int medidorLuz;
     private int nis;
+    private String ubicacion;
 
     public Reclamo() {
     }
@@ -128,5 +129,13 @@ public class Reclamo { // tabla GTreclamo
 
     public void setNis(int nis) {
         this.nis = nis;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 }

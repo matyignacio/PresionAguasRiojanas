@@ -36,6 +36,7 @@ public class StringTablasReclamo {
             "  dat_complem varchar(240) DEFAULT ''," +
             "  cod_barrio char(3) DEFAULT ''," +
             "  descripcion varchar(255) DEFAULT ''," +
+            "  ubicacion varchar(50) DEFAULT ''," +
             "  PRIMARY KEY (tpo_tram,num_tram)" +
             ")";
 

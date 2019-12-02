@@ -6,6 +6,7 @@ public class ResolucionReclamo {
     private String tipoTramite;
     private int numeroTramite;
     private String codigoResolucion;
+    private String descripcionResolucion;
     private String observaciones;
     private String usuario;
     private Date fechaDesde;
@@ -35,6 +36,14 @@ public class ResolucionReclamo {
 
     public void setCodigoResolucion(String codigoResolucion) {
         this.codigoResolucion = codigoResolucion;
+    }
+
+    public String getDescripcionResolucion() {
+        return descripcionResolucion;
+    }
+
+    public void setDescripcionResolucion(String descripcionResolucion) {
+        this.descripcionResolucion = descripcionResolucion;
     }
 
     public String getObservaciones() {

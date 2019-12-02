@@ -63,7 +63,7 @@ public class lvaResolucionReclamo extends BaseAdapter {
         setPrimaryFontBold(context, tvFecha);
         setPrimaryFontBold(context, tvObservacion);
         /**************************/
-        tvResolucion.setText("Resolucion: " + resolucionReclamos.get(position).getCodigoResolucion());
+        tvResolucion.setText("Resolucion: " + resolucionReclamos.get(position).getDescripcionResolucion());
         // A esta conversion de fecha la copie de Util.convertirFecha()
         tvFecha.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(resolucionReclamos.get(position).getFechaDesde()));
         tvObservacion.setText(resolucionReclamos.get(position).getObservaciones());

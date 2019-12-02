@@ -43,7 +43,7 @@ public class lvaTramite extends BaseAdapter {
 
 
         // Declare Variables
-        TextView tvCliente, tvMotivo, tvDescripcion;
+        TextView tvCliente, tvMotivo, tvDescripcion, etTramite;
 
         //http://developer.android.com/intl/es/reference/android/view/LayoutInflater.html
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,15 +51,18 @@ public class lvaTramite extends BaseAdapter {
         View itemView = inflater.inflate(R.layout.sli_tramite, parent, false);
 
         // Locate the TextViews in listview_item.xml
+        etTramite = itemView.findViewById(R.id.etTramite);
         tvCliente = itemView.findViewById(R.id.tvCliente);
         tvMotivo = itemView.findViewById(R.id.tvMotivo);
         tvDescripcion = itemView.findViewById(R.id.tvDescripcion);
         // Capture position and set to the TextViews
         /** SETEAMOS LOS TYPEFACES*/
+        setPrimaryFontBold(context, etTramite);
         setPrimaryFontBold(context, tvCliente);
         setPrimaryFontBold(context, tvMotivo);
         setPrimaryFontBold(context, tvDescripcion);
         /**************************/
+        etTramite.setText("Tramite: " + tramites.get(position).getTipoTramite().getTipo() + " - " + tramites.get(position).getReclamo().getNumeroTramite());
         tvCliente.setText(tramites.get(position).getReclamo().getRazonSocial());
         tvMotivo.setText(tramites.get(position).getMotivo().getDescripcion());
         tvDescripcion.setText(tramites.get(position).getDescripcion());

@@ -125,9 +125,17 @@
                 android:layout_marginTop="0dp" />
 
             <Button
-                android:id="@+id/bResolver"
+                android:id="@+id/bVerEnElMapa"
                 style="@style/b_primary"
                 android:layout_below="@id/etDescripcion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="@string/b_ver_en_el_mapa" />
+
+            <Button
+                android:id="@+id/bResolver"
+                style="@style/b_primary"
+                android:layout_below="@id/bVerEnElMapa"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
                 android:text="@string/b_resolver" />
