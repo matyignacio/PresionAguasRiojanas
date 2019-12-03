@@ -56,8 +56,10 @@ public class ReclamoActivity extends AppCompatActivity {
         etDescripcion.setText(tramite.getReclamo().getDescripcion());
         bVerEnElMapa.setOnClickListener(v -> {
             if (!tramite.getReclamo().getUbicacion().equals("null")) {
+                // SI EL TRAMITE TIENE UBICACION, MUESTRA EL PUNTO EN EL MAPA
                 abrirActivity(this, UbicacionReclamoActivity.class);
             } else {
+                // SINO, NOS MUESTRA UN MENSAJE QUE NO SE PUEDE MOSTRAR EL MAPA
                 mostrarMensaje(this, "Este tramite aun no tiene asignada una ubicacion");
             }
         });

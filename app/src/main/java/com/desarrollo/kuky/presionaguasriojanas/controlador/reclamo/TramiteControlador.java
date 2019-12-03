@@ -34,6 +34,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_RECLAMO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_DEFAULT_TIMEOUT;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_TRAMITE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
@@ -146,7 +147,7 @@ public class TramiteControlador {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("tpo_tram", "002");
+                params.put("tpo_tram", TIPO_TRAMITE);
                 return params;
             }
         };

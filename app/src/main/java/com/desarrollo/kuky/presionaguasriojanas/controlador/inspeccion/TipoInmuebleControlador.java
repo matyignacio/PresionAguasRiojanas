@@ -34,6 +34,7 @@ public class TipoInmuebleControlador {
     public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Recibiendo tipos de inmuebles...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "tipo_inmueble_select.php", response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
             if (!response.equals("ERROR_ARRAY_VACIO")) {
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
@@ -59,7 +60,6 @@ public class TipoInmuebleControlador {
             } else {
                 mostrarMensaje(a, "Error en el checkTipoInmueble.");
             }
-            lockProgressBar(a, progressBar, tvProgressBar);
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
             String problema = error.toString() + " en " + this.getClass().getSimpleName();

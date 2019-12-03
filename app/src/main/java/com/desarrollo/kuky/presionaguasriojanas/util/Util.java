@@ -69,7 +69,7 @@ public class Util {
     public static final int MAPA_RECORRIDO = 1;
     public static final int MAX_LENGHT_MEDIDORES = 8;
     private static final int MAXIMA_MEDICION = 100;
-    public static final int MY_DEFAULT_TIMEOUT = 30000;
+    public static final int MY_DEFAULT_TIMEOUT = 60000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final int PRIMER_INICIO_MODULO = 0;
     public static final int REQUEST_CHECK_SETTINGS = 100;
@@ -93,6 +93,7 @@ public class Util {
     public static final String SPINNER_TIPO_UNIDAD = "tipo_unidad";
     public static final String SPINNER_TIPO_UNIDAD2 = "tipo_unidad2";
     public static final String TIPO_MAPA = "id_tipo_punto";
+    public static final String TIPO_TRAMITE = "002";
     public static final String ULTIMA_LATITUD = "latitud";
     public static final String ULTIMA_LONGITUD = "longitud";
     public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";

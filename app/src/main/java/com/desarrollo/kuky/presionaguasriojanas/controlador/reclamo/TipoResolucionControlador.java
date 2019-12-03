@@ -100,7 +100,7 @@ public class TipoResolucionControlador {
         db.close();
         List<String> labelsResoluciones = new ArrayList<>();
         for (int i = 0; i < resoluciones.size(); i++) {
-            labelsResoluciones.add(resoluciones.get(i).getDescripcion());
+            labelsResoluciones.add(resoluciones.get(i).getResolucion() + " - " + resoluciones.get(i).getDescripcion());
         }
         tipoResolucionSpinner.setResoluciones(resoluciones);
         tipoResolucionSpinner.setLabelsResoluciones(labelsResoluciones);

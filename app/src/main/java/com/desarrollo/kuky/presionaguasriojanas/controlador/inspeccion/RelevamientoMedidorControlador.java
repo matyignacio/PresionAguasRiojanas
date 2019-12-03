@@ -96,6 +96,7 @@ public class RelevamientoMedidorControlador {
     public void syncMysqlToSqlite(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Recibiendo Relevamiento Medidores...");
         StringRequest request = new StringRequest(Request.Method.POST, VOLLEY_HOST + MODULO_INSPECCION + "relevamiento_medidores_select.php", response -> {
+            lockProgressBar(a, progressBar, tvProgressBar);
             if (!response.equals("ERROR_ARRAY_VACIO")) {
                 SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
                 /* LIMPIAMOS LA TABLA */
@@ -125,7 +126,6 @@ public class RelevamientoMedidorControlador {
             } catch (Exception e) {
                 mostrarMensajeLog(a, e.toString());
             }
-            lockProgressBar(a, progressBar, tvProgressBar);
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
             String problema = error.toString() + " en " + this.getClass().getSimpleName();

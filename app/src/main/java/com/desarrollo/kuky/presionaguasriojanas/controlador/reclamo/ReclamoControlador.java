@@ -1,6 +1,7 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -29,6 +30,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ERROR;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_RECLAMO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_DEFAULT_TIMEOUT;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_TRAMITE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
@@ -51,19 +53,18 @@ public class ReclamoControlador {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        String sql = "INSERT INTO `GTreclamo` " +
-                                " VALUES " +
-                                "('" + jsonArray.getJSONObject(i).getString("tpo_tram") + "','" +
-                                jsonArray.getJSONObject(i).getString("num_tram") + "','" +
-                                jsonArray.getJSONObject(i).getString("unidad_sol") + "','" +
-                                jsonArray.getJSONObject(i).getString("razon_sol") + "','" +
-                                jsonArray.getJSONObject(i).getString("calle") + "','" +
-                                jsonArray.getJSONObject(i).getString("num_casa") + "','" +
-                                jsonArray.getJSONObject(i).getString("dat_complem") + "','" +
-                                jsonArray.getJSONObject(i).getString("cod_barrio") + "','" +
-                                jsonArray.getJSONObject(i).getString("descripcion") + "','" +
-                                jsonArray.getJSONObject(i).getString("ubicacion") + "');";
-                        db.execSQL(sql);
+                        ContentValues values = new ContentValues();
+                        values.put("tpo_tram", jsonArray.getJSONObject(i).getString("tpo_tram"));
+                        values.put("num_tram", jsonArray.getJSONObject(i).getString("num_tram"));
+                        values.put("unidad_sol", jsonArray.getJSONObject(i).getString("unidad_sol"));
+                        values.put("razon_sol", jsonArray.getJSONObject(i).getString("razon_sol"));
+                        values.put("calle", jsonArray.getJSONObject(i).getString("calle"));
+                        values.put("numero", jsonArray.getJSONObject(i).getString("num_casa"));
+                        values.put("dat_complem", jsonArray.getJSONObject(i).getString("dat_complem"));
+                        values.put("cod_barrio", jsonArray.getJSONObject(i).getString("cod_barrio"));
+                        values.put("descripcion", jsonArray.getJSONObject(i).getString("descripcion"));
+                        values.put("ubicacion", jsonArray.getJSONObject(i).getString("ubicacion"));
+                        db.insertOrThrow("GTreclamo", null, values);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -89,7 +90,7 @@ public class ReclamoControlador {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("tpo_tram", "002");
+                params.put("tpo_tram", TIPO_TRAMITE);
                 return params;
             }
         };
@@ -129,6 +130,7 @@ public class ReclamoControlador {
     }
 
     public int actualizarUbicacion(Reclamo reclamo, Activity a) {
+        // A la nueva ubicacion la sincronizo con MySQL en el metodo updateToMySQL de TramiteControlador
         int retorno = ERROR;
         try {
             SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();

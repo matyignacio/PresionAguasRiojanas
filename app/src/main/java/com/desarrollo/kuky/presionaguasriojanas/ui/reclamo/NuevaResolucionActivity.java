@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo.ReclamoControlador;
@@ -48,6 +49,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cargarSpinner;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFont;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
@@ -65,6 +67,7 @@ public class NuevaResolucionActivity extends AppCompatActivity {
 
     public static TipoResolucion.TipoResolucionSpinner tipoResolucionSpinner = new TipoResolucion().new TipoResolucionSpinner();
     Spinner sTipoResolucion;
+    Switch swActualizarUbicacion;
     EditText etObservaciones;
     private ArrayList<EditText> inputs = new ArrayList<>();
     Button bEnviarResolucion;
@@ -81,12 +84,19 @@ public class NuevaResolucionActivity extends AppCompatActivity {
                 () -> null,
                 () -> null);
         etObservaciones = findViewById(R.id.etObservaciones);
+        swActualizarUbicacion = findViewById(R.id.swActualizarUbicacion);
         bEnviarResolucion = findViewById(R.id.bEnviarResolucion);
         /** SETEAMOS LOS TYPEFACES*/
-        setPrimaryFontBold(this, etObservaciones);
+        setPrimaryFont(this, etObservaciones);
+        setPrimaryFont(this, swActualizarUbicacion);
         setPrimaryFontBold(this, bEnviarResolucion);
         /**************************/
         inputs.add(etObservaciones);
+        if (tramite.getReclamo().getUbicacion().equals("null")) {
+            // SI EL PUNTO NO TIENE UBICACION PREVIA, OBLIGA AL USUARIO A ACTUALIZAR LA UBICACION
+            swActualizarUbicacion.setChecked(true);
+            swActualizarUbicacion.setEnabled(false);
+        }
         request_permissions();
     }
 
@@ -102,7 +112,6 @@ public class NuevaResolucionActivity extends AppCompatActivity {
         TramiteControlador tramiteControlador = new TramiteControlador();
         ResolucionReclamo resolucionReclamo = new ResolucionReclamo();
         ResolucionReclamoControlador resolucionReclamoControlador = new ResolucionReclamoControlador();
-        tramite.getReclamo().setUbicacion(mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
         resolucionReclamo.setTipoTramite(tramite.getTipoTramite().getTipo());
         resolucionReclamo.setNumeroTramite(tramite.getReclamo().getNumeroTramite());
         resolucionReclamo.setCodigoResolucion(tipoResolucionSpinner.getResoluciones().get(sTipoResolucion.getSelectedItemPosition()).getResolucion());
@@ -110,7 +119,13 @@ public class NuevaResolucionActivity extends AppCompatActivity {
         resolucionReclamo.setUsuario(LoginActivity.usuario.getId());
         if (resolucionReclamoControlador.insertar(this, resolucionReclamo) == EXITOSO) {
             if (tramiteControlador.actualizarEstado(tramite, this) == EXITOSO) {
-                if (reclamoControlador.actualizarUbicacion(tramite.getReclamo(), this) == EXITOSO) {
+                if (swActualizarUbicacion.isChecked()) {
+                    // SI EL SWITCH ESTA EN ON, ACTUALIZA LA UBICACION.
+                    tramite.getReclamo().setUbicacion(mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
+                    if (reclamoControlador.actualizarUbicacion(tramite.getReclamo(), this) == EXITOSO) {
+                        abrirActivity(this, TramitesActivity.class);
+                    }
+                } else {
                     abrirActivity(this, TramitesActivity.class);
                 }
             }
