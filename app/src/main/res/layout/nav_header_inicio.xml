@@ -49,7 +49,8 @@
             android:layout_alignBaseline="@id/ivUsuario"
             android:layout_gravity="center_vertical"
             android:layout_toEndOf="@id/ivUsuario"
-            android:text="@string/nav_header_subtitle" />
+            android:text="@string/nav_header_subtitle"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 

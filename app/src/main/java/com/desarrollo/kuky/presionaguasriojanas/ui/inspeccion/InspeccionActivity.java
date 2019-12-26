@@ -54,6 +54,7 @@ public class InspeccionActivity extends AppCompatActivity
         primerInicio();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setItemIconTintList(null);
         View headerView = navigationView.getHeaderView(0);
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         subTitle.setText(LoginActivity.usuario.getNombre());
@@ -69,7 +70,15 @@ public class InspeccionActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        abrirActivity(this, InicioActivity.class);
+        /* LO QUE HACE CUANDO VUELVA*/
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                abrirActivity(this, InicioActivity.class);
+            }
+        }
     }
 
     @Override
@@ -77,14 +86,19 @@ public class InspeccionActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.action_sync) {
-            Util.showDialog(this,
-                    R.layout.dialog_sincronizar,
-                    "sincronizar",
+            Util.createCustomDialog(this, "¿Esta seguro de sincronizar?",
+                    "",
+                    "Sincronizar",
+                    "Cancelar",
+                    // ACEPTAR
                     () -> {
                         sincronizar();
                         return null;
-                    }
-            );
+                    },
+                    // CANCELAR
+                    () -> {
+                        return null;
+                    }).show();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

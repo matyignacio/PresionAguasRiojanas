@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/action_add"
-            android:icon="@drawable/ic_add_black_24dp"
+            android:icon="@drawable/ic_add_white_24dp"
             android:title="@string/b_add_punto_presion" />
         <item
             android:id="@+id/action_sync"

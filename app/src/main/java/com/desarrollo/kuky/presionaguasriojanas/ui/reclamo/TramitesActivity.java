@@ -50,6 +50,7 @@ public class TramitesActivity extends AppCompatActivity
         /////////////////////////////////////////////////////////////
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setItemIconTintList(null);
         View headerView = navigationView.getHeaderView(0);
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         subTitle.setText(LoginActivity.usuario.getNombre());
@@ -96,14 +97,19 @@ public class TramitesActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_sync) {
-            Util.showDialog(this,
-                    R.layout.dialog_sincronizar,
-                    "sincronizar",
+            Util.createCustomDialog(this, "¿Esta seguro de sincronizar?",
+                    "",
+                    "Sincronizar",
+                    "Cancelar",
+                    // ACEPTAR
                     () -> {
                         new TramiteActivityControlador().sincronizar(this, progressBar, tvProgressBar);
                         return null;
-                    }
-            );
+                    },
+                    // CANCELAR
+                    () -> {
+                        return null;
+                    }).show();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

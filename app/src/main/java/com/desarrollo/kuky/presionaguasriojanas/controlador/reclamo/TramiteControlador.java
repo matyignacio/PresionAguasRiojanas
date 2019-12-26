@@ -1,6 +1,7 @@
 package com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -44,6 +45,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class TramiteControlador {
+    private static final String TAG = TramiteControlador.class.getSimpleName();
     private ArrayList<Tramite> tramites;
     private JSONArray tramitesUpdate;
 
@@ -68,7 +70,7 @@ public class TramiteControlador {
             mostrarMensajeLog(a, response.toString());
             try {
                 if (response.getJSONObject(0).getString("status").equals("OK")) {
-                    Log.d("RESPUESTASERVER", "OK");
+                    Log.d("RESPUESTASERVER", "OK " + TAG);
                     // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
                     for (int i = 0; i < tramites.size(); i++) {
                         actualizarPendiente(tramites.get(i), a);
@@ -88,7 +90,7 @@ public class TramiteControlador {
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            String problema = error.toString() + " en " + this.getClass().getSimpleName();
+            String problema = error.toString() + " en " + TAG;
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
@@ -114,14 +116,13 @@ public class TramiteControlador {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        String sql = "INSERT INTO `GTtramite` " +
-                                " VALUES " +
-                                "('" + jsonArray.getJSONObject(i).getString("tpo_tram") + "','" +
-                                jsonArray.getJSONObject(i).getString("num_tram") + "','" +
-                                jsonArray.getJSONObject(i).getString("descripcion") + "','" +
-                                jsonArray.getJSONObject(i).getString("motivo") + "'," +
-                                "0);"; //EN CERO AL PENDIENTE
-                        db.execSQL(sql);
+                        ContentValues values = new ContentValues();
+                        values.put("tpo_tram", jsonArray.getJSONObject(i).getString("tpo_tram"));
+                        values.put("num_tram", jsonArray.getJSONObject(i).getString("num_tram"));
+                        values.put("descripcion", jsonArray.getJSONObject(i).getString("descripcion"));
+                        values.put("motivo", jsonArray.getJSONObject(i).getString("motivo"));
+                        values.put("pendiente", 0);
+                        db.insertOrThrow("GTtramite", null, values);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

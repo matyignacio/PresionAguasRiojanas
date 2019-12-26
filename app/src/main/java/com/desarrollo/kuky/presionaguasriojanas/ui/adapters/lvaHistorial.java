@@ -63,8 +63,8 @@ public class lvaHistorial extends BaseAdapter {
         tvFecha.setText(convertirFecha(historialPuntos.get(position).getFecha()));
         tvPresion.setText(historialPuntos.get(position).getPresion().toString() + " mca");
         if (historialPuntos.get(position).getPresion() > ESTANDAR_MEDICION) {
-            tvFecha.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
-            tvPresion.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+            tvFecha.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            tvPresion.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else {
             tvFecha.setTextColor(context.getResources().getColor(R.color.marcador_rojo));
             tvPresion.setTextColor(context.getResources().getColor(R.color.marcador_rojo));

@@ -7,23 +7,32 @@
     tools:context=".ui.InicioActivity"
     tools:showIn="@layout/app_bar_inicio">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp">
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/logo" />
 
-        <TableRow
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivLogo"
+        android:layout_marginTop="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/bModuloPresion"
                 style="@style/b_primary"
                 android:layout_height="80dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
-                android:width="140dp"
+                android:layout_centerHorizontal="true"
                 android:text="@string/bModuloPresion"
                 android:visibility="invisible" />
 
@@ -31,38 +40,24 @@
                 android:id="@+id/bModuloInspeccion"
                 style="@style/b_primary"
                 android:layout_height="80dp"
+                android:layout_below="@id/bModuloPresion"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:width="140dp"
                 android:text="@string/bModuloInspeccion"
                 android:visibility="invisible" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
 
             <Button
                 android:id="@+id/bModuloReclamo"
                 style="@style/b_primary"
                 android:layout_height="80dp"
+                android:layout_below="@id/bModuloInspeccion"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
-                android:width="140dp"
                 android:text="@string/bModuloReclamo"
                 android:visibility="invisible" />
+        </RelativeLayout>
+    </ScrollView>
 
-            <Button
-                android:id="@+id/bModulo"
-                style="@style/b_primary"
-                android:layout_height="80dp"
-                android:layout_marginTop="15dp"
-                android:width="140dp"
-                android:text="@string/bModuloInspeccion"
-                android:visibility="invisible" />
-
-        </TableRow>
-    </TableLayout>
 
     <RelativeLayout
         android:id="@+id/rlProgressBar"

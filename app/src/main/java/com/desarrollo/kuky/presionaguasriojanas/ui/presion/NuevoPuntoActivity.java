@@ -202,14 +202,19 @@ public class NuevoPuntoActivity extends AppCompatActivity {
         bEnviarNuevoPunto.setOnClickListener(view -> {
             if (mCurrentLocation != null) {
                 if (validarCampos(NuevoPuntoActivity.this, inputs) == EXITOSO) {
-                    Util.showDialog(NuevoPuntoActivity.this,
-                            R.layout.dialog_guardar,
+                    Util.createCustomDialog(this, "¿Confirma que desea guardar?",
+                            "",
                             "Si, Guardar",
+                            "Cancelar",
+                            // ACEPTAR
                             () -> {
                                 insertarPunto();
                                 return null;
-                            }
-                    );
+                            },
+                            // CANCELAR
+                            () -> {
+                                return null;
+                            }).show();
                 } /**else {
                  ESTE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL
                  }*/

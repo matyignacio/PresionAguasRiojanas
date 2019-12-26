@@ -37,7 +37,7 @@
                     android:layout_toEndOf="@id/imageView1"
                     android:fontFamily="casual"
                     android:text="@string/tv_significado_amarillo"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
             </RelativeLayout>
 
@@ -66,7 +66,7 @@
                     android:layout_toEndOf="@id/imageView2"
                     android:fontFamily="casual"
                     android:text="@string/tv_significado_verde"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
             </RelativeLayout>
 
@@ -94,7 +94,7 @@
                     android:layout_toEndOf="@id/imageView3"
                     android:fontFamily="casual"
                     android:text="@string/tv_sifnificado_rojo"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
             </RelativeLayout>
 

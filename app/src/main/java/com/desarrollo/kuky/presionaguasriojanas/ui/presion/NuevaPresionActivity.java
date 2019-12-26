@@ -172,14 +172,19 @@ public class NuevaPresionActivity extends AppCompatActivity {
         bEnviarMedicion.setOnClickListener(view -> {
             if (mCurrentLocation != null) {
                 if (validarCampos(NuevaPresionActivity.this, inputs) == EXITOSO) {
-                    Util.showDialog(NuevaPresionActivity.this,
-                            R.layout.dialog_guardar,
+                    Util.createCustomDialog(this, "¿Confirma que desea guardar?",
+                            "",
                             "Si, Guardar",
+                            "Cancelar",
+                            // ACEPTAR
                             () -> {
                                 insertarMedicion();
                                 return null;
-                            }
-                    );
+                            },
+                            // CANCELAR
+                            () -> {
+                                return null;
+                            }).show();
                 } /**else {
                  ESTE ELSE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL
                  }*/

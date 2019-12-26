@@ -6,7 +6,7 @@
                 <shape>
                     <solid android:color="@color/backgroundColor" />
 
-                    <stroke android:width="3dp" android:color="@color/textColorPrimary" />
+                    <stroke android:width="3dp" android:color="@color/colorPrimary" />
 
                     <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp" />
 
@@ -15,7 +15,7 @@
             </item>
             <item>
 
-                <bitmap android:gravity="top|right" android:src="@drawable/ic_arrow_drop_down_circle"></bitmap>
+                <bitmap android:gravity="top|right" android:src="@drawable/arrow_drop_down_circle"></bitmap>
 
             </item>
         </layer-list>

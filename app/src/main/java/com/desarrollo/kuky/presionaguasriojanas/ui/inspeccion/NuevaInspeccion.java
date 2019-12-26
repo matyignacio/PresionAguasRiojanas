@@ -296,19 +296,18 @@ public class NuevaInspeccion extends AppCompatActivity {
             default:
                 posicionFormulario++;
                 bSiguienteFragmento.setVisibility(View.INVISIBLE);
-                Util.showDialog(this,
-                        R.layout.dialog_guardar,
+                Util.createCustomDialog(this, "¿Confirma que desea guardar?",
+                        "",
                         "Si, Guardar",
+                        "Cancelar",
+                        // ACEPTAR
                         () -> {
-
                             return null;
                         },
+                        // CANCELAR
                         () -> {
-                            NuevaInspeccion.posicionFormulario--;
-                            bSiguienteFragmento.setVisibility(View.VISIBLE);
                             return null;
-                        }
-                );
+                        }).show();
                 break;
         }
         return posicionFormulario;

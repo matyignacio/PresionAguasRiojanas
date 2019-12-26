@@ -123,9 +123,13 @@ public class NuevaResolucionActivity extends AppCompatActivity {
                     // SI EL SWITCH ESTA EN ON, ACTUALIZA LA UBICACION.
                     tramite.getReclamo().setUbicacion(mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
                     if (reclamoControlador.actualizarUbicacion(tramite.getReclamo(), this) == EXITOSO) {
+                        // Y DETENEMOS EL USO DEL GPS
+                        stopLocationUpdates();
                         abrirActivity(this, TramitesActivity.class);
                     }
                 } else {
+                    // Y DETENEMOS EL USO DEL GPS
+                    stopLocationUpdates();
                     abrirActivity(this, TramitesActivity.class);
                 }
             }
@@ -185,14 +189,19 @@ public class NuevaResolucionActivity extends AppCompatActivity {
         bEnviarResolucion.setOnClickListener(v -> {
             if (mCurrentLocation != null) {
                 if (validarCampos(this, inputs) == EXITOSO) {
-                    Util.showDialog(this,
-                            R.layout.dialog_guardar,
+                    Util.createCustomDialog(this, "¿Confirma que desea guardar?",
+                            "",
                             "Si, Guardar",
+                            "Cancelar",
+                            // ACEPTAR
                             () -> {
                                 insertarResolucion();
                                 return null;
-                            }
-                    );
+                            },
+                            // CANCELAR
+                            () -> {
+                                return null;
+                            }).show();
                 }
             }/**else {
              ESTE NO MUESTRA NINGUN MENSAJE, PORQUE LO HACE EL METODO GENERICO EN UTIL

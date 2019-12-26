@@ -106,15 +106,19 @@ public class RelevamientoActivity extends AppCompatActivity {
         bSiguienteFragmento.setOnClickListener(v -> posicionFormulario = siguienteFragmento(this, R.id.LLRelevamiento, posicionFormulario));
         bVolver.setOnClickListener(v -> posicionFormulario = volverFragmento(this, R.id.LLRelevamiento, posicionFormulario));
         bGuardarRelevamiento.setOnClickListener(v -> {
-            Util.showDialog(this,
-                    R.layout.dialog_guardar,
+            Util.createCustomDialog(this, "¿Confirma que desea guardar?",
+                    "",
                     "Si, Guardar",
+                    "Cancelar",
+                    // ACEPTAR
                     () -> {
                         insertar();
                         return null;
                     },
-                    () -> null
-            );
+                    // CANCELAR
+                    () -> {
+                        return null;
+                    }).show();
         });
     }
 
@@ -305,19 +309,19 @@ public class RelevamientoActivity extends AppCompatActivity {
             default:
                 posicionFormulario++;
                 bSiguienteFragmento.setVisibility(View.INVISIBLE);
-                Util.showDialog(this,
-                        R.layout.dialog_guardar,
+                Util.createCustomDialog(this, "¿Confirma que desea guardar?",
+                        "",
                         "Si, Guardar",
+                        "Cancelar",
+                        // ACEPTAR
                         () -> {
                             insertar();
                             return null;
                         },
+                        // CANCELAR
                         () -> {
-                            RelevamientoActivity.posicionFormulario--;
-                            bSiguienteFragmento.setVisibility(View.VISIBLE);
                             return null;
-                        }
-                );
+                        }).show();
                 break;
         }
         return posicionFormulario;

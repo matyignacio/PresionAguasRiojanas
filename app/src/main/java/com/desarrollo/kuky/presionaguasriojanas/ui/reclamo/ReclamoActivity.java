@@ -63,21 +63,23 @@ public class ReclamoActivity extends AppCompatActivity {
                 mostrarMensaje(this, "Este tramite aun no tiene asignada una ubicacion");
             }
         });
-        bResolver.setOnClickListener(v -> Util.showDialog(this,
-                R.layout.dialog_resoluciones,
-                "Ver resoluciones",
-                "Nueva resolucion",
-                () -> {
-                    TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-                    tramiteActivityControlador.abrirResolucionesActivity(this, tramite);
-                    return null;
-                },
-                () -> {
-                    TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-                    tramiteActivityControlador.abrirResolucionActivity(this, tramite.getMotivo().getMotivo());
-                    return null;
-                }
-        ));
+        bResolver.setOnClickListener(v ->
+                Util.createCustomDialog(this, "Elija una opcion",
+                        "",
+                        "Nueva resolucion",
+                        "Ver resoluciones",
+                        // ACEPTAR
+                        () -> {
+                            TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+                            tramiteActivityControlador.abrirResolucionActivity(this, tramite.getMotivo().getMotivo());
+                            return null;
+                        },
+                        // CANCELAR
+                        () -> {
+                            TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
+                            tramiteActivityControlador.abrirResolucionesActivity(this, tramite);
+                            return null;
+                        }).show());
     }
 
     @Override

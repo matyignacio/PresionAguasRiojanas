@@ -57,6 +57,8 @@ public class UsuarioControlador {
                     LoginActivity.usuario.setBanderaSyncModuloPresion(0);
                     LoginActivity.usuario.setBanderaModuloInspeccion(0);
                     LoginActivity.usuario.setBanderaSyncModuloInspeccion(0);
+                    LoginActivity.usuario.setBanderaModuloReclamo(0);
+                    LoginActivity.usuario.setBanderaSyncModuloReclamo(0);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +48,8 @@ public class Util {
     /**
      * CONEXION
      ********************************************/
-    public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
+//    public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
+    public static final String VOLLEY_HOST = "http://volley.aguasriojanas.com.ar/presionaguas/";
     public static final String MODULO_PRESION = "presion/";
     public static final String MODULO_INSPECCION = "inspeccion/";
     public static final String MODULO_RECLAMO = "reclamo/";
@@ -237,7 +240,6 @@ public class Util {
         bt.setTypeface(TF);
     }
 
-
     public static void setPreference(Context c, String nombreDato, int dato) {
         SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -262,86 +264,52 @@ public class Util {
         return settings.getString(nombreDato, defaultValue);
     }
 
-    public static void showDialog(final Activity a, int dialog, String mensajeSI, Callable<Void> methodParam) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(mensajeSI, (dialog1, id) -> {
-                    try {
-                        methodParam.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                })
-                .setNegativeButton("Cancelar", (dialog2, id) -> dialog2.cancel());
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    public static void showDialog(final Activity a, int dialog, String mensajeSI, Callable<Void> methodAcept, Callable<Void> methodCancel) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(mensajeSI, (dialog1, id) -> {
+    public static AlertDialog createCustomDialog(Activity a,
+                                                 String titulo, String cuerpo,
+                                                 String mensajeSi, String mensajeNo,
+                                                 Callable<Void> methodAcept, Callable<Void> methodCancel) {
+        final AlertDialog alertDialog;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(a);
+        // Get the layout inflater
+        LayoutInflater inflater = a.getLayoutInflater();
+        // Inflar y establecer el layout para el dialogo
+        // Pasar nulo como vista principal porque va en el diseño del diálogo
+        View v = inflater.inflate(R.layout.custom_dialog, null);
+        //builder.setView(inflater.inflate(R.layout.dialog_signin, null))
+        TextView tvTitulo = v.findViewById(R.id.tvTitulo);
+        TextView tvCuerpo = v.findViewById(R.id.tvCuerpo);
+        Button bAceptar = v.findViewById(R.id.bAceptar);
+        Button bCancelar = v.findViewById(R.id.bCancelar);
+        tvTitulo.setText(titulo);
+        tvCuerpo.setText(cuerpo);
+        bAceptar.setText(mensajeSi);
+        bCancelar.setText(mensajeNo);
+        builder.setView(v);
+        alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // Add action buttons
+        bAceptar.setOnClickListener(
+                v12 -> {
+                    // Aceptar
                     try {
                         methodAcept.call();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                })
-                .setNegativeButton("Cancelar", (dialog2, id) -> {
-
+                    alertDialog.dismiss();
+                }
+        );
+        bCancelar.setOnClickListener(
+                v1 -> {
                     try {
                         methodCancel.call();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    dialog2.cancel();
-                });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    public static void showDialog(final Activity a, int dialog, String mensajeUno, String mensajeDos, Callable<Void> methodAcept, Callable<Void> methodCancel) {
-        // get prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(a);
-        View promptView = layoutInflater.inflate(dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(a);
-        alertDialogBuilder.setView(promptView);
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(mensajeUno, (dialog1, id) -> {
-                    try {
-                        methodAcept.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                })
-                .setNegativeButton(mensajeDos, (dialog2, id) -> {
-
-                    try {
-                        methodCancel.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    dialog2.cancel();
-                });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+                    alertDialog.dismiss();
+                }
+        );
+        return alertDialog;
     }
 
     public static void showStandarDialog(final Activity a,
@@ -373,7 +341,7 @@ public class Util {
                                      Callable<Void> methodCancel) {
         spinner.setBackgroundResource(R.drawable.sp_redondo);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(a,
-                android.R.layout.simple_spinner_item, labels);
+                R.layout.spinner_item, labels);
         spinnerAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
@@ -424,7 +392,8 @@ public class Util {
         return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
     }
 
-    public static void progressBarVisibility(ProgressBar progressBar, TextView tvProgressBar, Boolean visible) {
+    public static void progressBarVisibility(ProgressBar progressBar, TextView
+            tvProgressBar, Boolean visible) {
         if (visible) {
             progressBar.setVisibility(View.VISIBLE);
             tvProgressBar.setVisibility(View.VISIBLE);
@@ -443,14 +412,16 @@ public class Util {
         }
     }
 
-    public static void displayProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar, String mensajeTV) {
+    public static void displayProgressBar(Activity a, ProgressBar progressBar, TextView
+            tvProgressBar, String mensajeTV) {
         setEnabledActivity(a, false);
         ocultarTeclado(a, progressBar);
         progressBarVisibility(progressBar, tvProgressBar, true);
         tvProgressBar.setText(mensajeTV);
     }
 
-    public static void lockProgressBar(Activity a, ProgressBar progressBar, TextView tvProgressBar) {
+    public static void lockProgressBar(Activity a, ProgressBar progressBar, TextView
+            tvProgressBar) {
         setEnabledActivity(a, true);
         progressBarVisibility(progressBar, tvProgressBar, false);
     }

@@ -88,6 +88,7 @@ public class MapActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setItemIconTintList(null);
         View headerView = navigationView.getHeaderView(0);
         subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         setNombreUsuario();
@@ -126,14 +127,19 @@ public class MapActivity extends AppCompatActivity
         } else if (id == R.id.ayuda_colores) {
             abrirActivity(MapActivity.this, PaletaColoresActivity.class);
         } else if (id == R.id.action_sync) {
-            Util.showDialog(MapActivity.this,
-                    R.layout.dialog_sincronizar,
-                    "sincronizar",
+            Util.createCustomDialog(this, "¿Esta seguro de sincronizar?",
+                    "",
+                    "Sincronizar",
+                    "Cancelar",
+                    // ACEPTAR
                     () -> {
                         sincronizar();
                         return null;
-                    }
-            );
+                    },
+                    // CANCELAR
+                    () -> {
+                        return null;
+                    }).show();
         } else if (id == R.id.action_add) {
             abrirActivity(MapActivity.this, NuevoPuntoActivity.class);
         } else if (id == R.id.set_circuito) {

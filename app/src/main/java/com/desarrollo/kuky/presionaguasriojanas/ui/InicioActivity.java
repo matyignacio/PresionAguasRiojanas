@@ -28,6 +28,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontB
 
 public class InicioActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = InicioActivity.class.getSimpleName();
     Button bModuloPresion;
     Button bModuloInspeccion;
     Button bModuloReclamo;
@@ -36,6 +37,7 @@ public class InicioActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
         progressBar = findViewById(R.id.progressBar);
@@ -71,6 +73,7 @@ public class InicioActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.setItemIconTintList(null);
         View headerView = navigationView.getHeaderView(0);
         TextView subTitle = headerView.findViewById(R.id.tvUsuarioNavBar);
         subTitle.setText(LoginActivity.usuario.getNombre());
@@ -95,26 +98,37 @@ public class InicioActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_sign_out) {
-            Util.showDialog(this,
-                    R.layout.dialog_cerrar_sesion,
+            Util.createCustomDialog(this, "¿Esta seguro que desea cerrar sesion?",
+                    "Recuerde que para volver a iniciar sesion debe estar en la misma red del servidor.",
                     "Si, cerrar",
+                    "Cancelar",
+                    // ACEPTAR
                     () -> {
                         if (LoginActivity.usuario.getBanderaSyncModuloPresion() == EXITOSO) {
-                            Util.showDialog(this,
-                                    R.layout.dialog_debe_sincronizar,
-                                    "sincronizar ahora",
+                            Util.createCustomDialog(this, "Debe sincronizar para poder cerrar sesion, desea hacerlo ahora?",
+                                    "",
+                                    "Sincronizar ahora",
+                                    "Cancelar",
+                                    // ACEPTAR
                                     () -> {
                                         MapActivityControlador mapActivityControlador = new MapActivityControlador();
                                         mapActivityControlador.sincronizar(InicioActivity.this, progressBar, tvProgressBar);
                                         return null;
-                                    });
+                                    },
+                                    // CANCELAR
+                                    () -> {
+                                        return null;
+                                    }).show();
                             //mostrarMensaje(InicioActivity.this, "Debe sincronizar primero");
                         } else {
                             logOut(InicioActivity.this);
                         }
                         return null;
-                    }
-            );
+                    },
+                    // CANCELAR
+                    () -> {
+                        return null;
+                    }).show();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -122,6 +136,7 @@ public class InicioActivity extends AppCompatActivity
     }
 
     private void evaluarUsuario() {
+        //try {
         for (int i = 0; i < LoginActivity.usuario.getModulos().size(); i++) {
             switch (LoginActivity.usuario.getModulos().get(i).getNombre()) {
                 case "presion":
@@ -135,5 +150,12 @@ public class InicioActivity extends AppCompatActivity
                     break;
             }
         }
+//        } catch (Exception e) {
+//            String problema = e.toString() + " en " + TAG;
+//            setPreference(this, ERROR_PREFERENCE, problema);
+//            mostrarMensajeLog(this, problema);
+//            abrirActivity(this, ErrorActivity.class);
+//        }
+
     }
 }

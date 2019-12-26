@@ -2,6 +2,7 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador.reclamo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -50,6 +51,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class ResolucionReclamoControlador {
+    private static final String TAG = ResolucionReclamoControlador.class.getSimpleName();
     private ArrayList<ResolucionReclamo> resoluciones;
 
     @SuppressLint("SimpleDateFormat")
@@ -82,7 +84,7 @@ public class ResolucionReclamoControlador {
             mostrarMensajeLog(a, response.toString());
             try {
                 if (response.getJSONObject(0).getString("status").equals("OK")) {
-                    Log.d("RESPUESTASERVER", "OK");
+                    Log.d("RESPUESTASERVER", "OK " + TAG);
                     // SI SALE BIEN, BAJAMOS EL PENDIENTE AL PUNTO
                     for (int i = 0; i < resoluciones.size(); i++) {
                         actualizarPendiente(resoluciones.get(i), a);
@@ -102,7 +104,7 @@ public class ResolucionReclamoControlador {
             }
         }, error -> {
             lockProgressBar(a, progressBar, tvProgressBar);
-            String problema = error.toString() + " en " + this.getClass().getSimpleName();
+            String problema = error.toString() + " en " + TAG;
             setPreference(a, ERROR_PREFERENCE, problema);
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
@@ -128,19 +130,18 @@ public class ResolucionReclamoControlador {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        String sql = "INSERT INTO `GTres_rec` " +
-                                " VALUES " +
-                                "('" + jsonArray.getJSONObject(i).getString("tpo_tram") + "','" +
-                                jsonArray.getJSONObject(i).getString("num_tram") + "','" +
-                                jsonArray.getJSONObject(i).getString("cod_res") + "','" +
-                                jsonArray.getJSONObject(i).getString("obs") + "','" +
-                                jsonArray.getJSONObject(i).getString("usuario") + "','" +
-                                jsonArray.getJSONObject(i).getString("fecha_d") + "','" +
-                                jsonArray.getJSONObject(i).getString("hora_d") + "','" +
-                                jsonArray.getJSONObject(i).getString("fecha_h") + "','" +
-                                jsonArray.getJSONObject(i).getString("hora_h") + "'," +
-                                "0);"; //EN CERO AL PENDIENTE
-                        db.execSQL(sql);
+                        ContentValues values = new ContentValues();
+                        values.put("tpo_tram", jsonArray.getJSONObject(i).getString("tpo_tram"));
+                        values.put("num_tram", jsonArray.getJSONObject(i).getString("num_tram"));
+                        values.put("cod_res", jsonArray.getJSONObject(i).getString("cod_res"));
+                        values.put("obs", jsonArray.getJSONObject(i).getString("obs"));
+                        values.put("usuario", jsonArray.getJSONObject(i).getString("usuario"));
+                        values.put("fecha_d", jsonArray.getJSONObject(i).getString("fecha_d"));
+                        values.put("hora_d", jsonArray.getJSONObject(i).getString("hora_d"));
+                        values.put("fecha_h", jsonArray.getJSONObject(i).getString("fecha_h"));
+                        values.put("hora_h", jsonArray.getJSONObject(i).getString("hora_h"));
+                        values.put("pendiente", 0);
+                        db.insertOrThrow("GTres_rec", null, values);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

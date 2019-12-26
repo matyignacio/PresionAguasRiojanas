@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity.bNuevoMedidor;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAX_LENGHT_MEDIDORES;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class FormMedidores extends Fragment {
     int marginTop = 15;
@@ -115,7 +116,10 @@ public class FormMedidores extends Fragment {
         LayoutPersonalizada lpMedidorLuz = new LayoutPersonalizada(marginTop);
         etMedidorLuz = new EditText(getActivity());
         etMedidorLuz.setId(idEditText);
+        setPrimaryFontBold(getActivity().getApplicationContext(), etMedidorLuz);
         etMedidorLuz.requestFocus();
+        etMedidorLuz.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
+        etMedidorLuz.setHintTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.colorAccent));
         etMedidorLuz.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_LENGHT_MEDIDORES)});
         etMedidorLuz.setBackgroundResource(R.drawable.et_redondo);
         etMedidorLuz.setHint("Medidor de Luz " + (idEditText + 1));
