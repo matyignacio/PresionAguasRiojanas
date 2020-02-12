@@ -49,7 +49,6 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cargarSpinner;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFont;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.validarCampos;
 
@@ -87,8 +86,8 @@ public class NuevaResolucionActivity extends AppCompatActivity {
         swActualizarUbicacion = findViewById(R.id.swActualizarUbicacion);
         bEnviarResolucion = findViewById(R.id.bEnviarResolucion);
         /** SETEAMOS LOS TYPEFACES*/
-        setPrimaryFont(this, etObservaciones);
-        setPrimaryFont(this, swActualizarUbicacion);
+        setPrimaryFontBold(this, etObservaciones);
+        setPrimaryFontBold(this, swActualizarUbicacion);
         setPrimaryFontBold(this, bEnviarResolucion);
         /**************************/
         inputs.add(etObservaciones);
@@ -105,6 +104,22 @@ public class NuevaResolucionActivity extends AppCompatActivity {
         /* LO QUE HACE CUANDO VUELVA*/
         stopLocationUpdates();
         abrirActivity(this, ReclamoActivity.class);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            startLocationUpdates();
+        } catch (Exception e) {
+            mostrarMensaje(this, e.toString());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
     }
 
     private void insertarResolucion() {

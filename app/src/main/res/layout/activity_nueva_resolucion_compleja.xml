@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/layout_primary"
+    android:id="@+id/RLNuevaResolucion"
+    tools:context=".ui.reclamo.NuevaResolucionComplejaActivity">
+
+    <Button
+        android:id="@+id/bAbrirResolucion"
+        style="@style/b_primary"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/b_abrir_resolucion" />
+
+    <TextView
+        android:id="@+id/tvsTipoResolucion"
+        style="@style/tv_primary_mini"
+        android:layout_below="@+id/bAbrirResolucion"
+        android:layout_alignStart="@+id/bAbrirResolucion"
+        android:layout_alignEnd="@id/bAbrirResolucion"
+        android:layout_marginTop="15dp"
+        android:text="@string/tv_tipo_resolucion" />
+
+    <Spinner
+        android:id="@+id/sTipoResolucion"
+        style="@style/mySpinnerItemStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tvsTipoResolucion"
+        android:layout_alignStart="@+id/tvsTipoResolucion"
+        android:layout_alignEnd="@id/tvsTipoResolucion"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/sp_redondo" />
+
+    <TextView
+        android:id="@+id/tvObservacion"
+        style="@style/tv_primary_mini"
+        android:layout_below="@+id/sTipoResolucion"
+        android:layout_alignStart="@+id/tvsTipoResolucion"
+        android:layout_alignEnd="@id/tvsTipoResolucion"
+        android:layout_marginTop="15dp"
+        android:text="@string/tv_observacion" />
+
+    <EditText
+        android:id="@+id/etObservaciones"
+        style="@style/et_primary"
+        android:layout_below="@+id/tvObservacion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:hint="@string/hint_observaciones"
+        android:inputType="textMultiLine" />
+
+    <Switch
+        android:id="@+id/swActualizarUbicacion"
+        style="@style/et_primary"
+        android:layout_below="@id/etObservaciones"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/switch_actualizar_ubicacion" />
+
+    <Button
+        android:id="@+id/bGuardarResolucion"
+        style="@style/b_primary"
+        android:layout_below="@+id/swActualizarUbicacion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/b_guardar_resolucion" />
+
+    <Button
+        android:id="@+id/bCerrarResolucion"
+        style="@style/b_primary"
+        android:layout_below="@+id/bGuardarResolucion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/b_cerrar_resolucion" />
+
+
+</RelativeLayout>

@@ -76,6 +76,9 @@ public class Util {
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final int PRIMER_INICIO_MODULO = 0;
     public static final int REQUEST_CHECK_SETTINGS = 100;
+    public static final int RESOLUCION_ABIERTA = 1;
+    public static final int RESOLUCION_GUARDADA = 2;
+    public static final int RESOLUCION_CERRADA = 3;
     public static final int SEGUNDO_INICIO_MODULO = 1;
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     /**
@@ -367,7 +370,6 @@ public class Util {
             }
         });
     }
-
 
     public static byte[] comprimirImagen(byte[] bytes) {
         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);

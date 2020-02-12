@@ -123,5 +123,8 @@
     <string name="b_ver_en_el_mapa">Ver en el mapa</string>
     <string name="b_resolver">Resolver</string>
     <string name="b_enviar_resolucion">Enviar Resolucion</string>
+    <string name="b_abrir_resolucion">Abrir Resolucion</string>
+    <string name="b_guardar_resolucion">Guardar Resolucion</string>
+    <string name="b_cerrar_resolucion">Cerrar Resolucion</string>
     <string name="switch_actualizar_ubicacion">Actualizar ubicacion</string>
 </resources>

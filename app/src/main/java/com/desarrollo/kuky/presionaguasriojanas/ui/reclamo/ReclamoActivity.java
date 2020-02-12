@@ -71,7 +71,7 @@ public class ReclamoActivity extends AppCompatActivity {
                         // ACEPTAR
                         () -> {
                             TramiteActivityControlador tramiteActivityControlador = new TramiteActivityControlador();
-                            tramiteActivityControlador.abrirResolucionActivity(this, tramite.getMotivo().getMotivo());
+                            tramiteActivityControlador.abrirResolucionActivity(this, tramite);
                             return null;
                         },
                         // CANCELAR

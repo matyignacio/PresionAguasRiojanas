@@ -35,10 +35,10 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeL
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 
 public class MapActivityControlador {
-    PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
-    HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
-    OrdenControlador ordenControlador = new OrdenControlador();
-    TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
+    private PuntoPresionControlador puntoPresionControlador = new PuntoPresionControlador();
+    private HistorialPuntosControlador historialPuntosControlador = new HistorialPuntosControlador();
+    private OrdenControlador ordenControlador = new OrdenControlador();
+    private TipoPuntoControlador tipoPuntoControlador = new TipoPuntoControlador();
 
     public void abrirMapActivity(Activity a, ProgressBar progressBar, TextView tvProgressBar, Callable<Void> method) {
         displayProgressBar(a, progressBar, tvProgressBar, "Revisando circuitos...");

@@ -41,6 +41,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.HOUR_TIME;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.INSERTAR_PUNTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_RECLAMO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_DEFAULT_TIMEOUT;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.RESOLUCION_ABIERTA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_TRAMITE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
@@ -215,6 +216,40 @@ public class ResolucionReclamoControlador {
             mostrarMensaje(a, "Error insertar RRC " + e.toString());
         }
         return retorno;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public int abrirResolucion(Activity a, ResolucionReclamo resolucionReclamo) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            Date currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat formatDate = new SimpleDateFormat(DATE_TIME);
+            SimpleDateFormat formatHour = new SimpleDateFormat(HOUR_TIME);
+            String date = formatDate.format(currentTime);
+            String hour = formatHour.format(currentTime);
+            ContentValues values = new ContentValues();
+            values.put("tpo_tram", resolucionReclamo.getTipoTramite());
+            values.put("num_tram", resolucionReclamo.getNumeroTramite());
+            values.put("usuario", resolucionReclamo.getUsuario());
+            values.put("fecha_d", date);
+            values.put("hora_d", hour);
+            values.put("estado", RESOLUCION_ABIERTA);
+            values.put("foto_inicio", resolucionReclamo.getFotoInicio());
+            if (db.insert("GTres_rec", null, values) > 0) {
+                /** SUBIMOS LA BANDERA DE SYNC MODULO RECLAMO **/
+                UsuarioControlador usuarioControlador = new UsuarioControlador();
+                usuarioControlador.editarBanderaSyncModuloReclamo(a, BANDERA_ALTA);
+                /** CERRAMOS LAS CONEXIONES **/
+                db.close();
+                mostrarMensaje(a, "Resolucion abierta");
+                return EXITOSO;
+            }
+            db.close();
+            return ERROR;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error abrir RRC " + e.toString());
+            return ERROR;
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

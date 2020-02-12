@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    style="@style/background_card">
 
     <TextView
         android:id="@+id/etTramite"
@@ -24,7 +22,7 @@
 
             <TextView
                 android:id="@+id/tvCliente"
-                style="@style/et_primary_mini"
+                style="@style/tv_primary_mini"
                 android:layout_width="match_parent"
                 android:layout_marginTop="0dp"
                 android:gravity="center"
@@ -39,7 +37,7 @@
 
             <TextView
                 android:id="@+id/tvMotivo"
-                style="@style/et_primary_mini"
+                style="@style/tv_primary_mini"
                 android:layout_width="match_parent"
                 android:layout_marginTop="0dp"
                 android:gravity="center"
@@ -56,19 +54,12 @@
 
         <TextView
             android:id="@+id/tvDescripcion"
-            style="@style/et_primary_mini"
+            style="@style/tv_primary_mini"
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="3dp"
             android:gravity="center"
             android:text="@string/tv_presion_historial" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/llCampos"
-        android:layout_marginBottom="5dp"
-        android:background="@color/colorPrimaryDark" />
 
 </RelativeLayout>

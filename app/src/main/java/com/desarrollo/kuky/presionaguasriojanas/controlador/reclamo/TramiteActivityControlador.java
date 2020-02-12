@@ -9,6 +9,7 @@ import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.BarrioCon
 import com.desarrollo.kuky.presionaguasriojanas.objeto.reclamo.Tramite;
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.NuevaResolucionActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.NuevaResolucionComplejaActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ReclamoActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.ResolucionesActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.reclamo.TramitesActivity;
@@ -57,13 +58,23 @@ public class TramiteActivityControlador {
         }
     }
 
-    public void abrirResolucionActivity(Activity a, String motivo) {
-        TipoResolucionControlador tipoResolucionControlador = new TipoResolucionControlador();
-        NuevaResolucionActivity.tipoResolucionSpinner = tipoResolucionControlador.extraerPorMotivo(a, motivo);
-        if (NuevaResolucionActivity.tipoResolucionSpinner.getResoluciones().size() > 0) {
-            abrirActivity(a, NuevaResolucionActivity.class);
+    public void abrirResolucionActivity(Activity a, Tramite tramite) {
+        if (tramite.getTipoTramite().getTipo().equals("003")) {
+            TipoResolucionControlador tipoResolucionControlador = new TipoResolucionControlador();
+            NuevaResolucionActivity.tipoResolucionSpinner = tipoResolucionControlador.extraerPorMotivo(a, tramite.getMotivo().getMotivo());
+            if (NuevaResolucionActivity.tipoResolucionSpinner.getResoluciones().size() > 0) {
+                abrirActivity(a, NuevaResolucionActivity.class);
+            } else {
+                mostrarMensaje(a, "No existen resoluciones para este motivo");
+            }
         } else {
-            mostrarMensaje(a, "No existen resoluciones para este motivo");
+            TipoResolucionControlador tipoResolucionControlador = new TipoResolucionControlador();
+            NuevaResolucionComplejaActivity.tipoResolucionSpinner = tipoResolucionControlador.extraerPorMotivo(a, tramite.getMotivo().getMotivo());
+            if (NuevaResolucionComplejaActivity.tipoResolucionSpinner.getResoluciones().size() > 0) {
+                abrirActivity(a, NuevaResolucionComplejaActivity.class);
+            } else {
+                mostrarMensaje(a, "No existen resoluciones para este motivo");
+            }
         }
     }
 

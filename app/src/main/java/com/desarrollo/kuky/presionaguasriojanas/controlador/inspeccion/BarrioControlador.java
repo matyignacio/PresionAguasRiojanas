@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.VolleySingleton;
@@ -22,6 +23,7 @@ import java.util.concurrent.Callable;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Errores.ERROR_PREFERENCE;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MODULO_INSPECCION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_DEFAULT_TIMEOUT;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.VOLLEY_HOST;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.displayProgressBar;
@@ -70,6 +72,11 @@ public class BarrioControlador {
             mostrarMensajeLog(a, problema);
             abrirActivity(a, ErrorActivity.class);
         });
+        // Establecer una política de reintentos en mi petición Volley mediante el método setRetryPolicy
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                MY_DEFAULT_TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(a).addToRequestQueue(request);
     }

@@ -59,7 +59,10 @@ public class StringTablasReclamo {
             "  hora_d char(8) DEFAULT ''," +
             "  fecha_h datetime DEFAULT NULL," +
             "  hora_h char(8) DEFAULT ''," +
-            "  pendiente int(1) NOT NULL DEFAULT '1'" +
+            "  pendiente int(1) NOT NULL DEFAULT '1'," +
+            "  estado int(1) NOT NULL DEFAULT '0'," +
+            "  foto_inicio blob DEFAULT NULL," +
+            "  foto_cierre blob DEFAULT NULL" +
             ")";
 
     public String getSqlTablaTipoTramite() {

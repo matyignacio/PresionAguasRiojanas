@@ -9,6 +9,9 @@ public class ResolucionReclamo {
     private String descripcionResolucion;
     private String observaciones;
     private String usuario;
+    private byte[] fotoInicio;
+    private byte[] fotoCierre;
+    private int estado;
     private Date fechaDesde;
     private String horaDesde;
     private Date fechaHasta;
@@ -92,5 +95,29 @@ public class ResolucionReclamo {
 
     public void setHoraHasta(String horaHasta) {
         this.horaHasta = horaHasta;
+    }
+
+    public byte[] getFotoInicio() {
+        return fotoInicio;
+    }
+
+    public void setFotoInicio(byte[] fotoInicio) {
+        this.fotoInicio = fotoInicio;
+    }
+
+    public byte[] getFotoCierre() {
+        return fotoCierre;
+    }
+
+    public void setFotoCierre(byte[] fotoCierre) {
+        this.fotoCierre = fotoCierre;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 }
