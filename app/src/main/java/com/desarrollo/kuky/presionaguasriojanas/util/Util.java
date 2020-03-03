@@ -51,8 +51,8 @@ public class Util {
     /**
      * CONEXION
      ********************************************/
-//    public static final String VOLLEY_HOST = "https://msedevelopments.com/volley/presionaguas/";
-    public static final String VOLLEY_HOST = "http://volley.aguasriojanas.com.ar/presionaguas/";
+//    public static final String VOLLEY_HOST = "http://volley.aguasriojanas.com.ar/presionaguas/";
+    public static final String VOLLEY_HOST = "http://volley.aguasriojanas.com.ar/presionaguas-debug/";
     public static final String MODULO_PRESION = "presion/";
     public static final String MODULO_INSPECCION = "inspeccion/";
     public static final String MODULO_RECLAMO = "reclamo/";
