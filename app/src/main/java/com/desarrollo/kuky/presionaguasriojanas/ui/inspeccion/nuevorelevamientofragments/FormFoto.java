@@ -59,7 +59,8 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.comprimirImagen;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.imageToString;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.rotarBitMap;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.showToast;
@@ -898,17 +899,21 @@ public class FormFoto extends Fragment
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
             getActivity().runOnUiThread(() -> {
-                Bitmap bmp = BitmapFactory.decodeByteArray(
-                        bytes,
-                        0,
-                        bytes.length,
-                        null);
-                ivFoto.setImageBitmap(rotarBitMap(bmp, 90));
-                ivFoto.setVisibility(View.VISIBLE);
-                bCapturar.setVisibility(View.INVISIBLE);
-                mTextureView.setVisibility(View.INVISIBLE);
+                try {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(
+                            bytes,
+                            0,
+                            bytes.length,
+                            null);
+                    ivFoto.setImageBitmap(rotarBitMap(bmp, 90));
+                    ivFoto.setVisibility(View.VISIBLE);
+                    bCapturar.setVisibility(View.INVISIBLE);
+                    mTextureView.setVisibility(View.INVISIBLE);
+                    RelevamientoActivity.relevamiento.setFoto(imageToString(rotarBitMap(bmp, 90)));
+                } catch (Exception e) {
+                    mostrarMensaje(getActivity(), e.toString());
+                }
             });
-            RelevamientoActivity.relevamiento.setFoto(comprimirImagen(bytes));
             mImage.close();
         }
 

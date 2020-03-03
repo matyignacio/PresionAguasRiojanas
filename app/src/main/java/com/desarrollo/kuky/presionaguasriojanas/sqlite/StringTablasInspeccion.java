@@ -27,7 +27,7 @@ public class StringTablasInspeccion {
             "  latitud_usuario double DEFAULT NULL," +
             "  longitud_usuario double DEFAULT NULL," +
             "  observaciones longtext DEFAULT NULL," +
-            "  foto blob DEFAULT NULL," +
+            "  foto VARCHAR(55) DEFAULT NULL," +
             "  fecha timestamp DEFAULT (datetime('now','localtime'))," +
             "  pendiente int(1) NOT NULL DEFAULT '1'," +
             "  PRIMARY KEY (id,id_usuario))";

@@ -200,7 +200,7 @@ public class RelevamientoControlador {
             relevamiento.setLatitudUsuario(c.getDouble(10));
             relevamiento.setLongitudUsuario(c.getDouble(11));
             relevamiento.setObservaciones(c.getString(12));
-            relevamiento.setFoto(c.getBlob(13));
+            relevamiento.setFoto(c.getString(13));
             relevamiento.setFecha(Timestamp.valueOf(c.getString(14)));
             relevamientos.add(relevamiento);
         }

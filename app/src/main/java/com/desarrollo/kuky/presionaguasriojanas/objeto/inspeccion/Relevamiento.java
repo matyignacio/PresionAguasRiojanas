@@ -16,7 +16,7 @@ public class Relevamiento {
     private double latitudUsuario;
     private double longitudUsuario;
     private String observaciones;
-    private byte[] foto;
+    private String foto;
     private Date fecha;
 //
 //    public Relevamiento() {
@@ -139,11 +139,11 @@ public class Relevamiento {
         this.observaciones = observaciones;
     }
 
-    public byte[] getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 
