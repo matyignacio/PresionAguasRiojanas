@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LLRelevamiento"
     style="@style/layout_primary"
-    tools:context=".ui.inspeccion.RelevamientoActivity">
+    tools:context=".ui.inspeccion.NuevoRelevamientoActivity">
 
     <Button
         android:id="@+id/bSiguienteFragmento"

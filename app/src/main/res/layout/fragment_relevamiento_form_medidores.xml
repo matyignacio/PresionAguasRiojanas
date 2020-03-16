@@ -6,7 +6,9 @@
 
     <RelativeLayout
         android:id="@+id/fMedidores"
-        style="@style/layout_primary">
+        style="@style/background_card"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_horizontal">
 
         <!-- A este textView le pongo ems:12 para alinear
              el resto de los elementos                -->
@@ -17,7 +19,6 @@
             android:layout_centerHorizontal="true"
             android:ems="11"
             android:text="@string/tv_medidores" />
-
 
     </RelativeLayout>
 </ScrollView>

@@ -21,7 +21,7 @@ public class StringTablasInspeccion {
             "  rubro varchar(45) DEFAULT NULL," +
             "  conexion_visible tinyint(4) DEFAULT NULL," +
             "  medidor_luz int(11) DEFAULT NULL," +
-            "  medidor_agua int(11) DEFAULT NULL," +
+            "  medidor_agua VARCHAR(11) DEFAULT NULL," +
             "  latitud double DEFAULT NULL," +
             "  longitud double DEFAULT NULL," +
             "  latitud_usuario double DEFAULT NULL," +

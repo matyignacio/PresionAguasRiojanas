@@ -19,13 +19,13 @@
             android:title="Tools" />-->
     </group>
 
-    <item android:title="Sesion">
+    <item android:title="Sesión">
 
         <menu>
             <item
                 android:id="@+id/action_sign_out"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
-                android:title="Cerrar Sesion" />
+                android:title="@string/sign_out" />
         </menu>
     </item>
 

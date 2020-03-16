@@ -11,9 +11,8 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            style="@style/background_card">
 
             <TextView
                 android:id="@+id/tvDatosCliente"

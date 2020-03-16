@@ -1,18 +1,19 @@
 package com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Relevamiento {
+public class Relevamiento implements Serializable {
     private int id;
     private String idUsuario;
     private String barrio;
     private String tipoInmueble;
     private String rubro;
     private boolean conexionVisible;
-    private int medidorLuz;
-    private int medidorAgua;
-    private double latitud;
-    private double longitud;
+    private long medidorLuz;
+    private String medidorAgua;
+    private Double latitud;
+    private Double longitud;
     private double latitudUsuario;
     private double longitudUsuario;
     private String observaciones;
@@ -83,23 +84,23 @@ public class Relevamiento {
         this.conexionVisible = conexionVisible;
     }
 
-    public int getMedidorLuz() {
+    public long getMedidorLuz() {
         return medidorLuz;
     }
 
-    public void setMedidorLuz(int medidorLuz) {
+    public void setMedidorLuz(long medidorLuz) {
         this.medidorLuz = medidorLuz;
     }
 
-    public int getMedidorAgua() {
+    public String getMedidorAgua() {
         return medidorAgua;
     }
 
-    public void setMedidorAgua(int medidorAgua) {
+    public void setMedidorAgua(String medidorAgua) {
         this.medidorAgua = medidorAgua;
     }
 
-    public double getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
@@ -107,7 +108,7 @@ public class Relevamiento {
         this.latitud = latitud;
     }
 
-    public double getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 

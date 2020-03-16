@@ -14,11 +14,9 @@
 
         <RelativeLayout
             android:id="@+id/rlForm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            style="@style/background_card"
+            android:layout_width="match_parent"
             android:layout_marginBottom="15dp"
-            android:layout_weight="60"
             android:gravity="center">
 
             <!--<TextView
@@ -140,7 +138,5 @@
                 android:text="@string/b_nueva_medicion" />
 
         </RelativeLayout>
-
-
     </LinearLayout>
 </ScrollView>

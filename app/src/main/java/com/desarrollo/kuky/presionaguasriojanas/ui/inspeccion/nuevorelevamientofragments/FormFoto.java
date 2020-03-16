@@ -47,7 +47,7 @@ import android.widget.ImageView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.AutoFitTextureView;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -909,7 +909,7 @@ public class FormFoto extends Fragment
                     ivFoto.setVisibility(View.VISIBLE);
                     bCapturar.setVisibility(View.INVISIBLE);
                     mTextureView.setVisibility(View.INVISIBLE);
-                    RelevamientoActivity.relevamiento.setFoto(imageToString(rotarBitMap(bmp, 90)));
+                    NuevoRelevamientoActivity.relevamiento.setFoto(imageToString(rotarBitMap(bmp, 90)));
                 } catch (Exception e) {
                     mostrarMensaje(getActivity(), e.toString());
                 }

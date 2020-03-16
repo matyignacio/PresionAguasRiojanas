@@ -954,7 +954,7 @@ public class NuevaResolucionComplejaFotoFragment extends Fragment
                 bCancelar.setVisibility(View.VISIBLE);
                 bytesGeneral = bytes;
             });
-//            RelevamientoActivity.relevamiento.setFoto(comprimirImagen(bytes));
+//            NuevoRelevamientoActivity.relevamiento.setFoto(comprimirImagen(bytes));
             mImage.close();
         }
 

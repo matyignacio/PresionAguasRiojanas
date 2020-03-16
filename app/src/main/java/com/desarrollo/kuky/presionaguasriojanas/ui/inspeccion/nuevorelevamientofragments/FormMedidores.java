@@ -1,26 +1,30 @@
 package com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMedidor;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity;
 
 import java.util.ArrayList;
 
-import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity.bNuevoMedidor;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity.bNuevoMedidor;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity.formMedidores;
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity.relevamientoMedidores;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAX_LENGHT_MEDIDORES;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ocultarTeclado;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
 public class FormMedidores extends Fragment {
@@ -28,12 +32,12 @@ public class FormMedidores extends Fragment {
     int addMargin = 130;
     int idEditText = 0;
     int cantidadEditText = 1;
-    EditText etMedidorLuz;
     /**
      * CREO ARRAYLIST PARA IR AGREGANDO LOS EDITTEXT EN TIEMPO DE EJECUCION
      * Y LUEGO EN "ON PAUSE" ASIGNARLOS AL ARRAYLIST RELEVAMIENTOMEDIDORES
      **/
     public static ArrayList<EditText> medidoresLuz;
+    TextView tvMedidoresRelevados;
 
     public FormMedidores() {
         // Required empty public constructor
@@ -62,11 +66,22 @@ public class FormMedidores extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        tvMedidoresRelevados = getActivity().findViewById(R.id.tvMedidoresRelevados);
+        tvMedidoresRelevados.setText("MEDIDORES");
         medidoresLuz = new ArrayList<>();
         idEditText = 0;
         marginTop = 15;
-        RelevamientoActivity.bGuardarRelevamiento.setVisibility(View.VISIBLE);
-        RelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
+        if (relevamientoMedidores.size() > 0) {
+            for (int i = 0; i < relevamientoMedidores.size(); i++) {
+                nuevoRegistro(marginTop
+                        , idEditText,
+                        String.valueOf(relevamientoMedidores.get(i).getNumero()));
+                marginTop += (addMargin * cantidadEditText);
+                idEditText++;
+            }
+        }
+        NuevoRelevamientoActivity.bGuardarRelevamiento.setVisibility(View.VISIBLE);
+        NuevoRelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -86,18 +101,34 @@ public class FormMedidores extends Fragment {
     public void onPause() {
         super.onPause();
         bNuevoMedidor.setVisibility(View.INVISIBLE);
-        for (int i = 0; i < medidoresLuz.size(); i++) {
-            try {
-                RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
-                relevamientoMedidor.setNumero(
-                        Integer.valueOf(
-                                medidoresLuz.get(i).getText().toString()));
-                RelevamientoActivity.relevamientoMedidores.add(relevamientoMedidor);
-            } catch (Exception e) {
-                mostrarMensajeLog(getActivity(), "No se pudo asignar " + e.toString());
+        if (medidoresLuz.size() != relevamientoMedidores.size()) {
+            relevamientoMedidores = new ArrayList<>();
+            for (int i = 0; i < medidoresLuz.size(); i++) {
+                try {
+                    RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
+                    relevamientoMedidor.setNumero(
+                            Integer.valueOf(
+                                    medidoresLuz.get(i).getText().toString()));
+                    NuevoRelevamientoActivity.relevamientoMedidores.add(relevamientoMedidor);
+                } catch (Exception e) {
+                    mostrarMensajeLog(getActivity(), "No se pudo asignar " + e.toString());
+                }
+                ocultarTeclado(getActivity(), medidoresLuz.get(i));
             }
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(medidoresLuz.get(i).getWindowToken(), 0);
+        } else {
+            relevamientoMedidores = new ArrayList<>();
+            for (int i = 0; i < medidoresLuz.size(); i++) {
+                try {
+                    RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
+                    relevamientoMedidor.setNumero(
+                            Integer.valueOf(
+                                    medidoresLuz.get(i).getText().toString()));
+                    NuevoRelevamientoActivity.relevamientoMedidores.add(relevamientoMedidor);
+                } catch (Exception e) {
+                    mostrarMensajeLog(getActivity(), "No se pudo asignar " + e.toString());
+                }
+                ocultarTeclado(getActivity(), medidoresLuz.get(i));
+            }
         }
     }
 
@@ -106,14 +137,15 @@ public class FormMedidores extends Fragment {
         super.onStop();
         /* Si se llama al onStop es porque se volvio un fragmento entonces
          *  reseteamos el ArrayList **************************************/
-        RelevamientoActivity.relevamientoMedidores = new ArrayList<>();
+        // EDIT 12-3-2020: NuevoRelevamientoActivity.relevamientoMedidores = new ArrayList<>(); lo mandamos al onCreate del activity NuevoRelevamientoActivity
         /* y mostramos de nuevo el boton SIGUIENTE ***********************/
-        RelevamientoActivity.bGuardarRelevamiento.setVisibility(View.INVISIBLE);
-        RelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
+        NuevoRelevamientoActivity.bGuardarRelevamiento.setVisibility(View.INVISIBLE);
+        NuevoRelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
     }
 
     public void nuevoRegistro(int marginTop, int idEditText) {
         LayoutPersonalizada lpMedidorLuz = new LayoutPersonalizada(marginTop);
+        EditText etMedidorLuz;
         etMedidorLuz = new EditText(getActivity());
         etMedidorLuz.setId(idEditText);
         setPrimaryFontBold(getActivity().getApplicationContext(), etMedidorLuz);
@@ -126,6 +158,35 @@ public class FormMedidores extends Fragment {
         etMedidorLuz.setInputType(InputType.TYPE_CLASS_NUMBER);
         etMedidorLuz.setLayoutParams(lpMedidorLuz.getmRparams());
         lpMedidorLuz.getmRlayout().addView(etMedidorLuz);
+        etMedidorLuz.setOnLongClickListener(v -> {
+            cerrarFragmento(getActivity(), this);
+            abrirFragmento(getActivity(), R.id.LLRelevamiento, formMedidores);
+            return true;
+        });
+        medidoresLuz.add(etMedidorLuz);
+    }
+
+    public void nuevoRegistro(int marginTop, int idEditText, String texto) {
+        LayoutPersonalizada lpMedidorLuz = new LayoutPersonalizada(marginTop);
+        EditText etMedidorLuz;
+        etMedidorLuz = new EditText(getActivity());
+        etMedidorLuz.setId(idEditText);
+        setPrimaryFontBold(getActivity().getApplicationContext(), etMedidorLuz);
+        etMedidorLuz.requestFocus();
+        etMedidorLuz.setTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
+        etMedidorLuz.setHintTextColor(getActivity().getApplicationContext().getResources().getColor(R.color.colorAccent));
+        etMedidorLuz.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_LENGHT_MEDIDORES)});
+        etMedidorLuz.setBackgroundResource(R.drawable.et_redondo);
+        etMedidorLuz.setHint("Medidor de Luz " + (idEditText + 1));
+        etMedidorLuz.setText(texto);
+        etMedidorLuz.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etMedidorLuz.setLayoutParams(lpMedidorLuz.getmRparams());
+        lpMedidorLuz.getmRlayout().addView(etMedidorLuz);
+        etMedidorLuz.setOnLongClickListener(v -> {
+            cerrarFragmento(getActivity(), this);
+            abrirFragmento(getActivity(), R.id.LLRelevamiento, formMedidores);
+            return true;
+        });
         medidoresLuz.add(etMedidorLuz);
     }
 

@@ -5,37 +5,39 @@
     style="@style/layout_primary"
     tools:context=".ui.presion.NuevaPresionActivity">
 
-    <EditText
-        android:id="@+id/etPresion"
-        style="@style/et_primary"
-        android:layout_centerHorizontal="true"
-        android:hint="@string/tv_presion"
-        android:inputType="numberDecimal" />
+    <RelativeLayout
+        style="@style/background_card"
+        android:layout_centerHorizontal="true">
 
-    <TextView
-        android:id="@+id/tvMca"
-        style="@style/tv_primary"
-        android:layout_alignEnd="@+id/etPresion"
-        android:paddingTop="2dp"
-        android:paddingEnd="10dp"
-        android:text="@string/tv_mca" />
+        <EditText
+            android:id="@+id/etPresion"
+            style="@style/et_primary"
+            android:hint="@string/tv_presion"
+            android:inputType="numberDecimal" />
 
-    <CheckBox
-        android:id="@+id/cbCalidad"
-        style="@style/et_primary"
-        android:layout_below="@+id/etPresion"
-        android:layout_centerHorizontal="true"
-        android:padding="2dp"
-        android:text="@string/cb_control_de_calidad" />
+        <TextView
+            android:id="@+id/tvMca"
+            style="@style/tv_primary"
+            android:layout_alignEnd="@+id/etPresion"
+            android:paddingTop="2dp"
+            android:text="@string/tv_mca" />
 
-    <Button
-        android:id="@+id/bEnviarMediicion"
-        style="@style/b_primary"
-        android:layout_below="@id/cbCalidad"
-        android:layout_alignStart="@id/etPresion"
-        android:layout_alignEnd="@id/etPresion"
-        android:layout_marginTop="15dp"
-        android:drawableEnd="@drawable/ic_save_white_24dp"
-        android:text="@string/b_enviar_medicion" />
+        <CheckBox
+            android:id="@+id/cbCalidad"
+            style="@style/et_primary"
+            android:layout_below="@+id/etPresion"
+            android:padding="2dp"
+            android:text="@string/cb_control_de_calidad" />
+
+        <Button
+            android:id="@+id/bEnviarMediicion"
+            style="@style/b_primary"
+            android:layout_below="@id/cbCalidad"
+            android:layout_alignStart="@id/etPresion"
+            android:layout_alignEnd="@id/etPresion"
+            android:layout_marginTop="15dp"
+            android:drawableEnd="@drawable/ic_save_white_24dp"
+            android:text="@string/b_enviar_medicion" />
+    </RelativeLayout>
 
 </RelativeLayout>

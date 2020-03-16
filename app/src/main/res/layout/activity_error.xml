@@ -5,22 +5,27 @@
     style="@style/layout_primary"
     tools:context=".ui.ErrorActivity">
 
-    <TextView
-        android:id="@+id/tvError"
-        style="@style/tv_primary_bold_center"
-        android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:text="@string/tv_error" />
+    <RelativeLayout
+        style="@style/background_card"
+        android:layout_centerHorizontal="true">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvError"
-        android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/ic_sentiment_dissatisfied_black_120dp"
-        tools:ignore="VectorDrawableCompat" />
+        <TextView
+            android:id="@+id/tvError"
+            style="@style/tv_primary_bold_center"
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            android:text="@string/tv_error" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvError"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            app:srcCompat="@drawable/ic_sentiment_dissatisfied_black_120dp"
+            tools:ignore="VectorDrawableCompat" />
+    </RelativeLayout>
 
 </RelativeLayout>

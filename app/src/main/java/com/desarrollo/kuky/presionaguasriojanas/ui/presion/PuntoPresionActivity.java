@@ -9,8 +9,8 @@ import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.presion.PuntoPresionControlador;
 import com.desarrollo.kuky.presionaguasriojanas.objeto.presion.PuntoPresion;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
@@ -38,8 +38,8 @@ public class PuntoPresionActivity extends AppCompatActivity {
         bNuevaMedicion = findViewById(R.id.bNuevaMedicion);
         bHistorialPunto = findViewById(R.id.bHistorialPunto);
         // OBTENEMOS EL PUNTO DE PRESION
-        int id = getPreference(this, ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
-        String usuario = getPreference(this, USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+        int id = getPreference(this, ID_PUNTO_PRESION, 0);
+        String usuario = getPreference(this, USUARIO_PUNTO_PRESION, "");
         //mostrarMensaje(this, "id: " + id + ", usuario: " + usuario);
         puntoPresion = puntoPresionControlador.extraerPorIdYUsuario(this, id, usuario);
         //etCircuito.setText(puntoPresion.getCircuito().toString());

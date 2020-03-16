@@ -117,7 +117,7 @@ public class RelevamientoMedidorControlador {
                     e.printStackTrace();
                 }
             } else {
-                mostrarMensaje(a, "Sin relevamientoMedidores.");
+                mostrarMensajeLog(a, "Sin relevamientoMedidores.");
             }
             // POR MAS QUE DEVUELVA UN ARRAY VACIO, EJECUTA LA SIGUIENTE TAREA
             // (Porque puede que la tabla este vacia)
@@ -172,6 +172,61 @@ public class RelevamientoMedidorControlador {
         c.close();
         db.close();
         return relevamientoMedidores;
+    }
+
+    public ArrayList<RelevamientoMedidor> extraerTodosPendientes(Activity a, int idRelevamiento, String idUsuarioRelevamiento) {
+        relevamientoMedidores = new ArrayList<>();
+        SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM relevamiento_medidores " +
+                " WHERE pendiente = 1 " +
+                " AND id_relevamiento = " + idRelevamiento +
+                " AND id_usuario_relevamiento = '" + idUsuarioRelevamiento + "'" +
+                " ORDER BY id ASC", null);
+        while (c.moveToNext()) {
+            RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
+            Relevamiento relevamiento = new Relevamiento();
+            relevamientoMedidor.setId(c.getInt(0));
+            relevamientoMedidor.setIdUsuario(c.getString(1));
+            relevamientoMedidor.setNumero(c.getInt(2));
+            relevamiento.setId(c.getInt(3));
+            relevamiento.setIdUsuario(c.getString(4));
+            relevamientoMedidor.setRelevamiento(relevamiento);
+            relevamientoMedidores.add(relevamientoMedidor);
+        }
+        c.close();
+        db.close();
+        return relevamientoMedidores;
+    }
+
+    public int insertarArray(ArrayList<RelevamientoMedidor> relevamientoMedidores, int idRelevamiento, Activity a) {
+        int retorno = EXITOSO;
+        SQLiteDatabase dbDelete = BaseHelper.getInstance(a).getWritableDatabase();
+        try {
+            dbDelete.delete("relevamiento_medidores",
+                    "id_relevamiento=" + idRelevamiento,
+                    null);
+        } catch (Exception eDelete) {
+            mostrarMensaje(a, eDelete.toString());
+        }
+        dbDelete.close();
+        for (int i = 0; i < relevamientoMedidores.size(); i++) {
+            try {
+                SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put("id", relevamientoMedidores.get(i).getId());
+                values.put("id_usuario", relevamientoMedidores.get(i).getIdUsuario());
+                values.put("numero", relevamientoMedidores.get(i).getNumero());
+                values.put("id_relevamiento", relevamientoMedidores.get(i).getRelevamiento().getId());
+                values.put("id_usuario_relevamiento", relevamientoMedidores.get(i).getRelevamiento().getIdUsuario());
+                values.put("pendiente", INSERTAR_PUNTO);
+                db.insert("relevamiento_medidores", null, values);
+                db.close();
+            } catch (Exception e) {
+                mostrarMensaje(a, "Error actualizar RMC " + e.toString());
+                return ERROR;
+            }
+        }
+        return retorno;
     }
 
     public int insertar(RelevamientoMedidor relevamiento, Activity a) {

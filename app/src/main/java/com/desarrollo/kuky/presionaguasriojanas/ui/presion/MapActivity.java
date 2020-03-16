@@ -39,7 +39,7 @@ import java.util.List;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_DEFECTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.CIRCUITO_USUARIO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ESTANDAR_MEDICION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MAPA_CLIENTES;
@@ -49,7 +49,7 @@ import static com.desarrollo.kuky.presionaguasriojanas.util.Util.PRIMER_INICIO_M
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.TIPO_MAPA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
@@ -178,7 +178,7 @@ public class MapActivity extends AppCompatActivity
                         CIRCUITO_USUARIO,
                         CIRCUITO_DEFECTO));
         // Recorremos el arrayList para ir creando los marcadores
-        for (Integer i = 0; i < puntosPresion.size(); i++) {
+        for (int i = 0; i < puntosPresion.size(); i++) {
             Marker puntoMarcador;
             LatLng marcador;
             /**
@@ -236,8 +236,8 @@ public class MapActivity extends AppCompatActivity
 
         /** GUARDAMOS EN SHARED PREFERENCES EL ID Y USUARIO DEL PUNTO
          *  TAMBIEN GUARDAMOS SU UBICACION PARA REABRIR EL MAPA EN EL PUNTO SELECCIONADO **/
-        setPreference(MapActivity.this, ID_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getId());
-        setPreference(MapActivity.this, USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, puntoPresion.getUsuario().getId());
+        setPreference(MapActivity.this, ID_PUNTO_PRESION, puntoPresion.getId());
+        setPreference(MapActivity.this, USUARIO_PUNTO_PRESION, puntoPresion.getUsuario().getId());
         setPreference(MapActivity.this, ULTIMA_LATITUD, puntoPresion.getLatitud().toString());
         setPreference(MapActivity.this, ULTIMA_LONGITUD, puntoPresion.getLongitud().toString());
 

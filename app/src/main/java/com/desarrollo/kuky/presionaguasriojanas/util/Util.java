@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
@@ -73,7 +74,7 @@ public class Util {
     public static final int INSERTAR_PUNTO = 1;
     public static final int MAPA_CLIENTES = 2;
     public static final int MAPA_RECORRIDO = 1;
-    public static final int MAX_LENGHT_MEDIDORES = 8;
+    public static final int MAX_LENGHT_MEDIDORES = 10;
     private static final int MAXIMA_MEDICION = 100;
     public static final int MY_DEFAULT_TIMEOUT = 60000;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -93,9 +94,8 @@ public class Util {
     public static final String HOUR_TIME = "hh:mm:ss";
     private static final String font_primary_path = "font/font_primary.ttf";
     private static final String font_primary_bold_path = "font/font_primary_bold.ttf";
-    public static final String ID_PUNTO_PRESION_SHARED_PREFERENCE = "id_punto_presion";
-    public static final String LATITUD_INSPECCION = "latitud_inspeccion";
-    public static final String LONGITUD_INSPECCION = "longitud_inspeccion";
+    public static final String ID_PUNTO_PRESION = "id_punto_presion";
+    public static final String MEDIDOR_LUZ_RELEVAMIENTO = "medidor_luz_relevamiento";
     public static final String POSICION_SELECCIONADA = "posicion_seleccionada_spinner";
     private static final String PREFS_NAME = "MyPrefsFile";
     public static final String SPINNER_BARRIO_RELEVAMIENTO = "barrio_relevamiento";
@@ -105,7 +105,9 @@ public class Util {
     public static final String TIPO_TRAMITE = "002";
     public static final String ULTIMA_LATITUD = "latitud";
     public static final String ULTIMA_LONGITUD = "longitud";
-    public static final String USUARIO_PUNTO_PRESION_SHARED_PREFERENCE = "id_usuario";
+    public static final String ULTIMA_LATITUD_RELEVAMIENTO = "latitud_relevamiento";
+    public static final String ULTIMA_LONGITUD_RELEVAMIENTO = "longitud_relevamiento";
+    public static final String USUARIO_PUNTO_PRESION = "id_usuario";
     /**
      * A LATITUD Y LONGITUD LAS DEFINO COMO STRINGS PARA PODER USARLAS COMO SHARED PREFERENCES
      * DESPUES LAS PARSEO A DOUBLE EN MAPACTIVITY
@@ -119,6 +121,17 @@ public class Util {
         a.finish();
     }
 
+    public static void abrirActivityWithBundle(Activity a, Class destino, Bundle mBundle) {
+        /** COMO SE USA
+         *             Bundle mBundle = new Bundle();
+         *             mBundle.putInt("key", value); (Pueden ser ints, Strings, etc)
+         *             abrirActivityWithBundle(this, ActivityDestino.class, mBundle);
+         * */
+        Intent intent = new Intent(a, destino);
+        intent.putExtras(mBundle);
+        a.startActivity(intent);
+        a.finish();
+    }
 
     public static void abrirFragmento(Activity a, int layout, Fragment fragment) {
         //Paso 1: Obtener la instancia del administrador de fragmentos
@@ -250,6 +263,13 @@ public class Util {
         SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(nombreDato, dato);
+        editor.apply();
+    }
+
+    public static void setPreference(Context c, String nombreDato, long dato) {
+        SharedPreferences settings = c.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(nombreDato, dato);
         editor.apply();
     }
 
@@ -394,14 +414,14 @@ public class Util {
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
 
-        int len = 0;
+        int len;
         while ((len = inputStream.read(buffer)) != -1) {
             byteBuffer.write(buffer, 0, len);
         }
         return byteBuffer.toByteArray();
     }
 
-    public static void setEnabledActivity(Activity a, Boolean estado) {
+    private static void setEnabledActivity(Activity a, Boolean estado) {
         if (estado) {
             a.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else {
@@ -416,7 +436,7 @@ public class Util {
         return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
     }
 
-    public static void progressBarVisibility(ProgressBar progressBar, TextView
+    private static void progressBarVisibility(ProgressBar progressBar, TextView
             tvProgressBar, Boolean visible) {
         if (visible) {
             progressBar.setVisibility(View.VISIBLE);
@@ -448,5 +468,13 @@ public class Util {
             tvProgressBar) {
         setEnabledActivity(a, true);
         progressBarVisibility(progressBar, tvProgressBar, false);
+    }
+
+    public static void intentar(Callable<Void> method) {
+        try {
+            method.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

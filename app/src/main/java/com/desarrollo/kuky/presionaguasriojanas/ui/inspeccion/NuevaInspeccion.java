@@ -42,10 +42,10 @@ import com.google.android.gms.location.SettingsClient;
 import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD_RELEVAMIENTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD_RELEVAMIENTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
@@ -270,8 +270,8 @@ public class NuevaInspeccion extends AppCompatActivity {
                 break;
             case 2:
                 if (mCurrentLocation != null) {
-                    Util.setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
-                    Util.setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
+                    Util.setPreference(this, ULTIMA_LATITUD_RELEVAMIENTO, String.valueOf(mCurrentLocation.getLatitude()));
+                    Util.setPreference(this, ULTIMA_LONGITUD_RELEVAMIENTO, String.valueOf(mCurrentLocation.getLongitude()));
                 }
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
                 posicionFormulario++;

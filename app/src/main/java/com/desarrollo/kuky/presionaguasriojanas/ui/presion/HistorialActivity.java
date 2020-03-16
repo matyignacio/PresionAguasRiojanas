@@ -11,8 +11,8 @@ import com.desarrollo.kuky.presionaguasriojanas.ui.adapters.lvaHistorial;
 
 import java.util.ArrayList;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 
@@ -25,8 +25,8 @@ public class HistorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
         // OBTENEMOS EL PUNTO DE PRESION
-        int id = getPreference(this, ID_PUNTO_PRESION_SHARED_PREFERENCE, 0);
-        String usuario = getPreference(this, USUARIO_PUNTO_PRESION_SHARED_PREFERENCE, "");
+        int id = getPreference(this, ID_PUNTO_PRESION, 0);
+        String usuario = getPreference(this, USUARIO_PUNTO_PRESION, "");
         ArrayList<HistorialPuntos> historiales = historialPuntosControlador.extraerTodosPorPunto(this, id, usuario);
         ListView lvHistorial = findViewById(R.id.lvHistorial);
         lvaHistorial adaptador = new lvaHistorial(this, historiales);

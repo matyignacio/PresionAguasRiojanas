@@ -15,15 +15,16 @@ import android.widget.Switch;
 import com.desarrollo.kuky.presionaguasriojanas.R;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.RelevamientoActivityControlador;
 import com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion.TipoInmuebleControlador;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
 
 import java.util.ArrayList;
 
+import static com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.NuevoRelevamientoActivity.relevamiento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.SPINNER_BARRIO_RELEVAMIENTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cargarSpinner;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.intentar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ocultarTeclado;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
@@ -60,7 +61,7 @@ public class FormInmueble extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        RelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
+        NuevoRelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
         if (labelsTipoInmueble.size() == 0) {
             // SOLO CARGAMOS LAS LISTAS ESTATICAS UNA VEZ (LA PRIMERA)
             for (int i = 0; i < tipoInmuebleControlador.extraerTodos(getActivity()).size(); i++) {
@@ -107,43 +108,69 @@ public class FormInmueble extends Fragment {
                     return null;
                 },
                 () -> null);
+        /** SI NO ES NUEVO, TRAEMOS SUS DATOS ************************************/
+        if (!NuevoRelevamientoActivity.isNew) {
+            intentar(() -> {
+                if (relevamiento.isConexionVisible()) {
+                    swConexionVisible.setChecked(true);
+                } else {
+                    swConexionVisible.setChecked(false);
+                }
+                return null;
+            });
+            intentar(() -> {
+                etMedidorLuz.setText(String.valueOf(relevamiento.getMedidorLuz()));
+                return null;
+            });
+            intentar(() -> {
+                etMedidorAgua.setText(String.valueOf(relevamiento.getMedidorAgua()));
+                return null;
+            });
+            intentar(() -> {
+                etRubro.setText(String.valueOf(relevamiento.getRubro()));
+                return null;
+            });
+            intentar(() -> {
+                etObservaciones.setText(String.valueOf(relevamiento.getObservaciones()));
+                return null;
+            });
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        RelevamientoActivity.relevamiento.setBarrio(
+        relevamiento.setBarrio(
                 labelsBarrios.get(sBarrios.getSelectedItemPosition())
         );
-        RelevamientoActivity.relevamiento.setTipoInmueble(
+        relevamiento.setTipoInmueble(
                 labelsTipoInmueble.get(sTipoInmueble.getSelectedItemPosition())
         );
-        RelevamientoActivity.relevamiento.setRubro(
+        relevamiento.setRubro(
                 etRubro.getText().toString());
         try {
-            RelevamientoActivity.relevamiento.setMedidorLuz(
-                    Integer.valueOf(etMedidorLuz.getText().toString()));
+            relevamiento.setMedidorLuz(
+                    Long.valueOf(etMedidorLuz.getText().toString()));
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(),
-                    "No se pudo guardar " + etMedidorLuz.getHint());
+                    "No se pudo guardar " + etMedidorLuz.getHint() + " por " + e.toString());
         }
         try {
-            RelevamientoActivity.relevamiento.setMedidorAgua(
-                    Integer.valueOf(etMedidorAgua.getText().toString()));
+            relevamiento.setMedidorAgua(
+                    etMedidorAgua.getText().toString());
         } catch (Exception e) {
             mostrarMensajeLog(getActivity(),
-                    "No se pudo guardar " + etMedidorAgua.getHint());
+                    "No se pudo guardar " + etMedidorAgua.getHint() + " por " + e.toString());
         }
-        RelevamientoActivity.relevamiento.setConexionVisible(swConexionVisible.isChecked());
-        RelevamientoActivity.relevamiento.setObservaciones(
+        relevamiento.setConexionVisible(swConexionVisible.isChecked());
+        relevamiento.setObservaciones(
                 etObservaciones.getText().toString());
-        ocultarTeclado(getActivity(), etObservaciones);
+        //ocultarTeclado(getActivity(), etObservaciones);
     }
 
     public class addListenerOnTextChange implements TextWatcher {
@@ -157,9 +184,9 @@ public class FormInmueble extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             if (mEdittextview.getText().toString().length() > 4) {
-                RelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
+                NuevoRelevamientoActivity.bSiguienteFragmento.setVisibility(View.VISIBLE);
             } else {
-                RelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
+                NuevoRelevamientoActivity.bSiguienteFragmento.setVisibility(View.INVISIBLE);
             }
         }
 

@@ -17,10 +17,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJA;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD_RELEVAMIENTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD_RELEVAMIENTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
 
@@ -59,9 +59,9 @@ public class FormMapa extends Fragment {
             googleMap = mMap;
             // DEFINIMOS EL TIPO DE MAPA
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            Double latitud = Double.valueOf(getPreference(getActivity(), LATITUD_INSPECCION,
+            Double latitud = Double.valueOf(getPreference(getActivity(), ULTIMA_LATITUD_RELEVAMIENTO,
                     LATITUD_LA_RIOJA));
-            Double longitud = Double.valueOf(getPreference(getActivity(), LONGITUD_INSPECCION,
+            Double longitud = Double.valueOf(getPreference(getActivity(), ULTIMA_LONGITUD_RELEVAMIENTO,
                     LONGITUD_LA_RIOJA));
             LatLng centroMapa = new LatLng(latitud, longitud);
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(centroMapa));

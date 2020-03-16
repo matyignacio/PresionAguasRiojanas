@@ -3,7 +3,7 @@ package com.desarrollo.kuky.presionaguasriojanas.controlador.inspeccion;
 import android.app.Activity;
 
 import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.Barrio;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientoActivity;
+import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.RelevamientosActivity;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class RelevamientoActivityControlador {
         barrios = new ArrayList<>();
         barrios = barrioControlador.extraerTodosPorLocalidad(a, zonaBarrios);
         if (barrios.size() > 0) {
-            abrirActivity(a, RelevamientoActivity.class);
+            abrirActivity(a, RelevamientosActivity.class);
         } else {
             mostrarMensaje(a, "No se obtuvieron barrios para mostrar.");
         }

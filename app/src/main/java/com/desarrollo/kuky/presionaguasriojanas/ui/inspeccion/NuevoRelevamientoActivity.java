@@ -26,7 +26,6 @@ import com.desarrollo.kuky.presionaguasriojanas.objeto.inspeccion.RelevamientoMe
 import com.desarrollo.kuky.presionaguasriojanas.ui.LoginActivity;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormFoto;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormInmueble;
-import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormMapa;
 import com.desarrollo.kuky.presionaguasriojanas.ui.inspeccion.nuevorelevamientofragments.FormMedidores;
 import com.desarrollo.kuky.presionaguasriojanas.ui.presion.NuevaPresionActivity;
 import com.desarrollo.kuky.presionaguasriojanas.util.Util;
@@ -45,24 +44,28 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_INSPECCION;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_INSPECCION;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LATITUD_LA_RIOJA;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.LONGITUD_LA_RIOJA;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LATITUD_RELEVAMIENTO;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ULTIMA_LONGITUD_RELEVAMIENTO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.cerrarFragmento;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.intentar;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensaje;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.mostrarMensajeLog;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPreference;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ocultarTeclado;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.setPrimaryFontBold;
 
-public class RelevamientoActivity extends AppCompatActivity {
+public class NuevoRelevamientoActivity extends AppCompatActivity {
     public static Button bSiguienteFragmento, bVolver, bGuardarRelevamiento;
+    public static boolean isNew = true;
     public static ImageButton bNuevoMedidor;
     public static FormInmueble formInmueble;
-    public static FormMapa formMapa;
     public static FormFoto formFoto;
     public static FormMedidores formMedidores;
     public static int posicionFormulario;
@@ -86,10 +89,26 @@ public class RelevamientoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_relevamiento);
-        relevamiento = new Relevamiento();
+        setContentView(R.layout.activity_nuevo_relevamiento);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            isNew = false;
+            relevamiento = (Relevamiento) bundle.getSerializable("relevamiento");
+            RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
+            relevamientoMedidores = relevamientoMedidorControlador.
+                    extraerTodosPendientes(this, relevamiento.getId(), relevamiento.getIdUsuario());
+        } else {
+            isNew = true;
+            relevamiento = new Relevamiento();
+            relevamientoMedidores = new ArrayList<>();
+        }
+        double latitud = Double.parseDouble(getPreference(this, ULTIMA_LATITUD_RELEVAMIENTO,
+                LATITUD_LA_RIOJA));
+        double longitud = Double.parseDouble(getPreference(this, ULTIMA_LONGITUD_RELEVAMIENTO,
+                LONGITUD_LA_RIOJA));
+        relevamiento.setLatitud(latitud);
+        relevamiento.setLongitud(longitud);
         formInmueble = new FormInmueble();
-        formMapa = new FormMapa();
         formFoto = new FormFoto();
         formMedidores = new FormMedidores();
         posicionFormulario = 0;
@@ -112,7 +131,11 @@ public class RelevamientoActivity extends AppCompatActivity {
                     "Cancelar",
                     // ACEPTAR
                     () -> {
-                        insertar();
+                        if (isNew) {
+                            insertar();
+                        } else {
+                            actualizar();
+                        }
                         return null;
                     },
                     // CANCELAR
@@ -124,13 +147,12 @@ public class RelevamientoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (formMapa.isVisible() ||
-                formFoto.isVisible() ||
+        if (formFoto.isVisible() ||
                 formMedidores.isVisible()) {
             mostrarMensaje(this, "Debe cerrar el formulario para poder volver");
         } else {
             stopLocationUpdates();
-            abrirActivity(this, InspeccionActivity.class);
+            abrirActivity(this, RelevamientosActivity.class);
         }
     }
 
@@ -270,33 +292,39 @@ public class RelevamientoActivity extends AppCompatActivity {
                 posicionFormulario++;
                 abrirFragmento(a, layout, formInmueble);
                 setOnButtonsFragment();
+                ocultarTeclado(this, bVolver);
                 break;
+//            case 1:
+//                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
+//                if (mCurrentLocation != null) {
+//                    // LE ASIGNAMOS AL RELEVAMIENTO LA UBICACION DEL USUARIO
+//                    relevamiento.setLatitudUsuario(mCurrentLocation.getLatitude());
+//                    relevamiento.setLongitudUsuario(mCurrentLocation.getLongitude());
+//                    // Y TAMBIEN ACTUALIZAMOS EL CENTRO DEL MAPA QUE SE ABRIRA EN EL FRAGMENTO
+//                    setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
+//                    setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
+//                }
+//                posicionFormulario++;
+//                Util.siguienteFragmento(a, layout,
+//                        formInmueble,
+//                        formMapa);
+//                break;
             case 1:
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL SIGUIENTE
                 if (mCurrentLocation != null) {
                     // LE ASIGNAMOS AL RELEVAMIENTO LA UBICACION DEL USUARIO
                     relevamiento.setLatitudUsuario(mCurrentLocation.getLatitude());
                     relevamiento.setLongitudUsuario(mCurrentLocation.getLongitude());
-                    // Y TAMBIEN ACTUALIZAMOS EL CENTRO DEL MAPA QUE SE ABRIRA EN EL FRAGMENTO
-                    setPreference(this, LATITUD_INSPECCION, String.valueOf(mCurrentLocation.getLatitude()));
-                    setPreference(this, LONGITUD_INSPECCION, String.valueOf(mCurrentLocation.getLongitude()));
                 }
-                posicionFormulario++;
-                Util.siguienteFragmento(a, layout,
-                        formInmueble,
-                        formMapa);
-                break;
-            case 2:
                 // EN ESTE CASO...
                 posicionFormulario++;
                 // ... CERRAMOS EL FRAGMENTO Y ...
-                cerrarFragmento(a, formMapa);
+                cerrarFragmento(a, formInmueble);
                 // ... ABRIMOS EL SIGUIENTE
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.LLRelevamiento, formFoto)
                         .commit();
                 break;
-            case 3:
+            case 2:
                 // EN ESTE CASO...
                 posicionFormulario++;
                 // ... CERRAMOS EL FRAGMENT formFoto...
@@ -335,24 +363,24 @@ public class RelevamientoActivity extends AppCompatActivity {
                 posicionFormulario--;
                 cerrarFragmento(a, formInmueble);
                 stopLocationUpdates();
-                abrirActivity(this, InspeccionActivity.class);
+                abrirActivity(this, RelevamientosActivity.class);
                 break;
+//            case 2:
+//                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
+//                posicionFormulario--;
+//                Util.siguienteFragmento(a, layout,
+//                        formMapa,
+//                        formInmueble);
+//                break;
             case 2:
-                // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
-                posicionFormulario--;
-                Util.siguienteFragmento(a, layout,
-                        formMapa,
-                        formInmueble);
-                break;
-            case 3:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
                 posicionFormulario--;
                 getSupportFragmentManager().beginTransaction().
                         remove(formFoto).
                         commit();
-                abrirFragmento(a, layout, formMapa);
+                abrirFragmento(a, layout, formInmueble);
                 break;
-            case 4:
+            case 3:
                 // EN ESTE CASO CERRAMOS EL FRAGMENTO Y ABRIMOS EL ANTERIOR
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.LLRelevamiento, formFoto)
@@ -395,18 +423,53 @@ public class RelevamientoActivity extends AppCompatActivity {
                         relevamientoMedidor.setRelevamiento(relevamiento);
                         relevamientoMedidorControlador.insertar(relevamientoMedidor, this);
                     } catch (Exception e2) {
-                        mostrarMensajeLog(this, "Ocurrio un error al insertar el relevamiento" + e2.toString());
+                        mostrarMensajeLog(this, "Ocurrió un error al insertar el relevamiento" + e2.toString());
                     }
                 }
-                mostrarMensaje(this, "Se guardo el relevamiento con exito!");
+                mostrarMensaje(this, "Se guardó el relevamiento con éxito!");
                 stopLocationUpdates();
-                abrirActivity(this, RelevamientoActivity.class);
+                abrirActivity(this, RelevamientosActivity.class);
             } else {
-                mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento");
+                mostrarMensaje(this, "Ocurrió un error al insertar el relevamiento");
                 stopLocationUpdates();
             }
         } catch (Exception e) {
-            mostrarMensaje(this, "Ocurrio un error al insertar el relevamiento" + e.toString());
+            mostrarMensaje(this, "Ocurrió un error al insertar el relevamiento" + e.toString());
+        }
+    }
+
+    private void actualizar() {
+        ArrayList<RelevamientoMedidor> relevamientosMedidoresLocal = new ArrayList<>();
+        RelevamientoMedidorControlador relevamientoMedidorControlador = new RelevamientoMedidorControlador();
+        try {
+            RelevamientoControlador relevamientoControlador = new RelevamientoControlador();
+            relevamiento.setIdUsuario(LoginActivity.usuario.getId());
+            if (relevamientoControlador.actualizar(relevamiento, this) == EXITOSO) {
+                for (int i = 0; i < FormMedidores.medidoresLuz.size(); i++) {
+                    RelevamientoMedidor relevamientoMedidor = new RelevamientoMedidor();
+                    relevamientoMedidor.setId((relevamientoMedidorControlador.obtenerSiguienteId(this) + i));
+                    relevamientoMedidor.setIdUsuario(LoginActivity.usuario.getId());
+                    int finalI = i;
+                    intentar(() -> {
+                        relevamientoMedidor.setNumero(Integer.parseInt(FormMedidores.medidoresLuz.get(finalI).getText().toString()));
+                        relevamientoMedidor.setRelevamiento(relevamiento);
+                        relevamientosMedidoresLocal.add(relevamientoMedidor);
+                        return null;
+                    });
+                }
+                if (relevamientoMedidorControlador.insertarArray(relevamientosMedidoresLocal, relevamiento.getId(), this) == EXITOSO) {
+                    mostrarMensaje(this, "Se guardó el relevamiento con éxito!");
+                    abrirActivity(this, RelevamientosActivity.class);
+                } else {
+                    mostrarMensaje(this, "Ocurrió un error al insertar el relevamiento");
+                }
+                stopLocationUpdates();
+            } else {
+                mostrarMensaje(this, "Ocurrió un error al insertar el relevamiento");
+                stopLocationUpdates();
+            }
+        } catch (Exception e) {
+            mostrarMensaje(this, "Ocurrió un error al insertar el relevamiento" + e.toString());
         }
     }
 }

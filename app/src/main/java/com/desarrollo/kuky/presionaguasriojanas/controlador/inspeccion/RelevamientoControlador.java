@@ -122,8 +122,8 @@ public class RelevamientoControlador {
                         values.put("rubro", jsonArray.getJSONObject(i).getString("rubro"));
                         // atendeme ese IF ELSE :)
                         values.put("conexion_visible", jsonArray.getJSONObject(i).getInt("conexion_visible") == 1 ? 1 : 0);
-                        values.put("medidor_luz", jsonArray.getJSONObject(i).getInt("medidor_luz"));
-                        values.put("medidor_agua", jsonArray.getJSONObject(i).getInt("medidor_agua"));
+                        values.put("medidor_luz", jsonArray.getJSONObject(i).getLong("medidor_luz"));
+                        values.put("medidor_agua", jsonArray.getJSONObject(i).getString("medidor_agua"));
                         values.put("latitud", jsonArray.getJSONObject(i).getDouble("latitud"));
                         values.put("longitud", jsonArray.getJSONObject(i).getDouble("longitud"));
                         values.put("latitud_usuario", jsonArray.getJSONObject(i).getDouble("latitud_usuario"));
@@ -175,7 +175,7 @@ public class RelevamientoControlador {
         }
     }
 
-    private ArrayList<Relevamiento> extraerTodosPendientes(Activity a) {
+    public ArrayList<Relevamiento> extraerTodosPendientes(Activity a) {
         relevamientos = new ArrayList<>();
         SQLiteDatabase db = BaseHelper.getInstance(a).getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM relevamiento " +
@@ -193,8 +193,8 @@ public class RelevamientoControlador {
             } else {
                 relevamiento.setConexionVisible(true);
             }
-            relevamiento.setMedidorLuz(c.getInt(6));
-            relevamiento.setMedidorAgua(c.getInt(7));
+            relevamiento.setMedidorLuz(c.getLong(6));
+            relevamiento.setMedidorAgua(c.getString(7));
             relevamiento.setLatitud(c.getDouble(8));
             relevamiento.setLongitud(c.getDouble(9));
             relevamiento.setLatitudUsuario(c.getDouble(10));
@@ -237,6 +237,39 @@ public class RelevamientoControlador {
             return ERROR;
         } catch (Exception e) {
             mostrarMensaje(a, "Error insertar RC " + e.toString());
+            return ERROR;
+        }
+    }
+
+    public int actualizar(Relevamiento relevamiento, Activity a) {
+        try {
+            SQLiteDatabase db = BaseHelper.getInstance(a).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("id", relevamiento.getId());
+            values.put("id_usuario", relevamiento.getIdUsuario());
+            values.put("barrio", relevamiento.getBarrio());
+            values.put("tipo_inmueble", relevamiento.getTipoInmueble());
+            values.put("rubro", relevamiento.getRubro());
+            // atendeme ese IF ELSE :)
+            values.put("conexion_visible", relevamiento.isConexionVisible() ? 1 : 0);
+            values.put("medidor_luz", relevamiento.getMedidorLuz());
+            values.put("medidor_agua", relevamiento.getMedidorAgua());
+            values.put("latitud", relevamiento.getLatitud());
+            values.put("longitud", relevamiento.getLongitud());
+            values.put("latitud_usuario", relevamiento.getLatitudUsuario());
+            values.put("longitud_usuario", relevamiento.getLongitudUsuario());
+            values.put("observaciones", relevamiento.getObservaciones());
+            values.put("foto", relevamiento.getFoto());
+            values.put("pendiente", INSERTAR_PUNTO);
+            if (db.update("relevamiento", values, "id = ?",
+                    new String[]{String.valueOf(relevamiento.getId())}) > 0) {
+                db.close();
+                return EXITOSO;
+            }
+            db.close();
+            return ERROR;
+        } catch (Exception e) {
+            mostrarMensaje(a, "Error actualizar RC " + e.toString());
             return ERROR;
         }
     }

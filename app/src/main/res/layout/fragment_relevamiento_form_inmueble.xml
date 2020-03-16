@@ -6,10 +6,10 @@
     tools:context=".ui.inspeccion.nuevorelevamientofragments.FormInmueble">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        style="@style/background_card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
+        android:focusableInTouchMode="true">
 
         <TextView
             android:id="@+id/tvDatosInmueble"
@@ -22,6 +22,7 @@
             android:id="@+id/tvsBarios"
             style="@style/tv_primary_mini"
             android:layout_below="@id/tvDatosInmueble"
+            android:layout_alignStart="@+id/tvDatosInmueble"
             android:layout_marginTop="5dp"
             android:text="@string/tv_barrio" />
 
@@ -39,6 +40,7 @@
             android:id="@+id/tvsTipoInmueble"
             style="@style/tv_primary_mini"
             android:layout_below="@+id/sBarrio"
+            android:layout_alignStart="@+id/tvDatosInmueble"
             android:layout_marginTop="5dp"
             android:text="@string/tv_tipo_de_inmueble" />
 
@@ -56,6 +58,8 @@
             android:id="@+id/etRubro"
             style="@style/et_primary"
             android:layout_below="@+id/sTipoInmueble"
+            android:layout_alignStart="@+id/tvDatosInmueble"
+            android:focusedByDefault="false"
             android:hint="@string/tv_rubro"
             android:inputType="text" />
 
@@ -71,22 +75,25 @@
             android:id="@+id/etMedidorLuz"
             style="@style/et_primary"
             android:layout_below="@id/swConexionVisible"
+            android:layout_alignStart="@+id/tvDatosInmueble"
             android:hint="@string/hint_medidor_de_luz"
             android:inputType="number"
-            android:maxLength="8" />
+            android:maxLength="10" />
 
         <EditText
             android:id="@+id/etMedidorAgua"
             style="@style/et_primary"
             android:layout_below="@id/etMedidorLuz"
+            android:layout_alignStart="@+id/tvDatosInmueble"
             android:hint="@string/hint_medidor_de_agua"
             android:inputType="text"
-            android:maxLength="8" />
+            android:maxLength="10" />
 
         <EditText
             android:id="@+id/etObservaciones"
             style="@style/et_primary"
             android:layout_below="@id/etMedidorAgua"
+            android:layout_alignStart="@+id/tvDatosInmueble"
             android:hint="@string/hint_observaciones"
             android:inputType="textMultiLine" />
 

@@ -42,11 +42,11 @@ import java.util.ArrayList;
 
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.EXITOSO;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.ID_PUNTO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.REQUEST_CHECK_SETTINGS;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.UPDATE_INTERVAL_IN_MILLISECONDS;
-import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION_SHARED_PREFERENCE;
+import static com.desarrollo.kuky.presionaguasriojanas.util.Util.USUARIO_PUNTO_PRESION;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirActivity;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.abrirFragmento;
 import static com.desarrollo.kuky.presionaguasriojanas.util.Util.getPreference;
@@ -204,11 +204,11 @@ public class NuevaPresionActivity extends AppCompatActivity {
                 Usuario uPunto = new Usuario();
                 // CAPTURAMOS EL ID DEL PUNTO, DESDE LAS SHARED PREFERENCES
                 int id = getPreference(NuevaPresionActivity.this,
-                        ID_PUNTO_PRESION_SHARED_PREFERENCE,
+                        ID_PUNTO_PRESION,
                         0);
                 puntoPresion.setId(id);
                 String usuario = getPreference(NuevaPresionActivity.this,
-                        USUARIO_PUNTO_PRESION_SHARED_PREFERENCE,
+                        USUARIO_PUNTO_PRESION,
                         "");
                 uPunto.setId(usuario);
                 puntoPresion.setUsuario(uPunto);
