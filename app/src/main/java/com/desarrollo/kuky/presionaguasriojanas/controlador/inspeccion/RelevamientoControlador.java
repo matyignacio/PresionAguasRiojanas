@@ -60,7 +60,7 @@ public class RelevamientoControlador {
                 relevamiento.put("latitud", relevamientos.get(i).getLatitud());
                 relevamiento.put("longitud", relevamientos.get(i).getLongitud());
                 relevamiento.put("latitud_usuario", relevamientos.get(i).getLatitudUsuario());
-                relevamiento.put("longitud_usuario", relevamientos.get(i).getLatitudUsuario());
+                relevamiento.put("longitud_usuario", relevamientos.get(i).getLongitudUsuario());
                 relevamiento.put("observaciones", relevamientos.get(i).getObservaciones());
                 relevamiento.put("foto", relevamientos.get(i).getFoto());
                 relevamiento.put("fecha", relevamientos.get(i).getFecha());
